@@ -1,3 +1,8 @@
+# The runtime admission control pins the exact sha256 of these two files; keep
+# them byte-stable across platforms regardless of local core.autocrlf.
+pyproject.toml text eol=lf
+uv.lock text eol=lf
+
 # Preserve already accepted, content-addressed W04 Markdown evidence bytes.
 reports/reviews/W04/archive/wyscout-season-lineup-product-binding-independent-review-R1-rework-431e0cfb.md whitespace=-blank-at-eol
 reports/reviews/W04/authorities/wyscout-build-product-independent-review-R1.md whitespace=-blank-at-eol

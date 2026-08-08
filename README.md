@@ -1,5 +1,8 @@
 # Scouting Intelligence
 
+[![CI](https://github.com/abinghamwalker/scouting-intelligence/actions/workflows/ci.yml/badge.svg)](https://github.com/abinghamwalker/scouting-intelligence/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 An ML research workbench for exploring player resemblance in football data —
 built to answer one question rigorously: *given a player I'm interested in, who in this
 dataset plays a similar role or style, and how confident should I be in that comparison?*
@@ -123,6 +126,16 @@ uv run python scripts/apply_migrations.py
 
 Then open `http://127.0.0.1:8769/` and keep the launcher terminal running (`Ctrl-C` to
 stop it).
+
+Two things to know before running it locally:
+
+- **Platform:** built and tested on macOS/Linux. The storage layer uses POSIX file
+  descriptor flags as a path-traversal guard, so it currently fails closed on native
+  Windows rather than silently degrading; use WSL on Windows.
+- **Data:** the governed historical feature matrix that powers live queries is a derived
+  artifact of the licensed Wyscout dataset, so it isn't included in this repository. A
+  fresh clone will start the server and show a clear "population not ready" state rather
+  than results — see the dataset card below for how that artifact is built.
 
 Before interpreting results, it's worth reading:
 
