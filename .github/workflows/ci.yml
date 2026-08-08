@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Sync locked environment
+        run: uv sync --locked --all-groups
+
+      - name: Apply local migrations
+        run: uv run python scripts/apply_migrations.py
+
+      - name: Import sanity check
+        run: uv run python -c "import scouting"
+
+      - name: ruff format
+        run: uv run ruff format --check .
+
+      - name: ruff check
+        run: uv run ruff check .
+
+      - name: mypy
+        run: uv run mypy src/scouting
+
+      - name: import-linter
+        run: uv run lint-imports
+
+      - name: bandit
+        run: uv run bandit -q -r src/scouting
+
+      # This test needs the raw licensed Wyscout archive, which is intentionally not in git.
+      - name: pytest
+        run: >
+          uv run pytest -q
+          --ignore=tests/unit/test_w04_wyscout_vertical_slice_context.py
