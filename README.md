@@ -155,8 +155,13 @@ uv run python -c "import scouting"
 uv run ruff format --check .
 uv run ruff check .
 uv run mypy src/scouting
-uv run pytest -q
+uv run pytest -q tests/unit tests/governance
 ```
+
+`tests/contracts`, `tests/integration`, `tests/security` and `tests/e2e` additionally
+require the real licensed Wyscout archive and its derived working artifacts in place
+locally; they're intentionally out of scope for a fresh clone and for CI. See
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) for exactly what runs on every push.
 
 ## Documentation
 
