@@ -22,6 +22,35 @@ until it has survived independent domain-expert review.
 5. **Compare and save** — line candidates up side by side and save the run as a
    reproducible, replayable experiment.
 
+## How it works
+
+```mermaid
+flowchart LR
+    subgraph Source["Governed historical data"]
+        A["Wyscout 2017/18 snapshot"]
+    end
+    subgraph Pipeline["Data pipeline"]
+        B["Canonical ingestion & lineage"]
+        C["Eligible player feature matrix\n(16 per-90 features)"]
+    end
+    subgraph Engine["Retrieval engine"]
+        D["Weighted Euclidean / cosine index"]
+    end
+    subgraph Workbench["Research workbench UI"]
+        E["Query: exemplar or\nweighted profile"]
+        F["Ranked results\n+ evidence"]
+        G["Candidate\ncomparison"]
+    end
+    H[("Saved experiment\n+ full provenance")]
+
+    A --> B --> C --> D
+    E --> D --> F --> G --> H
+```
+
+Everything runs in-process against local files — SQLite for operational/audit state,
+Parquet with DuckDB and Polars for the analytical layer — so there's no server, database
+container or external service to stand up.
+
 ## What's implemented
 
 - **A governed historical dataset spine.** Built from a real Wyscout 2017/18 dataset
