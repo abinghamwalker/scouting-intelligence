@@ -51,8 +51,11 @@ jobs:
       # of which is (or should be) committed to git. They pass locally once
       # that data is in place; this lightweight CI runs the portable subset
       # (tests/unit, tests/governance) that exercises real code paths against
-      # synthetic fixtures instead. Two unit files are excluded for reasons
+      # synthetic fixtures instead. Four unit files are excluded for reasons
       # of their own:
+      #  - test_w04_wyscout_vertical_slice_context.py, test_w10_expert_evidence_v2.py,
+      #    test_wyscout_source_completion_index.py, test_wyscout_source_manifest.py:
+      #    need that same licensed archive or its derived feature matrix.
       #  - test_w04_wyscout_runtime_control.py: a machine-attestation launcher
       #    intentionally pinned to the original developer's exact Homebrew/
       #    macOS toolchain; it isn't meant to pass on other machines.
@@ -61,5 +64,9 @@ jobs:
       - name: pytest
         run: >
           uv run pytest -q tests/unit tests/governance
+          --ignore=tests/unit/test_w04_wyscout_vertical_slice_context.py
+          --ignore=tests/unit/test_w10_expert_evidence_v2.py
+          --ignore=tests/unit/test_wyscout_source_completion_index.py
+          --ignore=tests/unit/test_wyscout_source_manifest.py
           --ignore=tests/unit/test_w04_wyscout_runtime_control.py
           --ignore=tests/unit/test_w05_m0_models.py
