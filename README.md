@@ -1,6 +1,6 @@
 # Scouting Intelligence
 
-A local-first ML research workbench for exploring player resemblance in football data —
+An ML research workbench for exploring player resemblance in football data —
 built to answer one question rigorously: *given a player I'm interested in, who in this
 dataset plays a similar role or style, and how confident should I be in that comparison?*
 
