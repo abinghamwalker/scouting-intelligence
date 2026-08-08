@@ -1,0 +1,78 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-05
+phase_id: W04
+revision: R1
+state: INDEPENDENT_PASS_MASTER_ACCEPTED
+objective: >-
+  Independently confirm that the bounded R4 capability correction preserved the R3
+  semantic/provenance PASS: exact index reconciliation, strict R21 mapping,
+  equal-clock/causal semantics, exact four-feature derivation and bounded manifest
+  scope. Do not duplicate the full proof-graph security review.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-01-R4:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_semantic_regression_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-05-R1.yaml
+  - reports/reviews/W04/wyscout-source-completion-index-semantic-independent-review-R1.md
+  - reports/verification/W04/wyscout-source-completion-index-R4-master-verification.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R4.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-source-completion-index-R4-semantic-regression-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-05-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: e7778db8c977b8461bb590f7174e4b519d7a2ba0a4171d99aa1fd686a6cd5302
+  contract_implementation_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  source_test_sha256: 05593a0a0afda62af2b6a2c8753a4f83e78fcbd363b89788751dd2055ed6dfeb
+  contract_test_sha256: 139683be6a9e6dc4d8be90cd81bb0827c1dbeea00b4ad01aebe3bdcaf9d5be9e
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  prior_semantic_review_sha256: 9d270746900394f2ae1abd3c145e278d61cf3cdef8c7e12165cde138d089c3fa
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - Reconcile the accepted index as 5 members, 3652 periods and 3071395 actions without changing bytes.
+  - Confirm strict integer-only event/subevent projection, retained unmapped strings, equal-clock group-first behavior and causal provenance are unchanged.
+  - Inspect and run the exact four-feature, dependency-lineage, six-coverage and one-match manifest regressions affected by R4.
+  - Confirm the real match positive test still requires all 1768 actions across two periods and makes no all-index completeness claim.
+  - Confirm no product/dependency/provider/network/Git/cloud/container/CI/endpoint/remote/deployment action.
+definition_of_done:
+  - R3 semantic/provenance PASS remains true for the exact R4 candidate with zero open P0-P2 findings.
+  - Review and return record PASS or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_wyscout_data_contracts.py -k 'integer or string_subevent or equal_clock or causal or completion_index or real_match_checked_path or gold or manifest'
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review with PASS or REWORK and exact P0/P1/P2 counts.
+  - Mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or need to edit any implementation/test/data/frozen path.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

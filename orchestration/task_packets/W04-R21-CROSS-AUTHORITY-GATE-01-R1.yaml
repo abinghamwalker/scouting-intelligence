@@ -1,0 +1,41 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-GATE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Run and close the complete frozen R21 master gate, materializing only the
+  fixed master verification, canonical machine gate record, and mandatory
+  master return after every repository and R21-specific check passes.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-REVIEW-01-R1:ACCEPTED_FOR_MASTER_GATE
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-GATE-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+allowed_paths:
+  - reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+  - reports/phase-gates/W04/wyscout-r21-correction-gate.json
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-GATE-01-R1.md
+requirements:
+  - Run the complete AGENTS.md repository suite in its exact declared order.
+  - Resolve every failure before materializing a PASS gate.
+  - Independently rerun the complete 478-test R21 focused suite.
+  - Bind the fixed review's complete physical SHA-256 and PASS recommendation.
+  - Prove exact retained inventory, local-only boundary, zero remotes, and no product path.
+  - Read back every R21 change and retained authority artifact.
+  - >-
+    The machine gate record is one closed canonical JSON object plus one
+    terminal LF with exactly decision, gate_path, review_path,
+    review_physical_sha256, and review_recommendation.
+  - Do not create any identity, Bronze, Silver, Gold, manifest, receipt, build, or product path.
+stop_conditions:
+  - Any complete repository or R21-specific check remains failing.
+  - A pass requires changing frozen authority, product architecture, local-only boundary, or dependency policy.
+delegation: forbidden
+git_operations: master_only
+self_approval: master_authority_required

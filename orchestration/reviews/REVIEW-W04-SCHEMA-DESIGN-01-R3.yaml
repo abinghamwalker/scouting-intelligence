@@ -1,0 +1,54 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R3
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-CODE-CHECKPOINT-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-SEMANTIC-TEMPORAL-BOUNDARY-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-SEMANTIC-AUTHORITY-SOURCE-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-PACKET-GRAPH-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-MANIFEST-FILE-COUNT-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-DESIGN-SOURCE-COVERAGE-CONTRACT-01
+    severity: P2
+    status: returned_for_rework
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R4
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R3.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R2.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - docs/architecture/evaluation-contract.md
+checks:
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-R3.md');
+      assert p.is_file() and p.stat().st_size > 8000"
+    result: PASS_45508_BYTES
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R2.md');
+      assert p.is_file() and p.stat().st_size > 6000"
+    result: PASS_20990_BYTES
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+

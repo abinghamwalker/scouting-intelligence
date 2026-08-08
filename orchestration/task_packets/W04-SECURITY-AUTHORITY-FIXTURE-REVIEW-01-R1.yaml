@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently verify the bounded credential-separator expected-fixture
+  correction is exact, necessary, and does not weaken or broaden the W04
+  source-authority security boundary.
+depends_on:
+  - W04-SECURITY-AUTHORITY-FIXTURE-01-R1:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_security_fixture_reviewer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1.yaml
+  - configs/sources/w04-provider.yaml
+  - src/scouting/sources/wyscout.py
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-01-R1.md
+  - orchestration/reviews/REVIEW-W04-SECURITY-AUTHORITY-FIXTURE-01-R1.yaml
+  - reports/verification/W04/security-authority-fixture-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/wyscout-security-authority-fixture-independent-review-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+review_authority:
+  review_id: w04-wyscout-security-authority-fixture-independent-review-R1
+  independent_actor_id: c9d7d4be-0fa3-5b17-b199-81765f344ed7
+  focused_test_sha256: 1c69b5f37ec6b250c90ca68424739dd996396df625444016f8dbd4f29b6b6a78
+  producer_return_sha256: e07119ce4b288e14549336aa581018d5a096faa3d7c724d0572cc5bd339ffbcd
+  protected_config_sha256: fdcfbad8ef1228ca056fbcacdbf41f25ff66652e0bfaa52bed13eb04be3be4bc
+  protected_runtime_sha256: 81ed529c2602a052eb21920dc9d6a4bd022443696da5c11782c037334fb98ee4
+requirements:
+  - >-
+    Independently prove the approved config and runtime require literal-slash
+    credential separator encoding and that the expected fixture now exactly
+    represents that closed contract.
+  - >-
+    Verify the change adds only that exact expected key/value, removes or
+    weakens no assertion, and changes no runtime/config/authority behavior.
+  - >-
+    Adversarially confirm non-literal or absent separator encodings still fail
+    and the complete focused security file passes.
+  - >-
+    Produce a review with the fixed ID, packet UUIDv5 actor, exact hashes, and
+    every P0-P2 finding. PASS requires zero P0-P2 findings.
+  - >-
+    Use apply_patch only for the two exact allowed paths. Do not run Git,
+    delegate, self-approve, modify any implementation/test/config/authority,
+    use network, or begin downstream work.
+definition_of_done:
+  - Review independently proves fixture-only exactness and boundary strength.
+  - Protected and producer bytes remain unchanged.
+  - Focused/Ruff/local-only checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/security/test_w04_source_authority_boundary.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/security/test_w04_source_authority_boundary.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/security/test_w04_source_authority_boundary.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any protected or producer byte differs.
+  - Any security assertion must be weakened or runtime/config change is required.
+  - Any mandatory check fails.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

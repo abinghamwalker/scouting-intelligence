@@ -1,0 +1,41 @@
+schema_version: 1
+environment_id: local-only
+runtime:
+  tenant_mode: single-tenant
+  containers_allowed: false
+  external_service_processes_allowed: false
+  public_endpoint_allowed: false
+  cloud_resource_allowed: false
+  hosted_identity_allowed: false
+  external_model_call_allowed: false
+source_control:
+  branch: main
+  remotes_allowed: false
+  pushes_allowed: false
+  hosted_ci_allowed: false
+dependencies:
+  authority: uv
+  python: "3.12"
+  root_environment: .venv
+  python_index_resolution_allowed: true
+  git_or_direct_url_sources_allowed: false
+storage:
+  operational_store: embedded_sqlite
+  operational_path: data/working/scouting.sqlite3
+  analytical_store: parquet_duckdb
+  vector_retrieval: versioned_local_artifact_and_in_process_similarity
+  external_database_allowed: false
+  external_cache_or_queue_allowed: false
+local_paths:
+  generated_data:
+    - data/source
+    - data/reference
+    - data/working
+  generated_runs:
+    - runs
+  committed_evidence:
+    - data/manifests
+    - reports
+revisit_trigger: >-
+  Containers or external services require explicit user approval of a new
+  architecture decision and amendments to both controlling plans.

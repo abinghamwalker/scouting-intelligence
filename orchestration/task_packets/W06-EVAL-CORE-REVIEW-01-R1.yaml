@@ -1,0 +1,92 @@
+schema_version: 1
+task_id: W06-EVAL-CORE-REVIEW-01
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the W06 evaluation contracts, ranking metrics, deterministic
+  intervals and public fixtures for any reproducible defect that can change metric
+  values, denominators, partitions, digests, leakage behaviour or the protected gate.
+depends_on:
+  - W06-EVAL-CORE-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-CORE-01-R1.yaml
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R1.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-core-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Do aggregate protocol/bundle/run/gate digests recompute from and bind every validated nested object, canonical order, reviewer, rubric, query and partition identity?
+  - Can duplicate, cross-partition, re-signed, query/label/reviewer/rubric, adjudication or access-record substitutions change admitted evidence without rejection?
+  - Does the metric core enforce protocol-declared k and represent per-item unjudged/missing labels and abstentions without silently treating them as irrelevant or zero?
+  - Are partial relevance, ties, insufficient denominators and candidate-universe limits defined and deterministic for Precision, Recall and NDCG?
+  - Are pair preference, eligible real-reviewer agreement, Spearman or an explicitly declared correlation, top-k overlap/Jaccard, bounded candidate churn and disagreement lists implemented correctly?
+  - Are bootstrap resampling unit, seed, count, confidence, method, canonical order, interval arithmetic and result digests stable and contract-bound?
+  - Do public fixtures prove implementation math only, with no expert, protected, transfer, calibration, prospective or claim evidence?
+  - Do the focused tests actually exercise the fail-closed and mathematical invariants above, including adversarial re-signed substitutions?
+deliverables:
+  - Independent verdict with P0/P1/P2 findings, exact reproduction evidence and smallest bounded correction per blocker.
+  - Direct answer to every review question and an explicit test-coverage assessment.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R1.md.
+definition_of_done:
+  - Findings are limited to reproducible effects on values, denominators, partitions, intervals, leakage, digests, protected decisions or claims.
+  - Review is report-only and accesses no protected expected output.
+  - Reviewer does not implement, delegate, self-approve or alter dependencies/Git/orchestration.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run ruff check src/scouting/contracts/evaluation.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run lint-imports
+  - test -s reports/reviews/W06/evaluation-core-independent-review-R1.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R1.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - verdict and finding table with severities
+  - exact commands, exit statuses and concise results
+  - exact evidence paths, formulas, counterexamples and identifiers
+  - residual leakage, schema, interval, applicability and claim risks
+  - smallest bounded corrections or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

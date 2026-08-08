@@ -1,0 +1,72 @@
+schema_version: 1
+task_id: W04-SOURCE-AUTHORITY-01
+phase_id: W04
+revision: R1
+state: VERIFIED
+objective: >-
+  Freeze the one governed W04 provider, product/version, licensed rights,
+  competitions/seasons, file/field coverage, temporal semantics, retention,
+  derivation/export rules, attribution, and bounded local acquisition method before
+  any real-data implementation or download.
+depends_on:
+  - W03:CLOSED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - configs/policies/data-rights.yaml
+  - docs/architecture/evaluation-contract.md
+allowed_paths:
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - docs/dataset-cards/w04-source.md
+  - orchestration/task_packets/W04-SOURCE-AUTHORITY-01-R1.yaml
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/**
+  - services/**
+  - apps/**
+  - tests/fixtures/synthetic/protected/**
+  - data/source/**
+  - data/working/**
+  - runs/**
+deliverables:
+  - User-authorised provider and exact dataset/product/version.
+  - >-
+    Evidence-backed licence/use class covering local retention, allowed derivations,
+    model/feature use, internal display, attribution, and export restrictions.
+  - Bounded competition, season, file, field, and coverage declaration.
+  - >-
+    Provider observed/acquired/available timestamp semantics, timezone, correction
+    policy, and deterministic snapshot identity.
+  - Local acquisition method with hashes/counts and no tracked credential.
+  - Master review before any implementation packet is dispatched.
+definition_of_done:
+  - The user explicitly identifies or authorises the source and rights basis.
+  - Every required right is ALLOWED, RESTRICTED with an enforceable control, or FORBIDDEN.
+  - Unresolved/assumed rights fail closed.
+  - Coverage is sufficiently bounded to design the Bronze contract without guessing.
+  - No source data is acquired before this packet is accepted.
+acceptance_checks:
+  - uv run pytest -q tests/governance/test_w04_source_authority.py
+  - uv run python scripts/verify_local_only.py
+  - git remote
+stop_conditions:
+  - The provider, product/version, licence evidence, or allowed derivations are not supplied.
+  - Work needs a credential, account, payment, click-through acceptance, or external transfer not explicitly authorised.
+  - The proposed source cannot remain within the local-only boundary.
+  - A provider term conflicts with the approved product claim, evaluation contract, retention, or audit requirements.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only
+decision_recorded: >-
+  On 2026-07-29 the user selected the Wyscout Soccer match event dataset, figshare
+  collection v5, under CC BY 4.0 for the local frozen proof of concept.
+blocked_reason: null

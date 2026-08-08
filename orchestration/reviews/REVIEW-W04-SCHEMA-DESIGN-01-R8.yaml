@@ -1,0 +1,69 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R8
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - {id: W04-DESIGN-WHEEL-PROVIDED-SCRIPT-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-UV-PIP-ALIAS-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-WRAPPER-INTERPRETER-ALIAS-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-VENV-BOOTSTRAP-PTH-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-PYC-CLOSED-CLASSIFICATION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-REPOSITORY-PYC-SCOPE-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-PREEXECUTION-IMPORT-CYCLE-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-EDITABLE-ROOT-NORMALIZATION-01, severity: P2, status: returned_for_rework}
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R9
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R8.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R8.md
+  - reports/verification/W04/wyscout-schema-design-R8-master-verification.md
+  - .venv/lib/python3.12/site-packages/ruff-0.16.0.dist-info/RECORD
+  - .venv/lib/python3.12/site-packages/pip-26.1.2.dist-info/RECORD
+  - .venv/lib/python3.12/site-packages/pip-26.1.2.dist-info/entry_points.txt
+  - .venv/bin/ruff
+  - .venv/bin/pip3.12
+  - .venv/bin/pytest
+  - .venv/lib/python3.12/site-packages/_virtualenv.py
+  - .venv/lib/python3.12/site-packages/_virtualenv.pth
+  - .venv/lib/python3.12/site-packages/a1_coverage.pth
+  - .venv/lib/python3.12/site-packages/scouting_intelligence.pth
+  - .venv/lib/python3.12/site-packages/scouting_intelligence-0.1.0.dist-info/direct_url.json
+  - .venv/lib/python3.12/site-packages/scouting_intelligence-0.1.0.dist-info/uv_cache.json
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-R8.md');
+      assert p.is_file() and p.stat().st_size > 22000"
+    result: PASS_73683_BYTES
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: >-
+      uv run python -c "from importlib.metadata import distributions;
+      import csv,pathlib; ..."
+    result: FAIL_EVIDENCE_35_BIN_ROWS_33_DIRECT_ENTRY_POINTS_1_PIP_ALIAS_1_WHEEL_SCRIPT
+  - command: >-
+      uv run python -c "import sys,sysconfig;
+      print(sys.executable); print(sysconfig.get_path('scripts'))"
+    result: FAIL_EVIDENCE_UV_RUN_PYTHON3_WRAPPER_SHEBANG_PYTHON
+  - command: >-
+      find .venv/lib/python3.12/site-packages -maxdepth 1 -name '*.pth'
+    result: FAIL_EVIDENCE_3_PTH_2_EXECUTABLE_1_ROOT_BEARING
+  - command: >-
+      find .venv/lib/python3.12/site-packages -name '*-pytest-*.pyc'
+    result: FAIL_EVIDENCE_112_PYTEST_REWRITE_PYC
+  - command: >-
+      find src scripts tests -name '*.pyc'
+    result: FAIL_EVIDENCE_56_REPOSITORY_PYC
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY

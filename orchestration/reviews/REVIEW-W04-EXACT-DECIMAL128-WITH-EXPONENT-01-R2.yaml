@@ -1,0 +1,15 @@
+schema_version: 1
+review_id: REVIEW-W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2
+task_id: W04-EXACT-DECIMAL128-WITH-EXPONENT-01
+phase_id: W04
+revision: R2
+verdict: ACCEPTED
+findings: []
+next_packet: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5
+evidence:
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.yaml
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-R2-master-acceptance.md

@@ -1,0 +1,63 @@
+task_id: W09-FULL-CANONICAL-BUILD-02B
+revision: R1
+owner: subagent
+objective: >-
+  Build a deterministic, local-only provider adapter and full canonical Parquet
+  projection for all five retained Wyscout 2017/18 partitions, using only accepted
+  source and identity authorities and preserving every W04 proof path unchanged.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - src/scouting/contracts/research.py
+  - src/scouting/contracts/wyscout_identity.py
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/storage/formats.py
+  - src/scouting/storage/guarded.py
+allowed_paths:
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - scripts/build_w09_historical_canonical.py
+  - tests/unit/test_w09_wyscout_historical_adapter.py
+  - tests/integration/test_w09_full_canonical_build.py
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R1.md
+deliverables:
+  - >-
+    A bounded adapter that verifies the exact retained source manifest, completion
+    index, admitted five paths, physical hashes, and accepted identity bundle before
+    yielding rows; never glob manifest sidecars or acquire data.
+  - >-
+    A deterministic builder producing canonical players, teams, competitions,
+    matches, appearances/minute evidence, and actions under a content-addressed
+    research build root, plus a canonical manifest that binds every authority,
+    schema, count, path and SHA-256.
+  - >-
+    Resolved canonical UUIDs are the only candidate identities. The 15
+    review-required player IDs and player:0 remain excluded with visible audit counts;
+    currentTeamId is never historical membership.
+  - >-
+    Match lineup/bench/substitution evidence reconstructs defensible player intervals
+    and labels exact versus conservative-lower-bound/unusable minutes. Never replace
+    absent evidence with appearances, actions, or a silent 90-minute assumption.
+  - >-
+    Tests cover exact source counts (1826/3071395/142/3603), five-partition alignment,
+    identity exclusions, duplicate keys, temporal clocks, deterministic small-fixture
+    builds, guarded paths, and preservation of W04 outputs.
+checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run ruff check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run mypy src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+  - uv run pytest -q tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+stop_conditions:
+  - Any source, completion, identity, rights, checksum, partition, or temporal authority conflict.
+  - A defensible minute state cannot be derived without a new product decision.
+  - Any need for network/provider access, dependencies, orchestration edits, Git operations, or paths outside allowed_paths.
+constraints:
+  - No Git operations and no dependency or lockfile changes.
+  - Use apply_patch for manual edits.
+  - Do not edit orchestration controls, shared contracts, W04, W05, W07, or W08 paths.
+  - Do not generate final full artifacts in this packet; the master will execute and reconcile the accepted builder.
+  - Synthetic rows are permitted only inside automated tests.

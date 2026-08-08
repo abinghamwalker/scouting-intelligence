@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W04-WYSCOUT-DATASET-CARD-01
+phase_id: W04
+revision: R1
+state: PLANNED
+objective: >-
+  Author the transformed W04 dataset card from accepted build, layer and health
+  evidence without changing product semantics or making unsupported claims.
+depends_on:
+  - W04-WYSCOUT-DATA-HEALTH-01-R1:MASTER_ACCEPTED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - docs/dataset-cards/w04-source.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/phase-gates/W04/data-health.json
+  - reports/phase-gates/W04/data-health.md
+  - reports/verification/W04/wyscout-real-root-invocation-R1-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-DATASET-CARD-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+requirements:
+  - >-
+    Bind exact build ID, code/layer manifest paths and SHA-256 values, canonical
+    health path/digest, source snapshot/completion authority and local offline
+    reproduction command/evidence.
+  - >-
+    Cover intended and excluded use, exact one-match product population and
+    distinct full-source population, separate source/Gold coverage, correction and
+    quarantine policy, transformations, four supported count features, suppressed
+    features, temporal boundary, unsupported exact minutes/per-90, coordinate and
+    semantic bias, research-only applicability, rights/attribution, residuals and
+    no deployment/publication claim.
+  - Make every count and digest mechanically agree with the controlling health JSON and immutable manifests.
+acceptance_checks:
+  - git diff --check
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact transformed dataset card and master return.
+stop_conditions:
+  - None for bounded evidence or prose corrections; unresolved product behavior differences remain user-boundary decisions.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

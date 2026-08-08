@@ -1,0 +1,65 @@
+{
+  "allow_pending_checkpoint": true,
+  "checks": [
+    {
+      "detail": "state: 'IMPLEMENTED'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'IMPLEMENTED'",
+      "id": "PHASE_GATE_READY",
+      "status": "FAIL"
+    },
+    {
+      "detail": "W09:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W10-EXPERT-RELEVANCE-PROTOCOL-01:ACCEPTED:1 retained return(s), W10-EXPERT-STUDY-CONSOLE-02A:ACCEPTED:1 retained return(s), W10-FORMAL-EXPERT-STUDY-02B:READY:all referenced packets are complete, master-assigned and task-ID matched, W10-RELEVANCE-EVALUATION-04A:ACCEPTED:1 retained return(s), W10-RUNTIME-HOST-STATE-HARDENING-05A:ACCEPTED:1 retained return(s), W10-INDEPENDENT-REVIEW-07A:ACCEPTED:1 retained return(s)",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "FAIL"
+    },
+    {
+      "detail": "docs/architecture/w10-expert-relevance-validation.md, reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md, reports/verification/W10/expert-relevance-protocol.md, reports/verification/W10/expert-relevance-study.md, reports/verification/W10/relevance-evaluation.md, reports/verification/W10/runtime-host-state-hardening.md, reports/reviews/W10/independent-review.md, reports/verification/W10/verification-report.md, reports/reviews/W10/master-review.md, reports/phase-gates/W10/gate-report.json, reports/phase-gates/W10/acceptance-report.md, reports/verification/W10/phase-verifier-candidate.json, reports/verification/W10/clean-tree-report.md, reports/verification/W10/user-approval-and-participation.md",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "engineering-implementation:PASS, protocol-and-frozen-authority:PASS, local-study-console:PASS, protected-relevance-evaluator:PASS, retained-runtime-host-state:PASS, independent-engineering-review:PASS, local-only-controls:PASS, G-RW4-PROTOCOL:PENDING_HUMAN_APPROVAL, G-RW4-STUDY:INSUFFICIENT_EVIDENCE, G-RW4-RESULT:INSUFFICIENT_EVIDENCE",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "FAIL"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w10-start:603cba2c23fc3a5c72f1ccd57073c500ce6a0061",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [
+    {
+      "code": "PHASE_GATE_READY",
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'IMPLEMENTED'"
+    },
+    {
+      "code": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "detail": "W10-EXPERT-RELEVANCE-PROTOCOL-01:ACCEPTED:1 retained return(s), W10-EXPERT-STUDY-CONSOLE-02A:ACCEPTED:1 retained return(s), W10-FORMAL-EXPERT-STUDY-02B:READY:all referenced packets are complete, master-assigned and task-ID matched, W10-RELEVANCE-EVALUATION-04A:ACCEPTED:1 retained return(s), W10-RUNTIME-HOST-STATE-HARDENING-05A:ACCEPTED:1 retained return(s), W10-INDEPENDENT-REVIEW-07A:ACCEPTED:1 retained return(s)"
+    },
+    {
+      "code": "DECLARED_CHECKS_PASS",
+      "detail": "engineering-implementation:PASS, protocol-and-frozen-authority:PASS, local-study-console:PASS, protected-relevance-evaluator:PASS, retained-runtime-host-state:PASS, independent-engineering-review:PASS, local-only-controls:PASS, G-RW4-PROTOCOL:PENDING_HUMAN_APPROVAL, G-RW4-STUDY:INSUFFICIENT_EVIDENCE, G-RW4-RESULT:INSUFFICIENT_EVIDENCE"
+    }
+  ],
+  "phase_id": "W10",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "IMPLEMENTED",
+  "status": "FAIL",
+  "validator": "verify_phase"
+}

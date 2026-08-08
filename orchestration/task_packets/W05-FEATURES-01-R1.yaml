@@ -1,0 +1,152 @@
+schema_version: 1
+task_id: W05-FEATURES-01
+phase_id: W05
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Implement the additive versioned W05 feature registry, exact W04 real-data bridge,
+  cryptographically separate synthetic-development family, deterministic materializer
+  and adversarial state/temporal fixtures without changing W04 authority.
+depends_on:
+  - REVIEW-W05-CONTRACTS-TRUTH-03-R1:ACCEPT
+assigned_role: feature_registry_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R1.yaml
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-03-R1.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R1.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-03-R2.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R2.md
+  - reports/reviews/W05/w05-m0-contract-truth-independent-review-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/evidence.py
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - reports/verification/W04/wyscout-four-feature-vertical-slice-R1-master-acceptance.md
+  - reports/verification/W04/wyscout-raw-to-gold-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/features/w05-m0-feature-registry-v1.json
+  - src/scouting/features/__init__.py
+  - src/scouting/features/registry.py
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/unit/test_w05_features.py
+  - reports/reviews/W05/returns/W05-FEATURES-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - configs/roles/**
+  - configs/models/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/scouting/contracts/**
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+  - tests/contracts/**
+requirements:
+  - >-
+    Create one self-verifying JSON registry collection whose canonical digest excludes
+    only its own digest and whose two evidence families have separate IDs, versions,
+    ordered schemas and content digests. Canonicalisation is compact UTF-8 JSON with
+    ensure_ascii=true, sorted mapping keys and list order preserved. Reject unknown
+    keys, duplicate names/order positions, digest drift and non-contiguous order.
+  - >-
+    The W04_REAL_GOVERNED bridge must reference, never copy or reinterpret, the
+    unchanged W04 candidate ID/digest, decision ID/digest and exact-four descriptor
+    digest from the accepted M0 contracts. Its only admitted names, in order, are
+    action_count, coordinate_known_action_count, match_count and
+    resolved_possession_action_count. Types are int64 counts, units are actions or
+    matches as applicable, denominator is NONE, imputation is FORBIDDEN, and only
+    accepted Gold rows with strict source/dependency lineage may enter. Minutes,
+    rates, per-90, role, outcome/value and other unsupported real fields stay
+    suppressed or unavailable exactly as W04 declares; no W04 bytes are changed.
+  - >-
+    The SYNTHETIC_DEVELOPMENT family must be visibly and cryptographically distinct,
+    carry provider_source=NONE, production_evidence=false,
+    protected_evaluation=false and claim=constructed_W05_development_only, and use
+    exactly this ordered schema: synthetic_progression_actions_per_90,
+    synthetic_final_third_entries_per_90,
+    synthetic_chance_creation_actions_per_90,
+    synthetic_defensive_disruptions_per_90,
+    synthetic_ball_retention_ratio, synthetic_aerial_involvements_per_90. It must not
+    use Wyscout in its identity, descriptions, lineage or claims.
+  - >-
+    Bind a separate ordered synthetic-only metadata-control schema inside that family
+    for synthetic_position_code, synthetic_age_years and synthetic_elapsed_minutes.
+    Give it its own schema hash and explicit control_only=true status. These inputs
+    support the declared metadata baseline and filters only; they are not silently
+    blended with the six resemblance features and are never admitted for W04 real
+    evidence, where elapsed minutes remains suppressed.
+  - >-
+    Define for every feature its football-language definition, strict numeric output
+    type, unit, exact numerator inputs, denominator inputs/formula, order, missing
+    policy, zero policy, suppression policy, unavailable policy, imputation=FORBIDDEN,
+    as-of available-at rule and dependency-lineage rule. Per-90 denominators use only
+    explicitly synthetic elapsed minutes; the ratio uses explicitly synthetic
+    attempts. No invalid/missing denominator becomes zero or an imputed value.
+  - >-
+    Implement a deterministic registry loader/admitter and synthetic materializer
+    using the additive W05 FeatureValue contract. It must return ordered values and
+    identity hashes, reject schema/evidence-class substitution, ignore no unknown
+    fields, use Decimal or another documented canonical calculation before one
+    documented float conversion, and never read provider data.
+  - >-
+    Materialization must enforce available_at < feature_cutoff_ts for every admitted
+    dependency and retain exact source/dependency lineage identity. A post-cutoff
+    record, altered manifest, reordered features or W04/synthetic identity swap must
+    fail closed rather than silently drop into a different result.
+  - >-
+    Add one self-verifying JSON fixture with at least 18 complete deterministic
+    synthetic player-window rows spanning at least three deliberately constructed
+    development peer groups plus explicit edge rows for unavailable, suppressed,
+    missing and observed zero. Each complete row carries fixed UUID, position, age,
+    synthetic elapsed minutes, cutoff, observed/available timestamps, raw numerator
+    inputs, ordered expected FeatureValues, constructed_development_peer_group and
+    dependency identity. The fixture must state that peer groups are development
+    construction labels, not recruitment outcomes, external expert labels or W06
+    protected evidence.
+  - >-
+    Tests must reproduce registry/fixture digests and exact bytes, feature order/hash,
+    formulas, state distinctions, W04 exact-four closure, suppression-not-zero,
+    no-imputation, cutoff-equality and post-cutoff rejection, lineage
+    substitution and deterministic repeated materialization.
+deliverables:
+  - Versioned self-verifying feature registry and exact W04/synthetic separation.
+  - Deterministic typed feature loader/materializer and development fixture.
+  - Focused adversarial tests and mandatory return.
+definition_of_done:
+  - W04 real admission is exact-four and all broader inputs are visibly synthetic-only.
+  - Unavailable, suppressed, missing and zero remain distinct through reload.
+  - No accepted W04 authority, Gold output, evidence or claim is modified.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/features tests/unit/test_w05_features.py
+  - uv run ruff check src/scouting/features tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to mutate or reinterpret accepted W04 authority/evidence/Gold bytes.
+  - Any materially different feature/product behaviour or weakened temporal/evidence guarantee.
+  - Any new dependency, external/provider access, credential, service, deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

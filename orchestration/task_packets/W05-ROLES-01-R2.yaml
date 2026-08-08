@@ -1,0 +1,117 @@
+schema_version: 1
+task_id: W05-ROLES-01
+phase_id: W05
+revision: R2
+state: IMPLEMENTED
+objective: >-
+  Make the accepted claim-bearing responsibility taxonomy a normally validated shared
+  FootballResponsibilityTaxonomy with one canonical digest and no model_construct bypass.
+depends_on:
+  - REVIEW-W05-ROLES-01-R1:REWORK
+assigned_role: football_role_taxonomy_implementer
+risk: high
+shared_contract_change: master_approved_bounded_additive_w05_correction
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-ROLES-01-R1.yaml
+  - reports/reviews/W05/w05-role-taxonomy-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-ROLES-REVIEW-01-R1.md
+  - orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R2.yaml
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-03-R2.yaml
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - src/scouting/roles/taxonomy.py
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - tests/unit/test_w05_roles.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/roles/taxonomy.py
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - tests/contracts/test_w05_m0_contracts.py
+  - tests/unit/test_w05_roles.py
+  - reports/reviews/W05/returns/W05-ROLES-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/models/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/w05-role-taxonomy-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-ROLES-01-R1.md
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/features/**
+  - src/scouting/modeling/**
+  - src/scouting/m0/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+requirements:
+  - >-
+    Extend FootballResponsibilityTaxonomy additively with the five already accepted
+    semantic fields canonical_order, expert_validation_status,
+    external_expert_evidence, claim and exemplar_notice. Give them strict contract
+    types; the role loader continues to enforce the exact W05 v1 values
+    responsibility_code_role_code_source_label, NOT_PERFORMED, empty evidence,
+    synthetic_development_taxonomy_only and the accepted exemplar notice.
+  - >-
+    The existing digest_for_payload must bind those fields alongside ID/version,
+    responsibilities, roles and mappings. The unchanged full config must reproduce
+    taxonomy digest 59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097
+    through the shared public method. Do not introduce a second taxonomy/config digest
+    or change accepted config/fixture bytes unless exact canonical recomputation proves
+    it unavoidable; if it is unavoidable, stop rather than choosing a new identity.
+  - >-
+    Replace the RoleTaxonomy loader's model_construct bypass with normal
+    FootballResponsibilityTaxonomy validation using every declared field and the
+    canonical digest. Catch validation failure as RoleTaxonomyError. The returned
+    contract must revalidate from model_dump(mode=python), and
+    digest_for_payload(contract.model_dump(mode=json)) must equal its taxonomy_digest.
+  - >-
+    Update the shared contract test taxonomy fixture to supply explicit synthetic-only
+    claim fields before computing its digest. Retain all existing contract truth tests.
+    Add role tests for public contract round-trip, exact digest recomputation and failure
+    of changed claim/exemplar/expert fields even after all candidate digests are re-signed.
+  - >-
+    Retain the exact eight responsibilities, six roles, mappings, fixture alignment,
+    probabilities, context behavior, fail-closed inputs, no-permanent-label boundary and
+    accepted taxonomy/fixture identity pins. No model/artifact/serving implementation is
+    in scope; later model work must source its pins from this validated contract object.
+deliverables:
+  - Additive full-semantic shared taxonomy contract and normally validated role loader.
+  - Public round-trip/digest and re-signed claim substitution tests.
+  - Complete mandatory R2 return with old/new physical byte comparison.
+definition_of_done:
+  - The exact R1 public revalidation probe returns a valid contract with digest 596886...
+    and no model_construct call remains in the role package.
+  - Config and role fixture logical/physical bytes are unchanged; all accepted role and contract tests pass.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/roles tests/contracts/test_w05_m0_contracts.py tests/unit/test_w05_roles.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/roles tests/contracts/test_w05_m0_contracts.py tests/unit/test_w05_roles.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/roles
+  - uv run pytest -q tests/unit/test_w05_roles.py tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Existing accepted taxonomy or fixture bytes cannot remain unchanged under one valid digest.
+  - Any W04, feature, dependency, external/provider, model/serving, destructive, rights or claim change is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

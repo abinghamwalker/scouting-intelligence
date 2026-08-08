@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W04-REPOSITORY-PROGRESSION-GUARD-01
+phase_id: W04
+revision: R3
+state: ACCEPTED
+objective: >-
+  Correct only R2's paired review-plus-gate-record substitution by binding both
+  supplied artifacts to their exact accepted physical SHA-256 values and adding a
+  direct paired-substitution attack in both progression fixtures.
+depends_on:
+  - W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R1:REWORK
+assigned_role: bounded_w04_progression_guard_r3_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R3.yaml
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R2.yaml
+  - reports/reviews/W04/wyscout-repository-progression-guard-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R2.md
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+fixed_bindings:
+  r2_field_test_sha256: c254430b6bafcb378896636d2c22c51080c69f83c666b0e79fb0162afd84f99d
+  r2_possession_test_sha256: eb56aaa34838f2d28eeb7d6a1f1e8f5cc56ab5a52eeab44fd82ebfd5e2158a94
+  r2_producer_return_sha256: 9a25ea7f4b849a48a8d9eaecee8a92df7baf39aa20a9f8c336f523c325ac542e
+  failed_review_sha256: 865d1b7af38a9ff54d860117b970dd9b9adf041726ec5c05896f3b3525f7b8a0
+  failed_reviewer_return_sha256: 7138473638739b5fea3649ee9261e1f174dfcd3480e36a908ecd76f3a5de132e
+  accepted_gate_review_sha256: e9eca309986140ddfe40c66645a3f640777ff700e6a7187d43f020060d35c070
+  accepted_gate_record_sha256: 980303642f5c58876ed157698a5ea8f25ee79acef3c9faeaf015266cf547f168
+  accepted_gate_report_sha256: 656769e7e9fe894421056230344ed9e976d583895cabe42600d1a2294042e14e
+  accepted_gate_return_sha256: 8f45128b4609b2a575a9f7da5e147dd95c5ef83f203812d27ac97e6fbd9eb051
+requirements:
+  - Verify every fixed binding before editing and stop on drift.
+  - >-
+    In both modules, bind the supplied complete gate review and canonical gate record
+    to the exact accepted physical SHA-256 constants above, preserving R2's exact
+    report/return hashes, four paths, canonical five-key record and all lower validators.
+  - >-
+    Add a direct paired review-bytes plus recomputed-record substitution case in both
+    modules. The exact accepted four artifacts must pass; the paired substitution must
+    fail even when the record's review digest is recomputed consistently.
+  - Preserve every existing 15-case attack and all governed downstream paths.
+  - Do not alter any production/source/data/authority/gate/dependency/product byte.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run ruff check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run pytest -q tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R3 test-only correction and mandatory return with new hashes.
+stop_conditions:
+  - Any production/source/data/authority/gate byte, dependency, architecture, product scope or local-only change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

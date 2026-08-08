@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R8
+state: DISPATCHED
+objective: >-
+  Independently challenge the complete standalone R11 W04 schema and deterministic
+  rebuild design, reproduce its material environment claims, and accept it for
+  implementation only if every P0-P2 concern is closed.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R11:MASTER_ACCEPTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R11.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R10.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R11.yaml
+  - reports/verification/W04/wyscout-schema-design-R10-master-verification.md
+  - reports/verification/W04/wyscout-schema-design-R11-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R10.md
+  - reports/reviews/W04/wyscout-schema-design-R11.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R6.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/evidence.py
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R8.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_challenges:
+  - >-
+    Reproduce the exact locked/no-sync no-site launch behavior and challenge both
+    ordered argv, process roles, future repository entry-point paths/bytes, uv
+    identity split, and continued independent L==I admission.
+  - >-
+    Challenge the pre-build admission-prefix, immutable code-manifest/build-ID,
+    and post-build rebuild-prefix ordering for cycles, reuse, mutation, pyc reads,
+    site startup, or alternate execution paths.
+  - >-
+    Recheck strict cutoff equality rejection, the envelope-only record-kind
+    authority, exact player-match and Gold keys, six source and six Gold coverage
+    contracts, unknown quarantine, and all final/staging/manifest paths.
+  - >-
+    Reproduce the all-groups closure, Packaging bootstrap, three .pth classes,
+    editable metadata, 35-row executable census with 33/1/1 classes and 21 owners,
+    all three interpreter aliases, source-complete pyc authority, exact optional
+    site-six/repository-PostgreSQL orphan predicates, and stable/operational split.
+  - >-
+    Recheck the exact 17 local resources, sole writers, health/card/gate evidence,
+    two-root proof, and two-local-commit checkpoint ledger. Report every P0-P2
+    defect; do not waive or silently repair one.
+definition_of_done:
+  - The complete R11 artifact is independently read and challenged.
+  - Material current-environment claims are reproduced read-only.
+  - Every P0-P2 defect is either absent or returns a precise REWORK finding.
+  - The review and return are the only changed paths.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R8.md');
+    assert p.is_file() and p.stat().st_size > 10000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - Any P0-P2 source, rights, temporal, identity, product, environment, path, resource, gate, ledger or local-only defect remains.
+  - Review would require code, config, data, dependency, provider, network, architecture, storage-root, cleanup, or Git mutation.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

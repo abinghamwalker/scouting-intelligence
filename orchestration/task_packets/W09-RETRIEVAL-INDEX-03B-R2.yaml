@@ -1,0 +1,45 @@
+task_id: W09-RETRIEVAL-INDEX-03B
+revision: R2
+objective: >-
+  Preserve legitimate player-by-competition-season rows in the exhaustive index
+  while retaining deterministic ordering and rejecting duplicate grain semantics.
+depends_on:
+  - W09-RETRIEVAL-INDEX-03B-R1
+read_first:
+  - scouting-intelligence/src/scouting/contracts/research.py
+  - scouting-intelligence/src/scouting/modeling/research.py
+  - scouting-intelligence/orchestration/task_packets/W09-FULL-FEATURE-MATRIX-02C-R1.yaml
+  - scouting-intelligence/orchestration/task_packets/W09-RETRIEVAL-INDEX-03B-R1.yaml
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R1.md
+allowed_paths:
+  - scouting-intelligence/src/scouting/modeling/research.py
+  - scouting-intelligence/configs/models/w09-historical-retrieval-v1.json
+  - scouting-intelligence/scripts/build_w09_research_index.py
+  - scouting-intelligence/tests/unit/test_w09_research_index.py
+  - scouting-intelligence/tests/integration/test_w09_research_index_build.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R2.md
+deliverables:
+  - >-
+    Remove the incorrect global one-row-per-player restriction. Retain a canonical
+    player in every distinct competition-season grain represented by the governed
+    eligible matrix.
+  - >-
+    Continue to require unique grain_id and unique
+    (player_id, competition_id, season_id), with deterministic ordering by player
+    UUID bytes then grain_id. Reject repeated player rows within one
+    competition-season.
+  - >-
+    Add a fixture proving one player across two competitions remains as two stable,
+    reproducible index rows and a fixture rejecting within-competition duplication.
+checks:
+  - uv run ruff format --check src/scouting/modeling/research.py scripts/build_w09_research_index.py tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py
+  - uv run ruff check src/scouting/modeling/research.py scripts/build_w09_research_index.py tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py
+  - uv run mypy src/scouting/modeling/research.py scripts/build_w09_research_index.py
+  - uv run pytest -q tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py
+  - uv run bandit -q -r src/scouting/modeling/research.py scripts/build_w09_research_index.py
+stop_conditions:
+  - Accepted contracts cannot represent the required player-by-competition-season population.
+  - A correction would weaken grain uniqueness or require silent deduplication.
+prohibitions:
+  - No Git operations, dependencies, production artifacts or paths outside R1 implementation/tests plus the R2 return.
+approval: master_only

@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Independently verify the final standalone R5 design, closure of the four R4 P1
+  defects, retention of every accepted finding, and complete readiness for W04
+  implementation and gate-evidence packets.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R5:IMPLEMENTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R5.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R4.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - docs/architecture/evaluation-contract.md
+  - docs/dataset-cards/w04-source.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R4.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+deliverables:
+  - Ranked closure table for all four R4 P1 defects.
+  - Retained closure tables for the six R3 defects and original nine findings.
+  - >-
+    Independent challenge of identity clocks/lifecycle, full artifact ownership,
+    installed/runtime/resource content admission, temporal/lineage truth, all W04/P2
+    deliverables, and G-W04 evidence sequencing.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - All P0-P2 defects close or the packet returns REWORK.
+  - Every implementation, runtime, review, health, card, gate, registry, and checkpoint artifact has one exact owner.
+  - No architecture, rights, dependency, migration, provider, or local-only change is introduced.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R4.md');
+    assert p.is_file() and p.stat().st_size > 8000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any P0-P2 temporal, identity, executable-truth, ownership, gate, or local-only defect remains.
+  - Review requires producer/code/config/data/dependency edits or provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

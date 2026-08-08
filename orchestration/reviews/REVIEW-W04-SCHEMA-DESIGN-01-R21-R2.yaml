@@ -1,0 +1,54 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R21-R2
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SCHEMA-DESIGN-REVIEW-01-R14
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-schema-design-R21-R2-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R2.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete corrected R21 and R2 return readback
+    result: PASS_1242_DESIGN_LINES_132_RETURN_LINES
+  - command: master R21 structural and cardinality reconstruction
+    result: PASS_119_FIELD_15_FEATURE_30_RESOURCE_16_PACKET
+  - command: master six-defect closure reconstruction
+    result: PASS_NO_REMAINING_R1_DEFECT
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: complete repository and site pyc inventory comparison
+    result: PASS_IDENTICAL_59_REPOSITORY_1086_SITE
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read all 1,242 corrected R21 lines and all 132 R2-return lines.
+    The producer changed exactly its two owned paths, preserved R20 and the R1
+    return byte-identically, used no Git, and did not implement any product or
+    downstream authority.
+  - >-
+    The corrected design preserves the fixed R20 profile order, uses canonical
+    prior-authority key order, defines an unambiguous sibling-preimage DAG,
+    makes the Markdown digest physical-only, separates cross-authority test,
+    review, and master-gate ownership, and enumerates the full repository gate.
+  - >-
+    This decision accepts the corrected candidate into fresh independent R14
+    review only. It does not self-accept R21 or authorize materialization of
+    preimages, field v2, possession v2, features, Bronze, Silver, Gold, or any
+    product path.

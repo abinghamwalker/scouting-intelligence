@@ -1,0 +1,119 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Correct only P1 REVIEW_ID_PATH_DRIFT in the focused executable authority
+  contract while preserving both failed review generations as exact historical
+  evidence and retaining all accepted possession semantics.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2:MASTER_REWORK
+assigned_role: possession_semantic_v2_review_route_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.yaml
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R2-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.yaml
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.yaml
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+correction:
+  defect_id: REVIEW_ID_PATH_DRIFT
+  finding_severity: P1
+  fixed_current_review_id: w04-wyscout-possession-semantic-independent-review-v2-R1
+  fixed_current_review_path: >-
+    reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  historical_failed_review_sha256:
+    - 71f4bdb25b0e2b3903abbede25afa5b2f62fd1763b54276899dd8ad4364feb8a
+    - 609a4e0bc42fd611cb63d9483ae4ef262e2633472c3a8c32f4f99a4caf88b37a
+requirements:
+  - >-
+    Make REVIEW_PATH and REVIEW_ID exactly the sole R21-fixed current route
+    above. Remove every invented current v2-R2 review ID/path.
+  - >-
+    Replace the stale assertion that the fixed path must always equal failed
+    R1 bytes. When the current fixed-path bytes equal one of the two exact
+    historical failed hashes, treat the actual progression as having no valid
+    current review and require decision-only/no-acceptance/no-later-authority
+    state. Never accept either failed review as current authority.
+  - >-
+    For any other fixed-path bytes, run the complete strict current-review
+    validation normally and fail closed on wrong ID, actor, clock, digest,
+    fence, findings, or schema. Do not broadly ignore an invalid review.
+  - >-
+    Add regressions proving both exact historical hashes are transitional
+    non-authority, an unknown invalid review is rejected, and a valid fixed
+    v2-R1 PASS/REWORK review is processed through the normal progression.
+  - >-
+    Preserve the decision, candidate, exact five bound inputs, 17-key
+    predecessor, all 36 predicates, selector/sequence separation, scope-local
+    determinism, every existing semantic test, and all R1-R3 evidence.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory. Use only
+    root uv with --locked --no-sync, bytecode disabled, helper Python with -B,
+    and reproduce the exact inventory after the R4 return. Do not sync,
+    install, clean, or repair.
+  - >-
+    Use apply_patch only for the two exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, access provider/network data, or begin review,
+    acceptance, feature, cross-authority, Bronze, Silver, Gold, build, model,
+    product, cloud, container, endpoint, hosted CI, or deployment work.
+definition_of_done:
+  - The sole current review route is the R21-fixed v2-R1 ID/path.
+  - Both exact failed reviews remain historical and never become authority.
+  - Unknown invalid review bytes fail closed and valid current reviews progress.
+  - All focused/Ruff/local-only checks pass and inventory equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - The correction requires decision, candidate, policy, predicate, or review edits.
+  - Either failed review/return or any earlier evidence byte changes.
+  - Any check, path boundary, or terminal inventory differs.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

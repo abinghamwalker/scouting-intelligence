@@ -1,0 +1,32 @@
+schema_version: 1
+review_id: REVIEW-W04-R21-CROSS-AUTHORITY-TEST-01-R4
+task_id: W04-R21-CROSS-AUTHORITY-TEST-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - revision: R1
+    decision: REWORK
+    code: PERMANENT_ABSENCE_LIFECYCLE
+  - revision: R2
+    decision: REWORK
+    code: SUPERSEDED_RETURN_BINDING
+  - revision: R3
+    decision: REWORK
+    code: FOCUSED_ONLY_BYTECODE_ENV_ASSUMPTION
+decision: ACCEPTED_FOR_FRESH_INDEPENDENT_REVIEW
+next_packet: W04-R21-CROSS-AUTHORITY-REVIEW-01-R2
+reviewer: master
+evidence:
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R4.md
+  - reports/verification/W04/wyscout-r21-cross-authority-test-R4-master-verification.md
+  - reports/verification/W04/wyscout-r21-full-repository-gate-R1-failure.md
+decision_notes:
+  - Exact unsuppressed cross-test and complete focused suite pass.
+  - Normal pytest bytecode is retained and stable rather than deleted.
+  - Fresh review must reproduce the complete unsuppressed repository pytest command.

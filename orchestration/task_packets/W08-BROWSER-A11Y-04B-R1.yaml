@@ -1,0 +1,98 @@
+schema_version: 1
+task_id: W08-BROWSER-A11Y-04B
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Automate the complete stable W08 loopback workflow in a real Python Playwright
+  browser and correct only bounded presentation/accessibility defects it exposes.
+depends_on:
+  - W08-WEB-WORKFLOW-04A:MASTER_ACCEPTED
+  - W08-WEB-BRIEF-04D:MASTER_ACCEPTED
+  - W08-WEB-EXPORT-04C:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Real-browser evidence must exercise only 127.0.0.1, remain keyboard-operable and
+  semantically labelled at 1440/390/320 widths, and label every automated persona and
+  action as synthetic automation rather than representative-user evidence.
+read_first:
+  - AGENTS.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/reviews/W08/returns/W08-WEB-WORKFLOW-04A-R1.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R1.md
+  - reports/verification/W07/browser-accessibility-report.md
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - src/scouting/web/w08.py
+  - scripts/run_w08_study.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/landing.html
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/entry.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/**
+  - apps/web/static/w08/**
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - services/**
+  - scripts/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Real Chromium journey covering brief create/submit/approve, replayable retrieval linkage, shortlist/entry creation, scout assignment, observation/disagreement/amendment, shortlist decision/rejection/next action, export/read/revoke/audit and sign-out/session denial.
+  - Real-browser stale-conflict and recoverable-failure witness with visible error/status text and explicit reload/retry affordance.
+  - Keyboard-only skip-link, logical focus order, visible focus, form activation and error recovery witnesses.
+  - Exactly one header/nav/main/footer landmark, one h1, explicit form labels/descriptions, live status/errors, table captions/scoped headings and evidence-honest wording on every exercised page.
+  - Parametrised 1440x900, 390x844 and 320x700 checks with no body horizontal overflow or clipped required controls.
+  - Request capture proving all browser requests resolve only to 127.0.0.1 and no external provider/model/service request occurs.
+  - Bounded template/CSS or route-presentation corrections only; no shared service, contract, policy, data or dependency changes.
+definition_of_done:
+  - The stable workflow's browser-testable journeys pass in real headless Chromium and remain distinct from genuine moderated-user evidence.
+  - Accessibility and evidence-honesty assertions are executable rather than screenshot-only claims.
+focused_checks:
+  - Full multi-role browser journey and expired/denied session.
+  - Keyboard, landmarks, headings, labels, tables, status/errors and focus visibility.
+  - 1440/390/320 overflow and loopback-only network request audit.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+stop_conditions:
+  - A shared service/contract/policy/migration/dependency change is required.
+  - A browser binary is unavailable after checking the retained local Chrome path, or a network/external service, Node/npm, container, protected-output access, destructive action or Git operation would be required.
+  - Passing would require weakening authentication/authorisation, accessibility, audit/recovery or evidence-honesty assertions.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - exact commands, exit statuses and test counts
+  - viewport, keyboard, semantic and local-request evidence
+  - complete journey and conflict/recovery evidence
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

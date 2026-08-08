@@ -1,0 +1,50 @@
+schema_version: 1
+task_id: W10-V2-INDEPENDENT-REVIEW-08F
+phase_id: W10
+revision: R1
+state: PLANNED
+objective: >-
+  Independently challenge v2 construct validity, evidence provenance, circularity, blinding,
+  accessibility, cross-version isolation and formal-evaluation safety before human approval.
+depends_on:
+  - W10-V2-DATA-CONTRACTS-08B:IMPLEMENTED
+  - W10-V2-STUDY-CONSOLE-08C:IMPLEMENTED
+  - W10-V2-PROTOCOL-FREEZE-08E:IMPLEMENTED_AWAITING_APPROVAL
+assigned_role: independent_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - reports/verification/W10/v2-evidence-capability-and-construct.md
+  - reports/verification/W10/v2-mechanics-pilot.md
+  - reports/verification/W10/v2-protocol-freeze.md
+allowed_paths:
+  - reports/reviews/W10/v2-independent-review.md
+  - reports/reviews/W10/returns/W10-V2-INDEPENDENT-REVIEW-08F-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - src/**
+  - services/**
+  - apps/**
+  - scripts/**
+  - tests/**
+requirements:
+  - Review source and rerun bounded checks without relying on producer claims.
+  - Treat minutes-only assessment, model-input-only circularity, missing GK evidence, provenance leakage, asymmetric rendering and v1 approval reuse as critical challenge cases.
+  - Report every P0-P3 finding with exact evidence; do not self-remediate or self-approve.
+deliverables:
+  - reports/reviews/W10/v2-independent-review.md
+  - reports/reviews/W10/returns/W10-V2-INDEPENDENT-REVIEW-08F-R1.md
+definition_of_done:
+  - The review returns ACCEPT or bounded REWORK with no ambiguity about whether v2 can support real expert judgement safely.
+acceptance_checks:
+  - The master independently reproduces the review evidence and closes every finding before v2 approval.
+stop_conditions:
+  - Any protected formal response exists before review acceptance or any evidence origin cannot be reconstructed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

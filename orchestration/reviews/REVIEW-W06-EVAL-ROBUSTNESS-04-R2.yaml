@@ -1,0 +1,43 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-ROBUSTNESS-04-R2
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R2
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    evidence: >-
+      Stress result 5edc056a4aa5d317642b1efd22e490eac2ff4a849b3f51d770babaa75f91d3f8
+      accepts rolling-window metric/interval children in split-half cohorts plus arbitrary
+      candidate-roster and common-candidate digests.
+  - severity: P1
+    evidence: >-
+      Control result a2fc46a61a5b5408bc1d2bc1e4cf53aec4adbf8cab202b7fb30b17ccdddb97fa
+      accepts caller input_digest bb...bb because persisted controls do not bind embedded
+      input evidence or their metric/comparison children to that input.
+  - severity: P1
+    evidence: >-
+      Public shuffled-pair result 96da14ddc305f67058a90a095b399ac428900a2b95d95fee129b420c6b861776
+      fabricates a governed-human reviewer and treats a one-pair identity permutation as
+      a computed null with baseline=null=1.0.
+  - severity: P1
+    evidence: >-
+      Metadata, raw-Euclidean and coverage control kinds accept arbitrary unlabeled
+      RankingRow pairs without kind-specific evidence authority or baseline identity.
+  - severity: P1
+    evidence: >-
+      Applicability static supported_population, exclusions and non_claims are
+      caller-controlled rather than exactly derived.
+  - severity: P1
+    evidence: >-
+      The public fixture contains population declarations but no executable observation,
+      score, label or control inputs; tests construct a separate unbound population.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.yaml
+reviewer: master

@@ -1,0 +1,127 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-TEST-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only the cross-authority test's serial lifecycle handling so the same
+  frozen contract passes before review, after an exact passing review, after
+  the exact master gate, and after later gate-authorized product paths exist.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-TEST-01-R1:MASTER_REWORK
+assigned_role: r21_cross_authority_test_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R2.yaml
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_r21_cross_authority_composability.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-*
+  - reports/verification/**
+  - reports/phase-gates/**
+retained_preflight_inventory:
+  pyc_files: 1150
+  pyc_path_list_sha256: 7953ff36ecd0721d414d637085d0f2331dac35cafc160745e9bf35280f8a4f44
+  cache_directories: 150
+  cache_path_list_sha256: 79250878e3cfb60a3b0131857ca7b0dc79878c5165725132223d95e32f7f9fd6
+defects:
+  - code: REVIEW_PATH_PERMANENT_ABSENCE_ASSUMPTION
+    severity: P1
+    evidence: >-
+      test_future_review_and_gate_assertions_fail_closed_and_bind_physical_bytes
+      asserts the fixed review and gate paths do not exist, so the contract
+      necessarily fails after the required serial review/gate materialization.
+  - code: GATE_ARTIFACT_MISCLASSIFIED_AS_PRODUCT
+    severity: P1
+    evidence: >-
+      test_no_product_or_generated_artifact_path_exists_before_complete_gate
+      includes the three authorized master-gate evidence paths in its absent
+      product set, so creating the mandatory gate makes the test fail.
+  - code: POST_GATE_PRODUCT_PERMANENTLY_FORBIDDEN
+    severity: P1
+    evidence: >-
+      The descriptor and product absence tests remain unconditional after a
+      valid complete gate, contradicting R21's before-gate boundary and the
+      user's explicitly authorized next vertical slice.
+requirements:
+  - >-
+    Preserve every R1 semantic assertion. Change only progression/lifecycle
+    handling and add exact tests for all four states: review absent/gate absent;
+    actual-or-synthetic exact PASS review/gate absent; exact PASS review plus
+    exact PASS gate; and gate-complete with simulated later product presence.
+  - >-
+    When the fixed review exists, parse and validate its exact machine record,
+    fixed ID/path, distinct reviewer, complete physical test digest, and
+    complete physical R1 producer-return digest. When absent, prove a supplied
+    absent review cannot satisfy the gate without making absence itself a test
+    failure.
+  - >-
+    When the master gate exists, parse and validate the exact closed canonical
+    JSON gate record and its binding to the fixed review's complete physical
+    digest and PASS recommendation. Gate evidence paths are control evidence,
+    never product paths.
+  - >-
+    Product/serializer/build/Bronze/Silver/Gold absence is mandatory only while
+    no valid complete master gate exists. After a valid gate, simulated or
+    actual later product paths must not invalidate R21 acceptance.
+  - >-
+    Do not create the actual review, master gate, or any product path. Exercise
+    lifecycle states with in-memory values and temporary paths only.
+  - >-
+    Preserve the exact 30-resource roster, all authority semantics, retained
+    inventory, and R1 return bytes. Use root uv --locked --no-sync,
+    PYTHONDONTWRITEBYTECODE=1, and Python -B. Do not run Git, delegate,
+    self-approve, or expand scope.
+definition_of_done:
+  - The contract remains green before review.
+  - The same contract is demonstrably green after exact review/gate evidence.
+  - Later gate-authorized product presence no longer breaks R21 tests.
+  - R1 semantics and all focused suites remain green.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Correct progression requires changing any frozen authority or R21 clause.
+  - >-
+    Correct work requires architecture, product, root, dependency/lock,
+    network, cloud, container, endpoint, hosted-CI, deployment, or broader
+    scope.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

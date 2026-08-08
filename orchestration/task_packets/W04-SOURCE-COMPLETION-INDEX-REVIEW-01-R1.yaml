@@ -1,0 +1,128 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently and adversarially review the exact W04 source-completion-index R2
+  candidate, its immutable artifact, affected Wyscout contracts, provenance/lineage
+  binding and equal-clock correction. Return PASS only if every authorized failure
+  mode is independently reproduced closed and no public product path can treat a
+  caller-selected subset or unaccepted index as source completeness authority.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: independent_w04_source_completion_index_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R1.yaml
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R2.yaml
+  - reports/verification/W04/wyscout-source-completion-index-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R2.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_manifest.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-source-completion-index-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R2.md
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: d81acf16302ce47bffe6461181163e1607b8744ca68f75e5719a2e50c7e43285
+  contract_implementation_sha256: acf5555d31c931dda6c3575e5b088401847e0b8efc50c50f349ca188ee019aa0
+  source_test_sha256: 8b4194574e0d362c7ddcf43b3d6787de5672a9a71d1c938b20a5eb70781f2cef
+  contract_test_sha256: ba01261521923bf2b62ea4a63930f43bc20e2df18fb3028accdf53b90d8e77c1
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  index_size_bytes: 644037
+  aggregate_action_count: 3071395
+  r2_return_sha256: 35b65b440ce6da7dd61f93b35e38a52d796f2749c8448f9980d59caccc50447d
+review_requirements:
+  - Verify every fixed candidate hash before analysis and stop on drift.
+  - >-
+    Independently rederive or otherwise recompute from the frozen source enough to
+    prove the bridge runs first, all five whole-file digest/size/row counts are exact,
+    only authorized members are opened, index bytes are deterministic and the full
+    3071395 row reconciliation is real rather than metadata trust.
+  - >-
+    Independently inspect the action and period preimages for source ordinal, provider
+    event and match identities, period/clock/order, player/team, integer-only event/
+    subevent semantics, raw tags, possession tag projection and Bronze-compatible raw
+    record digest. Challenge string/bool/float coercion and missing/null distinctions.
+  - >-
+    Reproduce rejection of wrong content address, internally self-consistent lookalike,
+    address spoof, source binding drift, member/period ordering drift, count/aggregate
+    drift, duplicate period/action, missing/additional/reordered/stale/cross-member/
+    cross-match/cross-period action and whole-period/whole-match omission.
+  - >-
+    Determine whether the public factory/reader is the enforceable production
+    completeness boundary despite low-level immutable contract models being directly
+    constructible for tests. Return REWORK if an authorized downstream product path
+    could bypass the reader and obtain accepted provenance/Gold from a caller-selected
+    subset. Do not accept a convention-only restriction that executable code does not
+    enforce.
+  - >-
+    Reproduce completion-index digest binding through possession sequence, Silver
+    possession, player-match fact, Gold provenance, dependency-lineage hash, temporal
+    proof and layer manifest; verify causal other-player/ineligible rows remain.
+  - >-
+    Reproduce both equal-clock ambiguous-team cases, dependent contested uncertainty
+    and preservation of strictly earlier deterministic groups. Challenge source
+    ordinal/event identity as a same-clock team tie-break.
+  - Verify exactly four Gold features remain and no product/runtime byte was written.
+  - Confirm no dependency/lock/provider/network/cloud/container/remote/CI/endpoint/deployment change.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run ruff check src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run mypy src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_identity_ruleset_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - git diff --check
+  - git remote
+deliverables:
+  - One independent review with PASS or REWORK, exact P0/P1/P2 findings and executable evidence.
+  - One mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or need to edit any implementation/test/data/frozen path.
+  - Any provider/network/Git/destructive operation, new dependency, architecture change or product write.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

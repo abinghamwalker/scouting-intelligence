@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% from "_authority.html" import no_go_banner, authority_panel %}
+{% block content %}
+  {{ no_go_banner(no_go) }}
+  <section class="hero" aria-labelledby="page-heading">
+    <p class="eyebrow">Read-only, local research evidence</p>
+    <h1 id="page-heading">Inspect governed evidence without turning it into a decision</h1>
+    <p class="lede">Evidence is pinned to its accepted local authority. Candidate labels identify synthetic-development records, not real people.</p>
+    <p><a class="button-link" href="/w07/search">Search synthetic-development evidence</a></p>
+  </section>
+  <section class="content-grid" aria-label="Evidence scope">
+    <article><h2>W04 descriptive bridge</h2><p>Accepted real-data context is descriptive only: 2 actions, 2 coordinate-known actions, 1 match and 2 resolved-possession actions. Minutes, rates and per-90 remain <strong>SUPPRESSED</strong>.</p></article>
+    <article><h2>W05 retrieval</h2><p>Rankings communicate distance-based resemblance geometry for synthetic-development evidence only. No combined percentage or positive quality conclusion is available.</p></article>
+    <article><h2>W06 evaluation status</h2><p><strong>NO_GO</strong>: protected outputs were not opened and expert relevance evidence is missing. Unsupported evidence is shown as unavailable rather than inferred.</p></article>
+  </section>
+  {{ authority_panel(authority|default({})) }}
+{% endblock %}

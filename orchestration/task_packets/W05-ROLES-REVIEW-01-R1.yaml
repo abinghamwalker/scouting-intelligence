@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W05-ROLES-REVIEW-01
+phase_id: W05
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Independently verify responsibility-language taxonomy content identity,
+  deterministic contextual membership and the no-permanent-label/no-expert-claim boundary.
+depends_on:
+  - W05-ROLES-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-ROLES-01-R1.yaml
+  - reports/reviews/W05/returns/W05-ROLES-01-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/roles/taxonomy.py
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/unit/test_w05_roles.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-role-taxonomy-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-ROLES-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Are taxonomy responsibilities and roles clear football-language contextual responsibilities rather than opaque clusters, quality/outcome claims or permanent labels?
+  - Does taxonomy content digest bind canonical responsibility/role/mapping semantics and reject same-ID changed content, order ambiguity and dangling codes?
+  - Is contextual membership deterministic, probability-ordered, exactly summing to one and bound to taxonomy ID/version/digest for every player-window context?
+  - Do unknown/negative/non-finite/all-zero inputs fail closed without invented uniform roles, and can the same player vary by context?
+  - Is any source-label mapping only a declared prior and can exemplar similarity neither replace nor redefine the taxonomy?
+  - Are expert validation, provider derivation, production validity and W06 evidence explicitly unclaimed in config, fixture, code, tests and return?
+deliverables:
+  - Independent P0/P1/P2 verdict and direct substitution/probability/context/claim probes.
+  - Smallest bounded fix for reproducible W05 blockers only.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - Taxonomy identity and contextual probability behavior independently reproduce.
+  - No source/test/config/orchestration/dependency/Git/accepted predecessor changes.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_roles.py tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/roles tests/unit/test_w05_roles.py
+  - uv run mypy src/scouting/roles
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any authority conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

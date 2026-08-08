@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R3
+state: REWORK
+objective: >-
+  Freshly and independently verify that the corrected R20 v15 child and separate
+  launcher reject every R2 fail-open state and retain exact stable authority,
+  immutable publication, one-hash projection/inverse and rebuild controls.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R3:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r3_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R3.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/contracts/wyscout_build.py
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R3.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  admission_child_sha256: 10b70fadc0f6eae5b6df463afda08413d810f5a4d8b46c4688a7dafee6d1cd34
+  launcher_sha256: 3bfb912b9a1bf011248d2ad39e91947f176ba03b421cfb77a468458c858632cf
+  runtime_tests_sha256: 17757be5f2db591b81fd2e13201d27c75bd095e3da536b67216463844aae74b7
+  producer_return_sha256: 8d39fb2238851dfe9568debfd03905fe12d19edd32528cef2451d337de8aef71
+  r2_review_sha256: 4a8ac98ba094499ec38f41e2196b24f412fd355f7d0efc9dce81e2b0cd69f704
+  r2_reviewer_return_sha256: 0ffcb9793a54a7ed0e867660eb4c664709a2a30af2e8f3a782d736cafddc8bfe
+requirements:
+  - Verify every fixed binding and keep producer bytes strictly read-only.
+  - >-
+    Independently attack exact three-PTH/bootstrap/coverage/editable metadata,
+    direct-url/uv-cache normalization, global installed ownership and generated
+    byte closure in both collectors.
+  - >-
+    Independently prove one-hop wheel-cache association, strict extracted RECORD
+    equality and complete collision-free root plus five-scheme PEP 427 mapping;
+    reproduce two-hop, omitted data, collision, overwrite and escape rejection.
+  - >-
+    Reconstruct the exact three-alias lstat topology, launch observation,
+    interpreter/full-version/platform/ABI/extension/libpython/loader/stdlib
+    closure and reject a fourth or altered alias/loader/ABI/source state.
+  - >-
+    Verify runtime R-subset-L is reject-only, exact child environment is not
+    inherited, admission repeats pre-result authority, and rebuild independently
+    rechecks aggregate/lock/stable authority/manifest/prefix before and after its
+    bounded child. Confirm the launcher does not import/call the child collector.
+  - >-
+    Run the full 178-test candidate gate including all final narrow hardening, the
+    actual two-run admission and direct child-versus-launcher reconstruction.
+    Require all twenty components/counts and repository identity equal and prove no
+    real-root write or rebuild execution.
+  - >-
+    Return PASS only with P0/P1/P2=0/0/0; otherwise bounded REWORK with complete
+    exact correction surface and no producer edits.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent R3 review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without editing producer bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

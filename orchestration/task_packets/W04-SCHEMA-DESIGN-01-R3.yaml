@@ -1,0 +1,82 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Produce a complete implementable W04 schema/rebuild design grounded in the accepted
+  source-adapter interface and measured admitted Wyscout schema profile, closing every
+  independent R1 and master R2 finding.
+depends_on:
+  - W04-SOURCE-INGEST-01-R3:ACCEPTED
+  - W04-SOURCE-INGEST-REVIEW-01-R3:ACCEPTED
+  - W04-SOURCE-PROFILE-01-R2:ACCEPTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R2.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/sources/wyscout.py
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R3.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R3.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Replace fabricated exact second-half UTC with a precision-aware period-relative
+    representation and conservative strict-cutoff eligibility rule.
+  - >-
+    Consume source object/member paths from the accepted completion manifest and
+    define the completion-to-layer-manifest relationship.
+  - >-
+    Define a non-circular deterministic bridge from provider completion evidence to
+    the strict SourceSnapshotManifest UUID, tenant/trace context, classification,
+    file evidence, coverage, and one downstream artifact.
+  - >-
+    Separate truthful run-clock receipts from deterministic semantic identity; define
+    stable build_id and exact semantic-versus-physical rebuild comparisons.
+  - >-
+    Add a serial master-owned field-registry and possession-taxonomy authority packet
+    with exact paths, schemas, versions, digests, unknown rules, and synthetic cases.
+  - Add a versioned deterministic neutral W04 role-context identity to the Gold key.
+  - >-
+    Freeze nominal/elapsed/stoppage/terminal/minute-interval semantics and suppress
+    per-90 products when the denominator is not supported.
+  - >-
+    Freeze every coverage numerator/denominator, zero-denominator rule, overall
+    aggregation, missing-dimension rule, and applicability decision table.
+  - >-
+    Add the blueprint-required Silver player_match_fact grain with match-bound minutes,
+    team/context, coverage, result-independent facts, lineage, and reconciliation.
+definition_of_done:
+  - All nine P1/P2 findings are explicitly closed with no guessed source semantics.
+  - The exact accepted source paths and measured schema profile drive the design.
+  - Every proposed implementation packet has serial dependencies and disjoint ownership.
+  - The complete standalone design remains within W04 and local-only authority.
+acceptance_checks:
+  - uv run python -c "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-R3.md'); assert p.is_file() and p.stat().st_size > 8000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Accepted source/schema evidence cannot support minutes, possessions, or required Gold grain.
+  - A source-rights, architecture, dependency, migration, or local-only change is required.
+  - Required correction needs provider/network/data access by the design subagent.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

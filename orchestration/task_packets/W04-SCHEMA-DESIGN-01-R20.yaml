@@ -1,0 +1,171 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R20
+state: DISPATCHED
+objective: >-
+  Produce a standalone R20 design that preserves every accepted R19 closure
+  while correcting the exact four-row Class-E wrapper-shebang contradiction and
+  updating the affected stable schema authority.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R19:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R12:MASTER_REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R12-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R12.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R12.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R19.yaml
+  - reports/verification/W04/wyscout-schema-design-R19-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R19.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R19.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R20.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Produce a standalone replacement of R19. Preserve every R19 field, actor,
+    possession, identity, supported-feature, source, rights, temporal, product,
+    path, environment, packaging, bytecode, resource, result-frame, projection,
+    build, two-root, ownership, gate, ledger, and no-write-review closure except
+    where this packet explicitly changes executable shebang authority.
+  - >-
+    Preserve B=35, E=33, P=1, W=1 and 21 owners. Truthfully bind 29 Class-E
+    wrappers plus the sole Class-P pip3.12 wrapper to the exact python shebang,
+    exactly four Class-E wrappers to the exact python3 shebang, and Ruff as the
+    sole Class-W non-wrapper binary. Thus the complete text-wrapper split is 30
+    python and four python3; no other split is admitted.
+  - >-
+    Define a constructive, exact per-row alias selector. python3 is selected if
+    and only if the complete owner/name/group/target tuple is one of:
+    detect-secrets==1.5.0 / detect-secrets / console_scripts /
+    detect_secrets.main:main; detect-secrets==1.5.0 /
+    detect-secrets-hook / console_scripts /
+    detect_secrets.pre_commit_hook:main; httpx==0.28.1 / httpx /
+    console_scripts / httpx:main; pip-licenses==5.5.5 / pip-licenses /
+    console_scripts / piplicenses:main. Every other Class-E row selects python;
+    Class P selects python. Generic either-alias acceptance, realpath-only
+    equivalence, launch-time sys.executable selection, fallback, or post-hoc
+    repair is forbidden.
+  - >-
+    Record the exact four current rows from the R12/master evidence, including
+    singular owner/RECORD row, entry-point target, size, complete SHA-256,
+    RECORD digest, regular/non-symlink kind, mode 0755, link count one, exact
+    python3 first line, and byte-identical deterministic body. Any changed fact
+    fails; do not rewrite or regenerate a wrapper.
+  - >-
+    Retain the exact three-alias safe topology and
+    w04-venv-wrapper-interpreter-alias-v2. Require every selected python3
+    shebang to traverse the exact contained one-hop python3 -> python chain and
+    then the already admitted physical interpreter. python and python3 remain
+    different exact wrapper roles even though their admitted chains end at the
+    same physical bytes. python3.12 and every other spelling remain forbidden
+    in E and P shebangs.
+  - >-
+    Define the two exact Class-E template variants as differing only in their
+    selected first-line alias. Stable normalization must replace only a fully
+    verified python first line with #!<W04_VENV_WRAPPER_PYTHON> and only a fully
+    verified python3 first line with #!<W04_VENV_WRAPPER_PYTHON3>, retaining
+    every remaining byte. The stable row must bind the selected alias role and
+    constructive tuple so the two spellings cannot collapse.
+  - >-
+    Because the executable canonical preimage changes, bump
+    w04-installed-executable-census-v2 to
+    w04-installed-executable-census-v3. Because that component is transitive to
+    the stable code/environment manifest, bump
+    w04-code-environment-admission-v14 to
+    w04-code-environment-admission-v15 everywhere it is an exact input, result,
+    equality, test, manifest, ledger, or two-root value. Do not retain a stale
+    v14 acceptance route.
+  - >-
+    Retain w04-local-control-bootstrap-v4,
+    w04-outer-environment-bootstrap-v2,
+    w04-child-environment-input-v2, and all other unchanged schema/algorithm
+    versions. Preserve the exact 16/8/10/25/25/20 cardinalities, 24-key
+    projection intersection, 20 component proofs, H1/H2 construction, and
+    build-ID algorithm; only the admitted code-manifest schema value and
+    executable component preimage change.
+  - >-
+    Preserve the exact 119-pair roster, strict UUID ActorId, 12-field/six-row
+    possession closure, approved field contract-test path, 17 resources,
+    1,086/58 R19 operational pyc snapshot and incident, future-run operational
+    preflight rule, and absent future implementation scripts.
+  - >-
+    Extend positive/negative tests to prove the exact four-row selector, the
+    29-E-plus-one-P python set, both distinct stable tokens, exact alias-chain
+    containment, v3/v15 propagation, and rejection of any swapped, added,
+    missing, generic, python3.12, env, flag-bearing, external-root, body-altered,
+    owner/target-altered, or repaired wrapper.
+  - >-
+    Change exactly the two R20 report paths. Do not touch .venv, sync, clean,
+    repair or delete any pyc, create a parent-workspace path, or perform Git,
+    provider, network, implementation, configuration, data, cloud, container,
+    endpoint, or deployment work.
+definition_of_done:
+  - R20 is a standalone implementation authority with no R19 wrapper contradiction.
+  - The exact per-row alias selector admits current bytes without generic equivalence.
+  - Distinct stable tokens preserve root-independent alias identity.
+  - Executable census v3 and code/environment manifest v15 propagate consistently.
+  - Every other passing R19 closure remains unchanged.
+acceptance_checks:
+  - >-
+    before_site=$(find .venv/lib/python3.12/site-packages -name '*.pyc' -type f | wc -l);
+    before_repo=$(find . -path './.venv' -prune -o -name '*.pyc' -type f -print | wc -l);
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "import os,sys; from pathlib import Path;
+    assert sys.dont_write_bytecode and os.environ.get('PYTHONDONTWRITEBYTECODE') == '1';
+    p=Path('reports/reviews/W04/wyscout-schema-design-R20.md');
+    s=p.read_text(); assert p.stat().st_size > 230000;
+    assert 'w04-installed-executable-census-v3' in s;
+    assert 'w04-code-environment-admission-v15' in s;
+    assert '<W04_VENV_WRAPPER_PYTHON3>' in s;
+    assert all(name in s for name in
+    ('detect-secrets','detect-secrets-hook','httpx','pip-licenses'))";
+    after_site=$(find .venv/lib/python3.12/site-packages -name '*.pyc' -type f | wc -l);
+    after_repo=$(find . -path './.venv' -prune -o -name '*.pyc' -type f -print | wc -l);
+    test "$before_site" = "$after_site";
+    test "$before_repo" = "$after_repo"
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    The correction requires wrapper/environment mutation, cleanup, dependency
+    or lock change, architecture change, project-root change, provider/rights
+    change, storage change, network access, or local-only boundary change.
+  - >-
+    The exact current wrapper facts cannot be represented constructively without
+    admitting arbitrary equivalent aliases or hiding alias choice.
+  - >-
+    A schema change beyond executable census v3 and code/environment manifest
+    v15 is required.
+  - Work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

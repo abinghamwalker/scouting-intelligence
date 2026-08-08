@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W06-EVAL-GATE-BINDING-REVIEW-02
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-GATE-BINDING-REVIEW-02-R1.yaml
+objective: >-
+  Freshly verify that gate-binding R2 closes governed abstention and nested-child
+  population escapes without regressing the accepted protocol/roster/NO_GO relation.
+depends_on:
+  - W06-EVAL-GATE-BINDING-02-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-02-R1.yaml
+  - reports/reviews/W06/evaluation-gate-binding-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R2.md
+  - src/scouting/contracts/evaluation.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-gate-binding-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Do all-ABSTAIN and mixed concrete-plus-ABSTAIN relevance reject for both positive decisions under REQUIRE_COMPLETE?
+  - Does at least one coherent, complete, governed positive shape still validate structurally?
+  - Do foreign-population metrics nested in slices and failures naming absent or non-rostered queries reject at run construction?
+  - Do exact protocol, protected roster, access, top-level result/interval and both NO_GO-shape closures from R1 remain intact?
+  - Can any normal-constructor substitution still alter evaluated membership, retained negative population or positive gate eligibility within this split?
+deliverables:
+  - Fresh report-only ACCEPT or REWORK verdict with exact public constructor matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R2.md.
+definition_of_done:
+  - All six R2 residual/master constructors are independently reproduced.
+  - R1 relational closures receive bounded regression checks.
+  - Reserved metric/value/identity work is not reopened unless it breaks this population relation.
+acceptance_checks:
+  - uv run --no-sync pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/evaluation-gate-binding-independent-review-R2.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R2.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and constructor matrix with severities
+  - exact commands, exit statuses and concise results
+  - exact remaining counterexamples and identities or explicit closure
+  - residual population, negative-retention, applicability and claim risks
+  - smallest bounded correction or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

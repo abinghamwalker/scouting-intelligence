@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block body %}
+  <h1>Work queue</h1>
+  <p role="status">Working as {{ principal.roles|join(', ')|title }}. All records are synthetic workflow mechanics.</p>
+
+  {% if guided_study %}
+    <section class="next-action" aria-labelledby="queue-next-action">
+      <p class="eyebrow">Recommended next action</p>
+      {% if 'analyst' in principal.roles and not briefs %}
+        <h2 id="queue-next-action">T1 · Create one role brief below</h2><p>Use a memorable pilot title; the supplied synthetic defaults are sufficient.</p>
+      {% elif 'analyst' in principal.roles and briefs and briefs[0].status == 'draft' %}
+        <h2 id="queue-next-action">T1 · Open “{{ briefs[0].title }}” and submit it</h2><p>The draft already exists. Do not create another one.</p><a class="button-link" href="/w08/briefs/{{ briefs[0].role_brief_id }}">Open current brief</a>
+      {% elif 'analyst' in principal.roles and briefs and briefs[0].status == 'submitted' %}
+        <h2 id="queue-next-action">T2 · This brief now needs the Approver</h2><p>Switch roles once; the guide will return you to this exact brief.</p>
+        <form method="post" action="/w08/guide/switch-role" class="role-switch-form"><input type="hidden" name="guide_csrf" value="{{ guided_switch_token }}"><input type="hidden" name="role" value="approver"><input type="hidden" name="return_to" value="/w08/briefs/{{ briefs[0].role_brief_id }}"><button class="role-switch" type="submit">Continue as Approver</button></form>
+      {% elif 'analyst' in principal.roles and briefs and briefs[0].status == 'approved' %}
+        <h2 id="queue-next-action">T2 · Open the approved brief and create its replay link</h2><a class="button-link" href="/w08/briefs/{{ briefs[0].role_brief_id }}">Continue approved brief</a>
+      {% elif 'approver' in principal.roles and briefs and briefs[0].status == 'submitted' %}
+        <h2 id="queue-next-action">T2 · Open and approve “{{ briefs[0].title }}”</h2><a class="button-link" href="/w08/briefs/{{ briefs[0].role_brief_id }}">Review submitted brief</a>
+      {% elif 'scout' in principal.roles and entries %}
+        <h2 id="queue-next-action">T3 · Open your assigned candidate</h2><a class="button-link" href="/w08/entries/{{ entries[0].shortlist_entry_id }}">Open candidate review</a>
+      {% elif 'admin' in principal.roles %}
+        <h2 id="queue-next-action">T5 · Inspect the audit and exercise the denied path</h2><a class="button-link" href="/w08/audit">Open audit evidence</a>
+      {% else %}
+        <h2 id="queue-next-action">Return to the journey guide</h2><p>It shows the required role and screen for every remaining task.</p><a class="button-link" href="/w08/guide">Open pilot journey</a>
+      {% endif %}
+    </section>
+  {% else %}
+    <form method="post" action="/w08/logout"><input type="hidden" name="csrf" value="{{ csrf }}"><button>Sign out and revoke session</button></form>
+  {% endif %}
+
+  {% if 'analyst' in principal.roles %}
+    <section>
+      <h2>Create role brief</h2>
+      <p>Describe one synthetic search brief. Template and taxonomy details are retained automatically.</p>
+      <form method="post" action="/w08/briefs">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <label>Brief title <input name="title" required></label>
+        <label>Required responsibility <select name="responsibility">{% for code in brief_options.responsibilities %}<option value="{{ code }}">{{ code }}</option>{% endfor %}</select></label>
+        <label>Preferred responsibility <select name="preference_dimension">{% for code in brief_options.responsibilities %}<option value="{{ code }}">{{ code }}</option>{% endfor %}</select></label>
+        <label>Preference weight <select name="preference_weight">{% for weight in brief_options.preference_weights %}<option value="{{ weight }}">{{ weight }}</option>{% endfor %}</select></label>
+        <label>Synthetic age at most <input type="hidden" name="constraint_field" value="{{ brief_options.constraint_field }}"><input type="hidden" name="constraint_operator" value="{{ brief_options.constraint_operator }}"><select name="constraint_value">{% for value in brief_options.constraint_values %}<option value="{{ value }}">{{ value }}</option>{% endfor %}</select></label>
+        <label>Synthetic exemplar <select name="exemplar_player_ids">{% for player_id in brief_options.exemplar_player_ids %}<option value="{{ player_id }}">{% if guided_study %}Synthetic reference player{% else %}Public W07 query player {{ player_id }}{% endif %}</option>{% endfor %}</select></label>
+        <button>{% if guided_study %}Create draft{% else %}Create immutable draft{% endif %}</button>
+      </form>
+      <details class="technical-note"><summary>Technical template details</summary><p>{{ brief_options.template_id }} · {{ brief_options.taxonomy_id }} · {{ brief_options.taxonomy_version }}</p></details>
+    </section>
+  {% endif %}
+
+  <section>
+    <h2>Role briefs</h2>
+    <table><caption>Current version of each local role brief</caption><thead><tr><th scope="col">Title</th><th scope="col">Status</th><th scope="col">Version</th><th scope="col">Action</th></tr></thead><tbody>{% for row in briefs %}<tr><th scope="row">{{ row.title }}</th><td>{{ row.status|title }}</td><td>{{ row.version }}</td><td><a href="/w08/briefs/{{ row.role_brief_id }}">Open</a></td></tr>{% else %}<tr><td colspan="4">No role briefs yet.</td></tr>{% endfor %}</tbody></table>
+  </section>
+
+  <section>
+    <h2>Candidates</h2>
+    <table><caption>Current visible candidate workflow entries</caption><thead><tr><th scope="col">Candidate</th><th scope="col">State</th><th scope="col">Revision</th><th scope="col">Action</th></tr></thead><tbody>{% for row in entries %}<tr><th scope="row"><code>{{ row.shortlist_entry_id }}</code></th><td>{{ row.state|title }}</td><td>{{ row.revision }}</td><td><a href="/w08/entries/{{ row.shortlist_entry_id }}">Open</a></td></tr>{% else %}<tr><td colspan="4">No visible candidates yet.</td></tr>{% endfor %}</tbody></table>
+  </section>
+{% endblock %}

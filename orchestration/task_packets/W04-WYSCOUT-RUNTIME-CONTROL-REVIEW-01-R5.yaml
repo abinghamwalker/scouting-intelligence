@@ -1,0 +1,82 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R5
+state: ACCEPTED
+objective: >-
+  Freshly and independently verify the sole R5 complete cache-directory lstat
+  correction and every retained exact runtime-control predicate.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R5:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r5_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R5.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R5.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R5.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R5.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  admission_child_sha256: cba67d6a143951cbeefa2e63063f5f09aab73f6ec435a1378fb2451d59950cb5
+  launcher_sha256: d3ac8c84995c8475b0a4df983899ebf6b364f047dcbba45c411d55b62c808740
+  runtime_tests_sha256: 61f1d770d1b662df0f30c6d4bc54aace9f0fa1069d32501c7d466be908b66fb4
+  producer_return_sha256: f6a75dc396672fc64a67c5a39579b4cbd11d46df6d85e3d728d7e247128989bd
+  r4_review_sha256: 74e5ff009bac72196739551f4c1aca724f9710636cce39ab429da1394d4514ab
+  r4_reviewer_return_sha256: 926bfbb77f6f3561e94f2f75f3e5113266748d02e55a01d36505ec5e8cf4156f
+requirements:
+  - Verify every fixed binding and keep producer bytes read-only.
+  - >-
+    Reproduce complete child and launcher cache-directory rows and independently
+    attack same-path replacement, same-inode clock drift, link count, size/entry,
+    symlink and mode changes. Require complete equality boundaries and no stable
+    identity inclusion or child PYC content read.
+  - >-
+    Rerun the complete 203-test final-hash gate and actual two-run admission, plus
+    child-versus-launcher authority equality, external mappings, PYC ownership,
+    immutable replay, projection/inverse, no-rebuild and no-real-root proof.
+  - >-
+    Recheck every retained R2-R4 predicate. PASS only with P0/P1/P2=0/0/0;
+    otherwise bounded REWORK with exact smallest correction and no producer edits.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent R5 review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W04-SOURCE-PROFILE-01
+phase_id: W04
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Produce a deterministic, reproducible measured profile of the admitted Wyscout
+  source schema and clock/minutes evidence from the verified guarded local snapshot.
+depends_on:
+  - W04-SOURCE-ACQUIRE-01-R1:VERIFIED
+  - W04-SOURCE-ACQUIRE-REVIEW-01-R1:ACCEPTED
+assigned_role: source_profiler
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-ACQUIRE-01-R1.yaml
+  - configs/sources/w04-provider.yaml
+  - data/source/wyscout/v5/completion-manifest.json
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_read_paths:
+  - data/source/wyscout/v5/**
+allowed_paths:
+  - scripts/profile_wyscout_v5.py
+  - tests/unit/test_wyscout_profile.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - reports/reviews/W04/returns/W04-SOURCE-PROFILE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - migrations/**
+  - src/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - >-
+    A deterministic uv-run profiler that reads only completion-declared admitted
+    files and emits stable Markdown without embedding player names or raw records.
+  - >-
+    Measured top-level/nested field presence and type shapes for competitions, teams,
+    players, matches, events, and mapping CSVs.
+  - >-
+    Measured counts and relationships for admitted competitions, matches, events,
+    players, teams, periods, lineup/substitution structures, eventSec ranges, and
+    available terminal/minutes evidence.
+  - >-
+    Explicit unknown/nullable/mixed-type and unmapped ID evidence needed by schema
+    design, identity, possession, minutes, coverage, and reconciliation packets.
+  - Unit tests using small fabricated fixtures and a golden deterministic report shape.
+definition_of_done:
+  - The report is derived from and binds the accepted completion-manifest SHA-256.
+  - Profiling never reads excluded archive members or reconstructs unlisted paths.
+  - Output contains aggregate schema/count evidence only and is byte-stable on rerun.
+  - No provider access, product transformation, semantic guess, or source-data mutation occurs.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_profile.py
+  - uv run python scripts/profile_wyscout_v5.py --check
+  - uv run ruff format --check scripts/profile_wyscout_v5.py tests/unit/test_wyscout_profile.py
+  - uv run ruff check scripts/profile_wyscout_v5.py tests/unit/test_wyscout_profile.py
+  - uv run mypy scripts/profile_wyscout_v5.py
+  - uv run bandit -q scripts/profile_wyscout_v5.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Required evidence is absent from the admitted snapshot.
+  - Profiling requires excluded-member payloads, provider/network access, or semantic guessing.
+  - A dependency, contract, storage, architecture, or rights change appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

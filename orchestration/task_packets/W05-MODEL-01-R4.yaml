@@ -1,0 +1,219 @@
+schema_version: 1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R4
+state: DISPATCHED
+objective: >-
+  Close the R3 representation, trust-pinning, temporal and adversarial-test defects
+  without changing the frozen R3 geometry, global configuration semantics or scores.
+depends_on:
+  - REVIEW-W05-MODEL-01-R3:REWORK
+assigned_role: m0_baseline_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R1.yaml
+  - orchestration/task_packets/W05-MODEL-01-R2.yaml
+  - orchestration/task_packets/W05-MODEL-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R3.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/storage/formats.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/baselines.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/models/w05-m0-baselines-v1.json
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/artifact.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/roles/**
+  - data/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+immutable_r3_semantics:
+  candidate_ids: 20000000-0000-4000-8000-000000000001..20000000-0000-4000-8000-000000000018
+  candidate_order: ascending_canonical_uuid_bytes
+  query_mode: all_18_leave_one_out
+  query_order: ascending_canonical_uuid_bytes
+  k: 3
+  metadata_sequence_per_archetype:
+    - [CENTRAL, 18, 900]
+    - [DEFENSIVE, 19, 990]
+    - [WIDE, 20, 1080]
+    - [CENTRAL, 21, 1170]
+    - [DEFENSIVE, 22, 1260]
+    - [WIDE, 23, 1350]
+  feature_vectors_per_archetype:
+    progression: [8.0, 6.0, 2.0, 2.0, 0.8, "aerial=[0,100,200,300,400,500]"]
+    chance_creation: [2.0, 6.0, 8.0, 2.0, 0.8, "aerial=[0,100,200,300,400,500]"]
+    defensive_disruption: [2.0, 2.0, 2.0, 8.0, 0.8, "aerial=[0,100,200,300,400,500]"]
+  taxonomy_roles_and_dependency_inputs: exact_R3_preregistered_construction
+  deterministic_seed: 20260803
+  weighted_cosine_weights: [2.0, 2.0, 2.0, 2.0, 1.0, 0.1]
+  pca_component_count: 3
+  role_aware_minimum_overlap: 0.75
+  selected_model_family: role_aware_restriction
+  exact_scores:
+    metadata_control: 0.1111111111111111
+    raw_euclidean_control: 0.3333333333333333
+    robust_scaled_cosine: 1.0
+    weighted_cosine: 1.0
+    pca: 1.0
+    role_aware_restriction: 1.0
+requirements:
+  - >-
+    Preserve immutable_r3_semantics exactly. Do not search, tune, retry selection,
+    alter fixture geometry, change a label/query/candidate, change weights/threshold/k,
+    weaken a control or select a subset. Reproducing the same exact six scores is a
+    parity check only. Stop if any score or numeric fitted/index array changes from the
+    R3 semantic projection.
+  - >-
+    Replace compact candidate construction with one explicit canonical ordered list of
+    18 objects, each containing its complete exact synthetic feature row, complete role
+    row, expected ordered FeatureValues, expected ordered role probabilities and peer
+    group. Replace the query fixture with 18 explicit ordered query objects containing
+    query player UUID, self_excluded=true, k=3 and exact relevant peer group. Root
+    objects retain every R3 authority and claim-boundary field.
+  - >-
+    Candidate/query loaders accept exact canonical bytes plus one newline, exact root/
+    row/nested keys, strict JSON scalar types, exact counts/order/UUIDs/timestamps,
+    unique populations, self digests and matching cross-fixture pins. Reproduce every
+    feature calculation, role membership, dependency digest/lineage, metadata, peer
+    label and query projection. Reject unknown/reordered/re-signed claim or authority
+    substitutions.
+  - >-
+    Implement an immutable typed M0Configuration loaded from the exact canonical config
+    path. It has exact keys; tuple weights; immutable six-family expected array-payload
+    digest mapping; candidate/query fixture IDs/digests; exact ordered candidate/query
+    population projection digests; selected family/k; fixed seed/components/threshold;
+    self digest; and a source-pinned accepted ID/version/digest constant. Arbitrary
+    Mapping or independently re-signed config input must fail.
+  - >-
+    Define the candidate population projection as the exact canonical ordered artifact
+    candidate objects, including full one-item dependency identities with observed_at,
+    available_at, dependency digest and reproduced lineage hash. Define the query
+    population projection as the exact ordered 18 query objects. Bind both digests in
+    config and candidate-universe JSON. Candidate-universe JSON also pins candidate and
+    query fixture identities/digests, registry/family/schema, taxonomy and all explicit
+    development-only claim flags.
+  - >-
+    Every family must compare its computed numeric array_payload_digest to the accepted
+    typed config's expected digest for that exact family before writing/loading. Derive
+    artifact UUID from canonical family, config, registry/schema, taxonomy, fitting/
+    candidate/query population, lineage and array payload inputs. Loader recomputes it,
+    requires exact family model/index IDs/versions and rejects any re-signed model,
+    manifest, array, config, universe or fixture pin substitution.
+  - >-
+    Metadata artifacts use exactly the three metadata-control names, metadata-control
+    schema hash, numeric encoded metadata feature matrix/index vectors and matching
+    candidate-universe feature values. The other five families use exactly the six
+    synthetic feature names/schema. All feature matrices, arrays, universe values and
+    manifest shapes/names/hashes must agree.
+  - >-
+    PCA uses the accepted sign/tie rules for fit, index and reload. Runtime PCA distance
+    still uses the exact three-component vectors, but contribution evidence must be a
+    deterministic six-position original-feature projection whose sum is consistent
+    with the cosine term. Direct tests cover sign-flipped components, equal-variance
+    ordering, contribution length and two independent builds.
+  - >-
+    Replace silent population drops with exact fail-closed admission of all 18 fixture
+    candidates and exact role rows. Candidate errors, nonnumeric state, missing/extra
+    role/feature row, duplicate or reordered IDs and cutoff/lineage errors fail. Do not
+    retain generic edge-row skipping in the M0 fitting population API.
+  - >-
+    Runtime rejects an artifact root or ancestor reached through symlinks and exact
+    entry symlinks/extra/missing files. Deep-freeze all loaded nested config/universe/
+    role state and set all arrays read-only. Strictly validate exclusion and exemplar
+    UUID inputs/uniqueness/overlap, exact taxonomy role order/set, non-boolean finite
+    probabilities in [0,1], exact total and candidate temporal/dependency projections.
+  - >-
+    Retain one runtime scorer for indexed and sorted-exemplar-mean queries. Both modes
+    use identical family distance, contribution, artifact-pinned role restriction and
+    distance/UUID tie ordering. Runtime has no fit/write/provider/mutation method and
+    modeling owns all fitting/writing.
+  - >-
+    Safe artifact serialization remains four files only, deterministic fixed-metadata
+    non-executable NPZ with allow_pickle=false, exact safe member names/order and strict
+    little-endian float64 C arrays/uint8 UUID rows plus canonical JSON. Tests reject
+    pickle/object, zip member/path/metadata, dtype/shape/order/byte/digest, root escape
+    and extra/missing/duplicate attacks and prove two-build byte identity.
+  - >-
+    Add dedicated tests/unit/test_w05_m0_models.py covering fixtures/config, six
+    families, exact population/scaler/schema/array pins, control behavior, zero IQR/
+    norm, UUID ties, PCA, indexed/exemplar parity, safe reload, deep immutability,
+    every authority/substitution attack and the exact retained R3 scores/ranking
+    digests. Tests call the one runtime scorer and do not implement a second scorer.
+  - >-
+    The R4 return must list physical/logical fixture/config/artifact identities, exact
+    per-family expected array payload and ranking digests, exact test/check commands and
+    the R1 negative and R3 positive evidence. State explicitly that the result is only
+    constructed synthetic development readiness, never validation, W06/protected,
+    expert, recruitment outcome, transfer, robustness, Wyscout or production evidence.
+deliverables:
+  - Explicit canonical 18-candidate and 18-query self-verifying fixtures.
+  - Source-pinned immutable typed configuration and fully pinned safe artifacts.
+  - Correct six-family runtime/trainer with feature-aligned PCA explanations.
+  - Complete adversarial model tests, selected role-aware artifact and mandatory R4 return.
+definition_of_done:
+  - Every R3 semantic score/array fact is unchanged while every representation/trust defect is closed.
+  - Six families build twice byte-identically, load read-only and score through one runtime interface.
+  - Substitution/temporal/schema/taxonomy/config/manifest failures close and focused gates pass.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any immutable R3 semantic input, numeric array or exact score would change.
+  - Any accepted W04/W05 contract, registry, taxonomy or predecessor fixture byte would need to change.
+  - Any new search/tuning/selection, learned behavior, second scorer or control degradation would be required.
+  - Any external/provider/dependency/destructive/out-of-scope action or path is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

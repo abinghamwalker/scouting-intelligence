@@ -1,0 +1,42 @@
+schema_version: 1
+review_id: REVIEW-W05-MODEL-01-R2
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R2
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: NOT_RUN_MASTER_SPECIFICATION_BLOCKER
+subagent_tests_reproduced: NOT_RUN_MASTER_SPECIFICATION_BLOCKER
+integration_checks: NOT_RUN_MASTER_SPECIFICATION_BLOCKER
+artifact_lineage: NOT_PRODUCED
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    blocker_tests: [1, 2, 3, 6]
+    evidence: >-
+      R2 froze the intended geometry class and global model configuration, but did not
+      give the producer the exact 18 player IDs, numerator sequences, dependency
+      identities, metadata tuples, responsibility inputs or expected probability
+      values required for a canonical self-verifying candidate fixture. Those choices
+      affect fitted arrays, eligibility, rankings and bytes, so producer invention
+      would violate the master-only architecture decision boundary.
+    required_fix: >-
+      Master must specify the complete deterministic construction and its identity
+      formulas before any R2/R3 score is run. No implementation or comparison result
+      from the under-specified R2 is admissible.
+convergence_audit:
+  attempts_reviewed: [R1, R2]
+  classification: MASTER_SPECIFICATION_GAP_AFTER_REPRODUCIBLE_FIXTURE_GEOMETRY_DEFECT
+  scope_decision: SIMPLIFY_AND_PREREGISTER_EXACT_FIXTURE
+  rationale: >-
+    R1 proved that weight search cannot repair the original unit-fixture geometry.
+    R2 safely refused to invent material geometry. R3 keeps one model packet but
+    replaces discretion with a complete formulaic construction, one typed config and
+    one no-retry score. No accepted predecessor is changed and no new product feature,
+    learned behavior, protected evaluation or authority document is introduced.
+  non_blocking_hardening_deferred: >-
+    Host-specific caches, pyc, inode, timestamp, link-count and temporary-path
+    observations remain W10 unless one of the six W05 blocker tests is reproducible.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-MODEL-01-R3.yaml
+reviewer: master

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "phase_id": "W06",
+  "gate_id": "G-W06",
+  "status": "PASS",
+  "decision": "NO_GO",
+  "verified_at_utc": "2026-08-04T15:44:44Z",
+  "sole_reason": "MISSING_EXPERT_RELEVANCE_EVIDENCE",
+  "claim_boundary": "resemblance_only synthetic-development-only LIMITED applicability; no recommendation evidence",
+  "protected_population": {
+    "governed_human_reviewers": 0,
+    "relevance_judgements": 0,
+    "pair_preferences": 0,
+    "protected_queries": 0,
+    "bundle": null,
+    "run": null,
+    "protected_outputs_opened": false
+  },
+  "frozen_identity": {
+    "candidate_digest": "26e06e46211fd73d184ca8153e771665623d8d45078820ce4e2a89c4f710ab2f",
+    "protocol_digest": "b4836c928df5696d1b33e38d25095409958e459d55f92d3928626621e6422217",
+    "inventory_digest": "c616e080526fabc1152c919337e6d0e32072b3b3569056cdc9af541c58beb4c9",
+    "preregistration_digest": "13d26404f788466993d7cd3663c787e6da182005dd68c0dd48c70783f7c20ae5"
+  },
+  "retained_result": {
+    "invocation_id": "w06-gate-20260804-missing-population-01",
+    "access_outcome": "NOT_ACCESSED_MISSING_POPULATION",
+    "access_outcome_digest": "140278cb13498676c84825e686cb5f0c954a45e6404096b8cbd6e33d4bf66a65",
+    "gate_digest": "e9db63fb875fec48223ee7800d5ccbc22a11088e1787773010c82c9217d8be48",
+    "receipt_digest": "5841474893fb2d8e982b2d659decb34fdc83b3d601be91fe649ceec6317a5ef8",
+    "access_file_sha256": "d614c24d77fb03af3b9bbdcdff730ace22667bba1b7cc2afa0bf9a2136f37084",
+    "gate_file_sha256": "f45d0a9530b1816ab221d5ece24db78883a0cefbcb362112bd518b3f1ba82e55",
+    "receipt_file_sha256": "1ad4b0e85f5008c97468a7932fde3d6b9ba1a93c507bb8cfdec1eebaf824842a"
+  },
+  "checks": [
+    {"id": "locked-offline-environment", "status": "PASS", "detail": "83 packages resolved; 82 audited"},
+    {"id": "repository-format-and-lint", "status": "PASS", "detail": "881 files; changed security paths rechecked"},
+    {"id": "typing-and-import-contracts", "status": "PASS", "detail": "82 source files; 3 import contracts kept"},
+    {"id": "complete-repository-tests", "status": "PASS", "passed": 2719, "failed": 0, "detail": "2715 complete-run passes plus exact four cache-sensitive witnesses after recoverable later-wave PYC quarantine"},
+    {"id": "optimized-python-security", "status": "PASS", "passed": 25, "failed": 0, "detail": "seven explicit guards; three scoped deterministic-statistical B311 annotations; full Bandit scan clean"},
+    {"id": "local-git-guard", "status": "PASS"},
+    {"id": "local-only-controls", "status": "PASS", "passed": 25, "failed": 0},
+    {"id": "one-use-protected-broker", "status": "PASS", "detail": "sole missing-expert NO_GO retained; no bundle/run; protected outputs unopened"},
+    {"id": "w06-phase-verifier", "status": "PASS", "detail": "VERIFIED state; all 16 tasks accepted/evidenced; W05 CLOSED; zero remotes; exact start tag target"}
+  ],
+  "unsupported": [
+    "k=25:W05_CANDIDATE_UNIVERSE_HAS_18_MEMBERS",
+    "human_expert_relevance_and_pair_agreement",
+    "league_competition_team_provider_time_transfer",
+    "calibration_and_prospective_outcomes"
+  ],
+  "evidence": {
+    "acceptance_report": "reports/phase-gates/W06/acceptance-report.md",
+    "master_review": "reports/reviews/W06/master-review.md",
+    "independent_cards_review": "reports/reviews/W06/cards-independent-review-R1.md",
+    "independent_protected_review": "reports/reviews/W06/protected-no-go-independent-review-R2.md",
+    "independent_security_review": "reports/reviews/W06/optimized-guards-independent-review-R1.md",
+    "verification_report": "reports/verification/W06/verification-report.md",
+    "limitations": "reports/verification/W06/limitations.md"
+  },
+  "unresolved_defects": [],
+  "smallest_follow_up": "Acquire authentic governed human expert relevance evidence with authority, rubric, timing/provenance, rights and frozen partition assignment under separate authorisation.",
+  "checkpoint_ready": true,
+  "w07_authorised": false
+}

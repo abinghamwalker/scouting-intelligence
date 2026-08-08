@@ -1,0 +1,12 @@
+# Preserve already accepted, content-addressed W04 Markdown evidence bytes.
+reports/reviews/W04/archive/wyscout-season-lineup-product-binding-independent-review-R1-rework-431e0cfb.md whitespace=-blank-at-eol
+reports/reviews/W04/authorities/wyscout-build-product-independent-review-R1.md whitespace=-blank-at-eol
+reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-independent-review-R1.md whitespace=-blank-at-eol
+reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R2.md whitespace=-blank-at-eol
+reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R3.md whitespace=-blank-at-eol
+reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R4.md whitespace=-blank-at-eol
+reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01-R1.md whitespace=-blank-at-eof
+reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-COMPOSITION-BOUNDARY-AUDIT-01-R1.md whitespace=-blank-at-eof
+reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md whitespace=-blank-at-eof
+reports/verification/W04/wyscout-data-contracts-R3-master-verification.md whitespace=-blank-at-eof
+reports/verification/W04/wyscout-data-contracts-R4-master-verification.md whitespace=-blank-at-eof

@@ -1,0 +1,84 @@
+schema_version: 1
+task_id: W08-EXPORT-03
+phase_id: W08
+revision: R1
+state: MASTER_REVIEW_WITH_EVIDENCE_FINDINGS
+objective: >-
+  Implement a policy-bound, local-only evidence-pack export with content addressing,
+  append-only receipts, revocation and fail-closed confidentiality/tamper checks.
+depends_on:
+  - W08-AUTH-AUDIT-01:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/threat-model.md
+  - docs/architecture/product-claim.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - reports/verification/W06/limitations.md
+  - reports/verification/W07/limitations.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/storage/guarded.py
+allowed_paths:
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/operations/__init__.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - reports/reviews/W08/returns/W08-EXPORT-03-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Bind runtime grants and export contents exactly to both retained W08 policy files and fail closed on policy drift.
+  - Generate one immutable canonical local JSON evidence pack under a declared GuardedStorage root with classification, underlying workflow values, model/data/taxonomy versions, fixed limitations, content checksum and restrictive permissions.
+  - Include only tenant-matching, exporter-visible objects and exclude owner-only observations not owned by or assigned to the exporter.
+  - Persist evidence_exports and a hash-chained export AuditEvent in the caller transaction; retry identical content without overwriting and roll back database state on storage or audit failure.
+  - Verify pack bytes against the persisted digest before readback, reject post-write tampering, and deny reads after an append-only revocation receipt.
+  - Reject admin-only privilege escalation, cross-tenant/IDOR access, traversal/symlink/file hazards, external destinations and any unexpected classification or claim wording.
+  - Synthetic automated fixtures only; never claim real scout evidence, model relevance, recruitment success, value, recommendation, transferability or production readiness.
+definition_of_done:
+  - Positive export, denied export, revocation, tamper, confidentiality, path/file handling and recovery tests pass.
+  - The mandatory return is complete and labels all workflow records synthetic_automated_test.
+focused_checks:
+  - Authorised export plus admin/cross-tenant/private-data denial.
+  - Revocation, checksum tamper, path handling, partial failure and idempotent retry.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/operations/evidence_export.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run ruff check src/scouting/operations/evidence_export.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run mypy src/scouting/operations/evidence_export.py
+  - uv run pytest -q tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_auth_audit.py tests/unit/test_guarded_storage.py
+stop_conditions:
+  - Required behaviour conflicts with the master-owned contract, migration or retained policies.
+  - A remote destination, network access, external service, protected-output access, destructive action or new dependency is required.
+  - A correction would weaken confidentiality, local-only storage, append-only audit, revocation or evidence honesty.
+mandatory_return:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - behaviour and security choices
+  - exact commands, exit statuses and concise results
+  - evidence paths and identifiers
+  - residual risks and follow-ups
+  - confirmations of no Git operations, no dependency or lock change, and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

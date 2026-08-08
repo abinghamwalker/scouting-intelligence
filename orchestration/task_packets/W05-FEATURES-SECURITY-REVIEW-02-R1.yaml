@@ -1,0 +1,68 @@
+schema_version: 1
+task_id: W05-FEATURES-SECURITY-REVIEW-02
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently prove the terminal W05 feature-loader assert correction remains
+  fail-closed under normal and optimized Python without changing accepted behavior.
+depends_on:
+  - W05-FEATURES-SECURITY-02-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-FEATURES-SECURITY-02-R1.yaml
+  - reports/reviews/W05/returns/W05-FEATURES-SECURITY-02-R1.md
+  - reports/reviews/W05/w05-feature-registry-independent-review-R3.md
+  - reports/reviews/W05/w05-training-serving-parity-independent-review-R1.md
+  - src/scouting/features/registry.py
+  - tests/unit/test_w05_features.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-feature-security-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-FEATURES-SECURITY-REVIEW-02-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+mandatory_fresh_attacks:
+  - Parse production AST and prove src/scouting/features/registry.py has no Assert node, `__debug__` bypass or new Bandit suppression.
+  - Run Bandit on the feature module and the repository security command; no medium/high issue or runtime-assert finding may remain.
+  - Under both ordinary Python and `python -O`, attack absent synthetic metadata schema, observed state with no value, absent W04 authority and non-mapping W04 dependency; all must raise deterministic FeatureRegistryError.
+  - Reload/materialize the accepted registry, 22 synthetic rows and exact W04 bridge; compare exact logical/physical registry and fixture identities, exact-four W04 vector/lineage and all accepted positive outputs before/after.
+  - Re-run focused feature, contract, model and serving tests and reproduce the frozen selected artifact/result identities; no ranking, result, claim or evidence byte may change.
+deliverables:
+  - Independent PASS/REWORK report with exact normal/-O/security evidence and P0/P1 verdict.
+  - Mandatory return at the exact allowed path.
+definition_of_done:
+  - Optimized and ordinary runtime boundaries are identical and no P0/P1 remains.
+  - Only the two report paths are changed.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/unit/test_w05_m0_models.py tests/integration/test_w05_m0_serving.py
+  - uv run ruff check src/scouting/features/registry.py tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features/registry.py
+  - uv run bandit -q -r scripts src
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted-authority conflict, dependency/external/destructive action or out-of-scope source change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

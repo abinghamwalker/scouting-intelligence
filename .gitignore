@@ -1,0 +1,27 @@
+.DS_Store
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Generated local data and run artifacts remain untracked; manifests and reports are evidence.
+data/source/*
+!data/source/.gitkeep
+data/reference/*
+!data/reference/.gitkeep
+data/working/*
+!data/working/.gitkeep
+runs/*
+!runs/.gitkeep

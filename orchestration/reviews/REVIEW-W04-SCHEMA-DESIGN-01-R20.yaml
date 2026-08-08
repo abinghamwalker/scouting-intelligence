@@ -1,0 +1,76 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R20
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SCHEMA-DESIGN-REVIEW-01-R13
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R20.md
+  - reports/verification/W04/wyscout-schema-design-R20-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R20.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R12-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      read complete R20 return and every line of the R19-to-R20 unified diff
+      against the previously completely read R19 standalone candidate
+    result: PASS_123_RETURN_LINES_1389_DIFF_LINES
+  - command: >-
+      enumerate all installed bin RECORD rows and verify complete selected
+      shebang/template bytes, owner, group, target, size, digest, mode, and link
+    result: PASS_35_ROWS_30_PYTHON_4_PYTHON3_1_RUFF
+  - command: >-
+      parse R20 exact roster, ActorId authority, possession fields/decisions,
+      field-test ownership, stable versions, result/projection cardinalities,
+      and future-script absence
+    result: PASS_119_10_11_26_47_18_4_3_UUID_12_6_V4_V2_V2_CENSUS_V3_MANIFEST_V15_16_8_10_25_25_20
+  - command: >-
+      reject stale w04-installed-executable-census-v2 and
+      w04-code-environment-admission-v14 acceptance literals
+    result: PASS_ZERO_STALE_LITERALS
+  - command: >-
+      complete shell site/repository pyc inventory before sync/helpers and after
+    result: PASS_1086_SITE_58_REPOSITORY_METADATA_AND_CONTENT_IDENTICAL
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read the complete 123-line return and all 1,389 lines of the
+    R19-to-R20 unified diff, evaluating every change against the already
+    completely read 4,357-line R19 standalone candidate. The producer changed
+    exactly its two assigned R20 report paths.
+  - >-
+    R20 constructively admits exactly four full owner/name/group/target tuples
+    through the exact contained python3 alias, keeps all other E and P wrappers
+    on python, preserves the complete template body, and rejects generic
+    equivalent-alias or repair routes.
+  - >-
+    Distinct root-independent normalization tokens preserve alias identity.
+    Executable census v3 and code/environment manifest v15 are the only stable
+    schema changes; all unchanged v4/v2/v2, H1/H2, result, projection, build,
+    source, semantic, rights, temporal, ownership, gate, and ledger closures
+    remain intact.
+  - >-
+    Every master Python helper used process-start bytecode denial. Complete shell
+    preflight and postflight metadata/content inventories are identical.
+  - >-
+    R20 is accepted only as a corrected master candidate. Field implementation
+    remains blocked until a fresh independent R13 merits review passes and the
+    master reproduces it.

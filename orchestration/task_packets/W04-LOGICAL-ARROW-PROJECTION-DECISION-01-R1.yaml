@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-DECISION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Freeze the user's exact bounded logical-to-Arrow projection authorization as one
+  canonical control-plane authority and progression-safe contract test, without
+  changing serializer implementation or creating schema/product bytes.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01-R1:BLOCKED_BOUNDED_AUTHORITY_GAP
+assigned_role: w04_logical_arrow_projection_authority_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-logical-arrow-projection-authorization-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-readiness-audit-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01-R1.md
+  - reports/verification/W04/wyscout-23-root-schema-readiness-blocker-R1-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R4.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-acceptance.md
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - src/**
+fixed_bindings:
+  authorization_sha256: eeb28f62b631b70e6c7046f3e8a6cdba74c1a7a4996c7024e98c471b08b8dd69
+  readiness_audit_sha256: f9961082a27b949da6b9c1647b50f9ce18b6862c66fb8c104826c4b20ca746a0
+  readiness_return_sha256: 227801dd267622b2d4fae868d4e1f6648d4c35ada3f9b9aac9edc4b34e3e9819
+  blocker_verification_sha256: d33eedb889c3b916e509a27d9a3383862793b16002639cf559ebe0f2fbc1af71
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  accepted_parquet_review_sha256: eb5928d0bc06be4ecbe8317d9d3387e2db5d6d8631d08ac3dacbc45583c5ad9d
+  accepted_parquet_master_acceptance_sha256: 1cfcd5bde3128a7736c75360460e61f73cc9910772d80d5e0b062abb606ce519
+  accepted_build_contract_master_acceptance_sha256: 26026181020650779bd7319c0672abf5dc5e78313fd38a33aff385bcb65c3449
+authority_requirements:
+  - Verify every fixed hash before writing and stop on drift.
+  - >-
+    Write exactly one strict R20-canonical JSON object plus one terminal LF. Use
+    decision ID `w04-wyscout-logical-arrow-projection-decisions-v1`, schema version
+    `w04-wyscout-logical-arrow-projection-decision-v1`, authority class
+    `LOGICAL_ARROW_PROJECTION`, decided_at `2026-08-01T15:44:40Z`, and decided_by
+    `4efe5691-8903-5148-8275-30d2e7e8aed0`.
+  - >-
+    Bind the immutable authorization/readiness/design/review/acceptance reports,
+    not a mutable implementation path. Preserve their exact physical hashes.
+  - >-
+    Freeze present CanonicalJsonValue as exact R20-canonical tagged logical JSON
+    UTF-8 without LF; strict inverse duplicate-key/invalid-constant/typed/canonical
+    byte-equality checks; outer optionality versus non-null encoded canonical JSON
+    null; heterogeneous fixed tuples as exact descriptor-owned ordered positional
+    structs; homogeneous sequences as exact descriptor-owned Arrow lists; and
+    schema generation only from independently accepted descriptor content.
+  - >-
+    Freeze the existing semantic digest version/preimage/formula unchanged. The
+    correction may affect the physical schema and its existing descriptor input,
+    but adds no digest field, preimage, root or derivation.
+  - >-
+    Lifecycle state is `AUTHORITY_ONLY_NO_SCHEMA_OR_PRODUCT_BYTES`; independent
+    review and master acceptance are required before serializer implementation is
+    accepted, and serializer implementation acceptance is required before the
+    23-root producer resumes.
+  - >-
+    Prohibit fixture/row/empty-sequence/caller inference, Arrow null for present
+    CanonicalJsonNull, lossy or one-way transforms, unions as Parquet authority,
+    callbacks/Booleans/caller digests, new roots/fields/features/populations/
+    dependencies, provider access, product publication or external deployment.
+  - >-
+    The test must strict-load and byte-reproduce the authority, assert every exact
+    key/value/ordering/prohibition/lifecycle rule, and be progression-safe after
+    later implementation/product states. It must not assert mutable source hashes
+    or permanent absence of product paths.
+definition_of_done:
+  - Canonical decision and focused progression-safe authority test pass.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - uv run ruff check tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - uv run mypy tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Canonical authority decision, focused test and producer return.
+stop_conditions:
+  - Fixed hash drift.
+  - Need to choose a rule outside the exact user authorization.
+  - Need to edit implementation, existing authority, product/data/run, dependency,
+    Git, provider/network or external-infrastructure state.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

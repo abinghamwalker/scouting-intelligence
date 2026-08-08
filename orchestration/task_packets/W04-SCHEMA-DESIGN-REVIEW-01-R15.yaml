@@ -1,0 +1,131 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R15
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent merits review of immutable R20 plus the final
+  bounded R21 candidate at its exact R3 hash, confirm the failed R14 evidence is
+  preserved but inactive, and recommend PASS only with zero P0-P2 findings.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R21-R3:MASTER_ACCEPTED_FOR_REVIEW
+  - W04-SCHEMA-DESIGN-REVIEW-01-R14:MASTER_REWORK
+assigned_role: fresh_independent_final_r21_data_contract_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R15.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R3.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R3.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R3.yaml
+  - reports/verification/W04/wyscout-schema-design-R21-R3-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R14.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R14.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R14-master-verification.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R15.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+preflight_postflight:
+  - >-
+    Before reading the designs or invoking Python, inventory every existing
+    repository and site-packages pyc using shell-only path, size, mode, link,
+    mtime, first-sixteen-byte, and complete-SHA evidence; count cache
+    directories and retain the inventory in /tmp.
+  - >-
+    Every Python helper sets PYTHONDONTWRITEBYTECODE=1 before uv and uses
+    `uv run --locked --no-sync python -B`; use `-S -B` where packages are not
+    required. Do not sync, install, clean, repair, purge, or recreate bytecode.
+  - >-
+    After the final report edit and check, repeat the identical shell inventory.
+    Any difference invalidates the review and must be reported without cleanup.
+review_requirements:
+  - >-
+    Read all 4,516 R20 lines and all 1,254 final R21 lines. Bind the R21 physical
+    SHA-256 exactly as
+    faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020.
+    Review independently; R14 and master conclusions are evidence only.
+  - >-
+    Confirm R14 and its control evidence remain byte-preserved, are not the
+    active review or implementation authority, and are outside the exact
+    30-resource roster. Confirm R15 is the sole active design-review
+    ID/path/resource/packet/gate reference.
+  - >-
+    Reconstruct the six-family merge, physical/canonical digest rules,
+    sibling-preimage DAG, prior-authority key order and values, exact 119-row
+    field order, one-row strict integer/no-coercion change, and typed quarantine
+    behavior.
+  - >-
+    Reconstruct all 36 possession predicates and canonical selector-only
+    behavior; exact 15-feature roster and 4/4/7 state split; two descriptor-only
+    preimage schemas; 17 path descriptors; 16 schema descriptors; 30 resources;
+    five dependencies; 16 disjoint serial packets; twelve repository commands;
+    and eighteen additive checks.
+  - >-
+    Evaluate all positive/negative cross-authority requirements, v1 immutability,
+    v2 supersession, anti-mixing, no-cycle/digest-substitution, and pre-product
+    boundaries. Confirm no architecture, product, source/provider/right, root,
+    dependency, storage, network, cloud, container, endpoint, hosted CI, or
+    deployment change.
+  - >-
+    Report every P0, P1, and P2 defect. PASS requires zero findings. State
+    complete readback, exact hashes/cardinalities, checks, inventory evidence,
+    recommendation, residual risks, and no self-acceptance or implementation.
+definition_of_done:
+  - The exact final R21 bytes receive a fresh independent complete merits review.
+  - Failed R14 preservation and active R15 exclusivity are verified.
+  - The no-write inventory harness passes identically.
+  - PASS has zero P0-P2 findings; otherwise REWORK is explicit.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R15.md');
+    s=p.read_text(); assert p.is_file() and p.stat().st_size > 18000;
+    assert 'faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020' in s;
+    assert 'recommendation' in s.lower();
+    assert 'P0' in s and 'P1' in s and 'P2' in s"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any preflight/postflight drift or unexpected filesystem write.
+  - Any mandatory input is missing, unreadable, or differs from its frozen hash.
+  - >-
+    A finding requires changing architecture, product, root, dependency,
+    source/provider/right, storage, or local-only boundary.
+  - Review needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

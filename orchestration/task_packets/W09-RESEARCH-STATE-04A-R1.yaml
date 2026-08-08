@@ -1,0 +1,49 @@
+task_id: W09-RESEARCH-STATE-04A
+revision: R1
+owner: subagent
+objective: >-
+  Implement immutable local SQLite experiment persistence and content-addressed guarded
+  report storage for W09, without importing or weakening the dormant W08 workflow.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - src/scouting/contracts/research.py
+  - src/scouting/storage/embedded.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - migrations/versions/0003_w09_research.sql
+  - tests/integration/test_migrations.py
+  - src/scouting/workflow/evidence_export.py
+allowed_paths:
+  - src/scouting/storage/research.py
+  - tests/integration/test_w09_research_storage.py
+  - reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R1.md
+deliverables:
+  - >-
+    A typed ResearchExperimentStore over an injected SQLAlchemy engine and
+    GuardedStorage research-report root, with exact JSON round trips.
+  - >-
+    Save/load/list immutable SavedResearchExperiment values, verify report bytes against
+    the contract digest and path, make identical retry idempotent, and reject same-ID
+    conflict or artifact conflict without partial state.
+  - >-
+    Append and list validated ResearchReplayReceipt values with deterministic receipt
+    identity; exact saved/loaded pins must remain visible.
+  - >-
+    Tests prove append-only triggers, canonical JSON, digest/path mismatch rejection,
+    idempotency/conflict, missing experiment, replay receipt round-trip, guarded path
+    rejection and no W08/auth/audit dependency.
+checks:
+  - uv run ruff format --check src/scouting/storage/research.py tests/integration/test_w09_research_storage.py
+  - uv run ruff check src/scouting/storage/research.py tests/integration/test_w09_research_storage.py
+  - uv run mypy src/scouting/storage/research.py
+  - uv run pytest -q tests/integration/test_w09_research_storage.py tests/integration/test_migrations.py
+stop_conditions:
+  - The additive migration is insufficient or contradicts strict research contracts.
+  - Atomic report/database persistence cannot be represented without a new product decision.
+  - Any need for orchestration, shared-contract, migration, dependency, W08 or Git changes.
+constraints:
+  - No Git operations, dependency changes, migration edits, or exports from storage/__init__.py.
+  - Use apply_patch for manual edits and edit only allowed_paths.
+  - Do not implement authentication, roles, manual audit entry, or W08 workflow coupling.

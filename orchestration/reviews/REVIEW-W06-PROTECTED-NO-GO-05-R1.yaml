@@ -1,0 +1,24 @@
+schema_version: 1
+review_id: REVIEW-W06-PROTECTED-NO-GO-05-R1
+task_id: W06-PROTECTED-NO-GO-05
+phase_id: W06
+revision: R1
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    evidence: >-
+      Reordering the first two fail_closed_order prerequisites and replacing stop_rule
+      with 'Proceed despite missing expert evidence.', then recomputing protocol and
+      preregistration digests, is accepted as protocol
+      0315215e86788e773050637a2ac6d6cda70464efbdc4297f28c2cac3b27a3f4e and
+      preregistration 5f71bc77d1ea5430e3663ac5e0f0f84697b07c00776a4f3a1ce678a24cb3dffe.
+      The protected decision algorithm and stop rule therefore are not frozen.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-PROTECTED-NO-GO-REVIEW-05-R1.yaml
+reviewer: master

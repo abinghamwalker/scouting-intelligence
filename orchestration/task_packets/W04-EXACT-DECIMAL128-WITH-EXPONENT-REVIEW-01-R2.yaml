@@ -1,0 +1,72 @@
+schema_version: 1
+task_id: W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01
+phase_id: W04
+revision: R2
+state: ACCEPTED
+objective: >-
+  Freshly review the exact R2 Decimal projection, independently reproduce closure
+  of R1 P1-01, and re-challenge all retained lossless/schema/byte/zero-write gates.
+depends_on:
+  - W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2:IMPLEMENTED
+assigned_role: fresh_independent_w04_decimal_projection_r2_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.yaml
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r2_formats_sha256: 2dfdf3675a47f6c2b53478857de1af27aebecb85def8f0701e6ef86c65fafcc9
+  r2_test_sha256: ba38c5a66f41aee8ef2b998f4622c71ec30f3b8861d7ef07d8540d001b0bee89
+  r2_producer_return_sha256: d06ff314c83c17964e96e6ea877e78187b9c7411d1b1ee12259f4f49b5e2556a
+  r1_review_sha256: 137401e9a602d97c59a114c7419f3eb67748cd0ebc04fcbca8259ecc3af36532
+  r1_reviewer_return_sha256: 126949bd85d65ca3e6c63fdb461addec10cd0b96a694c97553fc4e1f1bc8ea3c
+requirements:
+  - Verify every fixed hash before review and immediately before rendering.
+  - Independently reproduce all four incoming-zero-sign/Boolean combinations and require the Boolean alone to set the logical sign.
+  - Re-run an independently derived success/capacity/source-scale/no-rounding matrix and strict logical JSON-byte equality.
+  - Re-run descriptor, runtime child, physical schema, metadata, rounding, aliasing, zero-hash and zero-write attacks.
+  - Confirm coverage stays on CANONICAL_DECIMAL_UTF8 and the digest meaning/formula and generic serializer remain unchanged.
+  - Report exact P0/P1/P2 counts and PASS only when all are zero.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh R2 independent review and mandatory return.
+stop_conditions:
+  - Fixed hash drift, need to edit outside report paths, or correction outside standing authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

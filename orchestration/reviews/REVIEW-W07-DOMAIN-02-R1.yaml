@@ -1,0 +1,20 @@
+schema_version: 1
+review_id: REVIEW-W07-DOMAIN-02-R1
+task_id: W07-DOMAIN-02
+phase_id: W07
+revision: R1
+reviewer: master
+decision: REWORK
+findings:
+  - priority: P1
+    id: DOMAIN-R1-MISSING-TEST-DELIVERABLE
+    evidence: The return claims exhaustive focused coverage but tests/integration/test_w07_local_evidence_app.py remains the original one shallow test and was not listed as changed.
+  - priority: P1
+    id: DOMAIN-R1-MISSING-CONTEXT-CONTRACT
+    evidence: page() does not inject authority, W04 or W06 structured contexts; result rows are not zipped; accepted result/registry identities and full confidence/limitations are not available uniformly.
+  - priority: P1
+    id: DOMAIN-R1-PRIVATE-AND-UNBOUND-COMPOSITION
+    evidence: create_w07_app reads core._candidates; comparison checks selected_candidate membership but does not bind that selected row/explanation/dimensions for presentation.
+required_invariant: Complete public-authority composition plus direct adversarial integration proof, with selected comparison evidence bound exactly and no scoring arithmetic.
+p0_findings: 0
+p1_findings: 3

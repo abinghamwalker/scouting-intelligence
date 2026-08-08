@@ -1,0 +1,54 @@
+task_id: W09-FULL-CANONICAL-BUILD-02B
+revision: R4
+owner: subagent
+objective: >-
+  Preserve and classify the three retained out-of-domain coordinate points without
+  clamping, imputing, dropping actions or blocking coordinate-independent W09 features,
+  then complete the full no-write canonical traversal.
+read_first:
+  - AGENTS.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R3.md
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - tests/unit/test_w09_wyscout_historical_adapter.py
+  - tests/integration/test_w09_full_canonical_build.py
+allowed_paths:
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - scripts/build_w09_historical_canonical.py
+  - tests/unit/test_w09_wyscout_historical_adapter.py
+  - tests/integration/test_w09_full_canonical_build.py
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R4.md
+deliverables:
+  - >-
+    Keep every coordinate token a strict integer and preserve the original raw values
+    in canonical start/end x/y columns. Never clamp, wrap, silently null, or drop the
+    containing action. Add a closed coordinate evidence state at least distinguishing
+    valid, absent, and invalid_out_of_range; malformed structures/types still fail closed.
+  - >-
+    Classify an action invalid_out_of_range if any supplied point is outside inclusive
+    0..100. Reconcile exactly three invalid actions/points: Germany actions 225765702 and
+    225765704 with y=101, and Italy action 198907641 with x=-1. Record exact total and
+    per-partition counts in the canonical manifest and fail retained builds on drift.
+  - >-
+    Make coordinate-independent consumers able to retain these actions while coordinate
+    coverage counts only valid coordinate evidence. Add tests proving raw preservation,
+    invalid classification, no clamping, malformed-type rejection and manifest counts.
+  - >-
+    Complete a no-write full canonical action projection over all 3,071,395 actions,
+    reconciling identities, 7,821 optional subevent sentinels, the three coordinate
+    anomalies and stable action fingerprints. Stop on any further source conflict.
+checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run ruff check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run mypy src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+  - uv run pytest -q tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+stop_conditions:
+  - Any additional source type/domain/count/checksum/identity/temporal/partition conflict.
+  - Any need for network/provider access, dependencies, shared contracts, Git, orchestration controls or paths outside allowed_paths.
+constraints:
+  - This is a bounded evidence-state policy, not a provider schema correction; preserve raw data.
+  - No Git/dependency/orchestration/shared-contract changes.
+  - Use apply_patch for manual edits and preserve all W04-W08 paths and prior controls.

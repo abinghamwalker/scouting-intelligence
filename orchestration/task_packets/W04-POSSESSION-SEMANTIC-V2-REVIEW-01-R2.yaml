@@ -1,0 +1,153 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently review the corrected possession-v2 decision, candidate,
+  complete focused executable contract, and R1-R3 evidence against frozen
+  R20/R21. Report every P0-P2 finding and issue PASS only with zero findings.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_possession_semantic_v2_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R3-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+review_authority:
+  review_id: w04-wyscout-possession-semantic-independent-review-v2-R1
+  review_schema_version: w04-authority-independent-review-v1
+  independent_actor_id: db5e4511-e465-4f24-8b50-fa017eebe8fa
+  candidate_id: w04-wyscout-possession-taxonomy-v2
+  candidate_physical_sha256: 24223b25b5faa1521691f55a3258f28e186a3ed7cb6ebd0d5d8ed421286b0187
+  candidate_sha256: 3a3c7cdb0e6ce441d3514e4f415bb5117ebc53f2d18b753206a6ca8d7fcdd881
+  decision_id: w04-wyscout-possession-semantic-decisions-v2
+  decision_physical_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+  decision_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+  focused_contract_sha256: 1a2bd111c046781c3e4fe6ebff58a716f1bf793a3df29ea2aaf073fc9896100c
+historical_control:
+  failed_review_archive_verified_by_master: true
+  failed_review_sha256: 71f4bdb25b0e2b3903abbede25afa5b2f62fd1763b54276899dd8ad4364feb8a
+  failed_return_sha256: fc167434bf5da53e39b702d7fcc634222c53c84330cd05767eca1a3b52f98b90
+requirements:
+  - >-
+    Read every input completely. Reconstruct strict canonical JSON/YAML bytes,
+    physical and canonical digests, clocks, actors, five exact inputs, exact
+    17-key v1 predecessor, 36 predicate equality/order, and progression states
+    independently rather than trusting producer helpers.
+  - >-
+    Verify the failed R1 review and return against the retained archive before
+    replacing the fixed review path. Preserve their durable hashes in the new
+    review narrative and do not edit the R1 return or archive.
+  - >-
+    Challenge the selector with missing/mistyped values, booleans, strings,
+    numeric-looking strings, null, non-integer numbers, arrays/objects, unknown
+    pairs, absent/mistyped/unsorted/duplicate tag arrays, forbidden/required
+    tags, and absent/mistyped/zero canonical team. Prove no raw, rejected,
+    event/subevent name, or taxonomy-label value is consumed.
+  - >-
+    Independently challenge ordered same-period resolution: control/restart
+    opening, same-team continuation, opposing-team transition, dead-ball
+    attachment, contested buffering, administration, cross-team equal-clock
+    uncertainty, missing teams, period closure, no cross-period state, exactly
+    one assignment, and multi-scope input-order invariance.
+  - >-
+    Confirm selector lookup never emits final eligibility and
+    ELIGIBLE_RESOLVED appears only after deterministic assignment to exactly
+    one resolved possession.
+  - >-
+    Challenge review/acceptance clocks, actors, digests, supersession,
+    malformed fences, later-authority blocking, and absence of every product
+    path.
+  - >-
+    Replace the fixed review Markdown with exactly one
+    w04-authority-review-v1 fence whose body is strict canonical JSON plus LF
+    with the 12 exact review keys, truthful fresh reviewed_at, the fixed fresh
+    independent actor, exact current candidate/decision digests,
+    recommendation, and findings. PASS requires findings=[]; REWORK requires
+    one or more P0-P2 findings.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory; run only
+    root uv with --locked --no-sync and bytecode disabled; reproduce the exact
+    inventory after the final return. Do not sync, install, clean, or repair.
+  - >-
+    Use apply_patch only with the two exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, edit candidate/test/dependencies, access
+    provider/network data, or begin acceptance, feature, cross-authority,
+    Bronze, Silver, Gold, build, model, product, cloud, container, endpoint,
+    hosted CI, or deployment work.
+definition_of_done:
+  - Complete fresh independent review reports all P0-P2 findings.
+  - Candidate, decision, focused test, v1 bytes, and failed evidence remain unchanged.
+  - Review record is canonical, exact, truthful, and independently authored.
+  - Focused/local-only/inventory checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any candidate, test, v1, failed-evidence byte changes or third output is required.
+  - Any mandatory input, check, or terminal inventory differs.
+  - Reviewer cannot resolve a sequence rule from frozen R20/R21.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

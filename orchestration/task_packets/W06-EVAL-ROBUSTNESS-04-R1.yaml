@@ -1,0 +1,172 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the deterministic robustness, null-control, missing-population,
+  failure-register and applicability layer on the accepted W06 metric contracts,
+  using public implementation fixtures only and making every unsupported empirical
+  population fail closed.
+depends_on:
+  - W06-EVAL-VALUE-IDENTITY-03:ACCEPTED
+  - W06-EVAL-VALUE-IDENTITY-REVIEW-03:ACCEPTED
+assigned_role: implementation_engineer
+risk: high
+protocol_authority:
+  evidence_boundary: >-
+    Implementation-fixture labels and rankings may prove deterministic code behavior
+    only. They are not human-expert, protected, transfer, calibration, prospective,
+    provider, recruitment-outcome or production evidence.
+  canonical_ordering: >-
+    All inputs, groups, windows, results, failures and digests must have one declared
+    stable order; unordered, duplicated or caller-digest-substituted inputs reject.
+  stress_requirements:
+    split_half_reliability: at least 4 eligible observations per evaluated query and two non-empty deterministic halves
+    rolling_window_stability: at least 3 distinct chronologically ordered windows
+    minutes_sample_sensitivity: at least 2 preregistered thresholds with non-empty eligible populations
+    time_walk_forward: at least 2 distinct chronologically ordered windows with train-before-test eligibility
+    leave_competition_out: at least 2 distinct governed competitions
+    leave_team_out: at least 2 distinct governed teams
+    leave_provider_out: at least 2 distinct governed providers
+    intersection_only_source_comparison: at least 2 governed providers and a non-empty exact candidate intersection
+  insufficiency_rule: >-
+    Any unmet requirement returns status UNSUPPORTED_INSUFFICIENT_EVIDENCE, no metric
+    or interval value, and the exact missing population/count or temporal condition.
+    Missing, suppressed, abstained or unsupported evidence must never become zero.
+  deterministic_controls:
+    - coverage_only
+    - metadata
+    - raw_euclidean
+    - shuffled_label
+    - shuffled_pair
+  shuffle_rule: >-
+    Use the frozen EvaluationProtocol bootstrap seed and canonical within-query inputs;
+    preserve each query's label or pair cardinality and expose the ordered permutation
+    identity. Do not add a second ranking-metric formula.
+  comparison_rule: >-
+    Reuse accepted evaluate_ranking, bootstrap_interval and rank_comparison results for
+    all computed values, intervals, correlation, overlap, Jaccard and churn.
+  failure_rule: >-
+    Classify only data_coverage, role_ambiguity, context_mismatch,
+    sample_insufficiency, identity_uncertainty, objective_mismatch,
+    temporal_insufficiency or source_transfer_insufficiency. Retain the deterministic
+    worst ten where at least ten exist; otherwise retain every case and the exact
+    shortfall.
+  applicability_rule: >-
+    Applicability is a derived result over exact computed/unsupported controls and
+    governed-population inventory. Missing expert relevance or any unsupported
+    mandatory transfer population must remain explicit. Public-fixture computation
+    cannot yield an empirical or positive claim.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+  - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.yaml
+  - reports/reviews/W06/evaluation-value-identity-independent-review-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/__init__.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/limitations.md
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Add strict versioned contracts for governed population inventory, stress-test
+    specification/result, deterministic control result, applicability assessment and
+    failure-case register. Reject unknown fields, duplicates, noncanonical order,
+    incoherent status/value shapes, false population counts, substituted protocols or
+    rosters, and caller digests that do not match validated objects.
+  - >-
+    Implement split-half, rolling-window, minutes/sample, walk-forward,
+    leave-competition/team/provider-out and intersection-only-source execution when
+    their exact declared populations exist; otherwise return the frozen unsupported
+    state and exact deficit.
+  - >-
+    Implement coverage-only, metadata, raw-Euclidean and deterministic shuffled-label
+    or shuffled-pair controls using the accepted core rather than duplicating metric
+    arithmetic. Retain rank correlation, overlap, Jaccard, churn and disagreement lists.
+  - >-
+    Derive applicability and the failure register without converting missing evidence
+    to observations. Explicitly preserve MISSING_EXPERT_RELEVANCE_EVIDENCE for the
+    locally inventoried W06 state.
+  - >-
+    Add one public fixture with a prominent IMPLEMENTATION_FIXTURE_ONLY/non-expert
+    notice, sufficient cases for deterministic computed behavior, and deliberately
+    insufficient transfer populations proving exact unsupported behavior. Do not copy,
+    read or relabel W03 protected expected outputs.
+  - >-
+    Pin exact deterministic result/permutation/register/applicability digests and test
+    order independence only where the API explicitly canonicalizes; otherwise reject
+    noncanonical inputs.
+deliverables:
+  - Strict contracts and reusable deterministic implementation.
+  - Focused contract/unit tests and one public fixture.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R1.md.
+definition_of_done:
+  - Every listed stress test either computes through accepted metric/comparison objects or returns exact unsupported evidence with no fabricated value.
+  - Deterministic controls reproduce byte-stable identities under the frozen seed.
+  - Missing expert evidence and W04 one-match/four-count-feature transfer limits cannot yield a positive applicability state.
+  - Failure cases retain ten or every available case with exact shortfall and allowed categories only.
+  - Existing accepted W06 focused tests stay green.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R1.md
+stop_conditions:
+  - Work requires a new dependency, protected expected output, external/provider access, credential, model retuning or a positive empirical threshold.
+  - Implementing a required control would require changing the accepted W05 artifact, configuration, taxonomy, candidate universe, feature order or serving behavior.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - contract and algorithm summary
+  - exact computed-versus-unsupported stress matrix and missing populations
+  - exact control, permutation, failure-register and applicability identities
+  - exact commands, exit statuses and concise results
+  - risks and smallest follow-up or none
+  - confirmation that fixture evidence is implementation-only
+  - confirmation of no Git operations, dependency changes, protected expected-output access, external/provider access, model/protocol tuning or edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,73 @@
+task_id: W09-RETRIEVAL-INDEX-03B
+revision: R1
+objective: >-
+  Build the deterministic, versioned robust-scaling research index over the exact
+  eligible W09 feature matrix, without importing any synthetic W03/W05 authority.
+depends_on:
+  - W09-RESEARCH-CONTRACTS-02A
+  - W09-SHARED-SCORER-03A
+  - W09-FULL-FEATURE-MATRIX-02C
+read_first:
+  - scouting-ml-agent-implementation-workflow.html
+  - scouting-ml-production-blueprint.html
+  - scouting-intelligence/AGENTS.md
+  - scouting-intelligence/docs/architecture/research-workbench-pivot.md
+  - scouting-intelligence/docs/architecture/product-claim.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+  - scouting-intelligence/src/scouting/contracts/research.py
+  - scouting-intelligence/src/scouting/contracts/numerics.py
+  - scouting-intelligence/src/scouting/m0/scoring.py
+  - scouting-intelligence/src/scouting/storage/guarded.py
+  - scouting-intelligence/orchestration/task_packets/W09-FULL-FEATURE-MATRIX-02C-R1.yaml
+allowed_paths:
+  - scouting-intelligence/src/scouting/modeling/research.py
+  - scouting-intelligence/configs/models/w09-historical-retrieval-v1.json
+  - scouting-intelligence/scripts/build_w09_research_index.py
+  - scouting-intelligence/tests/unit/test_w09_research_index.py
+  - scouting-intelligence/tests/integration/test_w09_research_index_build.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R1.md
+deliverables:
+  - >-
+    A strict loader for one exact FeatureMatrixManifest and its named immutable
+    artifacts. Validate physical hashes, semantic digests, paths, row counts,
+    feature order, eligibility, canonical identities, no synthetic rows, temporal
+    pins and uniqueness before fitting.
+  - >-
+    Deterministic median/IQR robust scaling over every eligible row, sorted by
+    (canonical player UUID bytes, grain_id). Declare constant-feature handling;
+    never impute, sample, infer or silently discard a candidate.
+  - >-
+    Immutable little-endian float64 scaler/vector artifacts, candidate catalogue,
+    and a self-verifying ResearchIndexManifest pinned to the exact matrix,
+    registry, eligibility policy, scorer code and provider-neutral model config.
+  - >-
+    Both weighted_euclidean and weighted_cosine must be declared as transparent
+    methods. Do not pre-limit or create a nearest-neighbour approximation.
+  - >-
+    A local CLI whose production defaults read only the accepted W09 feature
+    manifest root and write only runs/w09/historical-player-workbench-v1. Tests
+    may use synthetic fixture rows but production construction must reject them.
+  - >-
+    Two-root byte/semantic reproducibility, stale/tampered artifact, path escape,
+    duplicate grain/player, missing/absent active feature, dtype/order and
+    no-synthetic-authority tests.
+checks:
+  - uv run ruff format --check src/scouting/modeling/research.py scripts/build_w09_research_index.py tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py
+  - uv run ruff check src/scouting/modeling/research.py scripts/build_w09_research_index.py tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py
+  - uv run mypy src/scouting/modeling/research.py scripts/build_w09_research_index.py
+  - uv run pytest -q tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py
+  - uv run bandit -q -r src/scouting/modeling/research.py scripts/build_w09_research_index.py
+stop_conditions:
+  - A required matrix/manifest contract is ambiguous or cannot bind every required index pin.
+  - Any production implementation would need synthetic fixtures, raw provider files, a network service or a dependency change.
+  - Full-population fitting would require imputation, sampling or silent row loss.
+  - Any artifact write would replace incompatible existing bytes.
+prohibitions:
+  - No Git operations.
+  - No dependency or lockfile edits.
+  - No orchestration control edits beyond the named return report.
+  - No serving, web, storage-state, canonical-data or feature-matrix edits.
+  - No W03/W05/W07/W08 runtime or fixture imports in production code.
+  - No production artifact generation; the master performs the final governed build.
+approval: master_only

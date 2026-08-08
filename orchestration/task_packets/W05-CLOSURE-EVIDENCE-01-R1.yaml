@@ -1,0 +1,90 @@
+schema_version: 1
+task_id: W05-CLOSURE-EVIDENCE-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce the bounded, factual W05 model/baseline, training-serving parity and
+  limitations evidence records from already accepted implementation and independent
+  review evidence. Do not create or alter the phase gate.
+depends_on:
+  - REVIEW-W05-MODEL-01-R6:ACCEPT
+  - W05-MODEL-REVIEW-01-R2:PASS
+  - REVIEW-W05-SERVING-01-R2:ACCEPT
+  - W05-SERVING-REVIEW-01-R2:PASS
+  - REVIEW-W05-PARITY-REVIEW-01-R1:ACCEPT
+  - W05-FEATURES-SECURITY-REVIEW-02-R1:PASS
+assigned_role: evidence_producer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R2.md
+  - orchestration/reviews/REVIEW-W05-SERVING-01-R2.yaml
+  - reports/reviews/W05/w05-m0-serving-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R2.md
+  - orchestration/reviews/REVIEW-W05-PARITY-REVIEW-01-R1.yaml
+  - reports/reviews/W05/w05-training-serving-parity-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-PARITY-REVIEW-01-R1.md
+  - orchestration/reviews/REVIEW-W05-FEATURES-SECURITY-02-R1.yaml
+  - reports/reviews/W05/w05-feature-security-independent-review-R1.md
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/**
+  - reports/verification/W04/**
+deliverables:
+  - >-
+    model-baseline-evidence.md with exact registry, schema, taxonomy, configuration,
+    fitting/query population, selected artifact, manifest, array/file, model-family,
+    score and result identities.
+  - >-
+    training-serving-parity-report.md with exact accepted parity proofs, attack counts,
+    batch/request/direct/fresh-core identity and fail-closed boundaries.
+  - >-
+    limitations.md that preserves resemblance_only, W04 exact-four/suppression truth,
+    synthetic-development-only comparison, no expert/provider validation and all
+    accepted P2/deferred-W10 residuals without inflating them into W05 blockers.
+  - Mandatory return identifying files written, sources read, checks and stop-condition status.
+definition_of_done:
+  - Every numeric value, UUID and digest is traceable to accepted evidence.
+  - The three reports are internally consistent and contain no W06 evaluation claim.
+  - No phase gate, integration state, source, test, config, artifact, dependency or Git mutation.
+acceptance_checks:
+  - rg -n "resemblance_only|synthetic|W06|suppressed|P2|W10" reports/verification/W05/model-baseline-evidence.md reports/verification/W05/training-serving-parity-report.md reports/verification/W05/limitations.md
+  - git diff --check -- reports/verification/W05/model-baseline-evidence.md reports/verification/W05/training-serving-parity-report.md reports/verification/W05/limitations.md reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R1.md
+stop_conditions:
+  - Any ambiguity requiring a new product decision, authority change, model tuning, W06 evidence, external access, new dependency or weakened claim/evidence boundary.
+mandatory_return_requirements:
+  - Exact path roster and statement that no other path was changed.
+  - Exact evidence identities reproduced and source path for each.
+  - Acceptance-check results and explicit no-Git/no-delegation statement.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

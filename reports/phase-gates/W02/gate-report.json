@@ -1,0 +1,60 @@
+{
+  "checkpoint": {
+    "accepted_tag": "checkpoint/w02-accepted",
+    "commit_message": "orchestration: accept master subagent control plane",
+    "start_tag": "checkpoint/w02-start"
+  },
+  "checks": [
+    {
+      "evidence": "orchestration/task_packets/W02-SYNTH-01-R1.yaml",
+      "id": "planned-and-bounded",
+      "result": "PASS"
+    },
+    {
+      "evidence": "reports/verification/W02/synthetic-return-R1-failure.json",
+      "id": "deliberate-rejection",
+      "result": "PASS"
+    },
+    {
+      "evidence": "reports/verification/W02/synthetic-return-R2-pass.json",
+      "id": "corrected-return-accepted",
+      "result": "PASS"
+    },
+    {
+      "evidence": "reports/verification/W02/parallel-safety.json",
+      "id": "parallel-safety",
+      "result": "PASS"
+    },
+    {
+      "evidence": "reports/verification/W02/verification-report.md",
+      "id": "complete-master-suite",
+      "result": "PASS"
+    },
+    {
+      "evidence": "reports/verification/W02/phase-verifier-candidate.json",
+      "id": "phase-state-and-evidence",
+      "result": "PASS"
+    },
+    {
+      "evidence": "reports/verification/W02/clean-tree-report.md",
+      "id": "checkpoint-clean-tree-procedure",
+      "result": "PASS"
+    }
+  ],
+  "decision": "ACCEPT",
+  "gate_id": "G-W02",
+  "phase_id": "W02",
+  "reviews": [
+    {
+      "decision": "REWORK",
+      "path": "orchestration/reviews/REVIEW-W02-SYNTH-01-R1.yaml"
+    },
+    {
+      "decision": "ACCEPT",
+      "path": "orchestration/reviews/REVIEW-W02-SYNTH-01-R2.yaml"
+    }
+  ],
+  "schema_version": 1,
+  "unresolved_defects": [],
+  "verified_at_utc": "2026-07-29T09:59:19Z"
+}

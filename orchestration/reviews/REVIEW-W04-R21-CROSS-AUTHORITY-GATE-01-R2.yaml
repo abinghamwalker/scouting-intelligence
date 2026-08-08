@@ -1,0 +1,29 @@
+schema_version: 1
+review_id: REVIEW-W04-R21-CROSS-AUTHORITY-GATE-01-R2
+task_id: W04-R21-CROSS-AUTHORITY-GATE-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPTED
+next_packet: W04-FOUR-FEATURE-VERTICAL-SLICE-PLANNING
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - reports/verification/W04/wyscout-r21-cross-authority-review-R2-master-verification.md
+  - reports/verification/W04/wyscout-r21-full-repository-gate-R1-failure.md
+  - reports/verification/W04/wyscout-r21-full-repository-gate-R2-control-failure.md
+  - reports/verification/W04/wyscout-phase-verifier-ready-R3-master-verification.md
+  - reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+  - reports/phase-gates/W04/wyscout-r21-correction-gate.json
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-GATE-01-R1.md
+decision_notes:
+  - Fixed independent review is PASS and physically bound by the canonical gate record.
+  - All nine governed product paths were absent before gate materialization.
+  - Post-materialization focused suite passed 478 tests.
+  - Post-materialization complete repository suite passed 1245 tests and every non-pytest gate.
+  - Downstream dispatch remains prohibited until the immediate clean checkpoint and no-remote proof pass.

@@ -1,0 +1,71 @@
+schema_version: 1
+task_id: W03-CONTRACTS-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Implement the strict, immutable W03 cross-boundary contracts and executable
+  contract tests for the synthetic vertical slice.
+depends_on:
+  - W02:CLOSED
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W03-CONTRACTS-01-R1.yaml
+  - docs/adr/0001-local-only-uv-git-delivery.md
+  - docs/adr/0002-master-subagent-verification.md
+allowed_paths:
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/audit.py
+  - tests/contracts/test_foundation_contracts.py
+  - reports/reviews/W03/returns/W03-CONTRACTS-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - orchestration/**
+  - src/scouting/storage/**
+  - src/scouting/serving/**
+  - src/scouting/workflow/**
+  - services/**
+  - apps/**
+deliverables:
+  - Strict Pydantic v2 primitives for canonical UUID identifiers, tenant context, and UTC instants.
+  - >-
+    Immutable temporal/source contracts covering source digests, licence/use
+    classification, source manifests, identity evidence, dependency lineage, and
+    fail-closed availability/cutoff invariants.
+  - >-
+    Versioned role-brief, retrieval request/result, shortlist-entry, and audit-event
+    contracts with tenant context, optimistic versions, trace identifiers, explicit
+    evidence/coverage, and the resemblance-only claim boundary.
+  - Contract tests for extra-field rejection, immutability, ID/UTC strictness, temporal future-data rejection, and tenant/version requirements.
+definition_of_done:
+  - The contracts package imports only the standard library and Pydantic validation primitives.
+  - Every cross-boundary model forbids unknown fields and is immutable.
+  - Naive or non-UTC instants fail validation rather than being silently coerced.
+  - Temporal evidence rejects dependencies available after the declared cutoff.
+  - Retrieval output exposes evidence dimensions, confidence, coverage, lineage, and reason codes without claiming transfer success.
+  - All allowed-path tests, Ruff, and mypy checks pass through uv.
+  - The mandatory return is complete and confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_foundation_contracts.py
+  - uv run ruff format --check src/scouting/contracts tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts tests/contracts/test_foundation_contracts.py
+  - uv run mypy src/scouting/contracts
+stop_conditions:
+  - A required contract decision is not resolved by either controlling HTML plan.
+  - A dependency, migration, database, storage, serving, or application change is required.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, external service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

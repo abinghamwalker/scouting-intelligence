@@ -1,0 +1,60 @@
+schema_version: 1
+task_id: W10-RUNTIME-HARDENING-SURVEY-00B
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Locate the smallest W04 runtime-authority seams that can separate incidental host/cache
+  metadata from security-relevant source, executable and product substitution while
+  preserving all accepted W04 fail-closed and zero-read/use witnesses.
+depends_on:
+  - W09:CLOSED
+assigned_role: runtime_security_surveyor
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W10-RUNTIME-HARDENING-SURVEY-00B-R1.yaml
+  - reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+  - reports/verification/W04/wyscout-runtime-control-R12-terminal-gate-blocker-correction-master-acceptance.md
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R12.md
+  - reports/verification/W04/wyscout-terminal-complete-repository-gate-R2-master-verification.md
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W10/returns/W10-RUNTIME-HARDENING-SURVEY-00B-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - services/**
+  - apps/**
+  - migrations/**
+  - scripts/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Identify exact functions, digest projections and metadata rows implicated by the backlog.
+  - Classify security-authoritative versus audit-only facts with fail-closed reasoning.
+  - Name portable fixtures and every W04 protected substitution/zero-read witness to retain.
+  - Propose a bounded implementation packet and focused verification commands.
+deliverables:
+  - reports/reviews/W10/returns/W10-RUNTIME-HARDENING-SURVEY-00B-R1.md
+definition_of_done:
+  - The master can dispatch a narrow hardening change without weakening W04 authority.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py
+  - test -s reports/reviews/W10/returns/W10-RUNTIME-HARDENING-SURVEY-00B-R1.md
+stop_conditions:
+  - Any proposed weakening of source/executable/product/rights/temporal/truthful-completion authority, a Git operation, or an edit outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

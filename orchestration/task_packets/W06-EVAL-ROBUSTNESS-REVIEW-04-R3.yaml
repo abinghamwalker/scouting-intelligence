@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-REVIEW-04
+phase_id: W06
+revision: R3
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.yaml
+objective: >-
+  Perform the final fresh review of the convergence-audited R3 implementation, limited
+  to exact embedded-row/child lineage, unsupported-fixture authority and deterministic
+  identity retention.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-04-R3:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R3.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R3.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R3.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - src/scouting/evaluation/__init__.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-robustness-independent-review-R3.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+master_counterexamples:
+  - >-
+    Exact normal stress result 013da049ef32c63d7bf5d40e825b7d377000cca70fe8b6c86fb2becb05797598:
+    split specification and exact split observation IDs, but each cohort embeds ranked
+    rows/per-query/aggregate/interval children from rolling windows; existing split
+    comparison rankings remain and the constructor accepts.
+  - >-
+    Exact normal metadata control 75b2bc182bbd1e72816de51ce7516e1cf1ee2475328aa49cbabca80485699e1b:
+    embedded input uses authority digest bb...bb and observation rows obs2/obs3 while
+    baseline/null/comparison children remain from obs0/obs1; constructor accepts.
+  - >-
+    public-robustness-v1.json SHA eee02e82271041c0da10f1474770f983d920b7cff32e08f670e03ac614104b00
+    has no sparse/unsupported stress observation roster, while R3 tests assert no literal
+    stress/control/applicability result identities.
+review_questions:
+  - Are cohort aggregate ranked rows exactly derived from the specification observations selected by cohort observation IDs?
+  - Are per-query and aggregate MetricResult input digests exactly derived from those embedded rows and are comparison rankings/input digests bound to their named cohorts?
+  - Can any control input rows or typed authority change without forcing exact recomputation of baseline/null/query results and comparisons?
+  - Are bare authority digests sufficient, or can a caller relabel an arbitrary ranking as metadata/raw/coverage without a content-addressed authority object?
+  - Does the public fixture contain and drive both computed and unsupported stress paths, pair absence, typed control inputs and literal expected identities?
+  - Does incoherent label/common-candidate input return exact typed unsupported evidence rather than raising or producing an empty-deficit invalid object?
+  - Do pair absence, applicability claim fields, failure source and complete walk-forward remain closed with no fabricated human evidence?
+deliverables:
+  - One final fresh report-only ACCEPT or REWORK verdict with exact P0/P1 counts and a narrow constructor/fixture matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.md.
+definition_of_done:
+  - Both master witnesses and the unsupported-fixture gap are independently closed or retained with exact severity.
+  - Any additional finding changes a persisted value, population, null, applicability or protected gate input.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/evaluation-robustness-independent-review-R3.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - final verdict and exact severity counts
+  - exact master-witness outcomes and narrow constructor/fixture matrix
+  - exact commands, statuses and results
+  - remaining P0/P1 risks and smallest correction or none
+  - no Git/dependency/protected/external/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

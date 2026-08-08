@@ -1,0 +1,214 @@
+schema_version: 1
+policy_id: w03-authorization-v1
+status: accepted_control_boundary
+scope:
+  environment: w03-local-review
+  runtime_tenant_mode: single-tenant
+  principals: local_synthetic_review_accounts_only
+
+decision:
+  default: deny
+  unknown_actor: deny
+  unknown_role: deny
+  unknown_action: deny
+  missing_context: deny
+  cross_tenant: deny
+  role_inheritance: none
+  all_applicable_policies_must_allow: true
+
+required_context:
+  - actor_id
+  - actor_roles
+  - tenant_id
+  - action
+  - resource_type
+  - resource_id
+  - resource_tenant_id
+  - request_id
+
+global_denies:
+  - recruitment.autonomous_select
+  - recruitment.autonomous_approve
+  - protected_trait.infer
+  - protected_trait.rank
+  - evidence.external_share
+  - evidence.external_model_send
+  - audit.update
+  - audit.delete
+  - tenant.cross_access
+
+roles:
+  analyst:
+    purpose: Create briefs, retrieve and organise evidence, and build reviewable shortlists.
+    allow:
+      - work_queue.read
+      - player.search
+      - player.profile.read
+      - player.evidence.read
+      - role_brief.create
+      - role_brief.read
+      - role_brief.update_owned
+      - role_brief.version
+      - retrieval.create
+      - retrieval.read
+      - comparison.create
+      - comparison.read
+      - shortlist.create
+      - shortlist.read
+      - shortlist_entry.add
+      - shortlist_entry.update_owned
+      - shortlist_entry.reject_with_reason
+      - observation.read_team_visible
+      - evidence_export.create
+
+  scout:
+    purpose: Review assigned evidence and record attributable observations and disagreement.
+    allow:
+      - work_queue.read
+      - player.search
+      - player.profile.read
+      - player.evidence.read_assigned
+      - role_brief.read_approved
+      - retrieval.read_assigned
+      - comparison.read_assigned
+      - shortlist.read_assigned
+      - shortlist_entry.recommend_next_action
+      - observation.create
+      - observation.read_own
+      - observation.read_team_visible
+      - observation.amend_own
+      - observation.flag_disagreement
+
+  approver:
+    purpose: Review evidence sufficiency and make explicit controlled workflow approvals.
+    allow:
+      - work_queue.read
+      - player.search
+      - player.profile.read
+      - player.evidence.read
+      - role_brief.read
+      - role_brief.approve
+      - retrieval.read
+      - comparison.create
+      - comparison.read
+      - shortlist.read
+      - shortlist_entry.transition
+      - shortlist_entry.approve
+      - shortlist_entry.hold
+      - shortlist_entry.reject_with_reason
+      - observation.read_team_visible
+      - evidence_export.create
+
+  admin:
+    purpose: Operate local accounts, policy, health and audit without implicit recruitment authority.
+    allow:
+      - local_account.create
+      - local_account.disable
+      - local_account.assign_role
+      - local_session.revoke
+      - policy.read
+      - data_health.read
+      - identity_review_queue.read
+      - job_health.read
+      - audit.read
+      - audit.export_local
+    not_granted_by_admin_role:
+      - role_brief.approve
+      - shortlist_entry.approve
+      - recruitment.autonomous_select
+
+# Every granted action has an explicit object-policy row. A newly granted action is
+# rejected at policy load until its ownership and visibility semantics are declared.
+action_rules:
+  audit.export_local: {requires_owner: false, owner_only_visibility_exempt: false}
+  audit.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  comparison.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  comparison.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  comparison.read_assigned: {requires_owner: false, owner_only_visibility_exempt: false}
+  data_health.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  evidence_export.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  identity_review_queue.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  job_health.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  local_account.assign_role: {requires_owner: false, owner_only_visibility_exempt: false}
+  local_account.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  local_account.disable: {requires_owner: false, owner_only_visibility_exempt: false}
+  local_session.revoke: {requires_owner: false, owner_only_visibility_exempt: false}
+  observation.amend_own: {requires_owner: false, owner_only_visibility_exempt: false}
+  observation.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  observation.flag_disagreement: {requires_owner: false, owner_only_visibility_exempt: false}
+  observation.read_own: {requires_owner: false, owner_only_visibility_exempt: false}
+  observation.read_team_visible: {requires_owner: false, owner_only_visibility_exempt: false}
+  player.evidence.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  player.evidence.read_assigned: {requires_owner: false, owner_only_visibility_exempt: false}
+  player.profile.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  player.search: {requires_owner: false, owner_only_visibility_exempt: false}
+  policy.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  retrieval.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  retrieval.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  retrieval.read_assigned: {requires_owner: false, owner_only_visibility_exempt: false}
+  role_brief.approve: {requires_owner: false, owner_only_visibility_exempt: true}
+  role_brief.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  role_brief.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  role_brief.read_approved: {requires_owner: false, owner_only_visibility_exempt: false}
+  role_brief.update_owned: {requires_owner: true, owner_only_visibility_exempt: false}
+  role_brief.version: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist.create: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist.read: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist.read_assigned: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.add: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.approve: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.hold: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.recommend_next_action: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.reject_with_reason: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.transition: {requires_owner: false, owner_only_visibility_exempt: false}
+  shortlist_entry.update_owned: {requires_owner: true, owner_only_visibility_exempt: false}
+  work_queue.read: {requires_owner: false, owner_only_visibility_exempt: false}
+
+object_rules:
+  all_resources:
+    require_same_tenant: true
+    deny_on_missing_owner_or_visibility: true
+    deny_response_must_not_disclose_resource_content: true
+  role_brief:
+    update_requires_owner_or_approver: true
+    approved_version_is_immutable: true
+  shortlist:
+    read_requires_team_visibility_or_assignment: true
+    write_requires_optimistic_version: true
+    transition_requires_reason: true
+  observation:
+    private_visibility_requires_author: true
+    amendment_creates_history: true
+  evidence_export:
+    require_data_rights_allow: true
+    require_environment_allow: true
+    require_classification: true
+  audit:
+    append_only: true
+
+audit:
+  required_for_material_actions: true
+  fail_closed_if_audit_write_fails:
+    - role_brief.approve
+    - shortlist_entry.transition
+    - shortlist_entry.approve
+    - evidence_export.create
+    - local_account.create
+    - local_account.disable
+    - local_account.assign_role
+  required_fields:
+    - actor_id
+    - tenant_id
+    - action
+    - target
+    - request_id
+    - timestamp
+    - before_digest
+    - after_digest
+    - reason
+    - export_scope
+
+evidence_status:
+  policy_is_normative: true
+  runtime_permission_tests_completed: false
+  real_user_access_review_completed: false

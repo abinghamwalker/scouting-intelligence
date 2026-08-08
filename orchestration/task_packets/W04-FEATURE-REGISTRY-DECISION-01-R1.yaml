@@ -1,0 +1,173 @@
+schema_version: 1
+task_id: W04-FEATURE-REGISTRY-DECISION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize the frozen R21 conservative supported-feature decision,
+  candidate, and progression-safe focused contract with exactly fifteen rows
+  and exactly four supported count features.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1:MASTER_ACCEPTED
+assigned_role: supported_feature_authority_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FEATURE-REGISTRY-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/verification/W04/wyscout-possession-semantic-v2-acceptance-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_supported_feature_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+authority:
+  decision_id: w04-wyscout-supported-feature-registry-decisions-v1
+  decision_schema_version: w04-supported-feature-decision-v1
+  registry_id: w04-wyscout-supported-count-features-v1
+  registry_schema_version: w04-supported-feature-registry-v1
+  source_id: wyscout-soccer-match-events-figshare-v5
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  bound_inputs:
+    field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+    field_registry_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+    field_registry_id: w04-wyscout-field-registry-v2
+    possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+    possession_taxonomy_canonical_sha256: 3a3c7cdb0e6ce441d3514e4f415bb5117ebc53f2d18b753206a6ca8d7fcdd881
+    possession_taxonomy_id: w04-wyscout-possession-taxonomy-v2
+    product_contract_preimage_id: w04-wyscout-product-contract-preimage-v1
+    product_contract_preimage_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+    schema_bundle_preimage_id: w04-wyscout-schema-bundle-preimage-v1
+    schema_bundle_preimage_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+exact_feature_order:
+  - action_count
+  - action_rate
+  - actions_per_90
+  - continuous_time_seconds
+  - coordinate_known_action_count
+  - match_count
+  - minutes_lower
+  - minutes_upper
+  - outcome_dependent_count
+  - provider_native_possession_count
+  - resolved_lineup_stint_count
+  - resolved_possession_action_count
+  - role_inferred_count
+  - unresolved_action_count
+  - value_model_sum
+exact_supported_features:
+  - action_count
+  - coordinate_known_action_count
+  - match_count
+  - resolved_possession_action_count
+requirements:
+  - >-
+    Materialize a canonical eight-key decision with authority_class exactly
+    SUPPORTED_FEATURE, the exact ten bound inputs, truthful fresh decided_at
+    strictly after both accepted-v2 clocks, the fixed UUIDv5 actor, fixed IDs
+    and schema, exact policies, and the fifteen exact R21 Section 9.3 rows.
+  - >-
+    Materialize a strict deterministic YAML candidate with exactly seven
+    top-level keys: bound_inputs, decision_id, decision_sha256, features,
+    policies, registry_id, registry_schema_version. It must exactly restate the
+    decision and bind the decision physical digest.
+  - >-
+    Every feature row has exactly aggregation, applicability, denominator,
+    feature_name, input_fields, output_type, reason, state. Preserve exact R21
+    strings, order, types, and input-field order. No sixteenth row is allowed.
+  - >-
+    Exactly the four packet-listed features are SUPPORTED. All others are
+    exactly R21's SUPPRESSED_UNSUPPORTED_DENOMINATOR or UNAVAILABLE states with
+    empty inputs, NONE/NEVER, and null output as specified.
+  - >-
+    `resolved_possession_action_count` has only the three listed canonical
+    selector fields as input_fields and additionally requires accepted
+    possession_eligibility_state == ELIGIBLE_RESOLVED through applicability;
+    do not add that state as a fourth input field.
+  - >-
+    The focused test must independently enforce canonical JSON/YAML, exact
+    keysets/roster/policies/bindings, accepted field/possession/preimage
+    digests, strict state unions, forbidden input/feature support, review and
+    acceptance schemas/digests/UUIDv5/clocks, progression blocking, no
+    feature_schema_hash before acceptance, and absence of every cross-authority
+    or product path.
+  - >-
+    Add negative cases for missing/duplicate/sixteenth features, unknown row
+    fields, wrong sort, wrong state/type/aggregation/denominator/applicability,
+    unsupported rows with inputs/output, supported rows with empty/unaccepted
+    inputs, v1 or physical-digest substitution, preimage swap, name-only or
+    possession-internal inputs, and any fifth supported feature.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory. Use only
+    root uv with --locked --no-sync, bytecode disabled, helper Python with -B,
+    and reproduce the exact inventory after the return. Do not sync, install,
+    clean, or repair.
+  - >-
+    Use apply_patch only for the four exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, edit any predecessor/preimage, create review
+    or acceptance, access provider/network data, or begin cross-authority,
+    identity, Bronze, Silver, Gold, build, model, product, cloud, container,
+    endpoint, hosted CI, or deployment work.
+definition_of_done:
+  - Exact decision/candidate authority is canonical and digest-linked.
+  - Exactly fifteen rows and exactly four supported features match R21.
+  - Progression and no-product boundaries fail closed.
+  - Focused/Ruff/local-only checks pass and inventory equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_supported_feature_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_supported_feature_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted predecessor or preimage digest differs from this packet.
+  - Exact R21 feature rows cannot satisfy the closed R20 schema union.
+  - Any check, path boundary, or terminal inventory differs.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

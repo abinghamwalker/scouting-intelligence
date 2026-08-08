@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01
+phase_id: W04
+revision: R2
+state: REWORK
+objective: >-
+  Independently review the exact R2 encoder candidate, proving closure of R1's false
+  physical-to-semantic row binding and all strict key/type bypasses while preserving
+  the accepted physical/semantic vectors and generic APIs.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_parquet_r2_byte_security_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R2-master-verification.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  formats_sha256: cfa25e672072cba702d103a2a68c79f2895852ee91e966b998cc3a2e13beb5ea
+  focused_test_sha256: 113af1f3b23aac813e0b8484b02348f53d96af0eb816cb495ae90325d5dd158f
+  producer_return_sha256: 5c007e2f370c7e231ea83e6a19d3f0ce35121a17dbdb40ef12fe5d6624aee063
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Independently repeat R1's unchanged-key/non-key Arrow divergence, Arrow-key
+    divergence, string/integer and Boolean/integer probes and require fail-closed
+    rejection before hashing/encoding.
+  - >-
+    Exercise complete-field equality, null/list/decimal/UTC/struct recursion,
+    unsupported types, nested nullability/metadata, finite-float and non-UTC/precision
+    failures. Confirm canonical physical rows and semantic rows cannot diverge.
+  - >-
+    Reconstruct both fixed vectors and semantic framing independently; recheck exact
+    Parquet controls and 65,535/65,536/65,537 row-group boundaries.
+  - >-
+    Probe direct WyscoutParquetSchemaDescriptor construction with unsupported,
+    malformed or metadata-like Arrow type text passed to the public semantic helper.
+    Return bounded REWORK if an unvalidated descriptor can yield a semantic digest
+    that callers could mistake for encoder-supported W04 authority.
+  - Confirm generic serializer behavior is unchanged and no product/control/provider/network/Git/cloud/container/CI/remote/deployment action occurred.
+definition_of_done:
+  - Exact R2 candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R2 review and mandatory return with exact finding counts.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

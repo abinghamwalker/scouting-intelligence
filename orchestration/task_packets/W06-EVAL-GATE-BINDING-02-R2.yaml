@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W06-EVAL-GATE-BINDING-02
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R1.yaml
+objective: >-
+  Close only the independently reproduced abstention and nested-child population escapes
+  in the otherwise accepted gate/population relation.
+depends_on:
+  - W06-EVAL-GATE-BINDING-REVIEW-02-R1:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R1.yaml
+  - orchestration/task_packets/W06-EVAL-GATE-BINDING-REVIEW-02-R1.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-02-R1.yaml
+  - reports/reviews/W06/evaluation-gate-binding-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R1.md
+  - src/scouting/contracts/evaluation.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/**
+  - tests/fixtures/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    For each evaluated protected query under REQUIRE_COMPLETE, positive decisions must
+    have governed relevance rows and every retained row must be a concrete non-ABSTAIN
+    label. All-abstain and mixed concrete-plus-ABSTAIN evidence must fail both positive
+    shapes because the shared metric core makes any abstained ranking unavailable.
+  - >-
+    Require every MetricResult nested in every SliceResult to bind the run evaluated
+    query digest. Do not invent an unapproved slice sub-population protocol.
+  - >-
+    Require every FailureResult.query_id to belong to the run evaluated-query roster.
+  - >-
+    Add exact public normal-constructor regressions for both all-abstain positive gates,
+    foreign-population slice metrics and absent-query failures while retaining all R1
+    closure tests unchanged.
+deliverables:
+  - Minimal contract/test correction for the two reproduced findings.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R2.md.
+definition_of_done:
+  - Both all-abstain positive constructors reject.
+  - Both mixed concrete-plus-ABSTAIN positive constructors reject.
+  - Foreign-population slice metrics and absent-query failures reject at run construction.
+  - All R1 coherent positive/negative and exact R3 closure constructors remain unchanged.
+acceptance_checks:
+  - uv run --no-sync pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R2.md
+stop_conditions:
+  - The correction requires a new dependency, protected expected output, external/provider access or a new slice-population protocol.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - The correction would alter accepted W05 bytes or the frozen claim boundary.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - exact validators and regression constructors changed
+  - exact commands, exit statuses and concise results
+  - residual risks reserved for the serial value/identity split
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

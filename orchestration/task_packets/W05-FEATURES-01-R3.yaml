@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W05-FEATURES-01
+phase_id: W05
+revision: R3
+state: IMPLEMENTED
+objective: >-
+  Add the sole missing strict JSON type check for the accepted W04 Gold row count and
+  prove boolean/float substitutions fail without changing any accepted identity.
+depends_on:
+  - REVIEW-W05-FEATURES-01-R2:REWORK
+assigned_role: feature_registry_implementer
+risk: high
+convergence_audit:
+  attempts_reviewed: [R1, R2]
+  result: >-
+    One reproducible blocker remains and all other R1/R2 attacks are closed. Retain the
+    packet and make only the strict scalar-type correction; no split or new authority.
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-FEATURES-01-R2.yaml
+  - reports/reviews/W05/w05-feature-registry-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R2.md
+  - src/scouting/features/registry.py
+  - tests/unit/test_w05_features.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/features/registry.py
+  - tests/unit/test_w05_features.py
+  - reports/reviews/W05/returns/W05-FEATURES-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/w05-feature-registry-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-FEATURES-01-R1.md
+  - reports/reviews/W05/returns/W05-FEATURES-01-R2.md
+  - src/scouting/contracts/**
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+  - tests/contracts/**
+  - tests/fixtures/**
+requirements:
+  - >-
+    Before the generic exact W04 projection comparison, require gold_row_count to be
+    an int, not a bool, and exactly 1. JSON true, 1.0, false, 0 and 2 must reject;
+    ordinary JSON integer 1 must retain the exact accepted result.
+  - >-
+    Add a direct parametrized test for true and 1.0 at minimum, plus the accepted
+    integer positive. Assert both attacks fail for an exact row-count type/value reason.
+  - >-
+    Do not change registry/config/fixture/family/schema digests, accepted W04 identity
+    constants, count-vector behavior, lineage, claims, formulas or any other surface.
+    Retain every R2 test and all original R1 attack closure.
+deliverables:
+  - Strict W04 row-count scalar validation and direct regression test.
+  - Complete mandatory R3 return.
+definition_of_done:
+  - Both R2 reviewer attack markers reject and the accepted integer row still materializes.
+  - No identity digest, config, fixture, W04, dependency, Git or downstream byte changes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/features tests/unit/test_w05_features.py
+  - uv run ruff check src/scouting/features tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any other product, identity, W04, authority, dependency, external or out-of-scope change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

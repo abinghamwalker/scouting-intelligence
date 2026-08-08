@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W04-IDENTITY-RULESET-DECISION-01
+phase_id: W04
+revision: R1
+state: MASTER_REVIEW
+objective: >-
+  Materialize the master-owned W04 identity v1 decision and ruleset bound to the
+  accepted source manifest and R21 field v2 authority, with executable
+  fail-closed contract tests, without creating identity runtime or product data.
+depends_on:
+  - W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1:MASTER_ACCEPTED
+  - W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1:ACCEPTED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-RULESET-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/verification/W04/wyscout-source-manifest-bridge-R1-master-verification.md
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - src/**
+  - scripts/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+fixed_bindings:
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  completion_manifest_sha256: 69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1
+  field_registry_id: w04-wyscout-field-registry-v2
+  field_registry_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  decision_id: w04-wyscout-identity-ruleset-decisions-v1
+  ruleset_id: w04-wyscout-identity-ruleset-v1
+requirements:
+  - >-
+    Implement the exact R20 identity v1 route while applying R21's explicit
+    requirement that the future identity decision bind accepted field v2.
+  - >-
+    Use exactly four ordered entity rules: COMPETITION, TEAM, PLAYER, MATCH;
+    numeric strict provider IDs only; player zero REJECT; all other unresolved
+    conditions REVIEW_REQUIRED; no names, coercion, repair, or duplicate
+    resolution.
+  - >-
+    Use the exact closed seven-policy object and exact UUIDv5 namespace/source-ID
+    construction defined by R20.
+  - >-
+    The decision must be canonical JSON and the ruleset one strict safe YAML
+    restatement whose canonical parsed digest is independent of physical YAML.
+  - >-
+    Tests must reject every missing, extra, reordered, mistyped, mutated,
+    noncanonical, unsafe-YAML, actor, source-input, namespace, identity,
+    duplicate, zero-player, name-matching, review-before-candidate, and
+    acceptance-before-PASS condition.
+  - >-
+    Correct the frozen R21 product-absence fixture only to admit the exact serial
+    identity lifecycle: absent, decision+candidate, then review, then acceptance.
+    Partial, reordered, or acceptance-before-review presence remains rejected.
+  - >-
+    Preserve all accepted upstream bytes. Do not create review, acceptance,
+    identity bundle/queue/correction, Bronze, Silver, Gold, receipt, build,
+    model, network, cloud, container, endpoint, CI, or deployment paths.
+definition_of_done:
+  - Decision and ruleset reproduce exact fixed IDs, bindings, entity rules, and policies.
+  - Candidate canonical and physical digests are reproducible and mutation-sensitive.
+  - Focused authority and R21 composability tests pass while downstream paths remain blocked.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_identity_ruleset_authority.py
+  - uv run ruff check tests/contracts/test_w04_identity_ruleset_authority.py
+  - uv run mypy tests/contracts/test_w04_identity_ruleset_authority.py
+  - uv run pytest -q tests/contracts/test_w04_identity_ruleset_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any accepted upstream digest, exact R20 identity semantic, actor, or clock differs.
+  - Correctness requires an R22 architecture change, dependency change, network, or product implementation.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only_no_mutation_required
+self_approval: master_authority_required

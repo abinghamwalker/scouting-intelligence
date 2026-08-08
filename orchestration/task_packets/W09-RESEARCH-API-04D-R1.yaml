@@ -1,0 +1,74 @@
+task_id: W09-RESEARCH-API-04D
+revision: R1
+objective: >-
+  Provide strict local JSON endpoints for the governed W09 dataset, players,
+  queries, results, comparisons, saved experiments, reports and replay receipts.
+depends_on:
+  - W09-RESEARCH-SERVING-04C
+  - W09-RESEARCH-STATE-04A
+  - W09-REPRODUCIBLE-REPORT-04B
+read_first:
+  - scouting-ml-agent-implementation-workflow.html
+  - scouting-ml-production-blueprint.html
+  - scouting-intelligence/AGENTS.md
+  - scouting-intelligence/docs/architecture/research-workbench-pivot.md
+  - scouting-intelligence/docs/architecture/product-claim.md
+  - scouting-intelligence/src/scouting/contracts/research.py
+  - scouting-intelligence/src/scouting/serving/research.py
+  - scouting-intelligence/src/scouting/storage/research.py
+  - scouting-intelligence/src/scouting/reporting/research.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R2.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-REPRODUCIBLE-REPORT-04B-R1.md
+allowed_paths:
+  - scouting-intelligence/src/scouting/api/__init__.py
+  - scouting-intelligence/src/scouting/api/research.py
+  - scouting-intelligence/tests/unit/test_w09_research_api.py
+  - scouting-intelligence/tests/integration/test_w09_research_api_integration.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-API-04D-R1.md
+deliverables:
+  - >-
+    A dependency-injected ResearchApiRuntime and FastAPI APIRouter under /api/w09.
+    Runtime inputs are one exact ResearchDatasetDescriptor,
+    ResearchServingService, ResearchExperimentStore, explicit retained attribution
+    and rights limitations, and an injectable UTC clock. Freshly validate all exact
+    contracts; do not perform production artifact discovery here.
+  - >-
+    GET /datasets and GET /players with bounded name/position/competition search over
+    the governed matrix only; POST /queries and GET /results/{result_id}; POST
+    /comparisons; POST/GET/list /experiments; POST /experiments/{id}/replay; and GET
+    /experiments/{id}/report returning exact saved bytes/media type.
+  - >-
+    Strict local request contracts for save-experiment and player search responses.
+    Query/comparison/replay payloads use the accepted shared contracts. Malformed is
+    422, absent is 404, stale/incompatible/tampered is 409, never a synthetic/current
+    fallback.
+  - >-
+    Thread-safe in-process immutable result/comparison caches. A save request may
+    reference only an exact cached result and optional exact cached comparison. Build
+    a content-addressed report and SavedResearchExperiment, persist through the
+    accepted store, and return the strict experiment contract.
+  - >-
+    Replay the exact saved request/pins. Return and append a valid deterministic
+    ResearchReplayReceipt for reproduced, incompatible-pins or deterministic-result-
+    mismatch status; never rewrite saved pins or silently use the current dataset.
+  - >-
+    Tests for every endpoint, strict validation, stale pins, unknown IDs, exact report
+    bytes/media, save/replay idempotency and mismatch statuses, bounded search, real
+    matrix population only, concurrent cache access, and an import/call tripwire
+    proving no W03/W05/W07/W08/provider runtime is used.
+checks:
+  - uv run ruff format --check src/scouting/api tests/unit/test_w09_research_api.py tests/integration/test_w09_research_api_integration.py
+  - uv run ruff check src/scouting/api tests/unit/test_w09_research_api.py tests/integration/test_w09_research_api_integration.py
+  - uv run mypy src/scouting/api
+  - uv run pytest -q tests/unit/test_w09_research_api.py tests/integration/test_w09_research_api_integration.py tests/unit/test_w09_research_serving.py tests/integration/test_w09_research_storage.py
+  - uv run bandit -q -r src/scouting/api
+stop_conditions:
+  - The stable serving interface changes incompatibly or an accepted contract cannot represent exact replay.
+  - Endpoint completion would require authentication/role workflow, raw providers, synthetic product data, a network service or a dependency change.
+prohibitions:
+  - No Git operations.
+  - No dependency, lockfile, shared-contract, serving, storage, reporting, modeling, feature, web UI, canonical or orchestration-control edits.
+  - No W03/W05/W07/W08/provider runtime or fixture imports in production code.
+  - No production app construction, artifact discovery or data generation.
+approval: master_only

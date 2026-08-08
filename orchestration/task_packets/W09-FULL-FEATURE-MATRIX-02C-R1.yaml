@@ -1,0 +1,84 @@
+task_id: W09-FULL-FEATURE-MATRIX-02C
+revision: R1
+owner: subagent
+objective: >-
+  Materialise a deterministic, versioned player-by-competition-by-2017/18-window
+  eligibility ledger and explainable feature matrix over the accepted full canonical
+  historical population, with no synthetic product rows and complete reconciliation.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R2.md
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R2.md
+  - src/scouting/contracts/research.py
+  - src/scouting/data_products/wyscout/historical.py
+  - src/scouting/storage/formats.py
+  - src/scouting/storage/guarded.py
+allowed_paths:
+  - src/scouting/features/historical.py
+  - configs/features/w09-historical-player-window-v1.json
+  - scripts/build_w09_feature_matrix.py
+  - tests/unit/test_w09_historical_features.py
+  - tests/integration/test_w09_feature_matrix.py
+  - reports/reviews/W09/returns/W09-FULL-FEATURE-MATRIX-02C-R1.md
+deliverables:
+  - >-
+    One source-population decision per 3,603 resolved catalogue players and one unique
+    eligibility decision per declared player/competition/2017-18 grain, with ledger
+    semantic digests and exact reason reconciliation. Never equate source count with
+    eligible row count.
+  - >-
+    Fixed eligibility policy w09-eligibility-v1: 450 minimum minutes. Sum only played
+    canonical appearances; retain exact only when every contributing played stint is
+    exact, otherwise conservative_lower_bound. An all-unusable/unused-bench grain is
+    UNUSABLE_MINUTES; a usable sum below 450 is BELOW_MINIMUM_MINUTES. Never infer
+    membership from player currentTeamId and never infer minutes from action presence.
+  - >-
+    Fixed common ordered feature registry w09-historical-player-window-v1. Every feature
+    is an event count per 90 using the governed usable minute denominator, so a zero
+    numerator is observed ZERO rather than missing: passes (event 8), accurate passes
+    (event 8 + tag 1801), crosses (event 8 + subevent 80), smart passes (event 8 +
+    subevent 86), shots (event 10), shots on target (event 10 + tag 1801), goals (tag
+    101 excluding own-goal tag 102), key passes (tag 302), assists (tag 301), duels
+    (event 1), duels won (event 1 + tag 703), interceptions (tag 1401), clearances
+    (subevent 71), accelerations (subevent 70), fouls (event 2), touches (subevent 72).
+    Registry JSON must record predicates, units, numerator/denominator semantics,
+    provider capability mapping, limitations and exact feature order.
+  - >-
+    Eligible rows must have all 16 required features, positive governed minutes,
+    canonical resolved player UUIDs, canonical historical teams/competition, explicit
+    position code GK/DF/MD/FW, source-action counts, coverage, strict cutoff and every
+    lineage digest required by FeatureMatrixRow. Unknown positions or absent required
+    canonical inputs are REQUIRED_FEATURE_MISSING; never silently impute.
+  - >-
+    Deterministic immutable Parquet/JSON artifacts for population decisions,
+    eligibility decisions, eligible matrix rows and player catalogue, plus one strict
+    FeatureMatrixManifest. Production writes are allowed only beneath
+    data/working/wyscout/v5/research_features and
+    data/manifests/wyscout/v5/research_features; arbitrary temporary roots are allowed
+    only through an explicit test-fixture boundary. Sort every ledger/matrix before
+    digest/write and prove byte/semantic reproducibility across two test roots.
+  - >-
+    Fixture tests cover duplicate/missing grains, 450-minute boundary, mixed exact/lower
+    bound exposure, unused bench, zero numerator, identity/position rejection, strict
+    cutoff, stale/incompatible canonical manifest, deterministic bytes, and no synthetic
+    product rows. The master, not this packet, will run the retained production build
+    and author the final full-feature-matrix evidence report.
+checks:
+  - uv run ruff format --check src/scouting/features/historical.py scripts/build_w09_feature_matrix.py tests/unit/test_w09_historical_features.py tests/integration/test_w09_feature_matrix.py
+  - uv run ruff check src/scouting/features/historical.py scripts/build_w09_feature_matrix.py tests/unit/test_w09_historical_features.py tests/integration/test_w09_feature_matrix.py
+  - uv run mypy src/scouting/features/historical.py scripts/build_w09_feature_matrix.py
+  - uv run pytest -q tests/unit/test_w09_historical_features.py tests/integration/test_w09_feature_matrix.py tests/contracts/test_w09_research_contracts.py
+  - uv run bandit -q -r src/scouting/features/historical.py scripts/build_w09_feature_matrix.py
+stop_conditions:
+  - Any retained canonical authority/count/digest/schema/identity/rights/temporal conflict.
+  - The fixed policy or feature predicates cannot be represented without a new product decision.
+  - Any need for network/provider access, dependencies, Git, orchestration controls, shared-contract edits, final retained artifact generation, or paths outside allowed_paths.
+constraints:
+  - No Git operations, dependency/lock changes, orchestration edits, or shared-contract edits.
+  - Use apply_patch for manual edits.
+  - Preserve W04-W08 paths; do not import synthetic feature/catalogue/serving modules.
+  - Synthetic rows may appear only in automated test fixtures behind the explicit boundary.

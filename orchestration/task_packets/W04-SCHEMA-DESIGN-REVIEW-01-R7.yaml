@@ -1,0 +1,61 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R7
+state: BLOCKED_ON_PREREQUISITE
+objective: >-
+  Independently verify the final standalone R8 design, closure of all R7 findings,
+  retention of R7's two intended fixes and every earlier accepted finding, and
+  readiness for W04 implementation.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R8:IMPLEMENTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R8.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R7.yaml
+  - reports/reviews/W04/wyscout-schema-design-R6.md
+  - reports/reviews/W04/wyscout-schema-design-R7.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R6.md
+  - reports/reviews/W04/wyscout-schema-design-R8.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/evidence.py
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R7.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R7.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+definition_of_done:
+  - All P0-P2 defects close or the packet returns REWORK.
+  - Every R7 and earlier retained closure is explicitly audited.
+  - No architecture, dependency, provider, network or local-only change is introduced.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R7.md');
+    assert p.is_file() and p.stat().st_size > 10000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any P0-P2 executable, temporal, source, identity, path, coverage, resource, gate or local-only defect remains.
+  - Review requires code/config/data/dependency/provider edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,33 @@
+schema_version: 1
+review_id: REVIEW-W04-DATA-CONTRACTS-01-R3
+task_id: W04-DATA-CONTRACTS-01
+reviewed_commit_base: 82a9f05b0db176dd55cbd4fa6b4388ec2b0a1906
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - {id: W04DCR3-P1-001, severity: P1, status: returned_for_rework}
+  - {id: W04DCR3-P1-002, severity: P1, status: returned_for_rework}
+  - {id: W04DCR3-P1-003, severity: P1, status: returned_for_rework}
+decision: REWORK
+next_packet: W04-DATA-CONTRACTS-01-R4
+reviewer: master
+evidence:
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R3.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R3.md
+  - reports/verification/W04/wyscout-data-contracts-R3-master-verification.md
+checks:
+  - command: exact R3 static security focused and local-only suite
+    result: PASS_437_TESTS_25_LOCAL_ONLY
+  - command: master validated public-constructor probes
+    result: FAIL_OPEN_THREE_P1_FINDINGS_REPRODUCED
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY

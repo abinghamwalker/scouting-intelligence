@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W06-OPTIMIZED-GUARDS-REVIEW-07
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently verify that the seven optimized-Python assert removals fail closed,
+  the three B311 suppressions are limited to deterministic statistical PRNGs, and no
+  formula, seed, digest, protocol, protected decision or claim changed.
+depends_on:
+  - W06-OPTIMIZED-GUARDS-07-R1:PRODUCED
+assigned_role: independent_security_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-OPTIMIZED-GUARDS-07-R1.yaml
+  - reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-07-R1.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - tests/unit/test_w06_missing_population_gate.py
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - reports/evaluation/W06/protected-access-outcome.json
+  - reports/evaluation/W06/protected-gate-decision.json
+  - reports/evaluation/W06/protected-execution-receipt.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/optimized-guards-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-REVIEW-07-R1.md
+forbidden_paths:
+  - src/**
+  - tests/**
+  - configs/**
+  - reports/evaluation/**
+  - reports/verification/**
+  - reports/phase-gates/**
+  - reports/readiness/**
+  - orchestration/**
+  - data/**
+  - runs/**
+  - docs/**
+  - scripts/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+deliverables:
+  - Independent report with ACCEPT or REWORK and exact P0/P1 counts.
+  - Mandatory return at reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-REVIEW-07-R1.md.
+definition_of_done:
+  - Each of the seven former runtime assert predicates has an explicit equivalent guard and stable rejection under optimized Python where applicable.
+  - No assert remains in the three production files and Bandit passes them.
+  - Each B311 annotation is attached only to a frozen-seed statistical bootstrap/null PRNG and no security randomness is suppressed.
+  - Focused W06 tests and optimized witness reproduce.
+  - Frozen config, fixtures and retained protected outputs remain byte-identical and gate decision remains NO_GO for the sole missing-expert reason.
+acceptance_checks:
+  - uv run --no-sync ruff format --check src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py tests/contracts/test_w06_evaluation_contracts.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py tests/contracts/test_w06_evaluation_contracts.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py
+  - uv run --no-sync bandit -q -r src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py tests/unit/test_w06_missing_population_gate.py
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json tests/fixtures/w06/public-missing-population-gate-v1.json reports/evaluation/W06/protected-access-outcome.json reports/evaluation/W06/protected-gate-decision.json reports/evaluation/W06/protected-execution-receipt.json
+stop_conditions:
+  - A reproducible P0/P1 can change optimized-mode validation, a metric, interval, partition, leakage behavior, gate decision or claim.
+  - Review requires any write outside allowed_paths, Git, dependency change, protected expected-output access or external/provider access.
+mandatory_return_requirements:
+  - verdict and exact P0/P1 counts
+  - seven guard mappings and three B311 classifications
+  - optimized/focused/static check results
+  - unchanged frozen/protected identities
+  - exact findings or none
+  - no Git/dependency/protected/external/orchestration/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

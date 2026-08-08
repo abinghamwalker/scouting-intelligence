@@ -1,0 +1,201 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R12
+state: DISPATCHED
+objective: >-
+  Correct the final runtime receipt so it carries the actual normalized loaded
+  owner subset R of the frozen selected closure L, and retain the exact child-
+  private process observations needed for two-root and health verification,
+  without making R an admission/build/product input or changing logical authority.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R11:MASTER_ACCEPTED
+assigned_role: w04_runtime_control_r12_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md
+  - reports/verification/W04/wyscout-runtime-loaded-subset-correction-authorization-R1.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/contracts/wyscout_aggregates.py
+  - src/scouting/data_products/**
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+fixed_bindings:
+  r20_design_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_design_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r11_master_acceptance_sha256: fbc120702b8c58526da4a43d9727a0645f856fc15e325813756b71bb5082164e
+  r11_review_descriptor_sha256: 4fb5e75b30c084a9c824bd466d67df47ce943afc64fee0e2567bc1d584a5a174
+  correction_authorization_sha256: 62e3f3de6da87ea204aaa4ca0603434fa691c54da673a5d234e0c127109fe23e
+  r11_admission_child_sha256: 68cb2e96a8006ab7e529d614d037a18e4b0dbd982c0c3e119ef23319f66b78cc
+  r11_launcher_sha256: db77870605410ca16554b5ed869a6304c2b24b60122b21f1646b2d09c3dc2779
+  r11_rebuild_child_sha256: fff279d4d4a6a1c76ea6ee2cc9c7a88a4d5fd2c56ca677984a1dcce765ef9339
+  r11_build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  r11_build_tests_sha256: f39e34daac144369444e1701003efdec0c1a97f83ba5fb0beecaf844c21e4692
+  r11_runtime_tests_sha256: bd65a02b5dfa73e1f6bbf7d5e3bf32937c62233c9f12f07eeca4a9de65313332
+  r11_security_tests_sha256: 5907b945fa61855ff1104a2e03dd13057a76863251258b8a53088e322b44d18d
+  r11_e2e_tests_sha256: 5ce8de532124869eb7e88c55a5504db4d153222525cfa46eb897dc9232a4b83c
+  runtime_subset_algorithm: w04-normalized-runtime-subset-observations-v1
+  installed_runtime_subset_policy: operational-R-subset-L-normalized-observation-v2
+  final_recheck_schema_version: w04-rebuild-final-recheck-v2
+  child_result_schema_version: w04-child-result-v3
+  manifest_schema_version: w04-code-environment-admission-v16
+  outer_completion_schema_version: w04-local-control-completion-v2
+  unchanged_child_input_schema_version: w04-child-input-v1
+  unchanged_projection_schema_version: w04-wyscout-pre-build-projection-v1
+  unchanged_rebuild_invocation_schema_version: w04-rebuild-invocation-v1
+  unchanged_rebuild_receipt_schema_version: w04-wyscout-rebuild-invocation-receipt-v1
+requirements:
+  - >-
+    Verify every fixed binding before editing. Preserve the complete dirty tree,
+    every retained R2/R3 run/failure/prefix, all products/manifests/receipts, PYC,
+    source/rights/authority bytes and unrelated files. Do not run a real-root
+    invocation, write generated data/run/manifest evidence, clean, or use Git.
+  - >-
+    Preserve PreBuildAdmissionResult, child-input v1, pre-build projection v1,
+    rebuild invocation v1, published rebuild-invocation receipt v1, the one-SHA
+    build formula, accepted logical schema/product digests, 23-root roster,
+    product population and every source/data-rights meaning. Actual R is terminal
+    operational evidence only: it must not enter stable admission, projection,
+    build ID, published product/manifest/receipt identity, selection, retry or
+    authority expansion.
+  - >-
+    Add one nested non-root strict RuntimeSubsetObservation with exactly ordered
+    fields observation_kind, owner_name, owner_version, site_relative_path,
+    subject_name. observation_kind is exactly MODULE_SOURCE, NATIVE_EXTENSION,
+    NAMESPACE_LOCATION or SITE_SHARED_IMAGE. owner name/version are the exact
+    normalized selected-L identity. Paths are NFC safe root-independent POSIX
+    paths relative to site-packages. subject_name is the exact sys.modules key
+    for module/namespace rows and literal DYLD_IMAGE for shared-image rows. No
+    null, extra, absolute root, unsafe segment, symlink or PYC/PYO spelling.
+  - >-
+    Freeze selected-L and complete RECORD ownership once before product imports.
+    At the terminal post-product/post-receipt recheck, observe R exactly once.
+    Record site .py origins as MODULE_SOURCE; exact frozen EXTENSION_SUFFIXES
+    origins as NATIVE_EXTENSION; true namespace locations only when origin is
+    None, there is no contributor-owned __init__.py and each emitted contributor
+    has singular concrete descendant ownership; and every Darwin loaded image
+    contained in site-packages and singularly RECORD-owned as SITE_SHARED_IMAGE.
+    Ignore only admitted built-in/frozen/repository/stdlib origins. Reject every
+    other absolute/external origin, unsafe namespace, unowned/ambiguous/mutated
+    file/image, installed-only/lock-only owner, version drift or selection drift.
+  - >-
+    Sort rows by canonical row JSON bytes, require exact uniqueness and bounded
+    cardinality 1..100000. R is the sorted unique (owner_name, owner_version)
+    projection and must be a nonempty subset of the frozen selected L. When
+    loaded, require native observations mapping pydantic_core to pydantic-core
+    and _polars_runtime_32 to polars-runtime-32. Use only local stdlib/Darwin
+    loader observation; add no dependency or provider/network access.
+  - >-
+    Preserve runtime_subset_digest's accepted meaning and calculate it only as
+    SHA256(canonical_json({algorithm:
+    w04-normalized-runtime-subset-observations-v1, rows:<exact tuple>})), without
+    terminal LF. Extend FinalRecheckResult with runtime_subset_rows immediately
+    after runtime_subset_digest; its strict validator reproduces order,
+    uniqueness, nonempty R and the exact digest. The launcher independently
+    validates every returned row against its pre-child frozen selected/RECORD
+    authority and current bytes so a coherent row-plus-digest substitution fails.
+  - >-
+    Apply exactly the fixed physical version changes: installed subset policy v2,
+    final-recheck v2, child-result v3, manifest v16 and outer-completion v2. Keep
+    frame magic/version 1 and every explicitly unchanged schema version fixed.
+    Rebind the stable child-result contract component to final-recheck v2, the
+    runtime-subset algorithm, exact five observation fields and four kinds; actual
+    R rows remain excluded. Regenerate only derived physical schemas/predicates/
+    constants/tests needed by these versioned runtime contracts; do not change a
+    Wyscout logical root or accepted logical digest.
+  - >-
+    Extend internal ChildExecution with one closed process-observation value and
+    retain the admission observation only as an explicitly operational,
+    build-excluded launch-plan field. Outer completion v2 must copy the rebuild
+    final R rows/digest byte-for-byte and contain the exact canonical top-level
+    roster admission_run_id, build_id, child_process_observations,
+    code_manifest_sha256, control_run_id, outer_transport_environment_sha256,
+    pyc_inventory_health, rebuild_receipt_relative_path,
+    rebuild_receipt_sha256, run_id, runtime_subset_digest, runtime_subset_rows,
+    schema_version, status. The two child rows are ordered admission then rebuild.
+  - >-
+    Each child-process observation must close and truthfully bind: child role and
+    input/result schema versions; exact argv/digest; input/final UV values;
+    transport digest; nonce; payload kind; entrypoint source descriptor object;
+    result descriptor number/inheritance/parent-close checkpoint; PID and exit 0;
+    timeout bound/not-timed-out; result frame magic/version/count/EOF/payload
+    size/digest; stdout/stderr sizes and SHA-256; prefix absolute/relative path,
+    pre identity {device,inode,link_count,mode}, empty before and identity/empty
+    unchanged after; source descriptor checkpoint; cross-field binding; in-place
+    PYC unchanged and zero in-place PYC read. Successful rows require every
+    boolean true, empty diagnostics, one frame, exact /opt/homebrew/bin/uv for the
+    three verified UV observations, and no diagnostic payload bytes in tracked
+    evidence. Actual PID/FD/inode/absolute path/nonce/transport fields are
+    operational and excluded from stable identity.
+  - >-
+    Add positive direct contract, observer, launcher-validation and outer-status
+    proofs. Add adversarial tests for row omission/insertion/reorder/duplicate;
+    digest-only drift; coherent row+digest owner/path/version substitution;
+    unknown/null/mistyped kind; absolute/unsafe/non-NFC/symlink/PYC/external
+    origin; owned-init/unowned/ambiguous/unsafe namespace; unowned/mutated shared
+    image; duplicate, lock-only, installed-only or version-mismatched owner;
+    exact native positives; repeated R observation/rescan; R influence on stable
+    identity; stale final-recheck v1, child-result v2, manifest v15 and outer v1;
+    outer row order/PID/FD/frame/diagnostic/prefix/UV binding; and synthetic
+    two-root R mismatch. Rejection must precede acceptance/publication use.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/contracts/test_w04_wyscout_build_contract.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/unit/test_w04_staged_product_publisher.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/install_local_git_guards.py --check
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R12 normalized loaded-R contract/observer/digest, independent launcher
+    validation, complete outer completion-v2 child evidence, adversarial tests,
+    preserved retained evidence and mandatory producer return.
+stop_conditions:
+  - >-
+    None for bounded implementation, physical-schema, test or derived-digest
+    defects; continue rework without cleanup, real-root execution, dependency
+    change, PYC mutation or Git. Stop only for a genuine user-boundary condition.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,96 @@
+schema_version: 1
+task_id: W08-EXPORT-IMPORT-BOUNDARY-05E
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct the final import-contract failure by relocating the local evidence-export
+  application service from the operations/policy peer layer to the permitted workflow
+  layer, without changing any export, authorisation, audit or storage behaviour.
+depends_on:
+  - W08-MULTIROLE-AUTHZ-REVIEW-05D:PASS
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  The evidence exporter remains functionally identical and fail closed, every caller
+  imports it from the workflow application layer, operations returns to telemetry-only,
+  and the approved import-linter contract passes without changing pyproject policy.
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - pyproject.toml
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/operations/__init__.py
+  - src/scouting/workflow/__init__.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - reports/reviews/W08/w08-independent-security-review-R4.md
+allowed_paths:
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/operations/__init__.py
+  - src/scouting/workflow/evidence_export.py
+  - src/scouting/workflow/__init__.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - reports/reviews/W08/returns/W08-EXPORT-IMPORT-BOUNDARY-05E-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/storage/**
+  - src/scouting/observations/**
+  - services/**
+  - scripts/**
+  - apps/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Move the evidence-export module unchanged in behaviour from `scouting.operations`
+    to `scouting.workflow`, update package exports and every runtime/test import, and
+    leave `scouting.operations` as its pre-W08 telemetry surface.
+  - Do not add a compatibility re-export that creates an upward or peer dependency;
+    do not change or weaken the import-linter contract.
+  - Re-prove privileged export/denial, byte tamper, audit receipt, revocation,
+    atomicity/retry, route and browser journeys after the move.
+definition_of_done:
+  - Import-linter keeps all three contracts, the old module is absent, the new module
+    is the sole exporter implementation, focused security/export/browser tests pass,
+    and no functional or claim-boundary delta is introduced.
+focused_checks:
+  - uv run ruff format --check src/scouting/operations/__init__.py src/scouting/workflow/__init__.py src/scouting/workflow/evidence_export.py src/scouting/web/w08.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_local_workflow_app.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run ruff check src/scouting/operations/__init__.py src/scouting/workflow/__init__.py src/scouting/workflow/evidence_export.py src/scouting/web/w08.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_local_workflow_app.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run mypy src/scouting/workflow/evidence_export.py src/scouting/web/w08.py
+  - uv run lint-imports
+  - uv run pytest -q tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_local_workflow_app.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run bandit -q src/scouting/workflow/evidence_export.py src/scouting/web/w08.py
+stop_conditions:
+  - Functional export/policy/audit/storage behaviour, a shared contract, policy grant,
+    schema, migration, dependency/lock, import-linter policy, protected output,
+    external service, container, Node/npm, destructive action or Git command would
+    need to change.
+mandatory_return:
+  - task/revision and invariant
+  - exact moved/changed paths and import graph before/after
+  - confirmation of no functional line delta beyond module/import/package routing
+  - exact commands/exits/test counts including three import contracts
+  - security/export/browser regression outcome
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-evidence/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

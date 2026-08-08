@@ -1,0 +1,59 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R8
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-REPOSITORY-MIGRATION-PYC-OMISSION-01
+    severity: P1
+    status: master_reproduced
+  - id: W04-DESIGN-EXTERNAL-LAUNCHER-AUTHORITY-01
+    severity: P1
+    status: master_reproduced
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R12
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R8.md
+  - reports/reviews/W04/wyscout-schema-design-R11.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R8-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      find the whole repository excluding .venv and count pyc files and
+      __pycache__ directories
+    result: FAIL_R11_EXPECTATION_ACTUAL_58_PYC_19_DIRECTORIES
+  - command: >-
+      classify every repository pyc by cache grammar and present sibling source
+    result: FAIL_R11_EXPECTATION_35_MAPPED_NORMAL_20_MAPPED_PYTEST_3_SOURCE_ABSENT
+  - command: >-
+      inspect exact migration and PostgreSQL orphan path, source absence, magic,
+      mode, size and SHA-256
+    result: PASS_THREE_EXACT_SOURCE_ABSENT_FILES_REPRODUCED
+  - command: >-
+      inspect R11 launcher references, ownership sequence, process-launch digest
+      and repository scripts
+    result: FAIL_UNNAMED_LAUNCHER_AND_UNSPECIFIED_RESULT_CHANNEL_REPRODUCED
+  - command: uv run --locked --no-sync python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: >-
+      uv run --locked --no-sync python -c
+      "parse all orchestration YAML and assert registry task IDs are unique"
+    result: PASS_123_YAML_23_TASKS_ZERO_DUPLICATES
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read the complete 498-line independent review and 97-line return.
+    Both P1 findings are implementation-blocking but admit a bounded report-only
+    R12 correction without architecture, dependency, provider, network, storage,
+    cleanup, or local-only changes.

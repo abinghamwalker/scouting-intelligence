@@ -1,0 +1,77 @@
+schema_version: 1
+task_id: W03-CONTRACTS-01
+phase_id: W03
+revision: R2
+state: READY
+supersedes: orchestration/task_packets/W03-CONTRACTS-01-R1.yaml
+objective: Correct only the five contract-integrity defects recorded by the master.
+depends_on:
+  - REVIEW-W03-CONTRACTS-01-R1:REWORK
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-CONTRACTS-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-CONTRACTS-01-R1.yaml
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/audit.py
+allowed_paths:
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/audit.py
+  - tests/contracts/test_foundation_contracts.py
+  - reports/reviews/W03/returns/W03-CONTRACTS-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/primitives.py
+  - src/scouting/storage/**
+  - src/scouting/serving/**
+  - services/**
+  - apps/**
+  - reports/reviews/W03/returns/W03-CONTRACTS-01-R1.md
+defects:
+  - code: RETRIEVAL_LINEAGE_NOT_BOUND_TO_TEMPORAL_PROOF
+    required_fix: >-
+      Add retrieval_run_id and reject candidate lineage that is not exactly the
+      result temporal-evidence dependency lineage.
+  - code: AUDIT_MUTATION_DIGESTS_OPTIONAL
+    required_fix: Enforce action-specific before/after digest requirements.
+  - code: ROLE_BRIEF_APPROVAL_TIME_UNPROVABLE
+    required_fix: Add and validate created_at/approved_at status semantics.
+  - code: IDENTITY_VALID_INTERVAL_ABSENT
+    required_fix: Add and validate valid_from/valid_to.
+  - code: TEMPORAL_CUTOFF_EQUALITY_ADMITTED
+    required_fix: >-
+      Enforce the frozen strict-before rule for both observation and availability:
+      evidence at or after feature_cutoff_ts is ineligible.
+deliverables:
+  - Corrected contracts and focused negative/positive tests for every recorded defect.
+  - A complete R2 mandatory return.
+definition_of_done:
+  - A mismatched or future candidate lineage fails RetrievalResult validation.
+  - RetrievalResult carries retrieval_run_id.
+  - CREATE, UPDATE, DELETE, and OVERRIDE audit actions enforce coherent digest state.
+  - Approved role briefs require approved_at not before created_at; non-approved briefs cannot claim approval.
+  - Identity evidence rejects an inverted valid interval.
+  - Evidence observed or available exactly at feature_cutoff_ts is rejected.
+  - All original and new contract checks pass through uv.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_foundation_contracts.py
+  - uv run ruff format --check src/scouting/contracts tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts tests/contracts/test_foundation_contracts.py
+  - uv run mypy src/scouting/contracts
+  - uv run bandit -q -r src/scouting/contracts
+stop_conditions:
+  - A correction requires a dependency or path outside allowed_paths.
+  - A Git command, external service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

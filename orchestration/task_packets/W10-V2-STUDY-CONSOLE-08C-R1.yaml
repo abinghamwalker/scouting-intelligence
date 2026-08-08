@@ -1,0 +1,52 @@
+schema_version: 1
+task_id: W10-V2-STUDY-CONSOLE-08C
+phase_id: W10
+revision: R1
+state: ACCEPTED
+objective: >-
+  Replace the over-blinded v1 participant task with an accessible side-by-side v2 evidence
+  comparison while preserving pilot/formal isolation and protected provenance.
+depends_on:
+  - W10-V2-DATA-CONTRACTS-08B:ACCEPTED
+assigned_role: frontend_application_engineer
+risk: high
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - reports/verification/W10/v2-evidence-capability-and-construct.md
+allowed_paths:
+  - src/scouting/storage/expert_study.py
+  - src/scouting/web/w10_expert_study.py
+  - services/api/w10_study_main.py
+  - apps/web/templates/w10_expert_study/**
+  - apps/web/static/w10-expert-study/**
+  - tests/unit/test_w10_expert_study_web.py
+  - tests/integration/test_w10_expert_study_console.py
+  - tests/e2e/test_w10_expert_study_playwright.py
+  - reports/reviews/W10/returns/W10-V2-STUDY-CONSOLE-08C-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/features/w09-historical-player-window-v1.json
+  - configs/models/w09-historical-retrieval-v1.json
+requirements:
+  - Present symmetric exemplar/candidate context, W09 inputs, independent descriptors, coverage and glossary.
+  - Record relevance, confidence, unable/abstain, evidence sufficiency and judgement basis separately.
+  - Never expose origin, rank, score, control identity, repeat linkage, expected result or other responses.
+  - Keep v1 data readable but unable to authorise or resume a v2 formal session.
+  - Cover desktop, narrow screen, keyboard, screen-reader structure, resume, corrections, submission and concurrency.
+deliverables:
+  - Participant-safe v2 console and storage integration with complete focused browser tests.
+  - reports/reviews/W10/returns/W10-V2-STUDY-CONSOLE-08C-R1.md
+definition_of_done:
+  - An expert can explain a role/style rating from visible football evidence without terminal use or provenance leakage.
+acceptance_checks:
+  - Real-browser tests prove evidence parity, readable fallbacks and forbidden-field absence.
+  - V1 approval cannot enable a v2 formal button or session.
+stop_conditions:
+  - The UI would need to infer unavailable evidence, reveal protected provenance or silently migrate v1 state.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

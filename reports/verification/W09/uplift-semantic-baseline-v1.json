@@ -1,0 +1,1254 @@
+{
+  "authority": {
+    "canonical_build_digest": "0105267ae0f107a63fad33b24adecdb3c4bb2e900bdf79a505e9ad4af6264b43",
+    "catalogue_digest": "07e976fd70bd773bafc143ae59f193e60f4a38be5b0dfb80397e77d64861e3a1",
+    "dataset_manifest_digest": "772d173716bb421ef4847a95eab2e62e6de77e41c7fba6766a2f182b0f688d6e",
+    "dataset_version": "2d018b617d870579be1acfa76a22ae1d6d184071feaa658f353b162e421bee6e",
+    "eligibility_policy_digest": "e00fe7b2b9285980b52e10438064ce84c6810a613a50acb0809194e46f1199dd",
+    "eligibility_policy_version": "w09-eligibility-v1",
+    "feature_cutoff_ts": "2026-08-05T00:00:00Z",
+    "feature_registry_digest": "bafccabfb64c347b72f5c9766b129baeac20784c0a577143552cf7259925623b",
+    "feature_registry_version": "w09-historical-player-window-v1",
+    "identity_bundle_digest": "4127705ab1a66145576439e520351587d817c48a71a572bb2c0cefc291fd1e80",
+    "index_manifest_digest": "f4a9e692336d152938319193a5f5c7cf28cb406da4aa71ca881eae5e0c8fe7c0",
+    "index_version": "w09-historical-player-index-v1",
+    "matrix_digest": "49bf6f72d2e564fa5c421c2eb36f70ceb57810a44c1442da9e14a3db6b799bb9",
+    "matrix_manifest_digest": "45e122d2a8a06ecdf6c7d0cf35c48e8866a96b2c8e124b2f164ad3892a1c9aa3",
+    "matrix_version": "w09-historical-player-window-v1-ad74298cf718d6f6",
+    "model_configuration_digest": "bba6340727e0ae1c7d01e252521234708c7509aef84bbfbb68a5a15588a6e0f7",
+    "model_version": "w09-robust-scaled-transparent-baselines-v1",
+    "scorer_code_digest": "535e244720b7abd46ac25e7de6f3ac387247d4213a00b4857e08acc19e19fc1c",
+    "scorer_version": "w09-shared-vector-scorer-v1"
+  },
+  "baseline_comparisons": [],
+  "cases": [
+    {
+      "candidates": [
+        {
+          "display_name": "M. Perin",
+          "goal_contribution": 0.12474019025974283,
+          "goal_squared_distance_share": 0.4083974938003029,
+          "grain_id": "player=26a797b9-f2d7-53eb-a2db-e4b6cb22d4ad|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 1,
+          "score": 0.5526646247372221
+        },
+        {
+          "display_name": "T. Strakosha",
+          "goal_contribution": 0.1152677023217277,
+          "goal_squared_distance_share": 0.3623231226564463,
+          "grain_id": "player=003dec57-15d5-560d-99b4-7a250b47012d|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 2,
+          "score": 0.5640346607418666
+        },
+        {
+          "display_name": "G. Donnarumma",
+          "goal_contribution": 0.25628318725215843,
+          "goal_squared_distance_share": 0.6845013795324365,
+          "grain_id": "player=d6c5fa34-c8e3-5933-91ed-15f6ee335c3e|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 3,
+          "score": 0.611889350036959
+        },
+        {
+          "display_name": "A. Meret",
+          "goal_contribution": 0.016736880464906696,
+          "goal_squared_distance_share": 0.041149542572299365,
+          "grain_id": "player=f281fac3-8c9f-55f2-9cc5-7660cc70ccf4|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 4,
+          "score": 0.6377562909574687
+        },
+        {
+          "display_name": "E. Berisha",
+          "goal_contribution": 0.27659340778790453,
+          "goal_squared_distance_share": 0.49095101227742394,
+          "grain_id": "player=b8ac7f80-34a1-5d08-81a8-daad851e7aa2|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 5,
+          "score": 0.7505883729228549
+        },
+        {
+          "display_name": "M. Sportiello",
+          "goal_contribution": 0.6284368993574155,
+          "goal_squared_distance_share": 0.7889934304895767,
+          "grain_id": "player=bed7bebf-0d36-5b39-871b-28f98e5262ed|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 6,
+          "score": 0.8924710658047935
+        },
+        {
+          "display_name": "A. Mirante",
+          "goal_contribution": 0.5602948564067474,
+          "goal_squared_distance_share": 0.692171641581317,
+          "grain_id": "player=88de3161-018b-574c-be71-9b198c098653|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 7,
+          "score": 0.8997076572660871
+        },
+        {
+          "display_name": "S. Sorrentino",
+          "goal_contribution": 2.1885605529862375,
+          "goal_squared_distance_share": 0.8946866791969215,
+          "grain_id": "player=0d636c85-2380-510f-bdbd-b79f6a0d7b10|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 8,
+          "score": 1.564025386151009
+        },
+        {
+          "display_name": "A. Consigli",
+          "goal_contribution": 2.424635174626254,
+          "goal_squared_distance_share": 0.9268445698657913,
+          "grain_id": "player=327aff77-83e7-5289-a883-f6a965543f7a|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 9,
+          "score": 1.6174085914749987
+        },
+        {
+          "display_name": "E. Viviano",
+          "goal_contribution": 2.8063580749136405,
+          "goal_squared_distance_share": 0.8952312421991448,
+          "grain_id": "player=5ada83cf-0470-57d3-ab66-0d029e7c251a|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 10,
+          "score": 1.7705325967569217
+        }
+      ],
+      "case_id": "sirigu-italy-gk::weighted_euclidean::equal",
+      "method": "weighted_euclidean",
+      "population": {
+        "competition_rows": 409,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 23,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 3,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 382,
+        "returned_rows": 10,
+        "scored_rows": 23
+      },
+      "position_code": "GK",
+      "query_digest": "8749ae1942d3c423315dfe9d78fad727eafb90ae99136d46f38e8f93dd8c88e0",
+      "result_digest": "153fcf7b7c9692c93adfccdf9d1048bc003bd77b2b22faefedcaac2fba71b994",
+      "scenario_id": "sirigu-italy-gk",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "T. Strakosha",
+          "goal_contribution": -0.5669798409995584,
+          "grain_id": "player=003dec57-15d5-560d-99b4-7a250b47012d|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 1,
+          "score": 0.0014601447637415665
+        },
+        {
+          "display_name": "M. Perin",
+          "goal_contribution": -0.5450129179527484,
+          "grain_id": "player=26a797b9-f2d7-53eb-a2db-e4b6cb22d4ad|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 2,
+          "score": 0.0028230288518711344
+        },
+        {
+          "display_name": "G. Donnarumma",
+          "goal_contribution": -0.5276264824827581,
+          "grain_id": "player=d6c5fa34-c8e3-5933-91ed-15f6ee335c3e|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 3,
+          "score": 0.003592185947759008
+        },
+        {
+          "display_name": "A. Meret",
+          "goal_contribution": -0.5671040775939321,
+          "grain_id": "player=f281fac3-8c9f-55f2-9cc5-7660cc70ccf4|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 4,
+          "score": 0.004197370692758051
+        },
+        {
+          "display_name": "E. Berisha",
+          "goal_contribution": -0.5265147174097543,
+          "grain_id": "player=b8ac7f80-34a1-5d08-81a8-daad851e7aa2|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 5,
+          "score": 0.005695908735896982
+        },
+        {
+          "display_name": "A. Mirante",
+          "goal_contribution": -0.6071860543801202,
+          "grain_id": "player=88de3161-018b-574c-be71-9b198c098653|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 6,
+          "score": 0.00624932202633266
+        },
+        {
+          "display_name": "M. Sportiello",
+          "goal_contribution": -0.5143702075963085,
+          "grain_id": "player=bed7bebf-0d36-5b39-871b-28f98e5262ed|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 7,
+          "score": 0.006526122277929258
+        },
+        {
+          "display_name": "S. Sorrentino",
+          "goal_contribution": -0.6144394837441285,
+          "grain_id": "player=0d636c85-2380-510f-bdbd-b79f6a0d7b10|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 8,
+          "score": 0.007897886542109989
+        },
+        {
+          "display_name": "A. Consigli",
+          "goal_contribution": -0.6208263350915514,
+          "grain_id": "player=327aff77-83e7-5289-a883-f6a965543f7a|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 9,
+          "score": 0.00918408086293887
+        },
+        {
+          "display_name": "A. Bizzarri",
+          "goal_contribution": -0.633797403257388,
+          "grain_id": "player=2c61a763-8893-5395-8b33-dcc206ef9a10|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+          "rank": 10,
+          "score": 0.013599979713690424
+        }
+      ],
+      "case_id": "sirigu-italy-gk::weighted_cosine::equal",
+      "method": "weighted_cosine",
+      "population": {
+        "competition_rows": 409,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 23,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 3,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 382,
+        "returned_rows": 10,
+        "scored_rows": 23
+      },
+      "position_code": "GK",
+      "query_digest": "890561530f78d002b0695b8c39f5cd6eea0f2ae0a2d24ca4c1f506f6d24115ec",
+      "result_digest": "3e377bc7b6733cfa78dec1b0d012a45d62230a4efd4f90c08bf2fb01c0c76c86",
+      "scenario_id": "sirigu-italy-gk",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "L. Koscielny",
+          "goal_contribution": 0.14012914598930237,
+          "goal_squared_distance_share": 0.0928090339349948,
+          "grain_id": "player=c5cc16e4-7384-5e01-8c39-bc6cf3db75a3|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 1.2287657897209399
+        },
+        {
+          "display_name": "J. Vertonghen",
+          "goal_contribution": 0.0,
+          "goal_squared_distance_share": 0.0,
+          "grain_id": "player=0ca6091e-1791-5df5-a057-41f510e7a017|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 1.2945012824447741
+        },
+        {
+          "display_name": "S. Mustafi",
+          "goal_contribution": 0.29978213873709436,
+          "goal_squared_distance_share": 0.14237378940759293,
+          "grain_id": "player=8ed429e2-2513-5364-a2a2-a6df069f5a1d|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 1.4510683001347404
+        },
+        {
+          "display_name": "J. Matip",
+          "goal_contribution": 0.039923584499029954,
+          "goal_squared_distance_share": 0.018434759336700086,
+          "grain_id": "player=95856470-2b86-53db-bc62-d9c7fcb51d93|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 1.471621172112328
+        },
+        {
+          "display_name": "D. Lovren",
+          "goal_contribution": 0.1419649750316486,
+          "goal_squared_distance_share": 0.05641886345339409,
+          "grain_id": "player=e8ac2cfb-70cb-5ab1-a342-f55d020233fa|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 1.5862748499101438
+        },
+        {
+          "display_name": "D. Sánchez",
+          "goal_contribution": 0.0,
+          "goal_squared_distance_share": 0.0,
+          "grain_id": "player=9cc5a1b6-7ba3-5ca6-a824-d17b70be44c3|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 1.8730498352488827
+        },
+        {
+          "display_name": "G. Cahill",
+          "goal_contribution": 0.0,
+          "goal_squared_distance_share": 0.0,
+          "grain_id": "player=8e12c60d-4389-565d-bd8e-4b91e78868a0|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 1.8956287440319832
+        },
+        {
+          "display_name": "W. Hoedt",
+          "goal_contribution": 0.0,
+          "goal_squared_distance_share": 0.0,
+          "grain_id": "player=8ce61548-4509-537e-8fd5-30f895d4921c|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 1.9058305519095184
+        },
+        {
+          "display_name": "F. Lejeune",
+          "goal_contribution": 0.0,
+          "goal_squared_distance_share": 0.0,
+          "grain_id": "player=0a6e4ae9-d9ea-58e0-b105-286db02a3c7c|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 1.9115220810723224
+        },
+        {
+          "display_name": "R. Klavan",
+          "goal_contribution": 0.07548146092535275,
+          "goal_squared_distance_share": 0.020427700023902113,
+          "grain_id": "player=f7968acd-5bf2-59b0-92b3-11ab13f6bbd4|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 1.9222524042195765
+        }
+      ],
+      "case_id": "van-dijk-england-df::weighted_euclidean::equal",
+      "method": "weighted_euclidean",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 123,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 19,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 246,
+        "returned_rows": 10,
+        "scored_rows": 123
+      },
+      "position_code": "DF",
+      "query_digest": "6ef0313ec6065c1f5444d10b3c74ffe94dec71aec1fcc338bd5b59c1d1d28015",
+      "result_digest": "78d06f47af96862ebe2547a67b773b327055fa888b3517f9e337d39b2f7a41c9",
+      "scenario_id": "van-dijk-england-df",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "L. Koscielny",
+          "goal_contribution": 0.0010422396077924736,
+          "grain_id": "player=c5cc16e4-7384-5e01-8c39-bc6cf3db75a3|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 0.0684050215029327
+        },
+        {
+          "display_name": "J. Vertonghen",
+          "goal_contribution": -0.012128912089621666,
+          "grain_id": "player=0ca6091e-1791-5df5-a057-41f510e7a017|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 0.07607686390256296
+        },
+        {
+          "display_name": "S. Mustafi",
+          "goal_contribution": 0.006670606305221983,
+          "grain_id": "player=8ed429e2-2513-5364-a2a2-a6df069f5a1d|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 0.09828575765352132
+        },
+        {
+          "display_name": "J. Matip",
+          "goal_contribution": -0.004470522398861585,
+          "grain_id": "player=95856470-2b86-53db-bc62-d9c7fcb51d93|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 0.10027338182577039
+        },
+        {
+          "display_name": "D. Lovren",
+          "goal_contribution": 0.0011858568122852051,
+          "grain_id": "player=e8ac2cfb-70cb-5ab1-a342-f55d020233fa|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 0.11869018643626428
+        },
+        {
+          "display_name": "F. Lejeune",
+          "goal_contribution": -0.015251243799418845,
+          "grain_id": "player=0a6e4ae9-d9ea-58e0-b105-286db02a3c7c|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 0.16682495558118626
+        },
+        {
+          "display_name": "G. Cahill",
+          "goal_contribution": -0.014823009588852406,
+          "grain_id": "player=8e12c60d-4389-565d-bd8e-4b91e78868a0|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 0.16688932416998725
+        },
+        {
+          "display_name": "D. Sánchez",
+          "goal_contribution": -0.01248781731283674,
+          "grain_id": "player=9cc5a1b6-7ba3-5ca6-a824-d17b70be44c3|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 0.1724399647854693
+        },
+        {
+          "display_name": "R. Klavan",
+          "goal_contribution": -0.002160729077766849,
+          "grain_id": "player=f7968acd-5bf2-59b0-92b3-11ab13f6bbd4|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 0.17555773816548115
+        },
+        {
+          "display_name": "W. Hoedt",
+          "goal_contribution": -0.013081744536053475,
+          "grain_id": "player=8ce61548-4509-537e-8fd5-30f895d4921c|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 0.17885580068011775
+        }
+      ],
+      "case_id": "van-dijk-england-df::weighted_cosine::equal",
+      "method": "weighted_cosine",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 123,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 19,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 246,
+        "returned_rows": 10,
+        "scored_rows": 123
+      },
+      "position_code": "DF",
+      "query_digest": "45b742d305dde69c0e162857c090ddb47d34669569cf71334dab00997919e521",
+      "result_digest": "d04063c0dbe17a5fa6c855aa472b9f8790f09f870ec1a4929980b1076e18662c",
+      "scenario_id": "van-dijk-england-df",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "A. Doucouré",
+          "goal_contribution": 0.48977149604532605,
+          "goal_squared_distance_share": 0.22069800896472402,
+          "grain_id": "player=52063b83-66ab-5a58-8cd1-c1711d10c0c5|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 1.489695636051203
+        },
+        {
+          "display_name": "L. Cook",
+          "goal_contribution": 0.017805197820223977,
+          "goal_squared_distance_share": 0.0075425175779313715,
+          "grain_id": "player=0b86c673-5a60-51bc-92c6-7babc7af8b4e|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 1.5364386943351196
+        },
+        {
+          "display_name": "M. Sissoko",
+          "goal_contribution": 0.02130225811901202,
+          "goal_squared_distance_share": 0.00700354624275584,
+          "grain_id": "player=d75e34db-9792-57a2-9e51-da6a8cb28d83|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 1.7440294775271796
+        },
+        {
+          "display_name": "E. Can",
+          "goal_contribution": 0.19361697073784,
+          "goal_squared_distance_share": 0.06224257006746892,
+          "grain_id": "player=a3c42699-fae1-5119-97dd-5eed91bcaedb|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 1.7637131464101856
+        },
+        {
+          "display_name": "I. Gueye",
+          "goal_contribution": 0.024785523240524143,
+          "goal_squared_distance_share": 0.007670282156467475,
+          "grain_id": "player=875ab8f7-3c65-5010-8f59-3f0925943697|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 1.7976013094830003
+        },
+        {
+          "display_name": "Oriol Romeu",
+          "goal_contribution": 1.5372113951694795e-05,
+          "goal_squared_distance_share": 4.3610583628814225e-06,
+          "grain_id": "player=8cef66a3-5f95-539f-9a1e-12452d06da04|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 1.8774606711220796
+        },
+        {
+          "display_name": "P. Højbjerg",
+          "goal_contribution": 0.017805197820223977,
+          "goal_squared_distance_share": 0.005041492096527007,
+          "grain_id": "player=242989f8-4528-545f-a98b-b594badcd172|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 1.8792902311561421
+        },
+        {
+          "display_name": "M. Lemina",
+          "goal_contribution": 0.009573640671859543,
+          "goal_squared_distance_share": 0.0026557967163110914,
+          "grain_id": "player=c0b6c692-d353-50fa-b4d8-90be87e9ea37|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 1.8986335319647363
+        },
+        {
+          "display_name": "J. Hogg",
+          "goal_contribution": 0.017805197820223977,
+          "goal_squared_distance_share": 0.004255489809899808,
+          "grain_id": "player=61967cc9-037a-5c64-a85c-c64a08fc536b|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 2.0454959508426547
+        },
+        {
+          "display_name": "G. Wijnaldum",
+          "goal_contribution": 0.0011046181095297667,
+          "goal_squared_distance_share": 0.0002613270677587172,
+          "grain_id": "player=772b3a23-c9c3-5464-a9f9-9fba87b4eb6a|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 2.055956311301474
+        }
+      ],
+      "case_id": "kante-england-md::weighted_euclidean::equal",
+      "method": "weighted_euclidean",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 123,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 21,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 244,
+        "returned_rows": 10,
+        "scored_rows": 123
+      },
+      "position_code": "MD",
+      "query_digest": "f17d5dace63b619e451ecad9ba43c6771e591696445ad915a730c73e056514d8",
+      "result_digest": "2ea12aa18ea1a29337ee691d6228a960f0a4998e7cd763be06b6c48b22fc4d9d",
+      "scenario_id": "kante-england-md",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "A. Doucouré",
+          "goal_contribution": 0.24488574802266302,
+          "goal_squared_distance_share": 0.16404675193242158,
+          "grain_id": "player=52063b83-66ab-5a58-8cd1-c1711d10c0c5|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 1.221793857263918
+        },
+        {
+          "display_name": "L. Cook",
+          "goal_contribution": 0.008902598910111989,
+          "goal_squared_distance_share": 0.0040418441044297905,
+          "grain_id": "player=0b86c673-5a60-51bc-92c6-7babc7af8b4e|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 1.484118656237415
+        },
+        {
+          "display_name": "E. Can",
+          "goal_contribution": 0.09680848536892,
+          "goal_squared_distance_share": 0.0369660692727197,
+          "grain_id": "player=a3c42699-fae1-5119-97dd-5eed91bcaedb|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 1.6182852516195485
+        },
+        {
+          "display_name": "I. Gueye",
+          "goal_contribution": 0.012392761620262071,
+          "goal_squared_distance_share": 0.004586528089117414,
+          "grain_id": "player=875ab8f7-3c65-5010-8f59-3f0925943697|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 1.643773668302092
+        },
+        {
+          "display_name": "Oriol Romeu",
+          "goal_contribution": 7.686056975847397e-06,
+          "goal_squared_distance_share": 2.618779091936658e-06,
+          "grain_id": "player=8cef66a3-5f95-539f-9a1e-12452d06da04|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 1.7131775210930262
+        },
+        {
+          "display_name": "M. Sissoko",
+          "goal_contribution": 0.01065112905950601,
+          "goal_squared_distance_share": 0.0035775812498799425,
+          "grain_id": "player=d75e34db-9792-57a2-9e51-da6a8cb28d83|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 1.7254527485661377
+        },
+        {
+          "display_name": "J. Hogg",
+          "goal_contribution": 0.008902598910111989,
+          "goal_squared_distance_share": 0.002411611550335982,
+          "grain_id": "player=61967cc9-037a-5c64-a85c-c64a08fc536b|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 1.9213422199357038
+        },
+        {
+          "display_name": "N. Matić",
+          "goal_contribution": 1.631683578843395e-05,
+          "goal_squared_distance_share": 4.413549040978028e-06,
+          "grain_id": "player=735c118b-07c7-59f3-a675-af6e7b9d61fc|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 1.9227551936568061
+        },
+        {
+          "display_name": "E. Dier",
+          "goal_contribution": 0.008902598910111989,
+          "goal_squared_distance_share": 0.002341322424572243,
+          "grain_id": "player=96875a64-5c2a-52cd-add4-8c519d0d30b9|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 1.949969378304914
+        },
+        {
+          "display_name": "P. Højbjerg",
+          "goal_contribution": 0.008902598910111989,
+          "goal_squared_distance_share": 0.0022992592867326846,
+          "grain_id": "player=242989f8-4528-545f-a98b-b594badcd172|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 1.9677251165640584
+        }
+      ],
+      "case_id": "kante-england-md::weighted_euclidean::defensive_reweight",
+      "method": "weighted_euclidean",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 123,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 21,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 244,
+        "returned_rows": 10,
+        "scored_rows": 123
+      },
+      "position_code": "MD",
+      "query_digest": "954bf3dafdd98e0e1abbe0bf0aaeb8583c699b39477c131e6af35db599c35379",
+      "result_digest": "d64f098ba690aba5096238ac0a243bf577be3d97846dc1b34cfc1522e3ef9b18",
+      "scenario_id": "kante-england-md",
+      "weight_profile": "defensive_reweight"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "F. Delph",
+          "goal_contribution": -0.002614518020862201,
+          "grain_id": "player=77a3bc3d-d21a-5a5d-95a6-3e5282388f41|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 0.16967203360780447
+        },
+        {
+          "display_name": "E. Can",
+          "goal_contribution": 0.0067799588810838534,
+          "grain_id": "player=a3c42699-fae1-5119-97dd-5eed91bcaedb|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 0.1982589191500711
+        },
+        {
+          "display_name": "İ. Gündoğan",
+          "goal_contribution": 0.014560854577304851,
+          "grain_id": "player=0c99323e-74d8-5c0a-8d6e-1a41437fe778|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 0.2009615415919016
+        },
+        {
+          "display_name": "A. Doucouré",
+          "goal_contribution": 0.022745073501822307,
+          "grain_id": "player=52063b83-66ab-5a58-8cd1-c1711d10c0c5|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 0.21339603619325787
+        },
+        {
+          "display_name": "L. Cook",
+          "goal_contribution": -0.01869059846310427,
+          "grain_id": "player=0b86c673-5a60-51bc-92c6-7babc7af8b4e|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 0.2176993281459707
+        },
+        {
+          "display_name": "N. Matić",
+          "goal_contribution": -0.005800718625944206,
+          "grain_id": "player=735c118b-07c7-59f3-a675-af6e7b9d61fc|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 0.252308945959803
+        },
+        {
+          "display_name": "M. Dembélé",
+          "goal_contribution": -0.00889091908335136,
+          "grain_id": "player=a7c8a914-b2da-5dcd-8095-c2466df35811|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 0.2722922348935102
+        },
+        {
+          "display_name": "Fernandinho",
+          "goal_contribution": 0.0066692258886533,
+          "grain_id": "player=fda4305d-078e-5317-b923-4105c307a987|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 0.27881896505098613
+        },
+        {
+          "display_name": "J. Henderson",
+          "goal_contribution": -0.0036831017904959944,
+          "grain_id": "player=76c5538d-4ebf-5cec-aa3c-700c6465ddd8|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 0.28842111561751804
+        },
+        {
+          "display_name": "M. Sissoko",
+          "goal_contribution": -0.0025449601183884676,
+          "grain_id": "player=d75e34db-9792-57a2-9e51-da6a8cb28d83|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 0.2932499552713431
+        }
+      ],
+      "case_id": "kante-england-md::weighted_cosine::equal",
+      "method": "weighted_cosine",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 123,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 21,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 244,
+        "returned_rows": 10,
+        "scored_rows": 123
+      },
+      "position_code": "MD",
+      "query_digest": "3d1fbb041da8884c8e16e173d38b8bc1ed80d87eaba52137286c27112b831ceb",
+      "result_digest": "3fb9b0a32bac3bfc92cf916f0a14929cf2762ef71584827413ee7a1f4acf6d74",
+      "scenario_id": "kante-england-md",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "A. Doucouré",
+          "goal_contribution": 0.012765777066817023,
+          "grain_id": "player=52063b83-66ab-5a58-8cd1-c1711d10c0c5|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 0.15479877872407233
+        },
+        {
+          "display_name": "F. Delph",
+          "goal_contribution": -0.0013885874452190486,
+          "grain_id": "player=77a3bc3d-d21a-5a5d-95a6-3e5282388f41|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 0.17161811865724075
+        },
+        {
+          "display_name": "E. Can",
+          "goal_contribution": 0.0036970584174464242,
+          "grain_id": "player=a3c42699-fae1-5119-97dd-5eed91bcaedb|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 0.17229336342575396
+        },
+        {
+          "display_name": "Fernandinho",
+          "goal_contribution": 0.0036045357745244154,
+          "grain_id": "player=fda4305d-078e-5317-b923-4105c307a987|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 0.17853109930039845
+        },
+        {
+          "display_name": "İ. Gündoğan",
+          "goal_contribution": 0.008046957925458372,
+          "grain_id": "player=0c99323e-74d8-5c0a-8d6e-1a41437fe778|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 0.1902612936500372
+        },
+        {
+          "display_name": "N. Matić",
+          "goal_contribution": -0.0030420129348280984,
+          "grain_id": "player=735c118b-07c7-59f3-a675-af6e7b9d61fc|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 0.19563508672747043
+        },
+        {
+          "display_name": "Ander Herrera",
+          "goal_contribution": -0.004653020864690364,
+          "grain_id": "player=bb0d0a80-5b43-531d-9796-035d9175ba89|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 0.21656403676039215
+        },
+        {
+          "display_name": "L. Cook",
+          "goal_contribution": -0.011193531134016532,
+          "grain_id": "player=0b86c673-5a60-51bc-92c6-7babc7af8b4e|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 0.22710180197513874
+        },
+        {
+          "display_name": "J. Henderson",
+          "goal_contribution": -0.001911915630615677,
+          "grain_id": "player=76c5538d-4ebf-5cec-aa3c-700c6465ddd8|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 0.2585000480208184
+        },
+        {
+          "display_name": "M. Dembélé",
+          "goal_contribution": -0.004407232016090109,
+          "grain_id": "player=a7c8a914-b2da-5dcd-8095-c2466df35811|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 0.2587531811196653
+        }
+      ],
+      "case_id": "kante-england-md::weighted_cosine::defensive_reweight",
+      "method": "weighted_cosine",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 123,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 21,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 244,
+        "returned_rows": 10,
+        "scored_rows": 123
+      },
+      "position_code": "MD",
+      "query_digest": "69efd4cc9f3150f4c6d873d2acc890c1cf49a638ca83265136dee972643b5872",
+      "result_digest": "e88d66b82ac131d1ceb4e33d0d9b2fdea950c56d76445ad61d3a5f9688d79890",
+      "scenario_id": "kante-england-md",
+      "weight_profile": "defensive_reweight"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "S. Agüero",
+          "goal_contribution": 0.02485931641308787,
+          "goal_squared_distance_share": 0.011292194389267167,
+          "grain_id": "player=ba5812fb-d465-5e20-a034-05dd1d5acdbe|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 1.4837318459388447
+        },
+        {
+          "display_name": "H. Kane",
+          "goal_contribution": 0.4591473441081221,
+          "goal_squared_distance_share": 0.056108404270543345,
+          "grain_id": "player=400a593f-80a6-5a27-9dba-b82be17e610b|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 2.860632573188936
+        },
+        {
+          "display_name": "P. Aubameyang",
+          "goal_contribution": 0.09371821901452339,
+          "goal_squared_distance_share": 0.009640312905008889,
+          "grain_id": "player=67b91d38-6aab-5497-b5a5-558107698972|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 3.1179306280887085
+        },
+        {
+          "display_name": "Gabriel Jesus",
+          "goal_contribution": 1.7301449228078003,
+          "goal_squared_distance_share": 0.15047965344342526,
+          "grain_id": "player=b557e10b-16ab-5857-ba9e-bd84d7c5a08b|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 3.390801371418838
+        },
+        {
+          "display_name": "R. Sterling",
+          "goal_contribution": 2.779496824901996,
+          "goal_squared_distance_share": 0.2334860748453465,
+          "grain_id": "player=0d1ae49b-e426-52e4-9f2f-e37fcae6a826|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 3.450266162733677
+        },
+        {
+          "display_name": "Son Heung-Min",
+          "goal_contribution": 5.522867315294131,
+          "goal_squared_distance_share": 0.45974116256728254,
+          "grain_id": "player=2f5aed7d-4959-538e-a456-e6cf7cf95ed7|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 3.4659764693285338
+        },
+        {
+          "display_name": "A. Lacazette",
+          "goal_contribution": 3.564329431242943,
+          "goal_squared_distance_share": 0.28098225503723573,
+          "grain_id": "player=71b2b36c-7bef-529c-ab7d-23428ebfc827|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 3.561635500644812
+        },
+        {
+          "display_name": "O. Giroud",
+          "goal_contribution": 3.1774682269490033,
+          "goal_squared_distance_share": 0.23664621632841068,
+          "grain_id": "player=480fd9a4-ec79-5e72-85e1-474fc1024f24|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 3.664298339146429
+        },
+        {
+          "display_name": "S. Mané",
+          "goal_contribution": 6.7683998374374585,
+          "goal_squared_distance_share": 0.4492541007378406,
+          "grain_id": "player=605da671-9f8b-522e-8569-4aa8699382cd|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 3.881476652582549
+        },
+        {
+          "display_name": "A. Martial",
+          "goal_contribution": 4.730759435630393,
+          "goal_squared_distance_share": 0.31340419955520793,
+          "grain_id": "player=bc715267-2b14-5e54-9807-b421e7e228e3|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 3.8851968353210475
+        }
+      ],
+      "case_id": "salah-england-fw::weighted_euclidean::equal",
+      "method": "weighted_euclidean",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 59,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 14,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 315,
+        "returned_rows": 10,
+        "scored_rows": 59
+      },
+      "position_code": "FW",
+      "query_digest": "6da2aa64f06b031c3b9188498fb1514c6cdc2daed697fd1c09db7547cd5aa708",
+      "result_digest": "e54b5619a7b267baed77edbe83024bef095cdfa294218e32c2a36eaabcf7d2b6",
+      "scenario_id": "salah-england-fw",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "S. Agüero",
+          "goal_contribution": -0.34999727837347866,
+          "grain_id": "player=ba5812fb-d465-5e20-a034-05dd1d5acdbe|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 1,
+          "score": 0.01970266511780927
+        },
+        {
+          "display_name": "Son Heung-Min",
+          "goal_contribution": -0.24819128778374835,
+          "grain_id": "player=2f5aed7d-4959-538e-a456-e6cf7cf95ed7|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 2,
+          "score": 0.047667404937551616
+        },
+        {
+          "display_name": "D. Welbeck",
+          "goal_contribution": -0.2668780574594765,
+          "grain_id": "player=2308aa89-bdec-5971-afc6-b815c751eb97|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 3,
+          "score": 0.07446404523791084
+        },
+        {
+          "display_name": "H. Kane",
+          "goal_contribution": -0.3121717428004253,
+          "grain_id": "player=400a593f-80a6-5a27-9dba-b82be17e610b|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 4,
+          "score": 0.08392950357151208
+        },
+        {
+          "display_name": "A. Lacazette",
+          "goal_contribution": -0.2893782642894648,
+          "grain_id": "player=71b2b36c-7bef-529c-ab7d-23428ebfc827|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 5,
+          "score": 0.0857814128597153
+        },
+        {
+          "display_name": "Gabriel Jesus",
+          "goal_contribution": -0.3387449144801535,
+          "grain_id": "player=b557e10b-16ab-5857-ba9e-bd84d7c5a08b|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 6,
+          "score": 0.08705286696280201
+        },
+        {
+          "display_name": "P. Aubameyang",
+          "goal_contribution": -0.3614664627392516,
+          "grain_id": "player=67b91d38-6aab-5497-b5a5-558107698972|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 7,
+          "score": 0.09972176689651524
+        },
+        {
+          "display_name": "M. Arnautović",
+          "goal_contribution": -0.2363791839470788,
+          "grain_id": "player=4df0f880-5077-5f26-94e3-43936a14079d|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 8,
+          "score": 0.1054063612866919
+        },
+        {
+          "display_name": "R. Sterling",
+          "goal_contribution": -0.2777128903427156,
+          "grain_id": "player=0d1ae49b-e426-52e4-9f2f-e37fcae6a826|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 9,
+          "score": 0.10653810587479406
+        },
+        {
+          "display_name": "S. Mané",
+          "goal_contribution": -0.20032100181843512,
+          "grain_id": "player=605da671-9f8b-522e-8569-4aa8699382cd|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+          "rank": 10,
+          "score": 0.1181525911306861
+        }
+      ],
+      "case_id": "salah-england-fw::weighted_cosine::equal",
+      "method": "weighted_cosine",
+      "population": {
+        "competition_rows": 389,
+        "exemplar_self_exclusions": 1,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 59,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 14,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 315,
+        "returned_rows": 10,
+        "scored_rows": 59
+      },
+      "position_code": "FW",
+      "query_digest": "8c01b5264450a181559bf1bb24eb241343d0c91faaaf7def8fd1074be00763f0",
+      "result_digest": "5f92373f7a7c778cdb4dadad823c05e81de821d51064b0011f7ee5a2865de454",
+      "scenario_id": "salah-england-fw",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "F. Thauvin",
+          "goal_contribution": 2.346273261598677,
+          "goal_squared_distance_share": 0.1353931629966801,
+          "grain_id": "player=4e6fee4a-3d8f-541c-a327-a844352e9c96|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 1,
+          "score": 4.1628515947149545
+        },
+        {
+          "display_name": "Neymar",
+          "goal_contribution": 0.0024734110107568355,
+          "goal_squared_distance_share": 0.00012363106978369095,
+          "grain_id": "player=84f590b6-68c0-50e1-bfe8-933420c3396d|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 2,
+          "score": 4.472849971333219
+        },
+        {
+          "display_name": "M. Depay",
+          "goal_contribution": 2.4091098133636524,
+          "goal_squared_distance_share": 0.11102364082032368,
+          "grain_id": "player=3a4aa3d8-54f4-5514-abed-acb1b4f0727e|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 3,
+          "score": 4.658226114773687
+        },
+        {
+          "display_name": "K. Mbappé",
+          "goal_contribution": 4.545106496270163,
+          "goal_squared_distance_share": 0.14898758066283907,
+          "grain_id": "player=0acd048b-34e6-5c0e-8f40-1a6c8f9f620c|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 4,
+          "score": 5.523279207979347
+        },
+        {
+          "display_name": "Malcom",
+          "goal_contribution": 8.126761735491325,
+          "goal_squared_distance_share": 0.2348312056982591,
+          "grain_id": "player=cb7559e5-1ef7-5776-bc4e-5f8d2e984905|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 5,
+          "score": 5.882756326701407
+        },
+        {
+          "display_name": "B. Traoré",
+          "goal_contribution": 5.102103635708889,
+          "goal_squared_distance_share": 0.10835035982467191,
+          "grain_id": "player=983b55f4-2ef6-50b4-b1ee-9b8d0470ce3e|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 6,
+          "score": 6.862138179632275
+        },
+        {
+          "display_name": "K. Toko Ekambi",
+          "goal_contribution": 5.354214767207257,
+          "goal_squared_distance_share": 0.1133793058760237,
+          "grain_id": "player=ad65a07e-f111-56d6-a522-d9ad6391df18|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 7,
+          "score": 6.87196591685018
+        },
+        {
+          "display_name": "C. N'Jie",
+          "goal_contribution": 1.893382903976017,
+          "goal_squared_distance_share": 0.03951475424240384,
+          "grain_id": "player=5e0a97f1-7f5c-5fd8-9b68-d4e6bf08a6a5|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 8,
+          "score": 6.922127319826926
+        },
+        {
+          "display_name": "A. Saint-Maximin",
+          "goal_contribution": 16.152656106560407,
+          "goal_squared_distance_share": 0.336252403912285,
+          "grain_id": "player=3a0ec25b-9361-59c2-8054-08c51e929514|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 9,
+          "score": 6.930894282217327
+        },
+        {
+          "display_name": "F. Kamano",
+          "goal_contribution": 8.718885766122847,
+          "goal_squared_distance_share": 0.17490787352466067,
+          "grain_id": "player=86bb9741-6260-5e99-bdae-6c8d17d83b3f|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 10,
+          "score": 7.060343224273337
+        }
+      ],
+      "case_id": "messi-france-fw::weighted_euclidean::equal",
+      "method": "weighted_euclidean",
+      "population": {
+        "competition_rows": 402,
+        "exemplar_self_exclusions": 0,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 72,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 15,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 315,
+        "returned_rows": 10,
+        "scored_rows": 72
+      },
+      "position_code": "FW",
+      "query_digest": "590bc69e89654ddff6947ee5d70672091595ae649300cb1d2bb9a98faac0e60e",
+      "result_digest": "6b835e5c36c5e49e6110167c35e1424bb3ec5ac07e06f3f418b7dc2360169111",
+      "scenario_id": "messi-france-fw",
+      "weight_profile": "equal"
+    },
+    {
+      "candidates": [
+        {
+          "display_name": "Neymar",
+          "goal_contribution": -0.1439471467446855,
+          "grain_id": "player=84f590b6-68c0-50e1-bfe8-933420c3396d|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 1,
+          "score": 0.04744895654018244
+        },
+        {
+          "display_name": "F. Thauvin",
+          "goal_contribution": -0.18097000666103571,
+          "grain_id": "player=4e6fee4a-3d8f-541c-a327-a844352e9c96|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 2,
+          "score": 0.0550629780087345
+        },
+        {
+          "display_name": "M. Depay",
+          "goal_contribution": -0.1976678664823517,
+          "grain_id": "player=3a4aa3d8-54f4-5514-abed-acb1b4f0727e|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 3,
+          "score": 0.062452511992983406
+        },
+        {
+          "display_name": "Malcom",
+          "goal_contribution": -0.11940346728853325,
+          "grain_id": "player=cb7559e5-1ef7-5776-bc4e-5f8d2e984905|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 4,
+          "score": 0.12863089635713498
+        },
+        {
+          "display_name": "K. Mbappé",
+          "goal_contribution": -0.15564011195916128,
+          "grain_id": "player=0acd048b-34e6-5c0e-8f40-1a6c8f9f620c|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 5,
+          "score": 0.13836632938371118
+        },
+        {
+          "display_name": "R. Rodelin",
+          "goal_contribution": -0.04389639835618583,
+          "grain_id": "player=ff002ed1-6845-552b-ab97-d904ad309cea|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 6,
+          "score": 0.1493707577982416
+        },
+        {
+          "display_name": "N. Pépé",
+          "goal_contribution": -0.2068727798464006,
+          "grain_id": "player=26cda5a8-06dd-5e5f-ac42-ea580f2629f1|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 7,
+          "score": 0.18223772080785183
+        },
+        {
+          "display_name": "B. Traoré",
+          "goal_contribution": -0.21424975713549785,
+          "grain_id": "player=983b55f4-2ef6-50b4-b1ee-9b8d0470ce3e|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 8,
+          "score": 0.18819485546327985
+        },
+        {
+          "display_name": "J. Bamba",
+          "goal_contribution": -0.09977749789910037,
+          "grain_id": "player=b5cb1428-5641-5fd9-b57c-4365600d347f|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 9,
+          "score": 0.1891128562574731
+        },
+        {
+          "display_name": "K. Toko Ekambi",
+          "goal_contribution": -0.2071025415861887,
+          "grain_id": "player=ad65a07e-f111-56d6-a522-d9ad6391df18|competition=8cc4a37d-8bec-5972-a266-39e0d0286835|season=181189",
+          "rank": 10,
+          "score": 0.19206453067250773
+        }
+      ],
+      "case_id": "messi-france-fw::weighted_cosine::equal",
+      "method": "weighted_cosine",
+      "population": {
+        "competition_rows": 402,
+        "exemplar_self_exclusions": 0,
+        "explicit_player_exclusions": 0,
+        "filter_admitted_rows": 72,
+        "matrix_rows": 1975,
+        "minimum_minutes_exclusions": 15,
+        "missing_feature_exclusions": 0,
+        "position_exclusions": 315,
+        "returned_rows": 10,
+        "scored_rows": 72
+      },
+      "position_code": "FW",
+      "query_digest": "c59f0c4ab33bfcd95c98ae88482e436e30e8634be265dc5a8793e833af8068db",
+      "result_digest": "a7563c8cd99e674bf9f84ce6bf8a5bdc26e2d96f18f405b25afc921a0bba942e",
+      "scenario_id": "messi-france-fw",
+      "weight_profile": "equal"
+    }
+  ],
+  "claim_boundary": "historical_resemblance_research_only",
+  "configuration_digest": "6340ec28d24150b3fe16174fb01c07c383119331f622fe6b9fad3582eb602fb6",
+  "evaluation_digest": "8f9f7ebde22029912483a9ea54e5f9d127d713419a5fe5c9f46e08d78e755429",
+  "evaluation_id": "w09-goal-event-semantic-uplift-v1",
+  "goal_numerator_by_position": {
+    "DF": 532,
+    "FW": 2658,
+    "GK": 4738,
+    "MD": 1508
+  },
+  "goal_numerator_total": 9436,
+  "limitations": [
+    "This evaluation measures semantic correction, deterministic execution and ranking churn; it does not measure football relevance.",
+    "Top-ten overlap is a preregistered rejection guard, not a quality threshold.",
+    "All governed minutes are conservative lower bounds."
+  ],
+  "matrix_row_count": 1975,
+  "phase": "baseline",
+  "preregistered_criteria_passed": null,
+  "schema_version": 1,
+  "source_reconciliation": {
+    "current_event_9_goal_rows": 4741,
+    "current_goal_numerator": 9436,
+    "event_10_only_negative_control_goal_numerator": 4177,
+    "expected_post_uplift_event_9_goal_rows": 0,
+    "expected_post_uplift_goal_numerator": 4695,
+    "retained_non_event_10_set_piece_goal_rows": 518
+  },
+  "weight_sensitivity": [
+    {
+      "entrants": [
+        "N. Matić",
+        "E. Dier"
+      ],
+      "exits": [
+        "M. Lemina",
+        "G. Wijnaldum"
+      ],
+      "method": "weighted_euclidean",
+      "top_10_overlap": 8
+    },
+    {
+      "entrants": [
+        "Ander Herrera"
+      ],
+      "exits": [
+        "M. Sissoko"
+      ],
+      "method": "weighted_cosine",
+      "top_10_overlap": 9
+    }
+  ]
+}

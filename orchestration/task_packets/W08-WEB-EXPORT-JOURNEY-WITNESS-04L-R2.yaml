@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W08-WEB-EXPORT-JOURNEY-WITNESS-04L
+phase_id: W08
+revision: R2
+state: DISPATCHED
+objective: >-
+  Implement the one missing role-complete export TestClient witness after R1 confirmed
+  the live pack_id route and made no test change.
+depends_on:
+  - W08-WEB-EXPORT-JOURNEY-WITNESS-04L:R1_PREFLIGHT_COMPLETE
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Existing production/templates are frozen; the complete authorised, idempotent,
+  revoked and denied journey must be established in one isolated automated test.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R1.md
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - One named isolated TestClient witness creates exact approved brief/replay/TEAM shortlist through HTTP, extracts hidden object tuple from rendered form and creates deterministic pack.
+  - Assert verified safe fields, correct non-empty revoke action, no raw underlying/private marker, idempotent repeat one row/file/export receipt, analyst-owner and approver read/inventory success.
+  - Create second same-tenant analyst and prove empty inventory/read denial; prove scout/admin absent nav/form and direct inventory/create/read/revoke denial.
+  - Revoke once; assert revoked row non-link with reason/time, read denial, exactly one revocation and one revocation receipt, and evidence-honest wording throughout.
+definition_of_done:
+  - New named witness plus complete existing focused suite pass; only allowed test/return files change.
+focused_checks:
+  - Exact rendered hidden tuple and safe fields.
+  - Owner/approver versus other analyst/scout/admin.
+  - Idempotent create and revoked non-readability/counts.
+acceptance_checks:
+  - uv run ruff format --check tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+stop_conditions:
+  - The live test reproduces a current product/template defect requiring a forbidden path, with exact failing assertion/response retained.
+  - Dependency/protected-output/network/external/Node/npm/container/Git/destructive action is required.
+  - Passing requires weakening any role, idempotency, revocation or non-disclosure assertion.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - exact commands/exits/test counts
+  - role/idempotency/revocation/non-disclosure results
+  - residual defect or risk
+  - no Git/dependency/protected-output/out-of-scope confirmations
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

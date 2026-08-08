@@ -1,0 +1,58 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-ACCEPTANCE-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Design a read-only adversarial acceptance matrix for the smallest real W04
+  raw-to-Bronze-to-Silver-to-Gold slice. Cover deterministic rebuild, immutability,
+  checked authority, exact completion, temporal leakage, manifests, idempotency and
+  local-only safeguards. Do not implement or modify product, test, data, run, or
+  control bytes.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1:INDEPENDENT_PASS_MASTER_ACCEPTED
+assigned_role: independent_vertical_slice_acceptance_analyst
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-ACCEPTANCE-AUDIT-01-R1.yaml
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/verification/W04/wyscout-source-completion-index-R4-complete-repository-gate.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - scripts/verify_phase.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-ACCEPTANCE-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Define positive tests for exact real output, deterministic byte-for-byte rebuild, idempotency and guarded immutable writes.
+  - Define adversarial tests for truncation, omission, duplication, reordering, stale/cross-period/cross-source evidence and detached checked values.
+  - Define strict temporal-cutoff and dependency-watermark tests proving zero post-cutoff fact use.
+  - Define manifest/count/hash/lineage/index-digest assertions and the complete repository master gate.
+  - Keep the plan to exactly four supported features and one explicitly bounded match/player slice.
+deliverables:
+  - One concise acceptance matrix with priority, expected failure behavior and PASS/BLOCKED verdict.
+stop_conditions:
+  - Any write outside the single allowed return path is needed.
+  - The analysis would require Git, network/provider, dependency, cloud, container, endpoint, hosted CI, remote or deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

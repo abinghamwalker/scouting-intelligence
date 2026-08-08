@@ -1,0 +1,172 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R3
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R2.yaml
+objective: >-
+  Complete the second and final bounded robustness rework by collapsing all executable
+  stress/control authority into content-addressed embedded inputs, removing fabricated
+  pair evidence, making fixture bytes authoritative and deriving every persisted field.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-REVIEW-04-R2:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: high
+convergence_audit:
+  attempts_reviewed:
+    - R1 implemented only unchanged full-population computations and opaque assertions.
+    - R2 executed real cohorts but persisted opaque row/control digests and fabricated a pair authority.
+  genuine_blocking_defects: >-
+    These findings can substitute metric/control values, suppress missing evidence,
+    fabricate expert/null authority or produce false walk-forward/applicability evidence;
+    they meet the W06 P1 convergence tests and cannot be deferred.
+  root_causes:
+    - Executable rows live outside persisted contracts, leaving child lineage unverifiable.
+    - Generic caller enums stand in for typed baseline and reviewer authority.
+    - Fixture metadata is separate from the objects used by tests.
+  simplified_solution: >-
+    Make the frozen specification own exact ranked observations; derive cohorts,
+    comparisons, deficits and controls from embedded inputs; make public JSON the sole
+    fixture source; represent absent governed pair evidence as unsupported.
+  deferred_nonblocking_hardening:
+    - Multiple alternative walk-forward cutoff strategies beyond the single frozen complete cutoff.
+    - Digest-only/scalable storage optimization for large future populations.
+    - Extra null seeds or repeated permutations beyond the single preregistered deterministic seed.
+  no_new_authority_document: true
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R2.yaml
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R2.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R3.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Replace external RobustnessRow authority with strict ranked-observation contracts
+    embedded in GovernedPopulationInventory/StressTestSpecification. Each observation
+    must contain exact ordered candidate scores and fixture labels, group/window/minutes
+    identity, implementation-versus-governed authority and its derived digest. The stress
+    executor accepts only one frozen specification; no separate protocol, inventory or
+    row arguments remain substitutable.
+  - >-
+    Make every StressCohort embed its exact derived aggregate ranked rows and per-query
+    core MetricResult evidence. Derive observation/candidate rosters and aggregate metric
+    input identity from those embedded rows. Make every StressComparison embed the exact
+    left/right ranking sequences and derive common-candidate and RankComparisonResult
+    input identities. Normal constructors must reject exact R2 stress witness
+    5edc056a4aa5d317642b1efd22e490eac2ff4a849b3f51d770babaa75f91d3f8
+    and every equivalent foreign-child or arbitrary-roster substitution.
+  - >-
+    Replace free-form unsupported strings with typed deficit evidence whose observed and
+    required populations are exactly derivable from the embedded specification. At
+    normal construction, reject caller_asserted_deficit and any deficit inconsistent
+    with per-unit counts, thresholds, chronology, groups or provider intersection.
+  - >-
+    Freeze one explicit walk_forward_cutoff_index in the specification. With N windows,
+    assign every eligible window at/before the cutoff to train and every later window to
+    test; require both populations non-empty and strict chronology. No intermediate
+    declared observation may be omitted.
+  - >-
+    Introduce typed control input/authority contracts. Coverage-only, metadata and raw
+    Euclidean controls must embed distinct baseline_authority_kind plus authority/artifact
+    digest and exact ordered baseline/challenger ranking inputs. Shuffled-label must embed
+    exact original rows and derived label mapping. Persist k/input rows or pair population
+    so input_digest, baseline/null results, permutation and comparisons are exactly
+    recomputable. Reject exact arbitrary-input control
+    a2fc46a61a5b5408bc1d2bc1e4cf53aec4adbf8cab202b7fb30b17ccdddb97fa.
+  - >-
+    Do not construct or impersonate a governed human reviewer in public fixtures. In the
+    current evidence inventory, shuffled-pair control must return a typed
+    UNSUPPORTED_INSUFFICIENT_EVIDENCE result with exact
+    MISSING_GOVERNED_PAIR_EVIDENCE and no metric value/permutation. Retain a deterministic
+    pair-permutation plan only if it can use IMPLEMENTATION_FIXTURE authority without
+    calling the governed pair metric; it remains implementation proof, never expert
+    evidence. Exact fabricated one-pair result
+    96da14ddc305f67058a90a095b399ac428900a2b95d95fee129b420c6b861776
+    must reject.
+  - >-
+    Make ApplicabilityAssessment derive and enforce the exact static W06 fixture
+    supported population, exclusions and non-claims plus every typed stress/control
+    deficit. Missing governed pair evidence must appear. Reject caller claim-field
+    assessment 6497964c48f108a1c8046b96400b30573b85bd267b0f6a68f532a050558e78a0
+    and caller-deficit assessment cc0b50afc3667a52f5aec0df9810cf31f7f56e4b09e6faf5ffd8c4c189f71263.
+  - >-
+    Make public-robustness-v1.json contain the exact protocol inputs, all ranked
+    observations, computed/unsupported populations, label-null rows, typed baseline
+    authorities and absence of governed pair evidence. Tests must parse those bytes into
+    every executable object; no duplicate hard-coded fixture_population may remain.
+    Pin the literal SHA-256 constant and prove a material fixture mutation changes a
+    result/input identity or fails validation.
+  - >-
+    Preserve R2-closed behavior: real named cohorts, per-unit split minima, exact source
+    intersection, protocol/k/inventory binding, score order, label-only permutation and
+    complete failure-source derivation. Preserve all accepted W06 metric/gate regressions.
+deliverables:
+  - Simplified strict embedded-input contracts and executor.
+  - Authoritative executable public fixture and focused adversarial tests.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R3.md.
+definition_of_done:
+  - All R1/R2 P1 witnesses reject through normal constructors or exact unsupported evidence.
+  - Every computed child is reproducible from inputs embedded in the same persisted object.
+  - No public object or test claims a fabricated human reviewer or computed governed pair null.
+  - Every declared fixture byte that affects populations, labels, controls or claims drives executable identities.
+  - Focused accepted metric/gate and corrected robustness checks pass.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R3.md
+stop_conditions:
+  - The simplified embedded-input design still requires a new dependency, protected expected output, external/provider access, model tuning or modification of accepted W05 bytes.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - convergence-audit solution implemented
+  - exact R1/R2 P1 closure matrix
+  - exact computed/unsupported stress and control identities
+  - exact fixture, failure and applicability identities
+  - exact commands, exit statuses and concise results
+  - remaining P0/P1 risks or explicit none
+  - implementation-only boundary and no fabricated expert confirmation
+  - no Git/dependency/protected/external/tuning/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

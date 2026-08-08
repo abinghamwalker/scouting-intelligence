@@ -1,0 +1,50 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1
+task_id: W04-POSSESSION-SEMANTIC-V2-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS_BUT_SEMANTICALLY_INSUFFICIENT
+integration_checks: FAIL_SEQUENCE_RESOLUTION_OVERCLAIM
+artifact_lineage: PASS
+security_temporal_review: FAIL_P1
+defects:
+  - code: SEQUENCE_RESOLUTION_OVERCLAIM
+    severity: P1
+    required_fix: >-
+      Separate exact four-field predicate selection from ordered same-period
+      possession resolution. Emit ELIGIBLE_RESOLVED only after deterministic
+      assignment under the unchanged R20 sequence rules.
+decision: REWORK
+next_packet: W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R1-master-verification.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete review and return readback
+    result: PASS_58_REVIEW_LINES_110_RETURN_LINES
+  - command: review physical and canonical record reconstruction
+    result: PASS_71F4BDB2_9D425353
+  - command: independent isolated-action helper reproduction
+    result: FAIL_CONTESTED_DEAD_BALL_ADMIN_ALL_PREMATURELY_RESOLVED
+  - command: focused suite
+    result: PASS_321_BUT_DOES_NOT_DISPROVE_P1
+  - command: local-only verifier
+    result: PASS_25_CHECKS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The finding is bounded to the possession-v2 policy/test and requires no
+    architecture, product, source, dependency, storage, or local-only change.
+  - >-
+    Exact R1 review and return bytes were retained before any future fixed-path
+    correction.

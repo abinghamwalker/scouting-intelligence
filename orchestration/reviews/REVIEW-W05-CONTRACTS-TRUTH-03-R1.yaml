@@ -1,0 +1,39 @@
+schema_version: 1
+review_id: REVIEW-W05-CONTRACTS-TRUTH-03-R1
+task_id: W05-CONTRACTS-TRUTH-03
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      MEASURED accepts legacy zero, MEASURED/ZERO reasons can contradict the visible
+      legacy card, and DATA_CONFIDENCE state/reasons need not project the authoritative
+      separate confidence object.
+    required_fix: >-
+      Enforce exact state-to-score and state-to-reason projection, including canonical
+      ZERO and derived DATA_CONFIDENCE state.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      W04_REAL_GOVERNED manifests validate as role-aware or metadata controls although
+      W04 supplies neither accepted role inference nor metadata-control inputs.
+    required_fix: >-
+      Add an explicit W04 model-family compatibility allow-list and test every family.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 6]
+    evidence: >-
+      FEATURE_MATRIX rows bind candidate rather than fitting population and PCA
+      components can exceed both fitting samples and feature count.
+    required_fix: >-
+      Bind fitting matrix rows to fitting_population_count and cap PCA component count.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R2.yaml
+reviewer: master

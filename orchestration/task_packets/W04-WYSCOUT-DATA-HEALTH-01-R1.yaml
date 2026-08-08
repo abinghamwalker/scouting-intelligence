@@ -1,0 +1,81 @@
+schema_version: 1
+task_id: W04-WYSCOUT-DATA-HEALTH-01
+phase_id: W04
+revision: R1
+state: PLANNED
+objective: >-
+  Materialize the controlling W04 data-health JSON and exact Markdown rendering
+  from the accepted source authority, real two-run raw-to-Gold outputs and frozen
+  runtime evidence, without changing any product or authority byte.
+depends_on:
+  - W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1:MASTER_ACCEPTED
+assigned_role: w04_data_health_owner
+risk: high
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-R2-master-acceptance.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R8-master-acceptance.md
+  - reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+  - reports/verification/W04/wyscout-four-feature-vertical-slice-R1-master-acceptance.md
+  - reports/verification/W04/wyscout-real-root-invocation-R1-master-acceptance.md
+  - data/manifests/wyscout/v5
+  - runs/w04/wyscout-rebuild
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/phase-gates/W04/data-health.json
+  - reports/phase-gates/W04/data-health.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-DATA-HEALTH-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - docs/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/verification/**
+requirements:
+  - Treat all real product, manifest, receipt, source, identity and runtime artifacts as read-only and guard-read exact named paths only.
+  - >-
+    Implement every controlling R20 Section 10 health field: separate source and
+    Gold six-dimensional coverage; source/identity/temporal/rights metrics;
+    backlog/corrections/quarantine/unknown/collision evidence; exact L, I and L==I;
+    wheel/cache/extracted/installed and Packaging/tag evidence; editable, 35-row
+    executable, interpreter/alias/stdlib/resource and forbidden-selector evidence;
+    complete PYC pre/post inventory digests, decomposition and signed R19 deltas;
+    all three process/prefix/source-descriptor/frame/diagnostic observations;
+    current-host uv proof; two-root equality; loaded subset R; and the documented
+    transient replace-and-restore residual.
+  - >-
+    Bind the exact build ID, code-manifest digest, three layer-manifest digests,
+    two operational real-run receipt families, product row counts, source and
+    Gold reconciliation equations, runtime schema literals and physical/logical
+    aggregate digests. Unknown or unavailable values must fail, not be guessed.
+  - >-
+    `data-health.json` is canonical pretty JSON with LF and no raw record, name,
+    secret or restricted datum. `data-health.md` is a complete human rendering of
+    that JSON and states limitations without broadening intended use.
+acceptance_checks:
+  - uv run python -c "import json,pathlib; p=pathlib.Path('reports/phase-gates/W04/data-health.json'); x=json.loads(p.read_text()); assert x['status']=='PASS' and x['schema_version']=='w04-data-health-v1'"
+  - git diff --check
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact controlling health JSON, Markdown rendering and mandatory return.
+stop_conditions:
+  - None for bounded evidence/rendering defects; return REWORK only for an actual upstream artifact mismatch.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

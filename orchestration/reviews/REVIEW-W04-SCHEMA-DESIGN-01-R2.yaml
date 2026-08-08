@@ -1,0 +1,58 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R2
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-EVENT-CLOCK-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-SOURCE-SEAM-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-MANIFEST-BRIDGE-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-REBUILD-CLOCK-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-POSSESSION-AUTHORITY-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-GOLD-GRAIN-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-DESIGN-MINUTES-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-DESIGN-COVERAGE-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-DESIGN-PLAYER-MATCH-FACT-01
+    severity: P2
+    status: returned_for_rework
+    detail: >-
+      Master readback found the blueprint-required player_match_fact is absent from
+      the proposed Silver products, leaving match-level minutes/context and Gold
+      reconciliation without an explicit canonical grain.
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R3
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R2.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+checks:
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-R2.md');
+      assert p.is_file() and p.stat().st_size > 5000"
+    result: PASS_37209_bytes
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_21_checks
+

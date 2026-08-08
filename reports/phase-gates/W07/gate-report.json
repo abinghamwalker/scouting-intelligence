@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "phase_id": "W07",
+  "gate_id": "G-W07",
+  "status": "PASS",
+  "decision": "ACCEPT_LOCAL_EVIDENCE_APPLICATION",
+  "verified_at_utc": "2026-08-04T19:43:59Z",
+  "claim_boundary": "resemblance_only synthetic-development-only LIMITED applicability; no recommendation evidence",
+  "protected_outputs_opened": false,
+  "w06_decision": "NO_GO",
+  "w06_sole_reason": "MISSING_EXPERT_RELEVANCE_EVIDENCE",
+  "checks": [
+    {"id": "three-activation-journey", "status": "PASS"},
+    {"id": "complete-result-authority", "status": "PASS"},
+    {"id": "prominent-w06-no-go", "status": "PASS"},
+    {"id": "single-accepted-scorer", "status": "PASS"},
+    {"id": "request-batch-digest-parity", "status": "PASS", "passed": 17, "failed": 0},
+    {"id": "responsive-keyboard-accessibility", "status": "PASS", "passed": 73, "failed": 0},
+    {"id": "protected-output-boundary", "status": "PASS", "detail": "not accessed"},
+    {"id": "local-only-controls", "status": "PASS", "passed": 25, "failed": 0},
+    {"id": "complete-repository-tests", "status": "PASS", "passed": 2731, "failed": 0, "detail": "2727 complete-run passes plus exact four cache-sensitive witnesses after recoverable later-wave PYC quarantine"},
+    {"id": "frozen-checkpoint-authorities", "status": "PASS"},
+    {"id": "w08-boundary", "status": "PASS", "detail": "PLANNED and unstarted"}
+  ],
+  "accepted_identity": {
+    "family": "role_aware_restriction",
+    "artifact": "9a0d43c6-d177-51be-8280-3bf02bedbc99",
+    "feature_registry_digest": "c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644",
+    "feature_schema": "1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f",
+    "taxonomy_digest": "59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097",
+    "configuration_digest": "5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a",
+    "manifest_digest": "2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9",
+    "result_digest": "9d08d8f0ddaba47a3461754d53d727709ea7a10276b438c18c9953b17ad3020e",
+    "lineage_hash": "c291a1b99937100b9934537dc92d4628cd130684cc84388f8aebe109708e7491"
+  },
+  "evidence": {
+    "acceptance_report": "reports/phase-gates/W07/acceptance-report.md",
+    "master_review": "reports/reviews/W07/master-review.md",
+    "independent_review": "reports/reviews/W07/w07-application-independent-review-R1.md",
+    "verification_report": "reports/verification/W07/verification-report.md",
+    "browser_accessibility": "reports/verification/W07/browser-accessibility-report.md",
+    "scoring_parity": "reports/verification/W07/scoring-parity-report.md",
+    "limitations": "reports/verification/W07/limitations.md",
+    "protected_output_boundary": "reports/verification/W07/protected-output-boundary.md"
+  },
+  "unresolved_defects": [],
+  "checkpoint_ready": true,
+  "w08_state": "PLANNED"
+}

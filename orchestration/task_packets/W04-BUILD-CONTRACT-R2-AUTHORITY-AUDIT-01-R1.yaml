@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W04-BUILD-CONTRACT-R2-AUTHORITY-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently determine the exact already-authorized R20/R4 contract needed to
+  close the R2 v15 admission proof and three-manifest receipt composition without
+  reviewing, editing or approving the producer candidate.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R1:MASTER_REWORK_REQUIRED
+assigned_role: independent_w04_build_r2_authority_interpretation_auditor
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-CONTRACT-R2-AUTHORITY-AUDIT-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-BUILD-CONTRACT-R2-AUTHORITY-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r2_packet_sha256: 8995671c7591b022c36f755e065c5f12b0bfd9138bf6e1a7d40633c3f678d368
+  build_authority_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+audit_requirements:
+  - Verify every fixed hash and stop on drift.
+  - >-
+    Identify the exact top-level stable w04-code-environment-admission-v15 manifest
+    fields and the exact twenty-key environment-component location/formula from the
+    accepted bytes. State whether R20 is unambiguous enough to implement without a
+    new architecture decision. Distinguish result-root schema from internal helper
+    structure so no ninth root is created.
+  - >-
+    State the exact executable equalities required between decoded component values,
+    environment_digest, each value_json_sha256, component_proofs_sha256 and any
+    independently recounted evidence_row_count seam.
+  - >-
+    State the minimal pure in-memory contract for all-three physical manifest
+    reproduction, the sole R4 semantic derivation, exact parent reconciliation and
+    Gold-manifest-derived boundary population. Identify which validation may rely on
+    a previously closed-schema-validated object and which equality must be repeated.
+  - >-
+    Confirm the exact competition UUID in the only accepted Gold path and whether
+    accepting another UUIDv5 widens the product population.
+  - >-
+    Return PASS_TO_IMPLEMENT with an exact bounded contract, or BLOCKED with the
+    precise unresolved contradiction. This audit is not candidate review or approval.
+acceptance_checks:
+  - shasum -a 256 over every fixed binding
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - One read-only authority interpretation return.
+stop_conditions:
+  - Any need to modify or approve producer bytes.
+  - Any architecture, schema-root, product, dependency, provider/network or local-only change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

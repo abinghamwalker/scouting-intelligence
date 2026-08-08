@@ -1,0 +1,75 @@
+schema_version: 1
+task_id: W05-ARCH-REVIEW-00
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently challenge the proposed W05 architecture and acceptance surface before
+  implementation fans out, identifying only reproducible P0/P1 risks to admitted
+  features, artifact/ranking bytes, temporal lineage, parity, explanations, claim
+  boundaries or local-only controls.
+depends_on:
+  - W04:CLOSED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/task_packets/W05-CONTRACTS-01-R1.yaml
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - docs/architecture/product-claim.md
+  - docs/architecture/evaluation-contract.md
+  - reports/phase-gates/W04/acceptance-report.md
+  - reports/phase-gates/W04/gate-report.json
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-architecture-preflight-R1.md
+  - reports/reviews/W05/returns/W05-ARCH-REVIEW-00-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Does the additive-contract approach preserve accepted W03/W04 bytes while pinning every W05 serving identity needed to fail closed?
+  - What exact serial dependency order is required across contracts, feature registry, taxonomy, model artifact, serving core and parity evidence?
+  - Which adversarial substitutions could change admitted features, fitted arrays, ranking/tie bytes, explanation/confidence truth or lineage without detection?
+  - Does the W04 real-data boundary remain exactly four counts with minutes/rates/per-90 suppressed, and are broader M0 inputs unambiguously synthetic-development-only?
+  - What minimum development check can establish improvement over metadata/raw-distance controls without performing or implying W06 protected evaluation?
+  - Are safe serialization, PCA orientation, deterministic ties, batch/request identity and serving prohibition on provider reads/fitting fully testable?
+  - Does any proposed concern belong only to the explicitly deferred W10 host-state backlog under the six W05 blocker tests?
+deliverables:
+  - Report with verdict, P0/P1/P2 findings, exact evidence and smallest required correction for each finding.
+  - Concrete W05 acceptance matrix and recommended packet dependency order.
+  - Complete mandatory return at the exact allowed return path.
+definition_of_done:
+  - Findings are evidence-backed, scope-bound and classified under the six user-defined W05 blocker tests.
+  - The review makes no implementation, authority, dependency, Git or product change.
+acceptance_checks:
+  - test -s reports/reviews/W05/w05-architecture-preflight-R1.md
+  - test -s reports/reviews/W05/returns/W05-ARCH-REVIEW-00-R1.md
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A required source is missing or authority conflicts materially.
+  - Any external access, provider use, new dependency, destructive action or out-of-scope write would be required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

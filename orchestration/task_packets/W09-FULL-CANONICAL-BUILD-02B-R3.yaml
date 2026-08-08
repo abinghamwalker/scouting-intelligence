@@ -1,0 +1,55 @@
+task_id: W09-FULL-CANONICAL-BUILD-02B
+revision: R3
+owner: subagent
+objective: >-
+  Resolve the retained materialization failure caused by Wyscout's optional
+  subEventId empty-string sentinel without weakening strict source typing, then
+  prove the full canonical builder can traverse all 3,071,395 actions.
+read_first:
+  - AGENTS.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R2.md
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - tests/unit/test_w09_wyscout_historical_adapter.py
+  - tests/integration/test_w09_full_canonical_build.py
+allowed_paths:
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - scripts/build_w09_historical_canonical.py
+  - tests/unit/test_w09_wyscout_historical_adapter.py
+  - tests/integration/test_w09_full_canonical_build.py
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R3.md
+deliverables:
+  - >-
+    Normalize only the exact raw empty-string optional subEventId sentinel to null at
+    the provider-adapter boundary. Preserve raw numeric JSON subEventId values as strict
+    integers. Reject quoted numeric, whitespace, boolean, float and other string/type
+    values; do not add generic string-to-integer coercion in the canonical builder.
+  - >-
+    Make explicit-fixture and retained DuckDB paths expose the same int-or-null adapter
+    contract. Add adversarial tests for empty sentinel, numeric integer and rejected
+    wrong types. Do not weaken strict_int.
+  - >-
+    Record and reconcile optional-subEventId missingness in the canonical manifest.
+    The accepted retained universe has exactly 7,821 empty sentinels across the five
+    partitions (England 1,558; France 1,543; Germany 1,219; Italy 1,620; Spain 1,881);
+    fail closed if retained traversal differs.
+  - >-
+    Add a no-write retained traversal check that exercises the exact builder action
+    projection over all 3,071,395 rows and proves the former action.subEventId failure is
+    gone while fingerprints remain stable. Do not generate final production artifacts;
+    the master will rerun the full builder.
+checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run ruff check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run mypy src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+  - uv run pytest -q tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+stop_conditions:
+  - Any other source value/type, count, checksum, identity, temporal or partition conflict.
+  - Any need for network/provider access, dependencies, shared contracts, Git, orchestration controls or paths outside allowed_paths.
+constraints:
+  - No Git/dependency/orchestration/shared-contract changes.
+  - Use apply_patch for manual edits.
+  - Preserve all W04-W08 paths and accepted R2 controls.

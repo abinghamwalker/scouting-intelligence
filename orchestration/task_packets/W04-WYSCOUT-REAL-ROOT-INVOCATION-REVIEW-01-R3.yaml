@@ -1,0 +1,133 @@
+schema_version: 1
+task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Freshly and independently adjudicate the frozen R3 outer-wrapper correction,
+  two wrapper-verified real-root run families, retained R2/failed evidence, exact
+  product/manifest stability, and complete runtime-prefix/PYC invariants.
+depends_on:
+  - W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3:MASTER_ACCEPTED_PENDING_REVIEW
+assigned_role: fresh_independent_w04_real_root_r3_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R2.yaml
+  - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.yaml
+  - reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+  - reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/formats.py
+  - src/scouting/data_products/wyscout/rebuild.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-real-root-invocation-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - scripts/**
+  - tests/**
+fixed_bindings:
+  r3_producer_packet_sha256: 836fdbf323a725adf11f24a47198a1789c37a9c2cb093465db71e10c72c6c831
+  r3_master_acceptance_sha256: 738e9852e17b9a5233fa34373ede01805aff14383200f9b9c8c7ccb796aed63e
+  r3_return_sha256: 13687bb55cc6594cd432102f3f031ecfa714e51405e5a0df485ad4d5178f07a3
+  corrected_wrapper_sha256: e5b557790d02c41f457c683d59756509c48df2b15854c4c6d6914feec875d537
+  master_readback_sha256: 760840e8113113db60c6228e6aacb90d0351bb7b5f0f793dd1002ece23b25e4b
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  rebuild_child_sha256: fff279d4d4a6a1c76ea6ee2cc9c7a88a4d5fd2c56ca677984a1dcce765ef9339
+  code_manifest_sha256: c94e650146a982174820ba694a2dcd1b20dc6648426527213bf2e6de09861c2c
+  build_id: b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79
+  r2_rebuild_run_id: 140f995e-7024-49a9-a764-1131fe326045
+  r2_rebuild_receipt_sha256: a70a977f76f775e31f0ae3d9d7c28c51df99490733ebe76f20972107402d31cb
+  r3_run_1_control_id: be5ce373-3287-49c9-b834-29c27f419afc
+  r3_run_1_admission_id: 8b183c33-2c80-426c-a90b-07d14ed45732
+  r3_run_1_rebuild_id: d39ee14e-e1ff-4235-ae73-9169308a2b28
+  r3_run_1_receipt_sha256: 63b645423ca72edcb2055814293a0024d549bd01e45005136ff3730416530f10
+  r3_run_1_boundary_sha256: a077a8a5385c633d1a6911717b843e2b7d60f5a6ac025136057ae810d9c595c2
+  r3_run_2_control_id: 5d1a224b-f833-4524-9ae7-6016c553b0b0
+  r3_run_2_admission_id: 245a4003-ffce-4792-bb10-d7a91f68236c
+  r3_run_2_rebuild_id: 5a802af6-6187-4374-ab8a-1bf64b8669ab
+  r3_run_2_receipt_sha256: db8501cf9c644644ca5ba614e87fea43d3d3c0568fcad405e028fb6d2ceace18
+  r3_run_2_boundary_sha256: 16488eb7ad9d6021e4f442455427a6c2d16e3db21a336a60f515cfbd5b08ab00
+  bronze_manifest_sha256: abdc5d89fdac08638f4877f9a44dceb9356d789741bd93981cce4a9b6825d9c1
+  silver_manifest_sha256: 089673ff01edd7de7b6e5777958d19cbaffaa9f429b042ab4986746d80a7c36a
+  gold_manifest_sha256: 08de1349a532c3f455d792ee56aafc3d8c587828bc9934dc7f77a58a71c90068
+  retained_root_post_sha256: c7edcc0341628b7224069cf4fc3cf3f1ef3bce4994f5bcf2ece904c313b1627c
+  site_pyc_sha256: ad6397ba9131fc7684bf9dbfdef4e3ae69ef9a7d9662f561948bef16868f835e
+  repository_pyc_sha256: 9b1407d4f9d5adae170014b9a4852bc1e62331efd57c99d04e69df14ac8719a2
+requirements:
+  - >-
+    Verify every fixed binding before adjudication. Keep all producer, code,
+    product, manifest, receipt, staging, retained-failure, PYC, data and run bytes
+    read-only. Perform no launch, publication, cleanup, Git operation, dependency
+    change, or producer edit.
+  - >-
+    Independently read the corrected wrapper and prove that it constructs the
+    exact post-uv 30-key environment from the unchanged launch inputs and compares
+    only the returned dynamic transport digest to that digest. Confirm that the
+    normalized fixed authority remains independently bound and that no accepted
+    launch/environment/command byte or digest formula changed.
+  - >-
+    Independently guard-read and strictly validate the retained R2 and both R3
+    invocation/boundary receipt families. Reproduce each 25-key projection,
+    projection/invocation inverse and sole build hash; require distinct UUIDv4
+    run/boundary paths and one common code/build/product/manifest authority.
+  - >-
+    Reopen all seven Parquet products and three manifests. Through the accepted
+    root-owned descriptors, strictly reconstruct every row to canonical logical
+    JSON bytes and recompute all physical/semantic hashes and parent paths.
+    Require ordered counts [1768,3544,13,1,2,1,1], exact Decimal inverse and
+    struct order/type, coverage UTF-8 projection, temporal proof, and byte-stable
+    outputs across both R3 runs.
+  - >-
+    Prove every retained runtime-pycache prefix is empty, old code manifest and
+    failed prefixes remain present, and independent shell site/repository PYC
+    inventories equal the frozen hashes. Add read-only/in-memory adversarial
+    mutations for receipt/product/manifest/cross-run/prefix predicates; no attack
+    may write a producer or retained-root byte.
+  - >-
+    Reproduce the exact 286-test runtime population plus Ruff, mypy, Bandit,
+    import-linter, guard, local-only, diff-check and zero-remotes checks with
+    writes/caches isolated under /tmp and Python bytecode disabled. PASS only with
+    P0/P1/P2 exactly 0/0/0; otherwise return bounded REWORK.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run pytest -q -p no:cacheprovider tests/security/test_w04_wyscout_vertical_slice_publication.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/unit/test_w04_staged_product_publisher.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/install_local_git_guards.py --check
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent R3 review report and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer or retained-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,94 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-ACCEPT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize the master-owned canonical possession-v2 acceptance, bind the
+  fresh independent PASS review and frozen candidate, verify progression, and
+  release only the supported-feature authority packet.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3:MASTER_ACCEPTED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R3-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - reports/verification/W04/wyscout-possession-semantic-v2-acceptance-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1.md
+authority:
+  acceptance_id: w04-wyscout-possession-semantic-acceptance-v2
+  acceptance_schema_version: w04-authority-acceptance-v1
+  accepted_at: "2026-07-31T08:28:40Z"
+  accepted_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  candidate_id: w04-wyscout-possession-taxonomy-v2
+  candidate_physical_sha256: 24223b25b5faa1521691f55a3258f28e186a3ed7cb6ebd0d5d8ed421286b0187
+  candidate_sha256: 3a3c7cdb0e6ce441d3514e4f415bb5117ebc53f2d18b753206a6ca8d7fcdd881
+  decision_id: w04-wyscout-possession-semantic-decisions-v2
+  decision_physical_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+  decision_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+  review_id: w04-wyscout-possession-semantic-independent-review-v2-R1
+  review_physical_sha256: c1e249c377d11258415cea84e83f0d3742436ebcb7aa640b885c44d245cb1e97
+  review_record_sha256: 0b4c02b6caa0457ec181bb1949dfaf920b71a4173157506d477ed4038d5ec553
+  review_recommendation: PASS
+  supersedes_acceptance_id: w04-wyscout-possession-semantic-acceptance-v1
+requirements:
+  - >-
+    Write exactly one strict canonical UTF-8 JSON object plus LF with the
+    fifteen closed acceptance keys and exact values above.
+  - >-
+    Independently reconstruct all decision/candidate/review physical and
+    canonical digests, UUIDv5 actors, PASS/empty findings, and ordered clocks.
+  - >-
+    Bind exact possession-v1 supersession. Preserve every candidate, test,
+    review, failed-review, v1, and return byte.
+  - >-
+    With acceptance present, rerun the combined field/possession suite,
+    canonical/digest/progression checks, local-only verifier, product absence,
+    bytecode counts, git diff check, and empty remote check.
+  - >-
+    Write complete master verification and return. Release only the serial
+    supported-feature authority producer packet; no cross-authority or product
+    authority is implied.
+  - >-
+    Perform no dependency/lock change, provider/network access, cloud,
+    container, endpoint, hosted CI, deployment, or Git mutation.
+definition_of_done:
+  - Exact canonical acceptance and digest are reproducible.
+  - Review and v1 supersession are bound without substitution.
+  - Focused/local-only/progression/path-absence checks pass.
+  - Master verification and return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any bound digest, actor, clock, review, recommendation, or supersession differs.
+  - Any focused/local-only/progression/path-absence check fails.
+  - A fourth output path or candidate/review edit is needed.
+  - >-
+    Work requires architecture, product, provider/right, root, dependency/lock,
+    storage, network, cloud, container, endpoint, hosted-CI, deployment, or
+    broader-scope change.
+delegation: forbidden
+git_operations: master_only_no_mutation_required
+self_approval: master_authority_required

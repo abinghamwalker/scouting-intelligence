@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R11
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 design by retaining every R10 and earlier
+  closure, enforcing locked/no-sync uv process launches, naming the exact
+  repository entry points, and correcting the stale revision lineage sentence.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R10:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R10.yaml
+  - reports/verification/W04/wyscout-schema-design-R10-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R10.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R10.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R11.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R11.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Replace every stage-0 and rebuild Python launch with the exact read-only
+    existing-environment grammar:
+    uv run --locked --no-sync python -S -B <exact-entry-point>.
+    `--locked` forbids lock mutation and `--no-sync` forbids environment
+    reconciliation; stage 0 still independently verifies pyproject/uv.lock,
+    complete L, installed I, and L==I. Missing either flag, plain uv run, a sync,
+    another interpreter command, site initialization, generated-script execution,
+    or mutation fails. Bind the exact argv/uv version/uv physical digest and
+    process-role observation; root-bearing executable spelling remains operational.
+  - >-
+    Name the exact repository-owned entry points as
+    scripts/admit_wyscout_v5_runtime.py for the pre-build stage-0 process and
+    scripts/rebuild_wyscout_v5.py for the post-build-ID rebuild process. Their
+    repo-relative paths and bytes are in repository code authority; stage 0 is
+    executed directly before any project import, installs the guard, and then
+    manually adds verified roots. The rebuild entry point runs only after the
+    immutable code manifest/build ID boundary. Do not create these files in this
+    design packet.
+  - >-
+    Correct the final lineage sentence to state that R11 closes the returned R10
+    master findings. Remove the stale claim that R9 closes R8.
+  - >-
+    Retain every R10 source, rights, strict temporal, identity/correction, key,
+    source/Gold coverage, path/serializer, no-site Packaging bootstrap, three .pth,
+    editable-root, 35-executable, three-alias, two-prefix/two-process, source-
+    complete pyc/orphan, resource, build/two-root, health/card, gate, ownership,
+    and two-local-commit ledger rule without compression or substitution.
+definition_of_done:
+  - Both Python processes use exact locked/no-sync uv argv and named repository paths.
+  - Standalone revision lineage is correct.
+  - Every R10 and earlier accepted closure remains intact.
+  - No architecture, dependency, migration, source-rights, provider, network or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R11.md');
+    assert p.is_file() and p.stat().st_size > 22000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A correction requires dependency/lock change, network acquisition, new storage root, cleanup, provider access or architecture change.
+  - Any R10 retained closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

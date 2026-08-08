@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/w08-study-console/app.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to main content</a>
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="W08 Study Console home">
+        <span class="brand-mark" aria-hidden="true">W08</span>
+        <span><strong>Study Console</strong><small>Representative-user workflow</small></span>
+      </a>
+      <div class="local-pill"><span aria-hidden="true"></span> Local only</div>
+    </header>
+    <main id="main" tabindex="-1">{% block body %}{% endblock %}</main>
+    <footer>
+      <p><strong>Evidence boundary:</strong> this console prepares and records study mechanics. It cannot provide consent, participant judgement, independent review or gate acceptance.</p>
+    </footer>
+  </body>
+</html>

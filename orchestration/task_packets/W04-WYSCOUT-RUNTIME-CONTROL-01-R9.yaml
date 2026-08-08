@@ -1,0 +1,127 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R9
+state: DISPATCHED
+objective: >-
+  Correct only W04-RUNTIME-R8-P1-01: bind every permitted built-in/frozen
+  startup module to its exact first-executable resident object and complete
+  package/parent/location shape, while retaining the accepted R8 exact roster
+  and metadata-only PYC closure byte-for-byte in meaning.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8:REWORK
+assigned_role: w04_runtime_control_r9_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R8.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - scripts/__pycache__/**
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/rebuild_wyscout_v5.py
+  - src/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/security/**
+fixed_bindings:
+  r8_review_packet_sha256: bb7211210edff4cfe4a801f5ceb4e9eb615bba4fa10e3624df98e83f72a013bc
+  r8_producer_packet_sha256: 6a16ff130a802dafe924a4a47011bc08b6e1eed3f7c7e6b30ebf4df32f8c00d8
+  r8_admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  r8_launcher_sha256: e7cf10d5f11871bc48911a5dc9ea8b58ce9a6477e6df0935475f053874b6e2d5
+  r8_runtime_tests_sha256: 01007463ac8cb52d67bdfb2b6784f36fab9cdf7a8ddf35c24a9149512d3707e0
+  r8_producer_return_sha256: 40a877805b20e4ca9cdd6d8489c3b1074e81de19efbc3c8975abbebf4ef01446
+  r8_review_sha256: 0f4a023fc55c7800f91e9e1f7247059c747d42dd69108e86266ba4e34b7f645c
+  r8_reviewer_return_sha256: a99d9a24b59b46d3132cc6ef3f15a291246ffa469307b5c4a0e88bd87a43d650
+  disclosed_operational_pyc_sha256: b1c8fbd8e5de10d6251995b9dc0fbbcb7457ba0bdaffd669e6e58c86d280b52e
+requirements:
+  - >-
+    Verify every fixed binding before editing. Never delete, restore, rewrite,
+    read through Python, import, or otherwise touch the disclosed launcher PYC;
+    it remains a frozen operational row for complete shell pre/post evidence
+    only. Keep the admission child byte-identical.
+  - >-
+    In the direct-execution branch, make the first executable statements before
+    any helper definition capture the exact ordered startup sys.modules name and
+    object-reference pairs for the governed 23-name roster, the exact resident
+    BuiltinImporter and FrozenImporter objects, and immutable normalized scalar
+    snapshots of each built-in/frozen row's __package__, spec parent, and spec
+    submodule_search_locations. Use only already resident built-in/frozen
+    capabilities and do not perform a file-backed import or filesystem access.
+    The capture must itself require the exact 23-name order and must not trust a
+    later mutable module/spec field as proof of initial object provenance.
+  - >-
+    In the full first-user verifier, require the live ordered sys.modules pairs
+    to have exactly the captured names and the very same object references, and
+    require the live importer authorities to be the captured exact objects.
+    For every built-in/frozen row, require exact expected __package__, spec
+    parent, and normalized submodule_search_locations values and equality with
+    the earliest immutable snapshot, alongside all R8 registration, is_frozen,
+    name, origin, loader, file, cache, location and distinctness predicates.
+    Reject add/remove/reorder/replacement/alias or metadata mutation before
+    guard installation without another file-backed import.
+  - >-
+    Add direct exact-uv adversarial cases that replace an already registered
+    built-in row with a distinct fully shaped object; replace a registered
+    frozen row where constructible; mutate built-in and frozen __package__, spec
+    parent, and submodule_search_locations independently; and alter a resident
+    importer authority. Prove each rejects in the first-user verifier. Retain
+    every R8 roster, encoding, owner/parent/leaf, tuple, environment, argv, FD,
+    prefix, chronology, PYC-denial and present-PYC case.
+  - >-
+    Preserve the R8 launcher PYC collector's strictly metadata-only behavior,
+    exact admission-child row equality, and unconditional .pyc/.pyo read denial.
+    Do not add any Python-role PYC byte read, exception, hash, header, magic, or
+    content authority. Shell/master pre/post evidence remains the sole PYC byte
+    authority.
+  - >-
+    Preserve all tuple fields, closed environment, child/rebuild behavior,
+    stable PYC source-map policy, logical contracts, product bytes, dependencies,
+    lock state and digest meaning/formula. Device/inode/clocks and PYC metadata
+    remain operational only. Freeze only after one fresh complete shell baseline,
+    the exact full final-hash gate, and byte-identical shell postflight.
+acceptance_checks:
+  - uv run ruff format --check scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R9 startup-object binding, complete built-in/frozen shape closure,
+    adversarial tests, preserved metadata-only PYC closure, and mandatory return.
+stop_conditions:
+  - None for bounded implementation defects; continue rework without PYC mutation,
+    real-root publication, dependency change, or Git.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

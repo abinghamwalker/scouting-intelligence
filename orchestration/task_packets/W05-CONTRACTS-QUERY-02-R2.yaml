@@ -1,0 +1,83 @@
+schema_version: 1
+task_id: W05-CONTRACTS-QUERY-02
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Add the one missing independent resolved-query identity pin and prove same-ID
+  semantic substitution fails even after recomputing all attacker-controlled digests.
+depends_on:
+  - REVIEW-W05-CONTRACTS-QUERY-02-R1:REWORK
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-QUERY-02-R1.yaml
+  - reports/reviews/W05/w05-m0-query-ranking-contracts-independent-review-R1.md
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R1.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    Add expected_resolved_query_digest: Sha256Digest to PinnedM0ServingRequest beside
+    the complete typed resolved_query. Require it to equal the already self-verified
+    resolved_query.resolved_query_digest. This field is the independent upstream pin;
+    it is not derived or silently overwritten by model construction.
+  - >-
+    Update focused fixtures and result digest inputs to carry the expected pin. Add a
+    direct strict-validation attack which changes responsibilities and matching
+    responsibility_weights under the same tenant, trace, brief ID/version, taxonomy,
+    cutoff, limit, exclusions and artifact pins; recomputes resolved_query_digest and
+    result_digest; leaves expected_resolved_query_digest unchanged; and fails with an
+    exact independent-query-digest mismatch.
+  - >-
+    Retain all accepted R1 request overlap, taxonomy, scored-candidate cardinality,
+    negative-zero, total-order, limit, exclusion and claim checks. Do not enter
+    candidate-specific evidence, W04 descriptor/array or explanation-truth scope.
+deliverables:
+  - Independent resolved-query digest pin and adversarial same-ID substitution test.
+  - Complete mandatory R2 return.
+definition_of_done:
+  - The sole independent-review P1 probe fails closed for the intended reason.
+  - No accepted W03/W04 or other W05 surface changes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+stop_conditions:
+  - Any need to change accepted W03/W04 contracts, authorities, evidence or product bytes.
+  - Any new product behavior, dependency, external access, weakened guarantee or out-of-scope write.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

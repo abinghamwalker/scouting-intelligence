@@ -1,0 +1,50 @@
+schema_version: 1
+task_id: W10-V2-DATA-CONTRACTS-08B
+phase_id: W10
+revision: R1
+state: ACCEPTED
+objective: >-
+  Implement deterministic participant-safe v2 evidence contracts, derivation, glossary and
+  coverage semantics from the accepted A1 design without changing W09 retrieval.
+depends_on:
+  - W10-V2-EVIDENCE-DESIGN-08A:ACCEPTED
+assigned_role: data_contract_engineer
+risk: critical
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - reports/verification/W10/v2-evidence-capability-and-construct.md
+allowed_paths:
+  - src/scouting/contracts/expert_relevance.py
+  - src/scouting/data_products/wyscout/expert_evidence.py
+  - configs/evaluation/w10-expert-evidence-presentation-v2.json
+  - scripts/build_w10_expert_evidence_v2.py
+  - tests/contracts/test_w10_expert_evidence_v2_contracts.py
+  - tests/unit/test_w10_expert_evidence_v2.py
+  - reports/reviews/W10/returns/W10-V2-DATA-CONTRACTS-08B-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/features/w09-historical-player-window-v1.json
+  - configs/models/w09-historical-retrieval-v1.json
+  - data/derived/w09/**
+requirements:
+  - Version every displayed value, definition, denominator, coverage state and W09_INPUT/INDEPENDENT_DESCRIPTOR purpose.
+  - Derive raw values and position-reference percentiles deterministically with explicit unavailable states.
+  - Keep v1 authority bytes unchanged and prohibit v2 fields from entering W09 scoring, weights, scaler or index.
+  - Exclude origin, rank, score, control rule, repeat linkage and expected outcomes from participant-safe bytes.
+deliverables:
+  - Versioned v2 evidence contract, builder, canonical authority and adversarial tests.
+  - reports/reviews/W10/returns/W10-V2-DATA-CONTRACTS-08B-R1.md
+definition_of_done:
+  - Exact accepted historical inputs reproduce the same participant-safe v2 evidence bytes and every unsupported value fails visibly.
+acceptance_checks:
+  - Contract, reconstruction, lineage, temporal, identity, missingness, percentile and forbidden-key tests pass.
+  - A code-path audit proves independent descriptors cannot affect W09 ranking.
+stop_conditions:
+  - Implementation requires altering accepted W09 artifacts or inventing unsupported evidence.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

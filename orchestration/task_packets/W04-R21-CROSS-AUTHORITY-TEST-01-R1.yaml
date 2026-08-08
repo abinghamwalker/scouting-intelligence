@@ -1,0 +1,132 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-TEST-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement only the frozen R21 cross-authority composability contract test and
+  its mandatory return, proving the accepted field-v2, possession-v2,
+  supported-feature, preimage, evidence-dependency, and exact-resource
+  authorities compose without creating a product path.
+depends_on:
+  - W04-FEATURE-REGISTRY-ACCEPT-01:ACCEPTED
+assigned_role: r21_cross_authority_test_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - tests/contracts/test_w04_supported_feature_authority.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_r21_cross_authority_composability.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-*
+  - reports/verification/**
+  - reports/phase-gates/**
+retained_preflight_inventory:
+  pyc_files: 1150
+  pyc_path_list_sha256: 7953ff36ecd0721d414d637085d0f2331dac35cafc160745e9bf35280f8a4f44
+  cache_directories: 150
+  cache_path_list_sha256: 79250878e3cfb60a3b0131857ca7b0dc79878c5165725132223d95e32f7f9fd6
+requirements:
+  - >-
+    Implement every positive case in R21 Section 13.1 and every negative case
+    in Section 13.2. The absent future identity authority files may appear only
+    as exact roster path values; do not create them or treat path enumeration
+    as accepted identity evidence.
+  - >-
+    Directly reuse the frozen focused authority validators/helpers by loading
+    their test modules. Do not copy or weaken field, possession, feature, or
+    preimage semantics and do not create a production implementation.
+  - >-
+    Prove strict integer-only field mapping, including language-level bool
+    exclusion; preserve string evidence and quarantine counts without coercion.
+  - >-
+    Prove an accepted canonical field-v2 action composes through the accepted
+    possession-v2 resolver and that only the applicable frozen feature row is
+    selected for the resolved possession case.
+  - >-
+    Encode the exact 30-resource roster in the R21 order, preserving all v1
+    paths at positions 1-17, uniqueness, and exclusion of products, returns,
+    generated evidence, and directory shorthand.
+  - >-
+    Exercise cross-authority negatives by mutating in-memory copies or
+    temporary paths only. Never alter or materialize an authority, product,
+    manifest, receipt, serializer, build, Bronze, Silver, or Gold path.
+  - >-
+    The future fixed review and master-gate assertions must fail closed while
+    those artifacts are absent and must validate exact physical binding once
+    independently created; do not create either artifact in this packet.
+  - >-
+    Start and finish on the retained inventory using root uv --locked
+    --no-sync, PYTHONDONTWRITEBYTECODE=1, and Python -B. Do not clean, repair,
+    sync, install, run Git, delegate, self-approve, or make network, cloud,
+    container, endpoint, hosted-CI, deployment, or product changes.
+definition_of_done:
+  - All R21 Section 13.1 positive cases are executable.
+  - All R21 Section 13.2 negative cases fail closed.
+  - Existing focused authority suites continue to pass unchanged.
+  - Exact test and mandatory return are the only changed paths.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen authority, candidate, review, acceptance, preimage, or retained inventory differs.
+  - Full Section 13 composability cannot be proven without production code or a hidden input.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

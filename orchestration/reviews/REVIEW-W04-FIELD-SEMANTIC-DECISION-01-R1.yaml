@@ -1,0 +1,85 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R1
+task_id: W04-FIELD-SEMANTIC-DECISION-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - id: R1-P1-01
+    severity: P1
+    path: tests/contracts/test_wyscout_field_registry_authority.py
+    line: 1213
+    summary: >-
+      The permanent contract test requires the exact future review and
+      acceptance paths, plus every future Bronze path, to remain absent. A
+      correct independent review therefore makes the focused and full suites
+      fail immediately; the exact review and acceptance packets cannot repair
+      the failure because R20 grants them no ownership of this test. Even if
+      review absence were removed, a correct acceptance and later authorized
+      Bronze construction would fail for the same reason. Replace the
+      permanent absence assertion with a progression-safe authority-state
+      validator: validate a review when present, validate an acceptance only
+      when backed by a valid PASS review and unchanged candidate, and require
+      Bronze/runtime outputs absent only while no valid acceptance exists.
+decision: REWORK
+next_packet: W04-FIELD-SEMANTIC-DECISION-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R1.md
+  - reports/verification/W04/wyscout-field-semantic-decision-R1-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R1.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      read complete producer return, complete 1,223-line contract test,
+      complete 1,330-line registry, and independently enumerate all 119 parsed
+      decision rows and transforms
+    result: PASS_COMPLETE_READBACK
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest
+      -q tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS_46
+  - command: >-
+      uv run --locked --no-sync ruff format --check
+      tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS
+  - command: >-
+      uv run --locked --no-sync ruff check
+      tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: complete post-sync shell pyc inventory before and after focused suite
+    result: PASS_IDENTICAL_1086_SITE_58_REPOSITORY
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The 119 semantic choices, fixed source shapes, registry restatement,
+    canonical/physical digests, master actor, and conservative transform
+    boundary passed master inspection. The player-zero REJECT transform is
+    consistent with R20: zero is not an identity and remains separately
+    reconciled source evidence.
+  - >-
+    R1-P1-01 is a workflow progression defect in the contract test, not a
+    semantic-candidate defect. The decision JSON and registry remain frozen and
+    read-only during R2.
+  - >-
+    The first pre-sync inventory and post-sync metadata hashes differed because
+    the required fresh sync updated metadata only; all 1,144 pyc content hashes
+    were unchanged. The master then took a clean post-sync baseline, reran the
+    entire focused suite, and reproduced identical counts, metadata, and
+    content hashes at terminal postflight.
+  - >-
+    No review, acceptance, Bronze, provider, network, cloud, container,
+    endpoint, deployment, Git remote, or Git operation was authorized.

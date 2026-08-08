@@ -1,0 +1,149 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently audit the frozen W04 field-semantic decision, registry, and
+  progression-safe contract; create only the exact R20 review record and return.
+depends_on:
+  - W04-FIELD-SEMANTIC-DECISION-01-R3:MASTER_ACCEPTED
+assigned_role: independent_field_semantic_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R13.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R13-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R3.yaml
+  - reports/verification/W04/wyscout-field-semantic-decision-R1-master-verification.md
+  - reports/verification/W04/wyscout-field-semantic-decision-R2-master-verification.md
+  - reports/verification/W04/wyscout-field-semantic-decision-R3-master-verification.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R3.md
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - "!reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md"
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R1.md"
+frozen_candidate:
+  decision_id: w04-wyscout-field-semantic-decisions-v1
+  decision_physical_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  decision_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  candidate_id: w04-wyscout-field-registry-v1
+  candidate_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  candidate_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  contract_test_physical_sha256: d8616b4afd9b9b83fccc0fbd52e387713c08b6d3904a956d271ef0bfe3a5f7b3
+authority:
+  review_id: w04-wyscout-field-semantic-independent-review-R1
+  review_schema_version: w04-authority-independent-review-v1
+  reviewed_by: 03a65770-02f6-5eb0-9bd2-e2ebb44b62bd
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+requirements:
+  - >-
+    Be genuinely independent. Treat decision, registry, test, all inputs, and
+    prior master evidence as read-only claims to verify rather than authority to
+    copy. Do not delegate or reuse producer conclusions without reproduction.
+  - >-
+    Independently parse the R20 normative roster and fixed profile. Prove exact
+    119-row ordered coverage, 10/11/26/47/18/4/3 counts, source shapes, four
+    frozen input digests, strict schemas, master ActorId/clock, canonical JSON,
+    safe canonical YAML, registry equality, and all physical/canonical digests.
+  - >-
+    Audit every semantic row against the W04 claim and source support. Report
+    any unsupported transform, unsafe canonical projection, missing forbidden
+    field, unjustified unmapped field, collision, coercion, label/name/current
+    team/outcome/score/role inference, zero-identity error, time/position/tag
+    overclaim, or rationale mismatch as a P0/P1/P2 finding.
+  - >-
+    Independently audit the progression-safe review/acceptance validator and
+    mutation suite. It must fail closed for malformed/missing/non-PASS
+    authority, changed candidate, self-review, actor/clock/digest/fence failure,
+    and downstream paths before valid acceptance, while allowing a valid review
+    and later exact acceptance without permanently blocking separately
+    authorized downstream paths.
+  - >-
+    Before writing the review, take an actual complete shell-only pyc preflight,
+    verify the four frozen hashes, confirm review/acceptance/downstream paths are
+    absent, and run the focused 123-test suite plus Ruff and local-only checks.
+    Do not sync.
+  - >-
+    Only after the audit is complete, obtain `reviewed_at` from the actual local
+    UTC clock. Create the review Markdown with explanatory prose outside exactly
+    one fenced block whose opening is exactly
+    `w04-authority-review-v1`. The body is one strict canonical JSON record plus
+    one LF using the exact R20 keys and frozen values. Use the exact independent
+    reviewer ActorId. PASS requires no findings; REWORK requires at least one
+    complete finding.
+  - >-
+    After writing the actual review, rerun the focused contract suite. It must
+    pass while strictly validating the newly present review and still blocking
+    absent acceptance/downstream work. Then run all other packet checks and
+    reproduce the complete terminal pyc inventory exactly.
+  - >-
+    Record review record SHA-256, complete physical review SHA-256, file
+    size/line count, candidate hashes before/after, all commands/results, and
+    exact inventory in the return. Do not create the acceptance artifact.
+  - >-
+    Use only root uv with locked/no-sync. Every Python process starts with
+    PYTHONDONTWRITEBYTECODE=1 and `python -B`; use `-S -B` for stdlib-only work.
+    Do not repair or clean pycs.
+  - >-
+    Change exactly the two owned paths. Do not run Git, self-approve, access
+    network/provider data, or create acceptance, dependency, Bronze, Silver,
+    Gold, product, runtime, cloud, container, endpoint, or deployment artifacts.
+definition_of_done:
+  - Independent audit covers all candidate rows and authority edges.
+  - Review record is exact, canonical, truthful, and recommendation-consistent.
+  - Focused suite passes both before and after the review exists.
+  - Frozen candidate and test digests are unchanged.
+  - Terminal pyc inventory exactly equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen hash differs or mandatory input cannot be reproduced.
+  - Review, acceptance, or downstream paths unexpectedly exist at preflight.
+  - Audit needs a candidate/test/R20/architecture/dependency/local-only change.
+  - Any focused/post-review check or preflight/postflight inventory differs.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

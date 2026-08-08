@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W03-DATABASE-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Implement the first append-only PostgreSQL/pgvector migration, local Compose
+  services, and migration/security tests for W03.
+depends_on:
+  - W03-DEPS-01:ACCEPTED
+  - W03-CONTRACTS-01:ACCEPTED
+assigned_role: database_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-DATABASE-01-R1.yaml
+  - src/scouting/contracts/__init__.py
+  - compose.yaml
+allowed_paths:
+  - compose.yaml
+  - .env.example
+  - alembic.ini
+  - migrations/__init__.py
+  - migrations/env.py
+  - migrations/script.py.mako
+  - migrations/versions/__init__.py
+  - migrations/versions/0001_foundation.py
+  - src/scouting/storage/postgres.py
+  - scripts/apply_migrations.py
+  - tests/integration/test_migrations.py
+  - tests/security/test_database_boundaries.py
+  - reports/reviews/W03/returns/W03-DATABASE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - src/scouting/serving/**
+  - services/**
+  - apps/**
+deliverables:
+  - >-
+    Local-only Compose services using the cached pgvector PostgreSQL 16 and Redis 7
+    images, loopback-only published ports, health checks, no embedded credential, and
+    no hosted/public configuration.
+  - Alembic configured to require an explicit local PostgreSQL URL and one append-only foundation migration.
+  - >-
+    Tenant-aware canonical/workflow/audit tables with UUID keys, foreign keys,
+    checks, optimistic versions, vector readiness, and indexes.
+  - Row-level tenant policies plus an append-only audit policy/trigger.
+  - >-
+    A bounded migration command and executable tests for upgrade idempotency,
+    constraints, policies, non-owner cross-tenant denial through the application
+    role, runtime-role audit update/delete rejection, and vector extension.
+definition_of_done:
+  - SCOUTING_DATABASE_URL is required and non-loopback database hosts fail closed.
+  - Compose binds published ports only to 127.0.0.1 and uses no floating `latest` tag.
+  - Migration upgrade succeeds from an empty database and a second invocation is idempotent.
+  - Audit rows cannot be updated or deleted.
+  - Cross-tenant access is denied when exercised through the non-owner application role.
+  - Tenant columns/policies and optimistic version constraints are present.
+  - All acceptance checks pass through uv against master-started local services.
+  - The mandatory return is complete and confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/integration/test_migrations.py tests/security/test_database_boundaries.py
+  - uv run ruff format --check migrations src/scouting/storage/postgres.py scripts/apply_migrations.py tests/integration/test_migrations.py tests/security/test_database_boundaries.py
+  - uv run ruff check migrations src/scouting/storage/postgres.py scripts/apply_migrations.py tests/integration/test_migrations.py tests/security/test_database_boundaries.py
+  - uv run mypy src/scouting/storage/postgres.py scripts/apply_migrations.py
+  - uv run bandit -q -r migrations src/scouting/storage/postgres.py scripts/apply_migrations.py
+stop_conditions:
+  - Required images are unavailable locally or a network pull is necessary.
+  - A contract or dependency change is required.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, cloud service, public bind, real credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

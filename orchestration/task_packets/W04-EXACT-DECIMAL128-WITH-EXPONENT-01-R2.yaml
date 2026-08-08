@@ -1,0 +1,83 @@
+schema_version: 1
+task_id: W04-EXACT-DECIMAL128-WITH-EXPONENT-01
+phase_id: W04
+revision: R2
+state: ACCEPTED
+objective: >-
+  Correct only R1's independently confirmed signed-zero toggle defect so the
+  negative_zero Boolean sets the reconstructed zero sign independently of the
+  numeric child's incoming zero sign, with an adversarial exact-typed scalar test.
+depends_on:
+  - W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1:REWORK_P1_01
+assigned_role: bounded_w04_exact_decimal_projection_r2_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.yaml
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.yaml
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/scouting/contracts/**
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+fixed_bindings:
+  r1_formats_sha256: 8fc57c2ceb8ac714cb2573802d7bc745afb05e67e2c14d302b6b06cd911086d6
+  r1_test_sha256: f529ca1c87795e67ed17b62285e1df50fe5d85757e85de45a14a704d39a56660
+  r1_producer_return_sha256: 369f3cdeed2a4424cf36146608e5fdfbcfeb15be52f13281f0e36f47d8b629eb
+  r1_review_sha256: 137401e9a602d97c59a114c7419f3eb67748cd0ebc04fcbca8259ecc3af36532
+  r1_reviewer_return_sha256: 126949bd85d65ca3e6c63fdb461addec10cd0b96a694c97553fc4e1f1bc8ea3c
+requirements:
+  - Verify all fixed hashes before editing.
+  - >-
+    After no-rounding exponent reconstruction, normalize a zero to its absolute
+    sign first, then apply a negative sign if and only if negative_zero is true.
+    Do not toggle the incoming numeric child sign. Nonzero negative_zero remains
+    rejected exactly as in R1.
+  - >-
+    Add an exact-typed fake Arrow struct-scalar probe that bypasses PyArrow's current
+    zero-sign normalization and covers all four combinations of positive/negative
+    numeric zero with false/true negative_zero. The logical output sign must equal
+    only the Boolean. Retain the full R1 success/adversarial suite unchanged.
+  - Preserve every other R1 implementation behavior, coverage projection, digest formula and boundary.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Minimal sign-setting correction, adversarial regression test and mandatory R2 return.
+stop_conditions:
+  - Any need to change scope beyond the exact P1 correction or any governing user boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

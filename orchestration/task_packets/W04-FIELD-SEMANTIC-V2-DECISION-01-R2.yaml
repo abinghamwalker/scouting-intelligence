@@ -1,0 +1,114 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-V2-DECISION-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct R1-P1-01 by materializing the unchanged R21 field-v2 artifacts only
+  at their absolute scouting-intelligence paths, then complete the previously
+  required focused suite, return, and terminal inventory.
+depends_on:
+  - W04-FIELD-SEMANTIC-V2-DECISION-01-R1:MASTER_REWORK
+assigned_role: field_semantic_v2_path_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-DECISION-01-R2.yaml
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-DECISION-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-field-semantic-v2-decision-R1-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/configs/schema/wyscout-v5-field-registry-v2.yaml
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_field_semantic_v2_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-DECISION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+correction:
+  defect_id: R1-P1-01
+  exact_project_root: /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence
+  required_path_rule: >-
+    Every apply_patch Add/Update File header must use one of the four exact
+    absolute allowed_paths. Relative patch paths are forbidden in R2.
+requirements:
+  - >-
+    Reconfirm the exact project root and the absence of both R1 accidental
+    parent-workspace directory chains before editing. Do not read, move, copy,
+    delete, or depend on quarantined R1 drafts; recreate the artifacts from
+    accepted authorities.
+  - >-
+    All semantic, canonicalization, immutability, exact-119-row, sole changed
+    action-subevent row, strict-integer taxonomy-pair, seven reason-code,
+    progression-safe future-state, no-product, local-only, and evidence
+    requirements in R1 remain mandatory and unchanged.
+  - >-
+    Take a fresh R2 shell-only pyc/__pycache__ preflight before Python and
+    reproduce it byte-for-byte after the final R2 return and checks. Set
+    PYTHONDONTWRITEBYTECODE=1, use root `uv run --locked --no-sync`, and invoke
+    helper Python with `-B` or `-S -B`. Do not sync, install, clean, or repair.
+  - >-
+    Create exactly the decision v2 JSON, candidate v2 YAML, focused v2 test, and
+    R2 return at the four absolute allowed paths. No R1 return is fabricated.
+  - >-
+    Run no Git command, delegation, self-approval, provider/network access,
+    dependency/lock edit, review/acceptance, possession, feature,
+    cross-authority, Bronze, Silver, Gold, manifest, receipt, serializer,
+    runtime/build, model, product, cloud, container, endpoint, hosted CI, or
+    deployment work.
+definition_of_done:
+  - R1-P1-01 is closed and both accidental parent paths remain absent.
+  - Exactly the four absolute R2 paths are created; no other path changes.
+  - Every R1 contract requirement and acceptance check passes.
+  - Fresh R2 preflight and terminal inventories are byte-identical.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Either accidental parent path exists before or after R2.
+  - Any output resolves outside the exact project root or fifth path is needed.
+  - Any frozen input, v1 byte, check, or inventory differs.
+  - >-
+    Correct work requires broader architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

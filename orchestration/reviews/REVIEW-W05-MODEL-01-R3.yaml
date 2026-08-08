@@ -1,0 +1,107 @@
+schema_version: 1
+review_id: REVIEW-W05-MODEL-01-R3
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R3
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PARTIAL_PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+retained_numerical_result:
+  comparison_attempt: SINGLE_PREREGISTERED_R3_ATTEMPT_CONSUMED
+  query_count: 18
+  k: 3
+  scores:
+    metadata_control: 0.1111111111111111
+    raw_euclidean_control: 0.3333333333333333
+    robust_scaled_cosine: 1.0
+    weighted_cosine: 1.0
+    pca: 1.0
+    role_aware_restriction: 1.0
+  numerical_gate: PASS
+  acceptance_status: RETAINED_POSITIVE_RESULT_FROM_UNACCEPTED_ARTIFACT
+defects:
+  - severity: P1
+    blocker_tests: [1, 2, 4, 6]
+    evidence: >-
+      The candidate fixture stores only compact construction rules, not the required
+      explicit 18 feature rows and 18 role rows. The query fixture stores no explicit
+      ordered queries. Its candidate_fixture_digest and own fixture_digest also differ
+      from the candidate/query digests carried by the current configuration.
+    required_fix: >-
+      Expand exactly the already frozen rows and queries into canonical explicit
+      projections, validate exact keys/types/order/bytes/digests and make every pin
+      agree. Numeric features, metadata, roles, peer labels, candidates, k, weights and
+      threshold must remain byte-equivalent in semantic projection to R3.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 6]
+    evidence: >-
+      Configuration is an arbitrary Mapping with a self digest. Its candidate and
+      query population projection digests are empty and expected_array_payload_digests
+      is empty. Candidate-universe JSON carries no fixture/query/population pins. A
+      re-signed substituted config/candidate/model can therefore be admitted.
+    required_fix: >-
+      Add a normally validated immutable typed configuration with source-pinned
+      accepted ID/version/digest, all six expected array payload digests and exact
+      fixture/population/query pins. Bind and validate those pins in every candidate
+      universe and artifact load.
+  - severity: P1
+    blocker_tests: [1, 3, 6]
+    evidence: >-
+      Artifact identity omits the array payload digest, and runtime loading does not
+      compare arrays to an external trusted expected digest. Canonically re-signed
+      array/model/manifest substitutions can pass the current external checks.
+    required_fix: >-
+      Verify the manifest array payload against the accepted typed config for the
+      family; derive and recompute artifact ID from family/config/population/array and
+      accepted registry/taxonomy inputs; require exact canonical model/index identities.
+  - severity: P1
+    blocker_tests: [1, 3, 4, 6]
+    evidence: >-
+      Metadata-control feature names have length three while the manifest and loader
+      still bind the six-feature schema hash and candidate-universe feature values.
+      PCA returns three component contributions against six manifest feature names.
+    required_fix: >-
+      Bind metadata matrix/names/metadata schema and family-specific universe values
+      consistently. Project PCA similarity contributions deterministically back to
+      all six original feature positions and prove exact contribution length/reload.
+  - severity: P1
+    blocker_tests: [1, 2, 4, 6]
+    evidence: >-
+      Fitting silently drops malformed or nonnumeric candidate rows. Runtime root
+      symlink rejection checks only the resolved path, nested configuration/universe
+      objects remain mutable, exclusion inputs are not strict and role membership
+      admission is not bound to the exact taxonomy role set and strict probabilities.
+    required_fix: >-
+      Fail closed on every admitted candidate error, reject symlinked roots/entries,
+      deep-freeze loaded state and strictly validate exclusions, roles, probabilities
+      and exact candidate projections.
+  - severity: P1
+    blocker_tests: [2, 4, 5, 6]
+    evidence: >-
+      Candidate universe retains only dependency lineage hashes, not the dependency
+      observed/available timestamps needed for serving to prove strict pre-cutoff
+      lineage. No dedicated model test file was delivered; the reported 60 tests are
+      only predecessor feature/role/contract tests.
+    required_fix: >-
+      Carry full exact dependency identities into the immutable universe, validate
+      strict cutoff and lineage reproduction, and add the complete adversarial model,
+      artifact, deterministic rebuild, PCA, tie, exemplar and substitution suite.
+bounded_rework:
+  geometry_change: FORBIDDEN
+  configuration_semantics_change: FORBIDDEN
+  comparison_selection_retry: FORBIDDEN
+  allowed_result_reproduction: >-
+    R4 and independent review may mechanically reproduce the same frozen R3 rankings
+    after representation and trust-pin corrections. That reproduction is parity
+    verification, not a new tuning or selection attempt. Any numerical score change is
+    a blocker and must stop.
+  unaccepted_artifact_disposition: >-
+    The exact four-file R3 artifact may be moved intact to a bounded temporary path by
+    the master before R4. It is not an accepted or registered W05 artifact.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-MODEL-01-R4.yaml
+reviewer: master

@@ -1,0 +1,207 @@
+schema_version: 1
+task_id: W04-DATA-CONTRACTS-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only the frozen W04 executable data contracts and focused tests so
+  all ten accepted R1 P1 findings fail closed at every public constructor.
+  Preserve R20/R21, every accepted authority and preimage, the four-feature
+  scope, and the local-only boundary. Create no serializer, product byte,
+  manifest file, receipt, runtime, build, or architecture revision.
+depends_on:
+  - W04-DATA-CONTRACTS-01-R1:REWORK
+  - W04-DATA-CONTRACTS-REVIEW-01-R1:MASTER_ACCEPTED_REWORK_EVIDENCE
+assigned_role: w04_data_contracts_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-DATA-CONTRACTS-01-R2.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-01-R1.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R1.yaml
+  - reports/verification/W04/wyscout-data-contracts-R1-master-verification.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/src/scouting/contracts/wyscout_data.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_wyscout_data_contracts.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/sources/**
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+fixed_bindings:
+  r1_implementation_sha256: 9d90641965ef6d9351d76785d5729cc932ed7ea3cae11ff931dcef3279148452
+  r1_focused_test_sha256: 568859f5879766c0470169e480177c3089b26788456c3133294e86ba2b0dc69a
+  r1_independent_review_sha256: 862fa5513cd261fd95bcd921fb52631c90af56ff930ce968682059879761dee2
+  identity_acceptance_sha256: 37764392cdaf9626ffaff26e119fb142218d36489e87a8b1d55402e3e2dc7f86
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+  feature_acceptance_sha256: d3b3c552784f4734f6b002569d9add1b4dd2d2eaaed57643a8ca4d5226fca78c
+  product_contract_preimage_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+  schema_bundle_preimage_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+  supported_features:
+    - action_count
+    - coordinate_known_action_count
+    - match_count
+    - resolved_possession_action_count
+requirements:
+  - >-
+    Close W04DC-P1-001 at RawKindEvidence itself. Direct construction must
+    derive the exact safe/unsafe/non-string/null/missing state, reject every
+    known token, and reproduce the exact canonical framed digest. Factory-only
+    correctness is insufficient.
+  - >-
+    Close W04DC-P1-002. SilverAction must accept a non-null canonical subevent
+    only for one of the 36 exact admitted strict-integer event/subevent pairs;
+    ELIGIBLE_RESOLVED also requires that pair and a resolved team. Bind every
+    BronzeRejectedField path/type/value/decision/reason to the exact accepted
+    field-v2 decision, including string, boolean, null, non-integer number,
+    array, object, and unknown-integer subevents, without coercion.
+  - >-
+    Close W04DC-P1-003 and the related action-ID gap. Require strict positive
+    non-boolean canonical competition, team, player, match, and action source
+    IDs at the helper and every public entity/action constructor. Require the
+    provider event record ID to be strict positive and equal the action source
+    ID. Zero remains rejected evidence, never a UUID.
+  - >-
+    Close W04DC-P1-004 with exact finite decimal128(22,18) validation that
+    counts positive exponents, limits scale to 18 and integer capacity to four
+    digits, and rejects NaN/infinity/overflow. Preserve the exact declared
+    lexical source scale; do not quantize, round, clamp, or coerce.
+  - >-
+    Close W04DC-P1-005 and P1-006. Bind source, identity, field-v2,
+    possession-v2, and supported-feature dependency decision/review/acceptance
+    clocks to their exact accepted authority records and require every bound
+    clock strictly before cutoff. Recompute every DependencyLineage hash and
+    require exact row-lineage/temporal-proof equality at player-match and Gold.
+    Replace the stale focused-fixture clocks with the exact accepted clocks.
+  - >-
+    Close W04DC-P1-007. Optional coordinate or possession 0/0
+    not-applicable states require the exact accepted FIELD or POSSESSION
+    authority evidence respectively; positive and mandatory zero denominators
+    forbid that proof. Represent AUTHORITY_MISSING and FAILED only as
+    fail-closed non-ready states with explicit sorted reasons. Enforce the
+    exact applicability order so no missing/failed/partial/uncertain row becomes
+    w04_data_ready.
+  - >-
+    Close W04DC-P1-008. Bind exact manifest filename/layer/build equality,
+    non-empty complete manifests, exact safe preceding-layer parent manifest,
+    same-build parent products, exact schema_role to path_role, exact unique
+    sorted path partition key/value pairs, fixed tenant, rights, feature and
+    dependency lineage, and no traversal/cross-layer/alternate-parent route.
+  - >-
+    Close W04DC-P1-009 without adding a fifth feature. Contributing
+    player-match facts/keys must reconcile to the Gold tenant, manifest, player,
+    competition, season, schema and window selection. Derive and verify exactly
+    action_count, coordinate_known_action_count, distinct match_count, and
+    resolved_possession_action_count from the selected facts; arbitrary keys,
+    schema strings, counts, or unrelated facts fail. Keep rates, minutes,
+    outcomes, roles, current team, per-90 and value models absent.
+  - >-
+    Close W04DC-P1-010 with the minimum evidence-bearing fields already
+    required by R20: exact measured raw paths/types and admission on known
+    Bronze, complete lineage/classification/authority clocks on rejected
+    records and fields, exact source availability and acquisition receipt,
+    fixed tenant with null club, exact restricted rights, source-family/row
+    membership, and zero-based source_record_ordinal strictly below the exact
+    manifested row count. Every Bronze/Silver/Gold row and manifest must bind
+    the same accepted source authority without cyclic lineage.
+  - >-
+    Add direct-constructor, mutation, and cross-authority negative matrices for
+    all ten findings, including booleans-as-integers, zero/negative IDs, ordinal
+    upper bounds, forged raw-kind state, non-admitted subevents, every rejected
+    raw type, decimal exponent boundaries, every authority clock, recomputed
+    lineage drift, tenant/rights drift, all coverage states, manifest
+    path/build/parent/schema/partition drift, and all four Gold feature
+    reconciliation routes. Preserve the in-memory one-match/seven-family
+    positive fixture and create no product file.
+definition_of_done:
+  - All ten R1 P1 findings fail closed at each exported constructor.
+  - Exact accepted authority/source/preimage bytes and digests remain unchanged.
+  - Tests use only in-memory values and tmp-free contract construction; no product or manifest file exists.
+  - No new feature, architecture revision, serializer, runtime, build, data write, or dependency is introduced.
+acceptance_checks:
+  - >-
+    uv run ruff format --check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run ruff check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run mypy src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - >-
+    uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+    tests/contracts/test_foundation_contracts.py
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any accepted authority, source, preimage, R20, R21, or R1 review byte must change.
+  - Exact correction requires a different project path, dependency, storage, serializer, runtime, or product byte.
+  - >-
+    Correctness genuinely contradicts frozen architecture, feature scope,
+    provider/right, project-root, dependency/lock, local-only, network, cloud,
+    container, endpoint, hosted-CI, or deployment boundaries.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

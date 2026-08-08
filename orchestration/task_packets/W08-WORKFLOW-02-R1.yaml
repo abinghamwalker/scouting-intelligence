@@ -1,0 +1,81 @@
+schema_version: 1
+task_id: W08-WORKFLOW-02
+phase_id: W08
+revision: R1
+state: STOPPED_SCHEMA_INTERPRETATION
+objective: >-
+  Implement the transactional R1 role-brief, retrieval-link, shortlist, comment and
+  scout-observation workflow over the master-owned immutable contracts and migration.
+depends_on:
+  - W08-AUTH-AUDIT-01:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W06/limitations.md
+  - reports/verification/W07/limitations.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/service.py
+allowed_paths:
+  - src/scouting/workflow/r1.py
+  - src/scouting/workflow/__init__.py
+  - src/scouting/observations/r1.py
+  - src/scouting/observations/__init__.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - reports/reviews/W08/returns/W08-WORKFLOW-02-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Immutable role-brief versions covering draft, submit, approve, reject, retire and linked redraft without rewriting history.
+  - Replayable retrieval links that pin the accepted W05 public-serving result and preserve the W06 NO_GO claim boundary.
+  - Shortlist ownership, scout assignment, comments, legal transition matrix, rejection/hold reasons, next actions and new-revision reconsideration.
+  - Optimistic concurrency for all mutable containers with stale-write conflict responses and no partial mutation.
+  - Private/team scout observations with structured rubric, confidence, local evidence references, disagreement, amendments and visible version history.
+  - Every material action attributable, reversible by a new revision where allowed, and atomically paired with a hash-chained audit receipt.
+  - Tests for positive journeys, IDOR/cross-object denial, scout/approver separation, visibility, stale writes, invalid transitions, audit failure rollback and retry/idempotent recovery.
+definition_of_done:
+  - Synthetic fixtures are labelled synthetic_automated_test and no result is described as real scout evidence.
+  - Focused checks pass and the mandatory return is complete.
+focused_checks:
+  - Role-brief/retrieval-link and shortlist/observation positive journeys.
+  - IDOR, role separation, visibility, stale-write, invalid-transition, rollback and retry witnesses.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run ruff check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run mypy src/scouting/workflow/r1.py src/scouting/observations/r1.py
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/security/test_w08_auth_audit.py
+stop_conditions:
+  - Required behaviour conflicts with the master-owned contract or migration.
+  - A dependency, external service, model call, protected-output access or destructive action is required.
+  - A correction would weaken historical immutability, deny-by-default access, audit atomicity or evidence honesty.
+mandatory_return:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - behaviour and key choices
+  - exact commands, exit statuses and concise results
+  - evidence paths and identifiers
+  - residual risks and follow-ups
+  - confirmations of no Git operations, no dependency or lock change, and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

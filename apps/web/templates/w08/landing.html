@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block body %}
+  <section class="landing-hero">
+    <div>
+      <p class="eyebrow">{% if guided_study %}Guided development pilot{% else %}Synthetic local workflow{% endif %}</p>
+      <h1>{% if guided_study %}One journey. Clear next steps.{% else %}Local R1 scouting workflow{% endif %}</h1>
+      <p>{% if guided_study %}Use the journey guide and switch roles with one click. You are testing whether the workflow works—not making a recruitment decision.{% else %}This local application tests workflow mechanics only. It does not validate retrieval quality or make a recruitment recommendation.{% endif %}</p>
+      <div class="evidence-points"><span>Versioned decisions</span><span>Default-deny access</span><span>Reproducible evidence</span></div>
+    </div>
+    <section class="login-card" aria-labelledby="login">
+      <p class="eyebrow">Session access</p>
+      {% if guided_study %}
+        <h2 id="login">Start the pilot as Analyst</h2>
+        <p>The guide handles synthetic role changes for you.</p>
+        <form method="post" action="/w08/guide/switch-role" class="guided-start-form">
+          <input type="hidden" name="guide_csrf" value="{{ guided_switch_token }}">
+          <input type="hidden" name="role" value="analyst">
+          <input type="hidden" name="return_to" value="/w08/guide">
+          <button>Start guided journey</button>
+        </form>
+      {% else %}
+        <h2 id="login">Synthetic automated test sign-in</h2>
+        <form method="post" action="/w08/login">
+          <label>Actor ID <input name="actor_id" required autocomplete="off"></label>
+          <label>Password <input name="password" type="password" required></label>
+          <button>Sign in</button>
+        </form>
+      {% endif %}
+    </section>
+  </section>
+  {% if not guided_study %}
+  <details class="persona-panel">
+    <summary>Fresh synthetic automated-test personas (do not treat as participant evidence)</summary>
+    <table>
+      <caption>In-memory local test accounts</caption>
+      <thead><tr><th scope="col">Role</th><th scope="col">Actor identifier</th></tr></thead>
+      <tbody>{% for role, item in personas.items() %}<tr><th scope="row">{{ role }}</th><td><code>{{ item.actor_id }}</code></td></tr>{% endfor %}</tbody>
+    </table>
+  </details>
+  {% endif %}
+{% endblock %}

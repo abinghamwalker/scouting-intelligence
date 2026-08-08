@@ -1,0 +1,29 @@
+schema_version: 1
+review_id: REVIEW-W07-APPLICATION-01-R2
+task_id: W07-APPLICATION-01
+phase_id: W07
+revision: R2
+reviewer: master
+decision: REWORK_SPLIT
+findings:
+  - priority: P1
+    id: W07-R2-RELABELLED-COMPARISON
+    evidence: Route w07/comparison executes the same one-item batch request and template as retrieval; no second player is selected or contrasted.
+  - priority: P1
+    id: W07-R2-NONFUNCTIONAL-EVIDENCE-PAGES
+    evidence: Search is a fixed one-row table with an inert input; player_id is not validated or used to load evidence; search/player pages omit required pinned identities and evidence.
+  - priority: P1
+    id: W07-R2-UNGOVERNED-STATES
+    evidence: Route w07/state/{state} uppercases and displays any caller string, so required state semantics and status are not closed or tested.
+  - priority: P1
+    id: W07-R2-INSUFFICIENT-PARITY-AND-ACCESSIBILITY-EVIDENCE
+    evidence: W07 integration coverage is one shallow test; no scorer spy, request/batch byte parity, artifact immutability, accepted digest suite, closed-state suite, complete metadata assertion, focus-visibility check, horizontal-overflow assertion or representative state browser journey exists.
+master_reproduction:
+  producer_reported_checks: PASS
+  content_and_contract_review: FAIL
+split_invariant:
+  composition: Every displayed value is derived from accepted local authorities and public W05 serving outputs; identity, state, parity and artifact-immutability tests are complete.
+  presentation: Every governed context is rendered accessibly and responsively with prominent evidence boundaries and no unsupported claim language.
+p0_findings: 0
+p1_findings: 4
+self_approval: forbidden

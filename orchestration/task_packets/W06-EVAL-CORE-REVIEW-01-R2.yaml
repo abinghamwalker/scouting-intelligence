@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W06-EVAL-CORE-REVIEW-01
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-CORE-REVIEW-01-R1.yaml
+objective: >-
+  Freshly review W06-EVAL-CORE-01-R2 and determine whether every previously reproduced
+  P0/P1 protected-binding, aggregate, metric, comparison and interval defect actually
+  closed, reporting only remaining effects on values, partitions, leakage or claims.
+depends_on:
+  - W06-EVAL-CORE-01-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-CORE-01-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R1.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-core-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Does R2 reject the exact W06-EC-R1-01 fixture/future-cutoff/FIT-access/empty-run/mismatched-protocol ACCEPT_CLAIM constructor chain?
+  - Are protocol roots, bundle contents, relevance/preferences/hard-negatives/adjudications, candidate universes and canonical order now completely cross-bound and unique?
+  - Do all five metric/interval correction families work under the exact R1 counterexamples, including declared k, missingness, partial policy, ties, agreement, pair identity, Spearman, overlap/churn and bootstrap identity?
+  - Do MetricResult, BootstrapInterval, EvaluationRun and GateDecision validate exact arithmetic, ranges, links, canonical non-empty rosters and relational identity rather than opaque digest shape?
+  - Are R2 tests adversarially sufficient and is the public fixture identity/authority mechanically exercised?
+deliverables:
+  - Fresh independent verdict with exact remaining P0/P1/P2 findings and counterexamples.
+  - Explicit closure matrix for W06-EC-R1-01 through W06-EC-R1-05.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R2.md.
+definition_of_done:
+  - Every claimed closure is independently reproduced, not inferred from passing tests.
+  - Findings stay limited to metric/partition/interval/digest/leakage/gate/claim effects.
+  - Review is report-only with no protected expected-output access.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run ruff check src/scouting/contracts/evaluation.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run lint-imports
+  - test -s reports/reviews/W06/evaluation-core-independent-review-R2.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R2.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and closure matrix with severities
+  - exact commands, exit statuses and concise results
+  - exact remaining counterexamples, formulas and identifiers
+  - residual leakage, schema, interval, applicability and claim risks
+  - smallest bounded corrections or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

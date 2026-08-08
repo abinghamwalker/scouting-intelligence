@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W08-WEB-BRIEF-04D
+phase_id: W08
+revision: R1
+state: DISPATCHED
+objective: >-
+  Complete the versioned role-brief HTTP seam and replace placeholder retrieval-link
+  metadata with an exact replay of the accepted local W05/W07 public serving path.
+depends_on:
+  - W08-WEB-WORKFLOW-04A:MASTER_ACCEPTED
+  - W08-WEB-E2E-04:R2_REWORK
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  A role-brief status change cannot rewrite requirements, and a retrieval link may be
+  persisted only from a successfully replayed, fully pinned local public-serving result;
+  random or invented result/run/digest evidence is forbidden.
+read_first:
+  - AGENTS.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/verification/W06/limitations.md
+  - reports/verification/W07/verification-report.md
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/contracts/workflow.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/web/w07.py
+  - src/scouting/serving/m0.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-04D-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - src/scouting/serving/**
+  - src/scouting/web/w07.py
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Accessible analyst form for a version-1 draft with named template, one or more responsibility codes, bounded hard constraints, transparent preference dimensions/weights and optional exemplar player IDs from the local synthetic-development catalogue.
+  - Immutable version history displaying template/taxonomy, responsibilities, constraints, weights, exemplars, submission/decision attribution, controlled rejection reason/note and timestamps.
+  - Analyst submit and rejected-to-draft correction/version routes plus approver approve/reject routes; every status-only transition preserves exact prior content and original submitted_at where the contract requires it.
+  - Replace random retrieval request/result/run IDs and placeholder digests with the exact output of the accepted local W05 M0 serving core used by W07, constructed for the approved W08 brief/tenant and replayed without fitting, external/model calls, W06 protected-output access or protected W06 rerun.
+  - Persist link model/index/data/taxonomy versions, exact result digest and dependency-lineage digest from that replay, and prove a repeat of the same pinned request returns the same IDs and digests.
+  - Display replay identity and the full NO_GO/MISSING_EXPERT_RELEVANCE_EVIDENCE, resemblance_only, synthetic_development_only, LIMITED and no_recommendation_evidence boundary without validated/recommended/transfer/value/production claims.
+  - Generic denial for unknown/foreign brief, invalid role, invalid constraint/exemplar, stale status version and failed serving replay; no partial link or audit row on failure.
+definition_of_done:
+  - Moderated tasks T1 and T2 plus the brief-to-retrieval portion of T3 are mechanically reachable with genuine deterministic local replay metadata.
+  - Tests prove historical interpretation, controlled rejection/correction and exact replay rather than placeholder evidence.
+focused_checks:
+  - Full analyst/approver version chain with constraints, weights and exemplars retained byte-for-byte through submit/approve or reject/correct/resubmit.
+  - Exact local serving replay identity and digest equality, plus no link/audit row after invalid/failed replay.
+  - Role/tenant/object/CSRF/stale-write denial and evidence-honest rendered wording.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w05_m0_retrieval.py
+stop_conditions:
+  - Exact replay requires any protected W06 output, reconstructing protected outputs, fitting/training, a shared-service/contract/policy/migration/dependency change or a network/external/model provider.
+  - Node/npm, container, destructive action, Git operation or out-of-scope mutation would be required.
+  - Correctness would require inventing identifiers/digests or widening the W06/product claim boundary.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - role-brief version/transition map and local-serving replay map
+  - exact commands, exit statuses and test counts
+  - exact replay identity/digest witness without protected outputs
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, W06 protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

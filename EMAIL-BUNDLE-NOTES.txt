@@ -1,0 +1,28 @@
+SCOUTING INTELLIGENCE — EMAIL-SAFE SOURCE BUNDLE
+
+Snapshot date: 2026-08-08
+Git commit: 30edc195de7b5aef637063c96ed5e7127d0f4a12
+Checkpoint: checkpoint/w10-v2-participant-interface-rework-reviewed
+Tracked files: 2,094
+
+This archive contains the complete version-controlled source snapshot:
+application code, configuration, documentation, reports, scripts, tests,
+manifests, lockfile, and repository instructions.
+
+Deliberately excluded because they are not tracked source and are unsuitable
+for an email attachment:
+
+- .git history and repository metadata
+- .venv and rebuildable Python dependencies
+- tool caches and operating-system metadata
+- data/source bulk provider datasets
+- data/working generated matrices, indexes, runtime artifacts, and databases
+- all local SQLite files, including mechanics-pilot responses
+- any ignored or otherwise untracked local files
+
+.env.example is included because it is a tracked template. No real .env file
+is included.
+
+This is a source-review and handoff bundle. It is not a fully populated runtime
+dataset. Restore dependencies from uv.lock and obtain data separately under
+the applicable rights and governance controls.

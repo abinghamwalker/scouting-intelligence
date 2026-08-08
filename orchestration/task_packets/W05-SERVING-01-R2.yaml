@@ -1,0 +1,165 @@
+schema_version: 1
+task_id: W05-SERVING-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct the five independently reproduced W05 serving R1 P1 classes without
+  changing accepted contracts, model behavior, artifacts, registries or authorities.
+depends_on:
+  - REVIEW-W05-SERVING-01-R1:REWORK
+  - W05-SERVING-REVIEW-01-R1:REWORK
+assigned_role: m0_serving_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-SERVING-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-SERVING-01-R1.yaml
+  - orchestration/task_packets/W05-SERVING-REVIEW-01-R1.yaml
+  - reports/reviews/W05/w05-m0-serving-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-01-R1.md
+  - orchestration/task_packets/W05-MODEL-01-R6.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/m0/core.py
+  - src/scouting/serving/m0.py
+  - src/scouting/serving/__init__.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/serving/m0.py
+  - src/scouting/serving/__init__.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - reports/reviews/W05/returns/W05-SERVING-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/w05-m0-serving-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-01-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R1.md
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/m0/**
+  - src/scouting/modeling/**
+  - src/scouting/sources/**
+  - src/scouting/web/**
+  - src/scouting/workflow/**
+  - tests/contracts/**
+  - tests/unit/**
+frozen_authority:
+  artifact_uuid: 9a0d43c6-d177-51be-8280-3bf02bedbc99
+  manifest_logical_digest: 2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9
+  configuration_digest: 5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a
+  feature_registry_digest: c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644
+  taxonomy_digest: 59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097
+  artifact_file_sha256:
+    arrays.npz: 73374ba529e2628112b7886e549e2b570883781544cd65478ea96a838975dfc6
+    manifest.json: c88f101211d8e26c06622021a4d9333ce1c0e9217999a100aee71812446f443a
+    configuration.json: d4d6839382267f3eb1cb8d767e01f833e106332e314ead886e9f08997681c006
+    candidate-universe.json: 2a8bd89b9715e2a0349e2aaba22f890333139a5142b931ae4e844aaa9bc5807e
+requirements:
+  - >-
+    At every public single-request and batch-item boundary, reconstruct the complete
+    PinnedM0ServingRequest by normal validation of its full Python semantic dump before
+    invoking the artifact loader or scorer. Explicitly recompute and compare the nested
+    resolved-query digest and exclusion digest; reject carried stale digests and use
+    only the rebuilt object. Directly test model_copy and model_construct mutations of
+    every behavior-bearing request/query pin, and spy that rejected requests never call
+    the loader or scorer.
+  - >-
+    Derive retrieval_result_id, retrieval_run_id and m0_result_id independently with
+    domain separators from the canonical digest of the complete normally validated
+    pinned request, exact accepted artifact identity and shared-core version. Normally
+    valid requests whose canonical bytes differ must not collide on any result/run ID;
+    same-request replay must remain byte-identical.
+  - >-
+    Parse, type-check, operator-check and canonicalize every hard constraint into a
+    complete immutable execution plan before scanning any candidate. Any invalid later
+    member must reject even when an earlier valid predicate would select no rows.
+    Equivalent valid filter permutations must execute identically and return the same
+    candidate order, scores, states and explanations. Do not alter the accepted
+    order-sensitive resolved_query_digest contract: distinct canonical pinned request
+    bytes may retain distinct request-bound result digests and IDs.
+  - >-
+    Emit action reason codes only for actions that occurred. A request with no hard
+    constraints must not emit hard_constraints_applied. For SYNTHETIC_DEVELOPMENT,
+    confidence is explicitly LIMITED and includes deterministic
+    synthetic_development_only and no_recommendation_evidence limitations in both the
+    approved ConfidenceAssessment and DataConfidenceEvidence projections and matching
+    closed serving reasons. Completeness may still be represented truthfully but never
+    changes rank. Preserve resemblance_only and emit no recruitment recommendation.
+  - >-
+    TemporalEvidence must take its snapshot, availability watermark and valid_from from
+    every admitted explicit evidence clock, including candidate/query feature-row
+    observed_at and available_at as well as source dependencies. Add truthful per-row
+    FEATURE_SCHEMA DependencyLineage identities derived deterministically from the
+    player and exact row-lineage digest. Keep raw inputs as SOURCE_MANIFEST. Continue to
+    bind the exact feature schema, taxonomy, model and index through the pinned request,
+    accepted manifest and result lineage, but do not invent observed/available times for
+    derived model/index/taxonomy identities where no explicit authority exists. Test
+    exactly-at-cutoff and post-cutoff rejection for both row and raw-dependency clocks.
+  - >-
+    Retain exactly one M0ServingCore, one accepted scouting.m0 loader and one
+    LoadedM0Artifact.score implementation for single and batch paths. Preserve exact
+    feature order, scoring, role threshold, deterministic tie order, six-dimensional
+    evidence-card shape, explanation inputs, nonranking data confidence and artifact
+    byte immutability. Add direct loader/scorer spies and query-player, exemplar, role,
+    exclusion, filter, pin-substitution, complete-wire forbidden-claim and replay tests
+    through the public production APIs.
+  - >-
+    This is a serving correctness correction only. Do not tune/refit models, change any
+    ranking geometry or selected model identity, modify contracts/artifacts/fixtures,
+    admit provider/W04 data, weaken evidence guarantees or begin W06/W10 work. The new
+    canonical serving result digest is expected to change only because truthful IDs,
+    limitations, reasons and temporal lineage are corrected; report it explicitly.
+deliverables:
+  - Corrected read-only serving core for all five P1 classes.
+  - Expanded adversarial integration/e2e tests through public APIs.
+  - Mandatory R2 return with exact checks, canonical digest and artifact hashes.
+definition_of_done:
+  - All five R1 P1 reproductions fail closed or emit corrected truthful evidence.
+  - Batch/request and fresh-core replay of the same validated request are byte-identical.
+  - Accepted model rankings and all four artifact files are unchanged.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/serving/m0.py src/scouting/serving/__init__.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run ruff check src/scouting/serving/m0.py src/scouting/serving/__init__.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run mypy src/scouting/serving/m0.py src/scouting/serving/__init__.py
+  - uv run pytest -q tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py tests/unit/test_w05_m0_models.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to change an accepted contract, feature/role/model registry, model/runtime,
+    materialized artifact, fixture or W03/W04 evidence byte.
+  - Any second scoring path, provider/Gold read, fit/write/mutation, unsupported blended
+    score, recommendation applicability or weakened claim boundary is required.
+  - Any new dependency, external access/service, deployment/publication, destructive
+    action, secret, W06 protected evaluation or W10 host hardening is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

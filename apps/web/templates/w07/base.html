@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="stylesheet" href="/static/w07/app.css">
+  <title>{{ page_title|default('Local evidence') }} · W07 local evidence</title>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header" role="banner">
+    <div class="site-width header-layout">
+      <a class="wordmark" href="/w07" aria-label="W07 local evidence home">W07 <span>local evidence</span></a>
+      <nav aria-label="Primary navigation">
+        <ul class="primary-nav">
+          <li><a href="/w07" {% if current_page|default('') == 'landing' %}aria-current="page"{% endif %}>Overview</a></li>
+          <li><a href="/w07/search" {% if current_page|default('') == 'search' %}aria-current="page"{% endif %}>Candidates</a></li>
+          <li><a href="/w07/retrieval" {% if current_page|default('') == 'retrieval' %}aria-current="page"{% endif %}>Retrieval</a></li>
+          <li><a href="/w07/evidence" {% if current_page|default('') == 'evidence' %}aria-current="page"{% endif %}>Evidence centre</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main id="main-content" class="site-width" tabindex="-1">
+    {% include "_authority.html" %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <div class="site-width">
+      <p><strong>Local, read-only evidence interface.</strong> Synthetic-development material is not real-player evidence and does not support a recruitment decision.</p>
+    </div>
+  </footer>
+</body>
+</html>

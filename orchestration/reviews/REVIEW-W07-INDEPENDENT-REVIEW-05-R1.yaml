@@ -1,0 +1,20 @@
+schema_version: 1
+review_id: REVIEW-W07-INDEPENDENT-REVIEW-05-R1
+task_id: W07-INDEPENDENT-REVIEW-05
+phase_id: W07
+revision: R1
+reviewer: master
+decision: ACCEPT_REVIEW_RETURN
+scope: Completeness, independence and reproducibility of the independent W07 application review.
+evidence:
+  - reports/reviews/W07/w07-application-independent-review-R1.md
+  - reports/reviews/W07/returns/W07-INDEPENDENT-REVIEW-05-R1.md
+findings:
+  - priority: P2_RESOLVED
+    id: STALE-PARITY-READ-PATH
+    evidence: The packet read-first path was corrected to the existing accepted reports/verification/W05/training-serving-parity-report.md before W07 integration.
+p0_findings: 0
+p1_findings: 0
+p2_findings: 1
+acceptance: Independent reviewer PASS, with zero P0/P1 and one resolved packet-routing P2; no production or protected-output access occurred.
+self_approval: forbidden

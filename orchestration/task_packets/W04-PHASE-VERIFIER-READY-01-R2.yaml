@@ -1,0 +1,54 @@
+schema_version: 1
+task_id: W04-PHASE-VERIFIER-READY-01
+phase_id: W04
+revision: R2
+state: REWORK
+objective: >-
+  Bind the master-owned empty-return exemption to the exact registry task ID so
+  an unrelated master packet cannot be borrowed as return-exemption evidence.
+depends_on:
+  - W04-PHASE-VERIFIER-READY-01-R1:MASTER_REVIEW_REWORK
+assigned_role: orchestration_control_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R1.yaml
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R2.yaml
+  - scripts/verify_phase.py
+  - tests/unit/test_orchestration_controls.py
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R1.md
+allowed_paths:
+  - scripts/verify_phase.py
+  - tests/unit/test_orchestration_controls.py
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/phase_registry.yaml
+  - orchestration/master_plan.yaml
+  - configs/**
+  - src/**
+  - data/**
+deliverables:
+  - Require every packet supporting an empty-return exemption to have a string task_id exactly equal to the registry task_id.
+  - Preserve R1 behavior and fail closed for missing, invalid, delegated, mixed, or task-mismatched packets.
+  - Add focused unit coverage proving an unrelated master packet cannot grant the exemption.
+  - Preserve the R1 handback and create a complete R2 Markdown handback.
+definition_of_done:
+  - The current W04 source-authority and source-acquire master tasks may omit returns because every packet is master-assigned and task-ID matched.
+  - A delegated packet, missing packet, invalid packet, non-string registry task ID, missing packet task ID, or mismatched packet task ID rejects the exemption.
+  - No other phase gate is weakened or changed.
+acceptance_checks:
+  - uv run ruff format --check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run ruff check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run mypy scripts/verify_phase.py
+  - uv run pytest -q tests/unit/test_orchestration_controls.py
+stop_conditions:
+  - The correction would alter R21 authorities, product semantics, dependency policy, local-only boundaries, or phase lifecycle data.
+  - Required work falls outside allowed_paths.
+  - A secret, external account, deployment, destructive action, dependency change, or Git operation is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

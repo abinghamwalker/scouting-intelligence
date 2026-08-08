@@ -1,0 +1,78 @@
+schema_version: 1
+task_id: W03-GOVERNANCE-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Materialise the approved P0 decision, claim, synthetic-data-rights, evaluation,
+  security, and W03 architecture boundaries as local control documents.
+depends_on:
+  - W02:CLOSED
+assigned_role: governance_architecture_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W03-GOVERNANCE-01-R1.yaml
+  - docs/adr/0001-local-only-uv-git-delivery.md
+  - docs/adr/0002-master-subagent-verification.md
+allowed_paths:
+  - docs/architecture/product-claim.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/threat-model.md
+  - docs/architecture/w03-synthetic-spine.md
+  - docs/adr/0003-local-postgres-pgvector.md
+  - configs/policies/authorization.yaml
+  - configs/policies/data-rights.yaml
+  - configs/environments/w03-local-review.yaml
+  - reports/reviews/W03/returns/W03-GOVERNANCE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - services/**
+  - apps/**
+  - tests/**
+deliverables:
+  - >-
+    Product claim/non-claims naming analyst, scout, and approver jobs; evidence-only
+    recommendation; resemblance-not-outcome boundary; and R0/R1/R2 cut lines.
+  - >-
+    Frozen synthetic W03 evaluation contract with replay cutoff, required negative
+    cases, acceptance metrics, protected-fixture rule, minimum gate, and no invented
+    real-user or real-data evidence.
+  - >-
+    Initial local threat model covering identity mismatch, future leakage, path escape,
+    tenant/authZ failure, confidential evidence, audit tampering, secrets, and misuse,
+    with fail-closed controls and residual risks.
+  - W03 modular-monolith architecture and one role-brief-to-audit journey with module/import boundaries.
+  - Accepted ADR for local PostgreSQL/pgvector and Redis Compose services, rejected alternatives, and revisit triggers.
+  - Deny-by-default role/action policy and synthetic-only data-rights policy as strict YAML.
+  - Local-review environment policy with loopback-only services and no external identity/telemetry/deployment.
+definition_of_done:
+  - Every statement is traceable to the approved HTML plans and no user research, licence, pilot, or security test is fabricated.
+  - Synthetic data is classified as generated, local, non-personal, non-exported test evidence.
+  - Authorization defaults to deny and names analyst, scout, approver, and admin permissions.
+  - The architecture explicitly keeps model evidence separate from product policy and human decisions.
+  - All YAML parses and the local-only verifier passes.
+  - The mandatory return is complete and confirms no Git operation.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path; import yaml;
+    [yaml.safe_load(path.read_text()) for path in
+    [Path('configs/policies/authorization.yaml'),
+    Path('configs/policies/data-rights.yaml'),
+    Path('configs/environments/w03-local-review.yaml')]]"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - The controlling plans do not resolve a material claim, rights, security, or architecture decision.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, external research/service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

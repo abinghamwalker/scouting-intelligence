@@ -1,0 +1,98 @@
+schema_version: 1
+task_id: W04-SOURCE-INGEST-01
+phase_id: W04
+revision: R2
+state: READY
+objective: >-
+  Correct the real-endpoint integration defect in R1 by consuming the reviewed
+  one-hop Figshare storage redirect authority without weakening any exact URL,
+  identity, retry, archive, manifest, or local-only control.
+depends_on:
+  - W04-SOURCE-INGEST-01-R1:REWORK
+  - W04-SOURCE-AUTHORITY-01:REDIRECT_AUTHORITY_CORRECTED
+assigned_role: source_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-INGEST-01-R1.yaml
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R1.md
+  - configs/sources/w04-provider.yaml
+  - reports/phase-gates/W04/download-redirect-preflight.md
+  - src/scouting/sources/wyscout.py
+  - tests/unit/test_wyscout_source.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout.py
+  - src/scouting/sources/__init__.py
+  - scripts/acquire_wyscout_v5.py
+  - tests/unit/test_wyscout_source.py
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/**
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+defects_to_close:
+  - id: W04-INGEST-REDIRECT-01
+    severity: P1
+    detail: >-
+      The exact authorised ndownloader endpoint returns HTTP 302 to a short-lived
+      signed Figshare S3 delivery URL, while R1 rejects every redirect and therefore
+      cannot perform real acquisition.
+  - id: W04-INGEST-CONFIG-FREEZE-01
+    severity: P2
+    detail: >-
+      R1 exact-key/type validation still accepts mutations to authority-bearing values
+      such as licence URL/name, attribution/change notice, purpose/claim lists, and
+      several coverage/acquisition declarations.
+required_corrections:
+  - >-
+    Strictly load and freeze the exact redirect_authority declaration without
+    hard-coding a broader permission than the configuration grants.
+  - >-
+    Permit exactly one HTTP 302 from the already exact source URL to HTTPS
+    s3-eu-west-1.amazonaws.com with the exact file-ID/name path and exact six-key AWS
+    v4 signed query shape.
+  - >-
+    Validate algorithm, same-date credential scope, eu-west-1/s3/aws4_request,
+    host-only signed headers, 1..60 second expiry, UTC signature date, lowercase
+    64-hex signature, no userinfo/port/fragment, and exact final URL before reading.
+  - >-
+    Strictly load credential_separator_encoding=literal_slash, accept the observed
+    unescaped `/` separators in X-Amz-Credential, and reject percent-encoded, mixed,
+    double-encoded, backslash, empty, or extra-segment aliases.
+  - >-
+    Require the signed credential access-key component to contain exactly 16..128
+    uppercase ASCII letters or digits.
+  - Reject a second redirect and every host/path/file/query/algorithm/scope/expiry alias.
+  - >-
+    Freeze every authority-bearing identity, purpose/claim, rights/evidence,
+    attribution, coverage, archive, temporal, and acquisition value used by this
+    source adapter; additive tests must mutate representative values in every group.
+  - Retain injected synthetic opener compatibility and all R1 controls.
+definition_of_done:
+  - The real endpoint transport shape is representable without recording a signed URL.
+  - Adversarial tests cover the allowed hop and every material redirect mutation.
+  - R1 producer suite remains green and no real provider access occurs in subagent work.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source.py
+  - uv run ruff format --check src/scouting/sources/wyscout.py src/scouting/sources/__init__.py scripts/acquire_wyscout_v5.py tests/unit/test_wyscout_source.py
+  - uv run ruff check src/scouting/sources/wyscout.py src/scouting/sources/__init__.py scripts/acquire_wyscout_v5.py tests/unit/test_wyscout_source.py
+  - uv run mypy src/scouting/sources/wyscout.py scripts/acquire_wyscout_v5.py
+  - uv run bandit -q src/scouting/sources/wyscout.py scripts/acquire_wyscout_v5.py
+stop_conditions:
+  - The observed endpoint requires more than one redirect or a different authority shape.
+  - A dependency/config/contract/storage change appears necessary.
+  - Real provider access is required to write or run tests.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

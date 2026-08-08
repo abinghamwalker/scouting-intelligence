@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W07-EVIDENCE-TEST-04
+phase_id: W07
+revision: R1
+state: DISPATCHED
+objective: Encode executable integration and real-browser evidence for every G-W07 semantic, parity, state, local-only and accessibility predicate without editing production code.
+depends_on:
+  - REVIEW-W07-DOMAIN-02-R2:REWORK_SPLIT
+  - W07-PRESENTATION-03:IMPLEMENTED
+assigned_role: w07_acceptance_test_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W07-EVIDENCE-TEST-04-R1.yaml
+  - orchestration/reviews/REVIEW-W07-DOMAIN-02-R2.yaml
+  - src/scouting/web/w07.py
+  - apps/web/templates/w07/base.html
+  - apps/web/templates/w07/result.html
+  - apps/web/static/w07/app.css
+  - src/scouting/serving/m0.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/integration/test_w07_local_evidence_app.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - reports/reviews/W07/returns/W07-EVIDENCE-TEST-04-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - src/**
+  - services/**
+  - apps/**
+  - runs/**
+  - configs/**
+  - reports/evaluation/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/w06/**
+required_integration_tests:
+  - Exact 18-candidate catalogue; stable labels; label, UUID and three position filters; empty and invalid filter states.
+  - Known player exact feature/role/cutoff/lineage display; malformed and unknown IDs are unavailable and call no serve/score path.
+  - Public serve_m0_request and LoadedM0Artifact.score spies for retrieval; public serve_m0_batch and same score spy for comparison; no other scoring implementation.
+  - Same pinned request direct/batch model_dump_json and result-digest identity; exact accepted result, lineage, manifest, registry, feature-schema, taxonomy and configuration digests.
+  - Exact four W05 artifact-file SHA-256 values before and after all web requests.
+  - Selected comparison UUID and its exact explanation feature values/contributions appear; each rank has reason codes, confidence, applicability and limitations.
+  - Five closed states are distinct and meaningful; unknown state 404; empty search; error/unavailable/NO_GO cannot look positive.
+  - All result pages expose source/model/index/artifact/manifest/registry/schema/taxonomy/config/window/cutoff/confidence/applicability/limitations/lineage; exact W04 2,2,1,2 plus SUPPRESSED measures.
+  - CSP/no-store/no-referrer, local stylesheet success, zero external URLs, forbidden match percentage/blended/recommendation/outcome/value/production claim labels absent.
+required_playwright_tests:
+  - Real loopback uvicorn and playwright.sync_api with existing local Chrome; no TestClient substitute.
+  - Desktop 1440x900, mobile 390x844 and narrow 320x700; no body horizontal overflow at each.
+  - Landing to search to player to retrieval in exactly three activations; NO_GO/evidence centre in one; compare from result in one more.
+  - First Tab focuses visible skip link; Enter lands main; keyboard-only navigation to retrieval; focus outline width/style visible.
+  - Main/header/nav/footer, single h1, labels, headings, captions, scoped table headers and labelled digest/details controls.
+  - Loading, empty, unavailable, error and NO_GO pages visually distinct and carry honest messages.
+  - Intercept every request and assert hostname is 127.0.0.1 and no external request occurs.
+acceptance_checks:
+  - uv run ruff format --check tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+  - uv run ruff check tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+  - uv run pytest -q tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+stop_conditions:
+  - A protected fixture/output, dependency install, production edit, external request, Node, Git or destructive action is required.
+  - A required predicate cannot be encoded without a production change; retain the exact failing test and return it to master.
+deliverables:
+  - Comprehensive integration and genuine Python Playwright acceptance tests.
+  - Mandatory return at reports/reviews/W07/returns/W07-EVIDENCE-TEST-04-R1.md with passing/failing node IDs.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

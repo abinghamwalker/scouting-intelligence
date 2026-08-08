@@ -1,0 +1,75 @@
+schema_version: 1
+task_id: W06-PROTECTED-NO-GO-REVIEW-05
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-PROTECTED-NO-GO-REVIEW-05-R1.yaml
+objective: >-
+  Freshly verify the exact two-field R2 correction and retained one-use missing-population
+  NO_GO behavior before the master invokes the production broker.
+depends_on:
+  - W06-PROTECTED-NO-GO-05-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-PROTECTED-NO-GO-05-R2.yaml
+  - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-05-R2.yaml
+  - reports/reviews/W06/protected-no-go-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/gate.py
+  - tests/unit/test_w06_missing_population_gate.py
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - tests/fixtures/w06/public-missing-population-gate-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/protected-no-go-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - reports/evaluation/W06/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Does exact protocol 0315215e...f4e and preregistration 5f71bc77...dffe now reject before broker invocation?
+  - Are fail_closed_order and stop_rule individually and jointly immutable under re-signing?
+  - Are the accepted config/preregistration identities unchanged?
+  - Do all retained candidate, inventory, sole-reason, no-protected-input and one-use/partial-output checks still pass in temporary directories?
+  - Is any P0/P1 capable of changing the protected decision or claim left?
+deliverables:
+  - One report-only ACCEPT or REWORK verdict with exact P0/P1 counts and retained matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R2.md.
+definition_of_done:
+  - The exact R1 finding is closed and every retained decision-bearing boundary remains green.
+  - No repository production output is invoked and no protected expected output is accessed.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-missing-population-gate-v1.json
+stop_conditions:
+  - A required check needs protected expected-output, repository production-output invocation, external/provider, credential or dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+mandatory_return_requirements:
+  - final verdict and exact severity counts
+  - exact R1 witness outcome and retained boundary matrix
+  - exact checks, config/fixture identities and remaining risk
+  - no Git/dependency/protected/production-output/external/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

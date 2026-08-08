@@ -1,0 +1,133 @@
+schema_version: 1
+task_id: W04-BUILD-PRODUCT-AUTHORITY-DECISION-01
+phase_id: W04
+revision: R1
+state: ACCEPTED_AUTHORITY_ONLY_PRODUCT_BLOCKED
+objective: >-
+  Freeze one exact canonical decision-only authority for the user-authorized R4
+  build/product surface and executable closed tests, without materializing v2
+  aggregate digests or writing any product, manifest, receipt, build or data byte.
+depends_on:
+  - W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R4:PASS_TO_USER_QUESTION
+  - W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R2:ACCEPTED
+assigned_role: bounded_w04_build_product_authority_decision_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-build-product-authority-authorization-R1.md
+  - reports/verification/W04/wyscout-pre-build-authority-complete-repository-gate-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - reports/reviews/W04/returns/W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/wyscout-build-product-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - src/**
+fixed_bindings:
+  authorization_sha256: b41a0606282d447675989181329bf53f987624be10b079ea5b74778d440fafe9
+  pre_build_repository_gate_sha256: 08ef2ed6c47c6b478ec4a243c59ab2cd8d4a882061ede900ad468dd473662a5f
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r2_audit_sha256: 77cf8dcb79d202b960553dfd6da631af039e5ec0a382a0e7c30be770045d0491
+  r3_audit_sha256: 0cf86df75af1276b3703083d3137de9ef345e2125a08a4e819617bbfd6100435
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r4_review_sha256: 288c58c29bbd572b8fe9bf5df9875d5a6b9c24cfca44923b8780e2dcb7bd7827
+  r4_reviewer_return_sha256: 90c711805516e68b065298320b2628eca5d2d9fd4404d76cdd663bed51ecefe0
+  product_contract_v1_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+  schema_bundle_v1_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+  feature_acceptance_sha256: d3b3c552784f4734f6b002569d9add1b4dd2d2eaaed57643a8ca4d5226fca78c
+  identity_acceptance_sha256: 37764392cdaf9626ffaff26e119fb142218d36489e87a8b1d55402e3e2dc7f86
+requirements:
+  - Verify every fixed binding before editing and stop on drift.
+  - >-
+    Write exactly one strict R20-canonical JSON-plus-one-LF decision at the allowed
+    authority path. Use a closed top-level schema, strict scalar types, NFC strings,
+    truthful UTC `decided_at`, master actor `4efe5691-8903-5148-8275-30d2e7e8aed0`,
+    decision ID `w04-wyscout-build-product-authority-decisions-v1`, and explicit
+    state `AUTHORITY_ONLY_NO_PRODUCT_BYTES`.
+  - >-
+    Bind all fixed inputs by exact relative path and physical digest. Preserve rather
+    than rewrite R20/R21/v1/index/R2/R3/R4 bytes.
+  - >-
+    Freeze the exact half-open window, selected-match snapshot, strict cutoff,
+    valid-from maximum rule, five-key canonical window object, namespace/name
+    UUIDv5 algorithm, canonical match/provider/source IDs and no terminal LF preimage.
+  - >-
+    Freeze the accepted completion-index path/content address, source/member binding,
+    source row count, match IDs and exact ordered 1H=901 and 2H=867 population digests.
+  - >-
+    Freeze exactly the 23 R4 required root roles in order and only the acyclic
+    implemented-schema-v2 materialization rule. Do not serialize any absent v2 schema
+    content digest, bundle digest, product digest, placeholder, null or anticipated value.
+  - >-
+    Freeze the v2 product-preimage key roster/rules, exact publication order,
+    nine-key invocation receipt and 15-key boundary receipt, guarded readback and
+    `started_at <= checked_at <= completed_at` clock predicate, without creating an
+    aggregate instance or receipt.
+  - >-
+    Freeze exactly the R20 25-key pre-build projection roster, schema version, one
+    canonical SHA-256 build algorithm, exact inverse reconstruction and post-hash
+    replacement of only `schema_version` by `build_id`; forbid a 26th key or second hash.
+  - >-
+    Freeze the sole two-key complete-LayerManifest semantic wrapper and formula for
+    all Bronze/Silver/Gold summaries, exact parent-summary chain, manifest-derived
+    one-Gold-product/one-boundary population/readback and all R4 substitution failures.
+  - >-
+    Freeze exactly four supported feature names: action_count,
+    coordinate_known_action_count, match_count, resolved_possession_action_count.
+    Preserve strict integer-only event/subevent mapping and unmapped/quarantined strings.
+  - >-
+    Encode explicit prohibitions for second semantic derivation, schema/population/
+    feature expansion, placeholder digests, provider/network access, product writes or
+    publication, cloud, containers, hosted CI, endpoints, remotes and deployment.
+  - >-
+    Add executable closed authority tests covering canonical bytes, exact key/type/
+    order/set equality, fixed bindings, window digest/UUID reconstruction, index and
+    period equality, 23/25/9/15/two-key rosters, acyclicity, feature scope, lifecycle,
+    no downstream product bytes and direct adversarial mutations. Review/acceptance
+    paths may be absent at decision-only state but must fail closed if malformed.
+  - Do not implement production code, materialize an aggregate, or write any product/control/data byte.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_build_product_authority.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_build_product_authority.py
+  - uv run mypy tests/contracts/test_w04_wyscout_build_product_authority.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Canonical decision, closed tests and mandatory return with exact physical/canonical hashes.
+stop_conditions:
+  - Any frozen binding, key/count/order/formula, architecture, dependency, rights, provider, root or local-only boundary must change.
+  - Any v2 aggregate digest, product, manifest, receipt, build or data byte would be required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+{% block body %}
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Study console</a><span>/</span><span>{% if is_pilot %}Pilot mode{% else %}Gate cohort{% endif %}</span><span>/</span><span>{{ participant_code }}</span></nav>
+  <section class="participant-hero">
+    <div>
+      <p class="eyebrow">{% if is_pilot %}Development pilot workspace{% else %}Representative-user workspace{% endif %}</p>
+      <h1>{{ participant_code }}</h1>
+      {% if is_pilot %}<p>Exercise the complete system end to end. A successful reviewed capture can support G-W08A development progression, but can never count toward the five-user G-W08B/G4 gate.</p>{% else %}<p>Complete the sections in order. Every saved result remains pending master reproduction and independent review.</p>{% endif %}
+    </div>
+    <div class="status-panel tone-{{ capture_status.tone }}">
+      <strong>{{ capture_status.label }}</strong>
+      <span>{{ capture_status.passed }} / 7 {% if is_pilot %}tasks checked{% else %}tasks passed{% endif %}</span>
+    </div>
+  </section>
+
+  <nav class="step-nav" aria-label="Participant workflow steps">
+    <a href="#consent">1. {% if is_pilot %}Pilot setup{% else %}Consent{% endif %}</a><a href="#runtime">2. Runtime</a><a href="#tasks">3. T1–T7</a><a href="#review">4. Review</a><a href="#completion">5. Complete</a>
+  </nav>
+
+  <section id="consent" class="panel">
+    <div class="panel-heading"><div><p class="step-label">Step 1</p><h2>{% if is_pilot %}Pilot boundary{% else %}Qualification and consent{% endif %}</h2></div><span class="required-note">Required before launch</span></div>
+    {% if is_pilot %}
+    <div class="pilot-boundary">
+      <strong>This is development evidence, not a smaller representative cohort.</strong>
+      <p>You may run it yourself or with one early user to check setup, navigation, role switching, failure recovery, timing and receipt generation. Its separate capture becomes a G-W08A candidate only after master reproduction and review.</p>
+    </div>
+    <form method="post" action="/participants/{{ participant_code }}/consent" class="form-grid">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label>De-identified operator code<input name="moderator_code" maxlength="32" pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,31}" value="{{ capture.session.moderator_code if capture and capture.session.moderator_code else '' }}" required autocomplete="off"></label>
+      <div class="check-stack full">
+        <label><input type="checkbox" name="pilot_progression_acknowledged" value="true" {% if capture and capture.pilot.development_progression_boundary_acknowledged %}checked{% endif %} required><span>I understand this pilot is valid G-W08A development-progression evidence after master review, but it does not satisfy representative-user acceptance for G-W08B or G4/G4B.</span></label>
+      </div>
+      <button class="button button-primary" type="submit">Prepare development pilot</button>
+    </form>
+    {% else %}
+    <div class="consent-copy">
+      <p>This is a moderated evaluation of a local synthetic scouting-workflow prototype, not of job performance or any real player. Participation is voluntary. The record contains only a participant code, relevant work responsibilities, task completion, elapsed time, de-identified interaction observations and answers about the evidence boundary.</p>
+      <p>Do not record names, account passwords, real-player judgement, employer-confidential information, audio, video or screen capture. The participant may stop at any time.</p>
+    </div>
+    <form method="post" action="/participants/{{ participant_code }}/consent" class="form-grid">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <fieldset class="full"><legend>Representative responsibilities</legend><div class="choice-row">
+        {% for key, label in responsibilities %}
+          <label class="choice"><input type="checkbox" name="responsibility_{{ key }}" value="true" {% if capture and key in capture.participant.representative_responsibilities %}checked{% endif %}><span>{{ label }}</span></label>
+        {% endfor %}
+      </div></fieldset>
+      <label>De-identified moderator code<input name="moderator_code" maxlength="32" pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,31}" value="{{ capture.session.moderator_code if capture and capture.session.moderator_code else '' }}" required autocomplete="off"></label>
+      <div class="check-stack full">
+        <label><input type="checkbox" name="qualification_confirmed" value="true" {% if capture and capture.participant.qualification_confirmed_by_authorised_study_owner %}checked{% endif %} required><span>The authorised study owner confirms this person is representative.</span></label>
+        <label><input type="checkbox" name="consent_obtained" value="true" {% if capture and capture.participant.consent_obtained %}checked{% endif %} required><span>The participant has heard the consent statement and affirmatively agrees.</span></label>
+      </div>
+      <button class="button button-primary" type="submit">Save qualification and consent</button>
+    </form>
+    {% endif %}
+  </section>
+
+  <section id="runtime" class="panel">
+    <div class="panel-heading"><div><p class="step-label">Step 2</p><h2>Fresh local runtime</h2></div>{% if session and session.running %}<span class="live-chip"><i></i> Running</span>{% endif %}</div>
+    {% if not capture_status.ready %}
+      <div class="empty-state"><strong>{% if is_pilot %}Pilot setup comes first.{% else %}Consent comes first.{% endif %}</strong><p>{% if is_pilot %}Acknowledge the staged-gate boundary above to unlock the pilot runtime.{% else %}Save the qualification and consent record above to unlock this participant’s runtime.{% endif %}</p></div>
+    {% elif not session %}
+      <form method="post" action="/participants/{{ participant_code }}/start" class="launch-card">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <div><h3>Prepare {{ participant_code }}</h3><p>Creates one new synthetic database, binds only to loopback and keeps access logs disabled.</p></div>
+        <label>Local port<input type="number" name="port" min="1024" max="65535" value="{{ (18868 if is_pilot else 18768) + (participant_code[-1]|int) - 1 }}" required></label>
+        <button class="button button-primary" type="submit">Start {% if is_pilot %}pilot{% else %}participant{% endif %} workspace</button>
+      </form>
+    {% elif session.running %}
+      <div class="runtime-banner">
+        <div><span class="live-chip"><i></i> Loopback runtime active</span><h3>{% if is_pilot %}Your guided pilot is ready.{% else %}The participant application is ready.{% endif %}</h3><p>{% if is_pilot %}The application now shows the complete journey, the current role and the next action. Switch synthetic roles there with one click—no password copying.{% else %}Open it in a second tab, then use the synthetic accounts below as each task requests.{% endif %}</p></div>
+        <a class="button button-primary" href="http://127.0.0.1:{{ session.port }}/w08" target="_blank" rel="noreferrer">{% if is_pilot %}Open guided pilot{% else %}Open participant application{% endif %}</a>
+      </div>
+      {% if is_pilot %}<details class="credentials-wrap"><summary>Manual credential fallback</summary><p class="muted">Use only if one-click role switching is unavailable. Never paste a password into the capture record.</p>{% else %}<div class="credentials-wrap">
+      {% endif %}
+        <h3>Ephemeral synthetic accounts</h3>{% if not is_pilot %}<p class="muted">Use during this session only. Never paste a password into the capture record.</p>{% endif %}
+        <div class="credential-grid">
+          {% for role, persona in session.personas.items() %}
+            <article><div class="role-label">{{ role }}</div><dl><dt>Actor ID</dt><dd><code>{{ persona.actor_id }}</code></dd><dt>Password</dt><dd><code>{{ persona.password }}</code></dd></dl></article>
+          {% endfor %}
+        </div>
+      {% if is_pilot %}</details>{% else %}</div>{% endif %}
+      <form method="post" action="/participants/{{ participant_code }}/stop" class="stop-row">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <div><strong>Finished the {% if is_pilot %}pilot{% else %}participant{% endif %} workflow?</strong><p>Stop the runtime to close the database and automatically produce its mechanical receipt.</p></div>
+        <button class="button button-danger" type="submit">Stop and create receipt</button>
+      </form>
+    {% else %}
+      <div class="receipt-card" id="receipt"><span class="success-mark" aria-hidden="true">✓</span><div><h3>Runtime stopped safely</h3><p>The ephemeral credentials have been cleared.</p>{% if session.receipt %}<dl class="receipt-list"><dt>Database SHA-256</dt><dd><code>{{ session.receipt.database_sha256 }}</code></dd><dt>Export manifest SHA-256</dt><dd><code>{{ session.receipt.export_manifest_sha256 }}</code></dd><dt>Export files</dt><dd>{{ session.receipt.export_file_count }}</dd></dl>{% endif %}</div></div>
+    {% endif %}
+  </section>
+
+  <section id="tasks" class="task-section">
+    <div class="section-heading"><div><p class="step-label">Step 3</p><h2>{% if is_pilot %}Exercise{% else %}Moderate{% endif %} T1–T7</h2></div><p>{% if is_pilot %}Try the real path, note friction and practise the hand-offs. Results may support G-W08A only after reproduction and review.{% else %}Use only neutral prompts. ASSISTED is recorded honestly and does not count as a pass.{% endif %}</p></div>
+    {% for task in tasks %}
+      {% set task_record = capture.tasks[task.key] if capture else none %}
+      <article class="task-panel" id="task-{{ task.id }}">
+        <div class="task-number">{{ task.id }}</div>
+        <div class="task-content">
+          <div class="task-heading"><div><span class="role-label">{{ task.role }}</span><h3>{{ task.title }}</h3></div>{% if task_record %}<span class="outcome outcome-{{ task_record.outcome|lower }}">{{ task_record.outcome }}</span>{% endif %}</div>
+          <p>{{ task.summary }}</p>
+          {% if task.id == 'T6' and session and session.running %}
+            <form method="post" action="/participants/{{ participant_code }}/expire" class="expiry-control">
+              <input type="hidden" name="csrf" value="{{ csrf }}">
+              <label>Currently signed-in synthetic role<select name="role" required>{% for role in session.personas %}<option value="{{ role }}">{{ role }}</option>{% endfor %}</select></label>
+              <button class="button button-secondary" type="submit">Expire this exact session</button>
+            </form>
+          {% endif %}
+          {% if capture_status.ready %}
+            <details class="capture-details" {% if task_record and task_record.outcome == 'NOT_RUN' %}open{% endif %}>
+              <summary>Record {{ task.id }} outcome</summary>
+              <form method="post" action="/participants/{{ participant_code }}/tasks/{{ task.id }}" class="task-form">
+                <input type="hidden" name="csrf" value="{{ csrf }}">
+                <label>Outcome<select name="outcome" required>{% for outcome in outcomes %}<option value="{{ outcome }}" {% if task_record and task_record.outcome == outcome %}selected{% endif %}>{{ outcome }}</option>{% endfor %}</select></label>
+                <label>Elapsed seconds<input type="number" name="elapsed_seconds" min="0" max="86400" value="{{ task_record.elapsed_seconds if task_record and task_record.elapsed_seconds is not none else 0 }}" required></label>
+                <label>Assistance count<input type="number" name="assistance_count" min="0" max="100" value="{{ task_record.assistance_count if task_record else 0 }}" required></label>
+                <label class="full">Retained identifiers <small>One workflow, audit or export identifier per line.</small><textarea name="retained_identifiers" rows="3">{{ task_record.retained_identifiers|join('\n') if task_record else '' }}</textarea></label>
+                <label class="full">Minimal de-identified observation<textarea name="deidentified_observation" maxlength="1000" rows="3">{{ task_record.deidentified_observation if task_record and task_record.deidentified_observation else '' }}</textarea></label>
+                <button class="button button-secondary" type="submit">Save {{ task.id }}</button>
+              </form>
+            </details>
+          {% endif %}
+        </div>
+      </article>
+    {% endfor %}
+  </section>
+
+  <section id="review" class="panel">
+    <div class="panel-heading"><div><p class="step-label">Step 4</p><h2>Interpretation and review measures</h2></div></div>
+    {% if capture %}
+      <form method="post" action="/participants/{{ participant_code }}/review" class="review-grid">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <label>Evidence-boundary interpretation<select name="evidence_boundary_interpretation"><option value="">Not recorded</option>{% for value in ['CORRECT','PARTIAL','UNSUPPORTED_INFERENCE'] %}<option value="{{ value }}" {% if capture.measures.evidence_boundary_interpretation == value %}selected{% endif %}>{{ value }}</option>{% endfor %}</select></label>
+        <label>Confidence completing unaided<select name="unaided_confidence_1_to_5"><option value="">Not recorded</option>{% for value in range(1,6) %}<option value="{{ value }}" {% if capture.measures.unaided_confidence_1_to_5 == value %}selected{% endif %}>{{ value }} / 5</option>{% endfor %}</select></label>
+        {% for key, label in [
+          ('access_denial_disclosed_object_existence','Access denial disclosed object existence'),
+          ('material_history_identifiable_and_reversible','History identifiable and reversible'),
+          ('keyboard_blocker','Keyboard blocker occurred'),
+          ('missing_label_landmark_or_visible_focus','Label, landmark or focus problem occurred'),
+          ('horizontal_overflow','Horizontal overflow occurred'),
+          ('unrecoverable_state','Unrecoverable state occurred'),
+          ('non_loopback_requests_observed','Non-loopback request observed')
+        ] %}
+          {% set current = capture.session.non_loopback_requests_observed if key == 'non_loopback_requests_observed' else capture.measures[key] %}
+          <label>{{ label }}<select name="{{ key }}"><option value="">Not recorded</option><option value="true" {% if current is sameas true %}selected{% endif %}>Yes</option><option value="false" {% if current is sameas false %}selected{% endif %}>No</option></select></label>
+        {% endfor %}
+        <label class="full">De-identified findings <small>One finding per line. Include the reviewed severity when known, for example “P2: unclear recovery wording”.</small><textarea name="findings" maxlength="10000" rows="4">{{ capture.findings|join('\n') }}</textarea></label>
+        <button class="button button-secondary" type="submit">Save review measures</button>
+      </form>
+    {% else %}<div class="empty-state"><p>Start the participant record above first.</p></div>{% endif %}
+  </section>
+
+  <section id="completion" class="panel completion-panel">
+    <div class="panel-heading"><div><p class="step-label">Step 5</p><h2>{% if is_pilot %}Pilot review and completion{% else %}Participant review and completion{% endif %}</h2></div></div>
+    {% if capture %}
+      <form method="post" action="/participants/{{ participant_code }}/complete">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <div class="check-stack">
+          <label><input type="checkbox" name="participant_reviewed" value="true" {% if capture.participant.participant_reviewed_deidentified_record %}checked{% endif %} required><span>The {% if is_pilot %}pilot operator{% else %}participant{% endif %} reviewed this de-identified record.</span></label>
+          <label><input type="checkbox" name="no_sensitive_data" value="true" {% if capture.attestation.no_name_contact_password_real_player_judgement_or_sensitive_data_recorded %}checked{% endif %} required><span>No names, contacts, passwords, real-player judgements or sensitive information were recorded.</span></label>
+          {% if not is_pilot %}
+          <label><input type="checkbox" name="no_substitution" value="true" {% if capture.attestation.no_automated_persona_or_moderator_substituted_for_participant %}checked{% endif %} required><span>No automated persona or moderator was substituted for the participant.</span></label>
+          {% endif %}
+          <label><input type="checkbox" name="no_protected_w06" value="true" {% if capture.attestation.no_protected_w06_output_opened_or_reconstructed %}checked{% endif %} required><span>No protected W06 output was opened or reconstructed.</span></label>
+        </div>
+        <button class="button button-primary" type="submit">{% if is_pilot %}Submit pilot capture for G-W08A review{% else %}Mark capture complete pending review{% endif %}</button>
+      </form>
+      <div class="metadata"><div><span>Protocol SHA-256</span><code>{{ protocol_sha256 }}</code></div><div><span>Runtime commit</span><code>{{ repository_commit or 'Unavailable — record manually' }}</code></div><div><span>Capture status</span><strong>{{ capture.status }}</strong></div></div>
+    {% else %}<div class="empty-state"><p>Start the participant record above first.</p></div>{% endif %}
+  </section>
+{% endblock %}

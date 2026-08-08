@@ -1,0 +1,109 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Correct only P1 MULTISCOPE_POSSESSION_ID_INPUT_ORDER_DEPENDENCE in the
+  test-owned deterministic resolver and add the missing multi-scope regression.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2:MASTER_REWORK
+assigned_role: possession_semantic_v2_multiscope_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R2-master-verification.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.yaml
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+correction:
+  defect_id: MULTISCOPE_POSSESSION_ID_INPUT_ORDER_DEPENDENCE
+  finding_severity: P1
+  reproduced_failure: >-
+    Two one-action match-period scopes receive ordinal 1/2 or 2/1 solely from
+    their first-seen input order because the helper uses one global possession
+    ordinal across insertion-ordered groups.
+requirements:
+  - >-
+    Make possession ordinals and resolved possession identifiers deterministic
+    within each exact (action_match_source_id, action_period_code) scope.
+    Presentation order of actions from another scope must not affect an
+    action's resolved possession identifier or eligibility result.
+  - >-
+    Add a focused regression with at least two match-period scopes whose
+    actions are interleaved and then reversed/reordered. Require identical
+    per-source_event_record_id result objects and exact deterministic
+    possession IDs across presentations.
+  - >-
+    Preserve the exact selector/sequence separation, sequence policy behavior,
+    and every existing positive/negative test.
+  - >-
+    Do not change the decision JSON, candidate YAML, five bound inputs,
+    17-key predecessor, 36 predicates, any R1/R2 evidence, review, acceptance,
+    feature, cross-authority, or product path.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory. Use only
+    root uv with --locked --no-sync, bytecode disabled, helper Python with -B,
+    and reproduce the exact inventory after the R3 return. Do not sync,
+    install, clean, or repair.
+  - >-
+    Use apply_patch only for the two exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, access provider/network data, or begin review,
+    acceptance, feature, cross-authority, Bronze, Silver, Gold, build, model,
+    product, cloud, container, endpoint, hosted CI, or deployment work.
+definition_of_done:
+  - Multi-scope resolved possession IDs are input-order invariant.
+  - The new regression fails on R2 and passes on R3.
+  - Full focused authority suites and Ruff/local-only checks pass.
+  - Exactly two R3-owned paths changed and terminal inventory equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - The bounded deterministic correction requires decision or candidate changes.
+  - Any frozen input, predecessor, predicate, policy, or prior evidence changes.
+  - Any check, path boundary, or terminal inventory differs.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

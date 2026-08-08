@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W08-WORKFLOW-INTEGRITY-02B
+phase_id: W08
+revision: R1
+state: MASTER_REVIEW_WITH_IDENTITY_ROLE_FINDINGS
+objective: >-
+  Prove that authenticated actor attribution and pinned brief/candidate/observation
+  identity cannot diverge across any W08 workflow revision.
+depends_on:
+  - W08-WORKFLOW-02-R2:MASTER_REPRODUCED_WITH_INTEGRITY_FINDINGS
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-WORKFLOW-02-R2.yaml
+  - reports/reviews/W08/returns/W08-WORKFLOW-02-R2.md
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/product-claim.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - tests/integration/test_w08_workflow.py
+allowed_paths:
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - reports/reviews/W08/returns/W08-WORKFLOW-INTEGRITY-02B-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Require role-brief created_by, shortlist-entry changed_by and observation author_id to equal the authenticated principal on every create/transition/amend action.
+  - Require the initial shortlist revision's shortlist, approved role-brief version and retrieval link to form one tenant-bound persisted chain before any mutation.
+  - Keep shortlist/player/brief-version/retrieval-link/owner identity immutable for every later entry revision.
+  - Require an observation amendment to retain observation_id, shortlist_entry_id, author_id and evidence_origin from the immediately prior version; history cannot move candidates or launder synthetic_automated_test into human_entered_local.
+  - For submit, approve, reject and retire role-brief transitions, reject changes to title/template/taxonomy/responsibilities/constraints/preferences/exemplars/owner; substantive edits occur only in a new draft revision and remain explicit in history.
+  - All rejections are generic before mutation and every forced failure leaves workflow and audit rows unchanged.
+definition_of_done:
+  - Adversarial attribution, retrieval/brief mismatch, observation-move, provenance-laundering and approval-content-rewrite tests pass.
+  - The complete prior workflow packet remains green and the mandatory return is complete.
+focused_checks:
+  - Actor attribution and role-brief/retrieval/shortlist chain integrity.
+  - Observation identity/provenance immutability and status-only role-brief transition content integrity.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run ruff check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run mypy src/scouting/workflow/r1.py src/scouting/observations/r1.py
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/security/test_w08_auth_audit.py
+stop_conditions:
+  - The invariant requires a shared contract, migration, policy or audit change.
+  - Any external dependency/service/model, protected-output access, destructive action or forbidden-path edit is required.
+  - A correction would weaken attribution, immutable history, deny-by-default access, audit atomicity or the W06 claim boundary.
+mandatory_return:
+  - task ID and exact integrity invariant
+  - exact changed-file list
+  - adversarial proof and key choices
+  - exact commands, exit statuses and concise results
+  - residual risks and follow-ups
+  - confirmations of no Git, dependency/lock, external/protected or out-of-allowlist action
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

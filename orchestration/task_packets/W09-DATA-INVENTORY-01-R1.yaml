@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W09-DATA-INVENTORY-01
+phase_id: W09
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently inventory and reconcile every retained Wyscout v5 source, identity,
+  Bronze, Silver and Gold artifact, distinguishing the full source universe from the
+  accepted W04 proof slice and producing an evidence-honest W09 baseline report.
+depends_on:
+  - W07:CLOSED
+  - RESEARCH_WORKBENCH_PIVOT:ACCEPTED
+assigned_role: retained_data_evidence_reconciler
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W09-DATA-INVENTORY-01-R1.yaml
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - data/manifests/wyscout/v5/bronze/b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79.manifest.json
+  - data/manifests/wyscout/v5/silver/b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79.manifest.json
+  - data/manifests/wyscout/v5/gold/b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79.manifest.json
+  - reports/phase-gates/W04/data-health.json
+  - reports/phase-gates/W04/data-health.md
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - src/scouting/identity/wyscout.py
+  - src/scouting/contracts/wyscout_identity.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-DATA-INVENTORY-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - services/**
+  - apps/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/W03/**
+  - reports/verification/W04/**
+  - reports/verification/W05/**
+  - reports/verification/W06/**
+  - reports/verification/W07/**
+  - reports/verification/W08/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - reports/reviews/W07/**
+  - reports/reviews/W08/**
+requirements:
+  - >-
+    Enumerate retained source objects, admitted and excluded archive members, byte sizes,
+    checksums, schemas, rights/use restrictions, acquisition and availability clocks.
+  - >-
+    Reconcile the five admitted league partitions to exactly 1,826 matches and 3,071,395
+    actions and the retained catalogues to 142 teams and 3,603 players. Distinguish source
+    catalogue counts from event-referenced, lineup-referenced, identity-resolved and future
+    eligibility counts. Do not claim every source player is eligible.
+  - >-
+    Inventory the retained identity bundle and review queue, including schema, checksum,
+    record-kind counts, resolution methods/statuses, duplicate or ambiguous evidence and
+    whether it is population-capable rather than proof-only.
+  - >-
+    Inventory every retained Bronze/Silver/Gold manifest entry and physical artifact,
+    verify existence, sizes, manifest hashes, row counts, declared parent lineage and
+    temporal fields, and state plainly that W04 canonical products are a one-match proof
+    rather than the full research population.
+  - >-
+    Record concrete missing canonical products and the exact reconciliation questions the
+    full feature-matrix builder must close. No external access, source reacquisition or
+    mutation is permitted.
+deliverables:
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-DATA-INVENTORY-01-R1.md
+definition_of_done:
+  - Every retained artifact class is enumerated with identifiers, checksums and scope.
+  - The four recorded source-universe counts are independently reconciled or any exception is bounded with evidence.
+  - Source, identity, canonical proof and future eligible-population counts cannot be confused.
+  - Rights, missing coverage and temporal limitations are explicit.
+acceptance_checks:
+  - uv run python -c "import json; from pathlib import Path; p=Path('data/source/wyscout/v5/completion-manifest.json'); d=json.loads(p.read_text()); assert sum(x['row_count'] for x in json.loads(Path('data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json').read_text())['files'] if x['object_path'].startswith('archive-members/matches_')) == 1826; assert sum(x['row_count'] for x in json.loads(Path('data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json').read_text())['files'] if x['object_path'].startswith('archive-members/events_')) == 3071395; assert d['state'] == 'complete'"
+  - test -s reports/verification/W09/data-inventory-and-coverage.md
+  - test -s reports/reviews/W09/returns/W09-DATA-INVENTORY-01-R1.md
+stop_conditions:
+  - Any retained digest, file size or declared count fails readback and cannot be bounded without mutation.
+  - A secret, unreviewed restricted datum, unresolved data-rights contradiction or destructive action is encountered.
+  - External access, provider reacquisition, a dependency change, a Git operation or any edit outside allowed_paths would be required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

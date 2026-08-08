@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W08-WEB-EXPORT-04C
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Compose and test only privileged local evidence-pack creation/read/revocation,
+  append-only audit display and their recoverable failure paths.
+depends_on:
+  - W08-WEB-WORKFLOW-04A:MASTER_ACCEPTED
+  - W08-WEB-BRIEF-04D:MASTER_ACCEPTED
+  - W08-EXPORT-INTEGRITY-03B:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Export and audit HTTP routes reveal nothing across role, tenant or object boundaries,
+  delegate every mutation to the accepted exporter, and cannot leave unaudited database
+  intent, mutable bytes or a widened W06 claim after denial, tampering or failure.
+read_first:
+  - AGENTS.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/operations/evidence_export.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - configs/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/evidence_export.py
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Analyst/approver POST route to create a local pack from an approved role-brief version, exact retrieval link and shortlist, using an opaque server-generated pack/trace/request identity and explicit submitted CSRF.
+  - Authorised verified read route and append-only revocation route with non-empty local reason; revoked or tampered packs fail closed with generic status and no payload disclosure.
+  - Policy-filtered export inventory and audit receipt view showing classification, checksums, versions, limitations and receipt identity without secrets/private observations; call AuditLedger.verify for the tenant before rendering and fail closed on any chain tampering.
+  - The shared form parser accepts only the expected URL-encoded media type, rejects oversized declared or actual request bodies before field processing, and returns generic 4xx errors without echoing secrets or submitted sensitive values.
+  - Explicit success, revoked, tampered and recoverable failure messages that never call workflow mechanics validated, recommended, transferable, price/value evidence or production-ready.
+  - Focused TestClient coverage for analyst/approver success, scout/admin/foreign denial, IDOR, CSRF, revocation, tamper, replay/idempotency and injected storage/database/audit failure atomicity.
+definition_of_done:
+  - Moderated task T6 and export/audit failure recovery are mechanically reachable and test-covered without real-browser scope.
+  - No HTTP mutation bypasses LocalEvidenceExporter and no route introduces an external destination/publication path.
+  - W06 remains NO_GO/MISSING_EXPERT_RELEVANCE_EVIDENCE, resemblance_only, synthetic_development_only, LIMITED and no_recommendation_evidence.
+focused_checks:
+  - Privileged create/read/revoke plus append-only audit receipt display.
+  - Cross-role, cross-tenant, foreign-ID and private-observation confidentiality denial.
+  - Tamper, retry and partial-failure recovery preserve immutable verified bytes and consistent audit/database state.
+  - Wrong content type, oversized declared/actual form body and malformed UTF-8 fail closed without database, audit or filesystem side effects.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+stop_conditions:
+  - A named journey requires changing an accepted exporter, audit, policy, contract, migration, configuration or dependency.
+  - A network/external destination, model call, Node/npm, container, protected-output access, destructive action or Git operation would be required.
+  - The invariant cannot be proved without widening access, weakening audit/recovery, or inventing human/model evidence.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - route-to-exporter and read-policy map
+  - exact commands, exit statuses and test counts
+  - denial, tamper, replay and failure-recovery results
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

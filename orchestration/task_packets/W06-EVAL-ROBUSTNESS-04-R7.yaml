@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R7
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R6.yaml
+objective: >-
+  Add the single missing test-only recurrence regression that reconstructs, literally
+  pins and rejects the three original numeric-child substitution parents.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-REVIEW-04-R6:ACCEPTED_REWORK_VERDICT
+assigned_role: test_engineer
+risk: medium
+bounded_scope:
+  accepted_and_frozen:
+    - all production source and single-core calculation behavior
+    - all contracts, formulas, fixtures, identities and evidence claims
+    - all prior robustness closures
+  exact_open_class:
+    - literal three-parent committed regression completeness
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R6.yaml
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R6.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R6.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R6.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R6.md
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/unit/test_w06_robustness.py
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R7.md
+forbidden_paths:
+  - src/**
+  - tests/fixtures/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Replace or extend the R5-named numeric-child test with the exact original metadata
+    comparison substitution. Change Spearman from -0.19999999999999996 to 0.0, re-sign
+    the comparison and metadata-control parent, literally assert parent digest
+    fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb,
+    then assert normal-constructor rejection with the owning comparison-values message.
+  - >-
+    Reconstruct the exact original metadata baseline aggregate substitution value
+    1.0 to 0.0 and numerator 1.0 to 0.0 while retaining input identity. Re-sign, literally
+    assert parent digest e67c82c8800e1e4c0efa360153cd918f36d21859079ef630b3fe3d2fab477815,
+    then assert owning metric-values rejection.
+  - >-
+    Reconstruct the exact original split aggregate substitution value 1.0 to 0.0 and
+    numerator 2.0 to 0.0, re-link the interval to the changed metric digest while
+    retaining interval point 1.0, re-sign cohort and affected comparison cohort links,
+    and re-sign the parent. Literally assert
+    2e70e316301230b85db9bae9785c16f431f1cf3a251affd9ba3d792174741404,
+    then assert owning stress metric/interval rejection.
+  - >-
+    Do not edit production code, fixtures or any other test. Preserve existing focused
+    behavior and add no new authority or helper outside this test file.
+deliverables:
+  - One exact test-only three-parent regression.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R7.md.
+definition_of_done:
+  - All three exact parent digest literals occur in the test and are asserted before rejection.
+  - Each substitution matches the original reviewer witness shape and owning error.
+  - Production and fixture bytes are unchanged.
+  - Focused W06 tests and Ruff pass.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check tests/unit/test_w06_robustness.py
+  - rg -n 'fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb|e67c82c8800e1e4c0efa360153cd918f36d21859079ef630b3fe3d2fab477815|2e70e316301230b85db9bae9785c16f431f1cf3a251affd9ba3d792174741404' tests/unit/test_w06_robustness.py
+  - shasum -a 256 tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R7.md
+stop_conditions:
+  - Exact witness reconstruction requires a production, formula, contract or fixture change.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A protected path, secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - exact three parent digests and reject messages
+  - exact focused commands/statuses/results
+  - production/fixture byte non-change confirmation
+  - remaining P0/P1 risk or none
+  - no Git/dependency/protected/external/tuning/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,145 @@
+schema_version: 1
+task_id: W05-CONTRACTS-TRUTH-03
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Close the second half of the convergence split: candidate-specific six-dimension
+  state truth, exact scored-input explanations, exact W04 registry/descriptor identity,
+  taxonomy membership identity and executable family array semantics.
+depends_on:
+  - REVIEW-W05-CONTRACTS-QUERY-02-R1:ACCEPT
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R3.yaml
+  - orchestration/task_packets/W05-CONTRACTS-QUERY-02-R1.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R1.md
+  - reports/reviews/W05/w05-m0-contracts-independent-review-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R2.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R3.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R1.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    Replace global dimension state with a per-candidate projection that contains
+    player ID, rank and exactly the six EvidenceDimensionName values in enum order.
+    It must align one-to-one and in rank order with RetrievalResult candidates and
+    explicit scored candidates.
+  - >-
+    Treat MEASURED and canonical ZERO as evidence-bearing states; ZERO is distinct
+    from MISSING, SUPPRESSED and UNAVAILABLE and may contribute to ranking. A ZERO
+    state requires the legacy dimension score to be canonical +0.0. Absence states
+    require zero sentinel score/confidence, exact matching reasons and may not rank.
+    DATA_CONFIDENCE remains a separate non-ranking object and its visible dimension
+    must be an exact projection of that object.
+  - >-
+    For every M0 result, IMPACT, TRAJECTORY and TRANSFER_RISK remain unavailable or
+    suppressed and non-ranking. For W04_REAL_GOVERNED, ROLE_COMPATIBILITY also remains
+    unavailable or suppressed and non-ranking; only STYLE_RESEMBLANCE and
+    DATA_CONFIDENCE may be MEASURED or ZERO. Synthetic development may measure role
+    compatibility but gains no production or expert-validation claim.
+  - >-
+    Require each candidate explanation to contain exactly artifact feature_names in
+    artifact order and to equal the corresponding scored candidate's exact query
+    FeatureValue tuple, candidate FeatureValue tuple and contribution tuple. Player,
+    rank and ordering must align. Mutating/re-signing/incompletely projecting an
+    explanation and recomputing result_digest must still fail.
+  - >-
+    Add taxonomy_digest to ContextualRoleMembership and require ID, version and digest
+    equality in require_matching_taxonomy. Restore direct taxonomy tests for canonical
+    responsibility/role/mapping order, same-ID content substitution, contextual
+    membership ordering, probability sum, unknown roles and digest drift.
+  - >-
+    Correct W04 real authority constants and manifest pins: canonical candidate digest
+    is `49065bcfe762caa7585082d897d845d82c9a9ef2f57a84a5312e55a12ffea10f`;
+    decision digest is a separate required feature_registry_decision_digest equal to
+    `bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941`.
+  - >-
+    Expose a pure mechanical helper which accepts the parsed accepted W04 registry,
+    selects exactly the four SUPPORTED rows in order action_count,
+    coordinate_known_action_count, match_count, resolved_possession_action_count, and
+    hashes compact sorted-key JSON containing exactly aggregation, applicability,
+    denominator, feature_name, input_fields, output_type, reason and state. Freeze the
+    expected digest as
+    `fb562ddee18e008f26b9c865772ef217cb5b34243ae73eb69fad815da291778e`.
+    W04 manifests must require it; missing, reordered, expanded or changed supported
+    rows fail derivation/tests. Do not modify the W04 YAML or acceptance JSON.
+  - >-
+    Make the ordered array semantic-role sequence and shape rules executable per
+    family. Every family requires INDEX_VECTORS then INDEX_PLAYER_IDS in a documented
+    canonical descriptor order; UUID bytes are uint8 candidate_count x 16. Raw and
+    metadata controls have candidate_count x feature_count vectors. Robust cosine
+    additionally requires one-dimensional SCALER_CENTER and SCALER_SCALE of
+    feature_count. Weighted cosine and role-aware restriction additionally require
+    SCALER_CENTER, SCALER_SCALE and FEATURE_WEIGHTS of feature_count. PCA requires
+    SCALER_CENTER, SCALER_SCALE, PCA_COMPONENTS and PCA_EXPLAINED_VARIANCE;
+    components are component_count x feature_count, variance is component_count, and
+    index vectors are candidate_count x component_count. All numeric model arrays are
+    float64 and descriptors use the canonical ordered semantic roles. A PCA manifest
+    with only feature/index arrays, a two-column matrix against four W04 features, or
+    reordered semantic roles must fail.
+  - >-
+    Retain canonical negative-zero rejection for FeatureValue, distance and
+    contribution. Update focused fixtures/exports and add direct adversarial tests for
+    every requirement. Do not add loaders, fitting, scoring, serving or W06 surfaces.
+deliverables:
+  - Candidate-specific evidence truth and scored-explanation equality contracts.
+  - Exact W04 candidate/decision/descriptor identity and complete array semantics.
+  - Restored taxonomy/membership substitution tests.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - The remaining four omissions from W05-CONTRACTS-01-R3 fail closed under direct tests.
+  - Existing W03/W04 contracts, authority files and serialized bytes remain unchanged.
+  - No loader, feature implementation, role implementation, training, serving or W06 work is introduced.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+stop_conditions:
+  - Any need to modify accepted W03/W04 contracts, authorities, evidence or product bytes.
+  - Any materially different product behaviour, weakened evidence guarantee or unresolved product decision.
+  - Any new dependency, external access/service, deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

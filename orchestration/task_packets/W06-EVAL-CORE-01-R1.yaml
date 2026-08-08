@@ -1,0 +1,123 @@
+schema_version: 1
+task_id: W06-EVAL-CORE-01
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement strict content-addressed W06 evaluation, partition, evidence, result and
+  gate contracts together with one deterministic ranking-metric/bootstrap core and
+  public deterministic fixtures, without accessing protected expected outputs or
+  freezing a protected result.
+depends_on:
+  - W06-PREFLIGHT-01:ACCEPTED
+assigned_role: evaluation_core_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W06-PREFLIGHT-01-R1.yaml
+  - reports/readiness/W06/evaluation-readiness.md
+  - reports/reviews/W06/evaluation-readiness-independent-review-R1.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - reports/phase-gates/W05/acceptance-report.md
+  - reports/phase-gates/W05/gate-report.json
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/limitations.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - tests/unit/test_w05_m0_models.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - configs/evaluation/**
+  - data/evaluation/**
+  - runs/w06/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/readiness/**
+  - docs/**
+  - scripts/**
+  - orchestration/**
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/features/**
+  - src/scouting/modeling/**
+  - src/scouting/m0/**
+  - src/scouting/serving/**
+  - tests/fixtures/w05/**
+  - runs/w05/**
+  - pyproject.toml
+  - uv.lock
+  - .git/**
+deliverables:
+  - >-
+    Strict immutable contracts for evaluation protocol; query/brief/exemplar identity;
+    governed reviewer identity; relevance, pair-preference and hard-negative evidence;
+    adjudication; FIT/TUNE/CALIBRATION/PROTECTED_TEST/PROSPECTIVE membership; access
+    record; evaluation run; metric/interval/slice/failure results; and the exact
+    ACCEPT_CLAIM/NARROW_APPLICABILITY/NO_GO gate decision roster.
+  - >-
+    Self-verifying canonical digests and aggregate validation rejecting unknown fields,
+    duplicates, cross-partition rows, missing provenance/rights, post-cutoff evidence,
+    query/label/reviewer/rubric substitution, overlap and disagreeing caller digests.
+  - >-
+    One reusable deterministic core for Precision@k, Recall@k, NDCG@k, pair preference,
+    coverage, inter-rater agreement when eligible, Spearman rank correlation, top-k
+    overlap/Jaccard, candidate churn and disagreement lists.
+  - >-
+    Deterministic query-unit bootstrap intervals with caller-frozen seed, resample count,
+    confidence level, interval method and canonical ordering; stable result digests.
+  - >-
+    Public synthetic fixtures and adversarial tests proving metric math and contract
+    failure behaviour only, explicitly incapable of expert/protected/claim evidence.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-EVAL-CORE-01-R1.md.
+definition_of_done:
+  - Unknown, duplicate, cross-partition, post-cutoff, re-signed-substitution and overlap attacks fail closed.
+  - Missing labels, abstentions, partial relevance, ties and insufficient denominators remain explicit and are never converted to zero.
+  - Only protocol-declared k values execute; a candidate universe smaller than k returns explicit insufficiency.
+  - Stable canonical ordering controls ties, resampling inputs, outputs and digests.
+  - The same metric implementation admits future development, protected and prospective runs without a second code path.
+  - Public fixture labels and values are visibly implementation-only and never expert evidence.
+  - Accepted W03, W04 and W05 files and identities are unmodified.
+  - No protocol threshold is tuned and no protected result is accessed or produced.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run ruff check src/scouting/contracts/evaluation.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run lint-imports
+stop_conditions:
+  - Work requires a new dependency, protected expected-output access, an external/provider service or a credential.
+  - A required contract or metric decision would expand the claim beyond resemblance_only or treat a fixture/agent as expert evidence.
+  - Unexpected user-owned work overlaps an allowed path.
+  - Required work falls outside allowed_paths or would mutate accepted W03/W04/W05 bytes.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - contract and metric semantics, including unsupported/missing rules
+  - exact commands, exit statuses and concise results
+  - exact public fixture and produced digest identities
+  - residual leakage, schema, interval, applicability and claim risks
+  - concrete follow-ups or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

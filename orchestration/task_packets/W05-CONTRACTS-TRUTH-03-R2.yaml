@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W05-CONTRACTS-TRUTH-03
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Close the three independently reproduced truth blockers with exact state projection,
+  W04 family compatibility and fitting/PCA dimensional bounds only.
+depends_on:
+  - REVIEW-W05-CONTRACTS-TRUTH-03-R1:REWORK
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-03-R1.yaml
+  - reports/reviews/W05/w05-m0-contract-truth-independent-review-R1.md
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R1.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    For every candidate dimension, require state reason_codes to equal the exact legacy
+    dimension reason_codes. MEASURED requires a strictly positive legacy score. ZERO
+    requires canonical +0.0. MISSING, SUPPRESSED and UNAVAILABLE retain the existing
+    zero score/confidence sentinel, matching reasons and non-ranking rule. Preserve
+    ZERO as evidence-bearing and potentially ranking.
+  - >-
+    Derive DATA_CONFIDENCE state from the authoritative separate DataConfidenceEvidence:
+    ZERO exactly when confidence.score is canonical +0.0, otherwise MEASURED. Its state
+    reasons equal the exact visible legacy projection consisting of confidence reasons,
+    limitations and applicability reason; it never contributes to ranking. Reject
+    MEASURED-zero, state/legacy reason drift and DATA_CONFIDENCE ZERO/reason drift after
+    recomputing result_digest.
+  - >-
+    Add one explicit W04_REAL_GOVERNED compatible-family allow-list containing only
+    RAW_EUCLIDEAN_CONTROL, ROBUST_SCALED_COSINE, WEIGHTED_COSINE and PCA. Reject
+    METADATA_CONTROL because W04 has no accepted position/age/minutes control schema,
+    and reject ROLE_AWARE_RESTRICTION because accepted W04 role inference/compatibility
+    is unavailable. Test all six families under the exact W04 identity. Synthetic
+    development retains all six families.
+  - >-
+    Bind FEATURE_MATRIX shape to (fitting_population_count, feature_count), while
+    INDEX_VECTORS and INDEX_PLAYER_IDS remain bound to candidate_universe_count. Update
+    family test builders so fitting and candidate counts may differ and directly reject
+    a re-digested fit-count/matrix mismatch.
+  - >-
+    For PCA require component_count <= min(fitting_population_count, feature_count), in
+    addition to the existing components/variance/index shape relations and policies.
+    Directly reject component overflow by fitting samples and separately by features.
+  - >-
+    Retain exact explanations, taxonomy identity, W04 candidate/decision/descriptor
+    digests, canonical roles/dtypes, query/ranking identity and negative-zero behavior.
+    Do not add loader/model/serving/feature/role/W06 work.
+deliverables:
+  - Exact corrections and direct regression tests for all three R1 P1 classes.
+  - Complete mandatory R2 return.
+definition_of_done:
+  - Every independent R1 accepted-attack string now fails for the intended reason.
+  - Existing W03/W04 authorities/evidence/bytes remain unchanged.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to change accepted W03/W04 contracts, authorities, evidence or product bytes.
+  - Any new product behavior, dependency, external access, weakened guarantee or out-of-scope write.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

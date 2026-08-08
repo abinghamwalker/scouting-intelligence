@@ -1,0 +1,136 @@
+{% extends "comparison_base.html" %}
+{% block title %}Historical Player Comparison{% endblock %}
+{% block body %}
+{% if error_message or participant_error %}
+<div id="participant-error" class="status-card error" role="alert" tabindex="-1">
+  {{ participant_error|default(error_message, true)|default('Please check the highlighted answers and try again.', true) }}
+</div>
+{% endif %}
+
+<section id="study-content" tabindex="-1" class="panel intro-panel" aria-labelledby="start-title">
+  <p class="section-kicker">About this form</p>
+  <h2 id="start-title">A trial of a historical player-comparison research form</h2>
+  <p>
+    This is a trial of a historical player-comparison research form. You will review five pairs
+    of players and answer one question about each pair. We are testing whether the football
+    information in the form is clear and sufficient for a professional judgement.
+  </p>
+  <div class="summary-grid" aria-label="What to expect">
+    <article>
+      <h3>Your responses</h3>
+      <p>
+        Your answers are saved on this computer under a participant code rather than your name.
+        They are not sent over the internet. Each comparison is saved as you continue, so an
+        unfinished form can resume on this computer.
+      </p>
+    </article>
+    <article>
+      <h3>Stopping and submitting</h3>
+      <p>
+        You can stop and withdraw before final submission. After you press “Submit final answers,”
+        the stored response is locked and cannot be edited through this form.
+      </p>
+    </article>
+    <article>
+      <h3>Research boundary</h3>
+      <p>
+        This research is about historical playing style. It is not recruitment advice and must
+        not be used as a recommendation about a player.
+      </p>
+    </article>
+  </div>
+  <h3>Before you begin</h3>
+  <p class="eligibility-note">
+    This trial is for people with at least two years of relevant professional football experience
+    who have assessed players professionally within the last five years.
+  </p>
+
+  <form id="start-form" method="post" action="/historical-player-comparison/sessions" class="form-grid">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label>
+      Participant code
+      <span class="field-hint" id="participant-code-help">Use the code provided to you, not your name. It must contain 6–32 capital letters, numbers, or hyphens.</span>
+      <input
+        name="participant_code"
+        pattern="[A-Z0-9][A-Z0-9\-]{5,31}"
+        maxlength="32"
+        aria-describedby="participant-code-help participant-code-error"
+        autocomplete="off"
+        required
+      >
+      <span class="field-error" id="participant-code-error" aria-live="polite"></span>
+    </label>
+    <label>
+      How many years of relevant professional football experience do you have?
+      <span class="field-hint" id="experience-years-help">Enter a whole number between 2 and 80.</span>
+      <input name="years_experience" type="number" min="2" max="80" aria-describedby="experience-years-help experience-years-error"{% if invalid_field == 'years_experience' %} aria-invalid="true"{% endif %} required>
+      <span class="field-error" id="experience-years-error" aria-live="polite"></span>
+    </label>
+
+    <fieldset class="full" data-checkbox-group>
+      <legend>Which experience applies to you? Select all that apply.</legend>
+      <p class="field-hint">At least one type of professional football experience is required.</p>
+      <div class="choice-grid">
+        {% for value, label in experience_choices %}
+        <label class="check">
+          <input class="experience-choice" name="experience_{{ value }}" value="true" type="checkbox">
+          <span>{{ label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <span class="field-error group-error" aria-live="polite"></span>
+    </fieldset>
+
+    <fieldset class="full">
+      <legend>Have you assessed players professionally within the last five years?</legend>
+      <div class="choice-row">
+        <label class="choice"><input id="recent-assessment" class="assessment-choice" name="assessed_players_within_window" value="true" type="radio" required><span>Yes</span></label>
+        <label class="choice"><input class="assessment-choice" name="assessed_players_within_window" value="false" type="radio"><span>No</span></label>
+      </div>
+      <span class="field-error assessment-error" aria-live="polite"></span>
+    </fieldset>
+
+    <fieldset class="full">
+      <legend>Do you have a current or recent conflict involving any player or club that may appear?</legend>
+      <p class="field-hint" id="conflict-help">
+        Examples include working for the player or club, advising on a current decision about them,
+        a close personal relationship, or a financial interest. If you are unsure, answer Yes.
+      </p>
+      <div class="choice-row">
+        <label class="choice">
+          <input class="conflict-choice" name="conflict_declared" value="false" type="radio" required>
+          <span>No</span>
+        </label>
+        <label class="choice">
+          <input id="conflict-declared" class="conflict-choice" name="conflict_declared" value="true" type="radio" aria-describedby="conflict-help">
+          <span>Yes</span>
+        </label>
+      </div>
+      <span class="field-error conflict-error" aria-live="polite"></span>
+    </fieldset>
+
+    <fieldset class="full">
+      <legend>Your agreement</legend>
+      <p class="field-hint">Please confirm each statement before starting.</p>
+      <div class="check-stack">
+        {% for item, label in [
+          ('voluntary_participation','I am taking part voluntarily.'),
+          ('local_pseudonymous_storage','I understand that my participant code and answers are stored only on this computer.'),
+          ('withdrawal_before_submission_understood','I understand that I can stop before final submission.'),
+          ('immutable_after_submission_understood','I understand that final submission locks my answers so they cannot be edited through this form.'),
+          ('research_limitations_understood','I understand that this is historical playing-style research, not recruitment advice.')
+        ] %}
+        <label class="check">
+          <input class="consent-choice" type="checkbox" name="{{ item }}" value="true" required>
+          <span>{{ label }}</span>
+        </label>
+        {% endfor %}
+      </div>
+      <span class="field-error consent-error" aria-live="polite"></span>
+    </fieldset>
+
+    <p class="form-status full" id="start-status" aria-live="polite"></p>
+    <button class="button primary" type="submit">Start comparisons</button>
+  </form>
+</section>
+{% endblock %}

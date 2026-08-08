@@ -1,0 +1,94 @@
+schema_version: 1
+task_id: W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the exact Decimal projection candidate for lossless/no-rounding
+  forward projection, strict inverse exponent and signed-zero reconstruction, exact
+  physical schema closure, byte equality, zero-hash/zero-write failures and retained
+  coverage/generic serializer behavior.
+depends_on:
+  - W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1:IMPLEMENTED
+assigned_role: independent_w04_decimal_projection_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.yaml
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-authorization-R1.md
+  - reports/verification/W04/wyscout-decimal128-exponent-reversibility-blocker-R1.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  candidate_formats_sha256: 8fc57c2ceb8ac714cb2573802d7bc745afb05e67e2c14d302b6b06cd911086d6
+  candidate_test_sha256: f529ca1c87795e67ed17b62285e1df50fe5d85757e85de45a14a704d39a56660
+  producer_return_sha256: 369f3cdeed2a4424cf36146608e5fdfbcfeb15be52f13281f0e36f47d8b629eb
+  authorization_sha256: 57ef5ce132f732457df6dac4bfd99c554ba5497a9759bd322d0093a5af8b3131
+requirements:
+  - Verify every fixed hash before review and again immediately before rendering the verdict.
+  - >-
+    Independently reconstruct accepted capacity/source-scale rules and a success
+    matrix covering exponent -18, 0 and positive values, significant trailing zeros,
+    both signed zeros and exact lower/upper capacity edges. Require exact Pydantic
+    JSON-mode logical token reproduction and exact physical child values.
+  - >-
+    Audit the descriptor validator and actual generated PyArrow schema for exact
+    child name/order/type/nullability and recursive metadata absence. Attack every
+    alternate representation through both schema generation and public encoder.
+  - >-
+    Independently attack nonfinite/wrong logical types, wrong declared scales,
+    capacity overflow, inexact rescaling, malformed exponent/sign/null child,
+    negative_zero=true for nonzero, impossible exponent reconstruction and logical
+    byte aliasing. Instrument semantic hashing and Parquet writing and require zero
+    calls on all invalid paths.
+  - >-
+    Inspect signed-zero reconstruction rather than assuming PyArrow's present
+    normalization: the boolean must determine the restored zero sign even if the
+    numeric child arrives with either zero sign. Classify any implementation that
+    toggles rather than sets the requested sign.
+  - >-
+    Prove CANONICAL_DECIMAL_UTF8 coverage behavior, generic storage suite, digest
+    meaning/formula and local-only/dependency boundaries remain unchanged.
+  - Report exact P0/P1/P2 findings and PASS only with all counts zero.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent review with exact evidence, finding counts and PASS or REWORK.
+  - Mandatory reviewer return.
+stop_conditions:
+  - Fixed candidate hash drift or need to write outside report-only allowed paths.
+  - Any required correction crosses the standing bounded-correction authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,81 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R21-R1
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - code: FIELD_ROSTER_ORDER_DRIFT
+    severity: P1
+    summary: >-
+      R21 says the 119 field rows sort by record_kind/json_path, but immutable
+      R20 requires the fixed profile roster order. Lexical sorting would move
+      action ahead of the accepted record-kind sequence and break v1/v2
+      byte-semantic preservation.
+  - code: PRIOR_AUTHORITY_NONCANONICAL_KEY_ORDER
+    severity: P1
+    summary: >-
+      The closed prior-authority key list and both JSON examples place
+      review_record_sha256 before review_recommendation. Canonical lexical JSON
+      requires review_recommendation first.
+  - code: PREIMAGE_GRAPH_CONTRADICTION
+    severity: P1
+    summary: >-
+      Section 4 says the two preimages are siblings and forbid sibling digests,
+      but its single-arrow graph depicts product preimage as a predecessor of
+      schema preimage. The exact dependency graph is therefore ambiguous.
+  - code: CROSS_AUTHORITY_REVIEW_OWNERSHIP_GAP
+    severity: P1
+    summary: >-
+      The final cross-authority packet assigns one scope to an independent
+      reviewer plus master without a separately owned review artifact or
+      packet. That cannot preserve producer/reviewer/master separation.
+  - code: INCOMPLETE_EXACT_REPOSITORY_GATE
+    severity: P1
+    summary: >-
+      R21 invokes the complete AGENTS.md suite but omits the exact Bandit, local
+      Git guard, phase verifier, and git-status commands from its closed gate.
+  - code: R21_DIGEST_NOMENCLATURE
+    severity: P2
+    summary: >-
+      R21 describes its Markdown digest as physical/canonical. Markdown has one
+      complete physical SHA-256 here; only the two JSON preimages have canonical
+      JSON digests.
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R21-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21.md
+  - reports/verification/W04/wyscout-schema-design-R21-R1-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete 1185-line design and 132-line return readback
+    result: PASS
+  - command: packet required-token and size check
+    result: PASS_55427_BYTES
+  - command: master structural contradiction reconstruction
+    result: FAIL_6_BOUNDED_DEFECTS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: complete post-sync shell pyc inventory before and after master checks
+    result: PASS_IDENTICAL_1086_SITE_59_REPOSITORY
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The correction remains within the user-authorized R21 scope and does not
+    require a broader architecture or product decision. The candidate is
+    returned for exact documentation/packet-graph rework before independent R14.
+  - >-
+    Existing v1 evidence, the 15-feature roster, integer-only mapping, two
+    descriptor-only preimages, and 30-resource roster remain frozen inputs to
+    the rework unless an exact correction above requires wording changes.

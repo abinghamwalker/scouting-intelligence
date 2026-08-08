@@ -1,0 +1,62 @@
+task_id: W09-REPRODUCIBLE-REPORT-04B
+revision: R1
+objective: >-
+  Render deterministic, content-addressable local W09 research reports that expose
+  the exact query, ranking, explanations, comparison, population accounting,
+  version pins, warnings, limitations and claim boundary.
+depends_on:
+  - W09-RESEARCH-CONTRACTS-02A
+  - W09-RESEARCH-STATE-04A
+read_first:
+  - scouting-ml-agent-implementation-workflow.html
+  - scouting-ml-production-blueprint.html
+  - scouting-intelligence/AGENTS.md
+  - scouting-intelligence/docs/architecture/research-workbench-pivot.md
+  - scouting-intelligence/docs/architecture/product-claim.md
+  - scouting-intelligence/src/scouting/contracts/research.py
+  - scouting-intelligence/src/scouting/storage/research.py
+  - scouting-intelligence/src/scouting/storage/formats.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R2.md
+allowed_paths:
+  - scouting-intelligence/src/scouting/reporting/__init__.py
+  - scouting-intelligence/src/scouting/reporting/research.py
+  - scouting-intelligence/tests/unit/test_w09_research_reporting.py
+  - scouting-intelligence/tests/integration/test_w09_research_report_persistence.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-REPRODUCIBLE-REPORT-04B-R1.md
+deliverables:
+  - >-
+    One strict renderer accepting exact ResearchQueryResult plus optional exact
+    ResearchComparison, report format json or html, and an explicit generated_at.
+    It returns immutable bytes and a valid ResearchReportDescriptor whose digest
+    and content-addressed path exactly match the bytes.
+  - >-
+    Canonical JSON report bytes and deterministic UTF-8 HTML report bytes. The HTML
+    must escape all data, contain no active script/remote resource, and remain a
+    self-contained readable saved report.
+  - >-
+    Both formats must expose all version pins and digests, query mode/method/profile
+    or exemplar, feature weights and filters, full retrieval population counts,
+    ordered real-player results, raw/scaled feature explanations, optional
+    comparison rows, warnings, limitations, rights/attribution inputs supplied by
+    the caller, and the historical-resemblance-only claim boundary.
+  - >-
+    Stable-byte tests across repeated renderings, escaping tests, strict comparison
+    binding, no synthetic/recruitment-usefulness claim text, report descriptor
+    digest/path validation, and an integration test through ResearchExperimentStore.
+checks:
+  - uv run ruff format --check src/scouting/reporting tests/unit/test_w09_research_reporting.py tests/integration/test_w09_research_report_persistence.py
+  - uv run ruff check src/scouting/reporting tests/unit/test_w09_research_reporting.py tests/integration/test_w09_research_report_persistence.py
+  - uv run mypy src/scouting/reporting
+  - uv run pytest -q tests/unit/test_w09_research_reporting.py tests/integration/test_w09_research_report_persistence.py tests/integration/test_w09_research_storage.py
+  - uv run bandit -q -r src/scouting/reporting
+stop_conditions:
+  - Exact report semantics cannot be represented by the accepted contracts.
+  - Rendering would require network, browser automation, active client script, a dependency change or mutable external state.
+  - The report would need an unsupported football-relevance or recruitment-usefulness claim.
+prohibitions:
+  - No Git operations.
+  - No dependency, lockfile, migration, shared-contract, storage-state, serving, web, canonical, feature or orchestration-control edits.
+  - No W03/W05/W07/W08 or synthetic runtime imports.
+  - No production report generation; tests may use synthetic contract fixtures only.
+approval: master_only

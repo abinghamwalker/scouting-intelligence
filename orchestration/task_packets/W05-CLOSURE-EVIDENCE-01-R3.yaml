@@ -1,0 +1,57 @@
+schema_version: 1
+task_id: W05-CLOSURE-EVIDENCE-01
+phase_id: W05
+revision: R3
+state: DISPATCHED
+objective: >-
+  Make the final exact one-file W04 state distinction and source citation required by
+  the R2 master review; change no other evidence or product behavior.
+depends_on:
+  - REVIEW-W05-CLOSURE-EVIDENCE-01-R2:REWORK
+assigned_role: evidence_producer
+risk: low
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CLOSURE-EVIDENCE-01-R2.yaml
+  - reports/verification/W05/limitations.md
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/verification/W05/limitations.md
+  - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/**
+  - reports/verification/W04/**
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+deliverables:
+  - >-
+    limitations.md states elapsed minutes, rates and per-90 as SUPPRESSED due no
+    accepted elapsed-minutes denominator, separately states unsupported roles/outcomes/
+    value as UNAVAILABLE, and cites accepted model P2 evidence.
+  - Mandatory R3 return with exact path roster and checks.
+definition_of_done:
+  - The two R2 findings are closed with no other semantic change.
+acceptance_checks:
+  - rg -n "suppressed because no accepted elapsed-minutes denominator|unavailable|REVIEW-W05-MODEL-01-R6|w05-m0-model-independent-review-R2" reports/verification/W05/limitations.md
+stop_conditions:
+  - Any need to change an accepted identity, product behavior, W04 authority, W06 scope, phase gate, dependency, external boundary or path outside this packet.
+mandatory_return_requirements:
+  - Exact changed-path roster, closure of both findings and no-Git/no-delegation confirmation.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

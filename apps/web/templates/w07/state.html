@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "_authority.html" import no_go_banner, authority_panel %}
+{% block content %}
+  {{ no_go_banner(no_go) }}
+  <section class="state-card state-{{ state|default('unavailable')|lower }}" aria-labelledby="state-heading">
+    <p class="eyebrow">Governed evidence state</p><h1 id="state-heading">{{ state_label|default(state|default('UNAVAILABLE')|upper) }}</h1>
+    <p>{{ state_message|default('This explicit evidence state does not substitute unavailable material with a claim.') }}</p>
+    {% if state|default('')|lower == 'loading' %}<p>The local context is being prepared; no result has been asserted.</p>{% elif state|default('')|lower == 'empty' %}<p>No accepted local evidence matches the request.</p>{% elif state|default('')|lower == 'error' %}<p>An explicit local evidence error occurred. No unsupported result is shown.</p>{% elif state|default('')|lower == 'no-go' %}<p>Expert relevance evidence is missing; no positive evaluation conclusion is available.</p>{% else %}<p>The requested identity or evidence is unavailable.</p>{% endif %}
+  </section>
+  {{ authority_panel(authority|default({})) }}
+{% endblock %}

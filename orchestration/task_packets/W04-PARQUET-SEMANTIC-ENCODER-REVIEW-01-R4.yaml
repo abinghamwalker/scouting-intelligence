@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01
+phase_id: W04
+revision: R4
+state: ACCEPTED
+objective: >-
+  Independently review the exact R4 candidate for complete metadata-presence closure
+  while preserving all R1-R3 row, key, recursive schema and public-helper guarantees.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-01-R4:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_parquet_r4_byte_security_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R4.yaml
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R1.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R2.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-verification.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  formats_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+  focused_test_sha256: c0afb390ef44f19d4759b62495bc0125a14fb80ac0f1e4376972a798702e3a9f
+  producer_return_sha256: b043cc215a3df053152798e46b1e2e819bdc36473da45a623b5439c90adb810b
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Differentially probe metadata absent (`None`) versus explicit empty (`{}`) and
+    non-empty maps on schema, top fields, struct children and all list-family value
+    fields recursively. Require failure before helper digest or writer invocation.
+  - >-
+    Independently confirm the explicit-empty schema representation changes serialized
+    schema/physical bytes, and prove the candidate admits neither representation
+    alias through encoder, direct descriptor construction or public helper.
+  - >-
+    Repeat R1-R3 row congruence, non-key/key/type confusion, complete recursive type,
+    malformed descriptor, timestamp, list child name/metadata and unsupported-schema
+    attacks. Confirm no physical/semantic row or schema divergence remains.
+  - >-
+    Reconstruct both fixed vectors, semantic framing, exact Parquet controls and
+    65,535/65,536/65,537 row-group boundaries independently.
+  - Confirm generic serializer behavior is unchanged and no product/control/provider/network/Git/cloud/container/CI/remote/deployment action occurred.
+definition_of_done:
+  - Exact R4 candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R4 review and mandatory return with exact finding counts.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

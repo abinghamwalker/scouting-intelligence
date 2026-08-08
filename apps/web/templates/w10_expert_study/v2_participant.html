@@ -1,0 +1,491 @@
+{% extends "comparison_base.html" %}
+{% block title %}Historical Player Comparison{% endblock %}
+
+{% macro choice_checked(answer, field, value) -%}
+  {%- if answer and answer[field] is not none and answer[field]|string == value %} checked{% endif -%}
+{%- endmacro %}
+
+{% macro response_fields(answer, sections, prefix) -%}
+<fieldset class="full question-card">
+  <legend>Can you make a fair comparison from the information provided?</legend>
+  <p class="field-hint">Choose “No” if the evidence does not support a responsible judgement.</p>
+  <div class="choice-row">
+    <label class="choice">
+      <input type="radio" name="fair_comparison" value="yes"{{ choice_checked(answer, 'fair_comparison', 'yes') }} required>
+      <span>Yes</span>
+    </label>
+    <label class="choice">
+      <input type="radio" name="fair_comparison" value="no"{{ choice_checked(answer, 'fair_comparison', 'no') }}>
+      <span>No — I do not have enough information</span>
+    </label>
+  </div>
+</fieldset>
+
+<fieldset class="question-card rating-question">
+  <legend>How credible is Player B as a historical playing-style comparison to Player A?</legend>
+  <div class="rating-scale">
+    {% for value, label in [
+      ('0','Not credible from this information'),
+      ('1','Slightly credible'),
+      ('2','Mixed evidence'),
+      ('3','Credible'),
+      ('4','Strongly credible')
+    ] %}
+    <label class="scale-choice">
+      <input type="radio" name="credibility" value="{{ value }}"{{ choice_checked(answer, 'credibility', value) }}>
+      <span class="scale-number">{{ value }}</span>
+      <span>{{ label }}</span>
+    </label>
+    {% endfor %}
+  </div>
+</fieldset>
+
+<fieldset class="question-card rating-question">
+  <legend>How confident are you?</legend>
+  <p class="field-hint">Rate your confidence in the judgement above.</p>
+  <div class="rating-scale">
+    {% for value, label in [
+      ('1','Very low'),
+      ('2','Low'),
+      ('3','Moderate'),
+      ('4','High'),
+      ('5','Very high')
+    ] %}
+    <label class="scale-choice">
+      <input type="radio" name="confidence" value="{{ value }}"{{ choice_checked(answer, 'confidence', value) }}>
+      <span class="scale-number">{{ value }}</span>
+      <span>{{ label }}</span>
+    </label>
+    {% endfor %}
+  </div>
+</fieldset>
+
+<fieldset class="full question-card">
+  <legend>What did you base your answer on?</legend>
+  <div class="choice-grid">
+    {% for value, label in [
+      ('supplied_evidence','Only the information shown in this form'),
+      ('prior_professional_knowledge','My prior professional knowledge'),
+      ('both','Both the information shown and my prior professional knowledge'),
+      ('unable_to_assess','I could not make a fair judgement')
+    ] %}
+    <label class="choice">
+      <input type="radio" name="assessment_basis" value="{{ value }}"{{ choice_checked(answer, 'assessment_basis', value) }} required>
+      <span>{{ label }}</span>
+    </label>
+    {% endfor %}
+  </div>
+</fieldset>
+
+<fieldset class="full question-card helpful-group">
+  <legend>What information helped you most? Select all that apply.</legend>
+  <p class="field-hint">
+    Select all that helped. If you based your answer on this form, choose at least one item from
+    Additional playing evidence. The statistics may also have helped, but they do not replace
+    that extra context.
+  </p>
+  <div class="choice-grid">
+    <label class="check">
+      <input
+        class="helped-control"
+        type="checkbox"
+        name="helped_statistics"
+        value="true"
+        {% if answer and (answer.statistics_helped or 'statistics' in answer.helped_keys|default([])) %}checked{% endif %}
+      >
+      <span>Statistics used to find similar players</span>
+    </label>
+    {% for section in sections %}
+    <label class="check">
+      <input
+        class="helped-control additional-helped-control"
+        type="checkbox"
+        name="helped_{{ section.key }}"
+        value="true"
+        {% if answer and section.key in answer.helped_keys|default([]) %}checked{% endif %}
+      >
+      <span>{{ section.label }}</span>
+    </label>
+    {% endfor %}
+  </div>
+  <span class="field-error helped-error" aria-live="polite"></span>
+</fieldset>
+
+<fieldset class="full question-card">
+  <legend>Was important information missing?</legend>
+  <p class="field-hint">This answer stays consistent with whether you can make a fair comparison.</p>
+  <div class="choice-row">
+    <label class="choice">
+      <input type="radio" name="important_information_missing" value="no"{{ choice_checked(answer, 'important_information_missing', 'no') }} required>
+      <span>No</span>
+    </label>
+    <label class="choice">
+      <input type="radio" name="important_information_missing" value="yes"{{ choice_checked(answer, 'important_information_missing', 'yes') }}>
+      <span>Yes</span>
+    </label>
+  </div>
+</fieldset>
+
+<label class="gap-field">
+  What was missing?
+  <select name="evidence_gap">
+    <option value="">Select one</option>
+    {% for value, label in [
+      ('sparse_opportunities','Too few recorded actions'),
+      ('missing_descriptor','A type of playing evidence was missing'),
+      ('coverage_limitation','The recorded coverage was incomplete'),
+      ('context_ambiguity','The player, position, season, competition, or club context was unclear'),
+      ('other','Something else')
+    ] %}
+    <option value="{{ value }}"{% if answer and answer.evidence_gap == value %} selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+</label>
+
+<label class="full explanation-field">
+  Please explain anything that was unclear or insufficient
+  <span class="field-hint">Required if you could not make a fair comparison or important information was missing.</span>
+  <textarea name="explanation" maxlength="1000" rows="4">{{ answer.explanation|default('') if answer else '' }}</textarea>
+</label>
+<p class="form-status full" id="{{ prefix }}-status" aria-live="polite"></p>
+{%- endmacro %}
+
+{% macro feedback_fields(feedback) -%}
+{% for name, details_name, question, help_text, details_label in [
+  ('names_or_minutes_only','names_or_minutes_details','For any comparison, were the player names or recorded minutes the only information you could use?','Choose Yes even if this applied to only one comparison.','Which comparison, and why was the other information not usable?'),
+  ('position_lacked_evidence','position_evidence_details','Did any position lack enough playing evidence for a fair comparison?','Choose Yes even if this applied to only one position.','Which position, and what evidence was missing?'),
+  ('interface_unclear','interface_clarity_details','Was any label, chart, warning, or navigation step unclear?','Include the wording or step if you can.','What was unclear?'),
+  ('system_preference_revealed','preference_revelation_details','Did the form appear to reveal which comparison the system preferred?','Consider wording, ordering, layout or any other clue.','What appeared to reveal a preference?')
+] %}
+<fieldset class="full question-card feedback-question" data-details-name="{{ details_name }}">
+  <legend>{{ question }}</legend>
+  <p class="field-hint">{{ help_text }}</p>
+  <div class="choice-row">
+    <label class="choice">
+      <input type="radio" name="{{ name }}" value="no"{{ choice_checked(feedback, name, 'no') }} required>
+      <span>No</span>
+    </label>
+    <label class="choice">
+      <input type="radio" name="{{ name }}" value="yes"{{ choice_checked(feedback, name, 'yes') }}>
+      <span>Yes</span>
+    </label>
+  </div>
+  <label class="nested-field">
+    {{ details_label }}
+    <textarea name="{{ details_name }}" maxlength="1000" rows="3">{{ feedback[details_name]|default('') if feedback else '' }}</textarea>
+  </label>
+</fieldset>
+{% endfor %}
+{%- endmacro %}
+
+{% block body %}
+{% if error_message or participant_error %}
+<div id="participant-error" class="status-card error" role="alert" tabindex="-1">
+  {{ participant_error|default(error_message, true)|default('We could not save that answer. Please review the form and try again.', true) }}
+</div>
+{% endif %}
+
+{% if receipt_view %}
+<section id="study-content" tabindex="-1" class="panel completion" aria-labelledby="completion-title">
+  <p class="section-kicker">Complete</p>
+  <h2 id="completion-title">Thank you — your answers have been submitted</h2>
+  <p>Your answers are stored locally and are now locked. This confirms completion of the historical player-comparison form trial.</p>
+  <dl class="receipt-summary">
+    <div><dt>Participant code</dt><dd>{{ receipt_view.participant_code|default(receipt_view.participant_code_masked)|default('Stored under your participant code', true) }}</dd></div>
+    <div><dt>Comparisons completed</dt><dd>{{ receipt_view.comparison_count }} of {{ receipt_view.total|default(receipt_view.comparison_count) }}</dd></div>
+    <div><dt>Submitted on this computer</dt><dd>{{ receipt_view.submitted_at }}</dd></div>
+    <div><dt>Status</dt><dd>Submitted and locked</dd></div>
+  </dl>
+  <p class="warning"><strong>Your responses can no longer be edited through this form.</strong></p>
+  <button id="print-receipt" class="button secondary" type="button">Print receipt</button>
+  <form method="post" action="/historical-player-comparison/detach">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button class="button secondary" type="submit">Finish</button>
+  </form>
+</section>
+
+{% elif task_view %}
+<section id="study-content" tabindex="-1" class="panel comparison-step" aria-labelledby="comparison-title">
+  <div class="progress-heading">
+    <div>
+      <p class="section-kicker">Your comparison task</p>
+      <h2 id="comparison-title">Comparison {{ task_view.ordinal }} of {{ task_view.total }}</h2>
+    </div>
+    <span class="task-counter" aria-hidden="true">{{ task_view.ordinal }} / {{ task_view.total }}</span>
+  </div>
+  <progress value="{{ task_view.ordinal }}" max="{{ task_view.total }}" aria-label="Comparison {{ task_view.ordinal }} of {{ task_view.total }}">
+    Comparison {{ task_view.ordinal }} of {{ task_view.total }}
+  </progress>
+  {% if task_view.resumed %}
+  <p class="resume-message">Welcome back. Your saved answers are still here. Continue with comparison {{ task_view.ordinal }} of {{ task_view.total }}.</p>
+  {% endif %}
+  <p class="prompt">
+    How credible is Player B as a historical playing-style comparison to Player A, based on the
+    information shown?
+  </p>
+  <p class="muted">
+    Compare the players using the historical season, position, playing statistics, and additional
+    evidence below. Judge only what the information can support. The form does not show which
+    answer is expected.
+  </p>
+
+  <section class="comparison-context" aria-labelledby="players-title">
+    <h3 id="players-title">Players and historical context</h3>
+    <div class="player-heading-grid">
+      {% for label, player in [('Player A', task_view.player_a), ('Player B', task_view.player_b)] %}
+      <article class="player-summary player-card">
+        <p class="card-label">{{ label }}</p>
+        <h4>{{ player.name }}</h4>
+        <dl>
+          <div><dt>Position</dt><dd>{{ player.position }}</dd></div>
+          <div><dt>Historical season and evidence window</dt><dd>{{ player.season }}</dd></div>
+          <div><dt>Competition</dt><dd>{{ player.competition }}</dd></div>
+          <div><dt>Club{% if player.teams|length != 1 %}s{% endif %} in that window</dt><dd>{{ player.teams|join(', ') }}</dd></div>
+          <div><dt>Recorded minutes</dt><dd>At least {{ player.minutes }}</dd></div>
+        </dl>
+      </article>
+      {% endfor %}
+    </div>
+    <aside class="context-note" aria-label="About the recorded minutes">
+      <strong>About recorded minutes:</strong>
+      {{ task_view.shared_minutes_note|default('The available minutes are a conservative minimum. The true total may be higher, so rates per 90 minutes can appear higher than they would with complete minutes.', true) }}
+    </aside>
+  </section>
+
+  <section class="evidence-section" aria-labelledby="statistics-title">
+    <div class="section-heading">
+      <div>
+        <p class="section-kicker">Shared comparison</p>
+        <h3 id="statistics-title">Statistics used to find similar players</h3>
+      </div>
+      <fieldset class="display-toggle">
+        <legend>Show values as</legend>
+        <label class="choice"><input id="evidence-view-recorded" type="radio" name="evidence_view" value="recorded" checked><span>Recorded rate per 90 minutes</span></label>
+        <label class="choice"><input id="evidence-view-reference" type="radio" name="evidence_view" value="reference"><span>Compared with players in the same position</span></label>
+      </fieldset>
+    </div>
+    <p>
+      These recorded rates were used to find players with a similar statistical profile. Rates
+      are shown per 90 recorded minutes. You can also compare each value with historical players
+      listed in the same broad position. These statistics describe recorded actions; they do not
+      by themselves prove that two players had the same role or playing style.
+    </p>
+    <div class="table-scroll" tabindex="0" role="region" aria-label="Comparable player statistics">
+      <table class="comparison-table">
+        <thead>
+          <tr><th scope="col">Statistic</th><th scope="col">Player A</th><th scope="col">Player B</th></tr>
+        </thead>
+        <tbody>
+          {% for statistic in task_view.statistics %}
+          <tr>
+            <th scope="row" class="profile-label">{{ statistic.label }}</th>
+            <td>
+              <span class="recorded-value">{{ statistic.player_a_recorded }}</span>
+              <span class="percentile-value" hidden>{{ statistic.player_a_percentile }}</span>
+            </td>
+            <td>
+              <span class="recorded-value">{{ statistic.player_b_recorded }}</span>
+              <span class="percentile-value" hidden>{{ statistic.player_b_percentile }}</span>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <details class="statistics-definitions">
+      <summary>How to read this information</summary>
+      <dl>
+        <dt>Recorded value</dt><dd>A count, percentage or rate reconstructed from the available historical records.</dd>
+        <dt>Per 90 recorded minutes</dt><dd>The recorded count scaled to 90 of the available minutes.</dd>
+        <dt>Compared with players in the same position</dt><dd>Where the value sits among historical players in the same broad position. It is not a quality grade.</dd>
+        <dt>Coverage</dt><dd>How much usable recorded information was available. Low coverage can make a comparison less stable.</dd>
+        <dt>Provider categories</dt><dd>Smart pass, hand pass and simple pass are recorded provider category names. They do not prove intent, difficulty or outcome.</dd>
+        {% for statistic in task_view.statistics %}
+        <dt>{{ statistic.label }}</dt><dd>{{ statistic.definition }}</dd>
+        {% endfor %}
+      </dl>
+    </details>
+  </section>
+
+  <section class="evidence-section" aria-labelledby="additional-evidence-title">
+    <p class="section-kicker">Context beyond the similarity search</p>
+    <h3 id="additional-evidence-title">Additional playing evidence</h3>
+    <p><strong>This information provides extra context that was not used to select the comparison.</strong></p>
+    <p>
+      It can help describe the kinds and recorded locations of actions. It cannot establish
+      quality, effectiveness, tactical instructions, or cause and effect. Sections are shown only
+      when they apply, and the most useful evidence for this position appears first.
+    </p>
+    {% for section in task_view.evidence_sections %}
+    <article class="evidence-family" aria-labelledby="evidence-{{ loop.index }}-title">
+      <h4 id="evidence-{{ loop.index }}-title">{{ section.label }}</h4>
+      <p>{{ section.summary }}</p>
+      {% if section.direction_notice %}<p class="direction-warning">{{ section.direction_notice }}</p>{% endif %}
+      <div class="table-scroll" tabindex="0" role="region" aria-label="{{ section.label }} comparison">
+        <table class="comparison-table compact-table">
+          <thead>
+            <tr><th scope="col">Category</th><th scope="col">Player A</th><th scope="col">Player B</th></tr>
+          </thead>
+          <tbody>
+            {% for row in section.rows %}
+            <tr>
+              <th scope="row" class="profile-label">{{ row.label }}</th>
+              <td>{{ row.player_a_count }}{% if row.player_a_percentage is not none %} <span class="muted">({{ row.player_a_percentage }})</span>{% endif %}</td>
+              <td>{{ row.player_b_count }}{% if row.player_b_percentage is not none %} <span class="muted">({{ row.player_b_percentage }})</span>{% endif %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <aside class="reading-guide" aria-label="What {{ section.label }} can and cannot show">
+        <h5>What this can and cannot show</h5>
+        <dl>
+          <dt>What it can indicate</dt><dd>{{ section.can_indicate }}</dd>
+          <dt>What it cannot tell you</dt><dd>{{ section.cannot_indicate }}</dd>
+        </dl>
+      </aside>
+    </article>
+    {% endfor %}
+    <details class="shared-limitations">
+      <summary>What this information cannot tell you</summary>
+      <p>
+        Counts describe recorded actions, not whether those actions were effective. Percentages
+        describe the share of recorded actions in a category. Differences may reflect role,
+        tactics, opposition, opportunity or data coverage; they do not establish cause.
+      </p>
+      <p>
+        This information cannot establish off-ball behaviour, tactical instructions, opponent
+        adjustments, current or future ability, availability, squad fit, value or recruitment
+        outcomes. Goalkeeper action categories do not establish save or shot-stopping quality.
+      </p>
+    </details>
+  </section>
+
+  <section class="response-section" aria-labelledby="response-title">
+    <p class="section-kicker">Your judgement</p>
+    <h3 id="response-title">Answer from the information you have</h3>
+    <form method="post" action="/historical-player-comparison/responses" class="form-grid response-form">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="command_id" value="{{ command_id }}">
+      <input type="hidden" name="expected_revision" value="{{ expected_revision if expected_revision is defined else (snapshot.revision if snapshot is defined else '') }}">
+      <input type="hidden" name="presentation_token" value="{{ task_view.token }}">
+      {{ response_fields(none, task_view.evidence_sections, 'response') }}
+      <button class="button primary" type="submit">Save and continue</button>
+    </form>
+  </section>
+</section>
+
+{% elif debrief_view is not defined or debrief_view is none %}
+<section id="study-content" tabindex="-1" class="panel" aria-labelledby="feedback-title">
+  <p class="section-kicker">One final step before review</p>
+  <h2 id="feedback-title">Tell us about the form</h2>
+  <p>
+    These questions are about whether the form worked for you. They are stored separately from
+    your football-comparison ratings and do not change those ratings.
+  </p>
+  <form method="post" action="/historical-player-comparison/form-feedback" class="form-grid feedback-form">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="command_id" value="{{ command_id }}">
+    <input type="hidden" name="expected_revision" value="{{ expected_revision if expected_revision is defined else (snapshot.revision if snapshot is defined else '') }}">
+    {{ feedback_fields(none) }}
+    <p class="form-status full" aria-live="polite"></p>
+    <button class="button primary" type="submit">Save feedback and review answers</button>
+  </form>
+</section>
+
+{% else %}
+<section id="study-content" tabindex="-1" class="panel review-step" aria-labelledby="review-title">
+  <p class="section-kicker">Review before submission</p>
+  <h2 id="review-title">Review your answers</h2>
+  <p>
+    Check each comparison and the trial-feedback answers below. You can make changes now. Saving a
+    change keeps the earlier answer in the local research record, but the review shows only your
+    latest answer.
+  </p>
+
+  <div class="review-list">
+    {% for row in review_rows %}
+    <details class="review-card">
+      <summary>
+        <span>Comparison {{ row.ordinal }}: {{ row.player_a_name|default('Player A', true) }} and {{ row.player_b_name|default('Player B', true) }}</span>
+        <span class="review-result">
+          {% if row.fair_comparison == 'no' %}Could not make a fair judgement{% else %}Credibility {{ row.credibility }} of 4{% endif %}
+        </span>
+        <span class="change-label">Change this answer</span>
+      </summary>
+      <dl class="answer-summary">
+        <div><dt>Fair comparison possible?</dt><dd>{{ 'Yes' if row.fair_comparison == 'yes' else 'No' }}</dd></div>
+        <div><dt>Credibility</dt><dd>{% if row.credibility is not none %}{{ row.credibility }} of 4{% else %}Not rated{% endif %}</dd></div>
+        <div><dt>Confidence</dt><dd>{% if row.confidence is not none %}{{ row.confidence }} of 5{% else %}Not rated{% endif %}</dd></div>
+        <div>
+          <dt>Answer based on</dt>
+          <dd>
+            {% if row.assessment_basis == 'supplied_evidence' %}Information in this form
+            {% elif row.assessment_basis == 'prior_professional_knowledge' %}Prior professional knowledge
+            {% elif row.assessment_basis == 'both' %}The form and prior professional knowledge
+            {% else %}I could not make a fair judgement{% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt>Information that helped most</dt>
+          <dd>
+            {% if row.statistics_helped %}Statistics used to find similar players{% endif %}
+            {% for section in row.evidence_sections if section.key in row.helped_keys %}
+              {% if row.statistics_helped or not loop.first %}, {% endif %}{{ section.label }}
+            {% else %}
+              {% if not row.statistics_helped %}Not recorded{% endif %}
+            {% endfor %}
+          </dd>
+        </div>
+        <div><dt>Important information missing?</dt><dd>{{ 'Yes' if row.important_information_missing == 'yes' else 'No' }}</dd></div>
+        {% if row.evidence_gap_label %}<div><dt>Missing information</dt><dd>{{ row.evidence_gap_label }}</dd></div>{% endif %}
+        {% if row.explanation %}<div><dt>Your explanation</dt><dd>{{ row.explanation }}</dd></div>{% endif %}
+      </dl>
+      <div class="correction-panel">
+        <h3>Change this answer</h3>
+        <form method="post" action="/historical-player-comparison/corrections" class="form-grid response-form">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <input type="hidden" name="command_id" value="{{ command_id }}">
+          <input type="hidden" name="expected_revision" value="{{ expected_revision if expected_revision is defined else (snapshot.revision if snapshot is defined else '') }}">
+          <input type="hidden" name="presentation_token" value="{{ row.token }}">
+          {{ response_fields(row, row.evidence_sections|default([]), 'correction-' ~ loop.index) }}
+          <button class="button secondary" type="submit">Save changes</button>
+        </form>
+      </div>
+    </details>
+    {% endfor %}
+  </div>
+
+  <details class="review-card feedback-review">
+    <summary>Review your feedback about the form</summary>
+    <form method="post" action="/historical-player-comparison/form-feedback" class="form-grid feedback-form">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="command_id" value="{{ command_id }}">
+      <input type="hidden" name="expected_revision" value="{{ expected_revision if expected_revision is defined else (snapshot.revision if snapshot is defined else '') }}">
+      {{ feedback_fields(debrief_view) }}
+      <p class="form-status full" aria-live="polite"></p>
+      <button class="button secondary" type="submit">Save changes</button>
+    </form>
+  </details>
+
+  <section class="final-submit" aria-labelledby="submit-title">
+    <h3 id="submit-title">Final submission</h3>
+    <p>
+      <strong>Final submission cannot be undone in this form.</strong> After you submit, your
+      answers are locked and cannot be edited. If you want to stop without submitting, close the
+      form now.
+    </p>
+    <form id="final-submit-form" method="post" action="/historical-player-comparison/submit">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="command_id" value="{{ command_id }}">
+      <input type="hidden" name="expected_revision" value="{{ expected_revision if expected_revision is defined else (snapshot.revision if snapshot is defined else '') }}">
+      <label class="check immutable-confirmation">
+        <input type="checkbox" required>
+        <span>I have reviewed my answers and understand that final submission is permanent.</span>
+      </label>
+      <button class="button danger" type="submit">Submit final answers</button>
+    </form>
+  </section>
+</section>
+{% endif %}
+{% endblock %}

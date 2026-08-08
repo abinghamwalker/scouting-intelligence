@@ -1,0 +1,46 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-ACCEPT-01-R2
+task_id: W04-FIELD-SEMANTIC-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: NOT_APPLICABLE_MASTER_OWNED
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-POSSESSION-SEMANTIC-DECISION-01-R1
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-ACCEPT-01-R2.md
+  - reports/verification/W04/wyscout-field-semantic-acceptance-R2-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-ACCEPT-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-ACCEPT-01-R1.yaml
+checks:
+  - command: canonical acceptance physical/canonical SHA-256
+    result: fd6b9f813c8e810e972ba5d943b2fb4c5fe2fcd7716b4ec9a38ddca3b0439365
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest
+      -q tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS_123_WITH_ACCEPTANCE_PRESENT
+  - command: Ruff format and lint
+    result: PASS
+  - command: local-only verifier
+    result: PASS_25_CHECKS
+  - command: complete current pyc inventory before and after acceptance suite
+    result: PASS_IDENTICAL_1086_SITE_59_REPOSITORY
+  - command: downstream absence
+    result: PASS_13_ABSENT
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The exact field authority is formally accepted. All upstream IDs, physical
+    and canonical digests, reviewer/master actors, clocks, PASS recommendation,
+    and null v1 supersession are closed and contract validated.
+  - >-
+    This acceptance authorizes the field registry only as a frozen input to
+    downstream authority packets. It creates no Bronze or product authority by
+    itself.

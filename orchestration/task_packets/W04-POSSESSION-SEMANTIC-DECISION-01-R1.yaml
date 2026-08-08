@@ -1,0 +1,164 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-DECISION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement only the accepted R20 possession-semantic decision route: freeze
+  the complete conservative master predicate decision, exact taxonomy
+  restatement, progression-safe contract test, and return. Do not construct
+  possessions or begin Bronze.
+depends_on:
+  - W04-FIELD-SEMANTIC-ACCEPT-01-R2:MASTER_ACCEPTED
+assigned_role: possession_semantic_authority_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R13.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/verification/W04/wyscout-field-semantic-acceptance-R2-master-verification.md
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/**
+  - "!configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml"
+  - tests/**
+  - "!tests/contracts/test_w04_possession_semantic_authority.py"
+  - reports/reviews/W04/authorities/**
+  - "!reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json"
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-DECISION-01-R1.md"
+frozen_inputs:
+  field_registry_id: w04-wyscout-field-registry-v1
+  field_registry_canonical_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  field_acceptance_sha256: fd6b9f813c8e810e972ba5d943b2fb4c5fe2fcd7716b4ec9a38ddca3b0439365
+  event_taxonomy_source_sha256: ce7bafb341b36ab4c6093bf1c09c967e9cea10d4223724a1fc679086e5d16842
+  tag_taxonomy_source_sha256: e0bc1bd8ff6ea5339586fdfc3e8e9b285a4a18f1ae2f5868ccc9ec9cecc8a922
+authority:
+  master_actor_id: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision_id: w04-wyscout-possession-semantic-decisions-v1
+  taxonomy_id: w04-wyscout-possession-taxonomy-v1
+  review_id: w04-wyscout-possession-semantic-independent-review-R1
+  acceptance_id: w04-wyscout-possession-semantic-acceptance-v1
+  source_id: wyscout-soccer-match-events-figshare-v5
+requirements:
+  - >-
+    Work only from accepted R20, the exact accepted field authority, and the
+    two frozen taxonomy CSVs. Do not use web/external football knowledge,
+    excluded payloads, provider-native possession claims, or runtime label/name
+    matching.
+  - >-
+    Inspect fixed taxonomy labels only as bounded offline decision evidence.
+    Runtime authority must consist solely of exact integer event/subevent/tag
+    selectors and the frozen source digests. A label change cannot alter
+    runtime matching.
+  - >-
+    Make an explicit conservative master decision for every one of the 36 fixed
+    `(event,subevent)` taxonomy pairs. Each pair must have at least one exact,
+    non-overlapping predicate. Use tag partitions only when fixed tag IDs and
+    disjoint required/forbidden sets justify the distinction; otherwise choose
+    the conservative complete R20 combination, including explicit UNMAPPED.
+    Unknown/conflicting/unmatched combinations remain UNMAPPED by policy.
+  - >-
+    Predicates must be sorted by the exact R20 tuple, unique, non-overlapping,
+    and use strict nonnegative integers. Required/forbidden tags are sorted,
+    unique, disjoint, and drawn from the fixed tag taxonomy. Do not infer a
+    missing selector, priority, fallback, opponent team, or possession from
+    names.
+  - >-
+    Every predicate contains all 12 exact R20 fields. Every row decided_by
+    equals the top-level master ActorId. Only the six exact valid
+    decision/control/open/close/attachment combinations are allowed.
+    UNMAPPED is fully explicit with nonempty row-specific rationale.
+  - >-
+    Use the exact seven closed policies. Set provider-native possession claim
+    false and runtime/unknown name matching forbidden.
+  - >-
+    Render the decision as strict canonical JSON with one LF, exact top-level
+    keys, five frozen inputs, truthful post-choice decided_at, and complete
+    predicates. Render one safe canonical YAML taxonomy whose parsed
+    bound_inputs, policies, and predicate objects equal the decision exactly and
+    whose decision_sha256 binds the decision bytes.
+  - >-
+    Implement the complete R20 contract and rejection matrix. Independently
+    reproduce input/taxonomy digests and coverage; enforce schemas, strict
+    types, sorting, overlap, tag partitions, actor equality, rationales,
+    combination union, canonical JSON/YAML, registry equality, and digest
+    edges. Reject label/name matching and provider-native claims.
+  - >-
+    Make the contract progression-safe from the outset. It must strictly
+    validate the future exact review and acceptance when present, block
+    possession/dependency/Bronze/runtime outputs without a fully valid
+    acceptance, and remain green after separately owned valid review and
+    acceptance artifacts later exist. Do not permanently assert those future
+    paths are absent.
+  - >-
+    At packet completion the actual review/acceptance and all possession,
+    dependency, Bronze, product, and runtime paths remain absent. Record that as
+    execution-time return evidence without creating those artifacts.
+  - >-
+    Take an actual complete shell-only current pyc preflight before Python.
+    Use root uv with `--locked --no-sync`; every Python process starts with
+    `PYTHONDONTWRITEBYTECODE=1` and `python -B`. Do not sync, use bare Python,
+    clean, repair, or coerce the baseline. Reproduce the exact inventory after
+    the return is written.
+  - >-
+    Change exactly the four owned paths. Do not run Git, delegate, self-approve,
+    access provider/network data, or begin review, acceptance, possession
+    construction, dependency, identity, feature, Bronze, Silver, Gold, product,
+    runtime, cloud, container, endpoint, or deployment work.
+definition_of_done:
+  - Complete explicit non-overlapping decisions cover all 36 taxonomy pairs.
+  - Decision/taxonomy are canonical, equal, closed, and digest-linked.
+  - Progression-safe positive/negative contract passes.
+  - Future authority and downstream paths remain absent.
+  - Terminal inventory exactly equals fresh preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    A semantic choice requires external knowledge, a new transform/decision
+    kind, label-based runtime matching, or an unsupported provider claim.
+  - Any frozen input/digest differs or mandatory taxonomy pair is ambiguous
+    beyond conservative UNMAPPED.
+  - Any check, inventory, or allowed-path boundary fails.
+  - Work requires architecture, root, dependency, rights, storage, or local-only change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

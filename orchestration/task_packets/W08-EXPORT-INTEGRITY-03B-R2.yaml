@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W08-EXPORT-INTEGRITY-03B
+phase_id: W08
+revision: R2
+state: MASTER_ACCEPTED_PENDING_INDEPENDENT_REVIEW
+objective: >-
+  Prove that only the latest retained shortlist assignment can grant a non-author
+  access to OWNER_ONLY comment or observation history in an evidence pack.
+depends_on:
+  - W08-EXPORT-INTEGRITY-03B-R1:MASTER_REPRODUCED_WITH_CURRENT_ASSIGNMENT_FINDING
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-EXPORT-INTEGRITY-03B-R1.yaml
+  - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R1.md
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/operations/evidence_export.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+allowed_paths:
+  - src/scouting/operations/evidence_export.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Derive assignment access from the single latest revision of each shortlist entry, never from an earlier assignment in the exported history.
+  - Include OWNER_ONLY records for their author regardless of current assignment and include TEAM records for an otherwise authorised exporter.
+  - Prove a scout assigned in revision N but unassigned in revision N+1 cannot see or infer another author's private comment/observation; their origins must also be absent from workflow_action_origins.
+  - Preserve full visible history, deterministic ordering, digests, policy binding, local-only storage, recovery, revocation and the fixed W06 model boundary.
+definition_of_done:
+  - Former-assignee denial, current-assignee positive access, author access and prior 41-test regressions pass.
+  - The mandatory return is complete and makes no participant-evidence claim.
+focused_checks:
+  - Latest-assignment-only private visibility and no provenance side channel.
+  - Current assignment/author/TEAM positives plus complete prior export suite.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/operations/evidence_export.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run ruff check src/scouting/operations/evidence_export.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run mypy src/scouting/operations/evidence_export.py
+  - uv run pytest -q tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_auth_audit.py tests/unit/test_guarded_storage.py
+stop_conditions:
+  - The invariant requires a shared contract/migration/policy change.
+  - Any external destination/service/model, protected-output access, destructive action or forbidden-path edit is required.
+  - A correction would retain historic assignment privilege or leak a private record/origin.
+mandatory_return:
+  - task ID/revision and exact current-assignment invariant
+  - exact changed-file list
+  - positive/negative proof
+  - exact commands, exit statuses and concise results
+  - residual risks and confirmations of no Git/dependency/external/protected/out-of-scope action
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

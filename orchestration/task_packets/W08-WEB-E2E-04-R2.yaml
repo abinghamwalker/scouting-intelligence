@@ -1,0 +1,102 @@
+schema_version: 1
+task_id: W08-WEB-E2E-04
+phase_id: W08
+revision: R2
+state: DISPATCHED
+objective: >-
+  Complete and test the server-rendered W08 workflow composition, proving that every
+  object read is policy-filtered and every mutation uses an explicit submitted CSRF
+  token and an accepted transactional service without partial failure.
+depends_on:
+  - W08-WEB-E2E-04:R1_REWORK
+  - W08-WORKFLOW-02:MASTER_ACCEPTED
+  - W08-EXPORT-03:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  No HTTP route may widen service authorisation or evidence claims: shortlist,
+  observation, export and audit reads must be indistinguishable on denial, and all
+  human-origin writes must remain attributable, versioned, reversible and atomic.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-E2E-04-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-E2E-04-R1.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - tests/integration/test_w08_workflow.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_workflow_access.py
+  - tests/security/test_w08_export_boundaries.py
+  - src/scouting/web/w08.py
+  - scripts/run_w08_study.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - src/scouting/web/__init__.py
+  - services/api/w08_main.py
+  - apps/web/templates/w08/**
+  - apps/web/static/w08/**
+  - scripts/run_w08_study.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-E2E-04-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Preserve and complete secure loopback login, logout, expiry and CSRF handling with generic real HTTP denial statuses and no sensitive logging.
+  - Preserve all submitted role-brief content across status-only versions, including constraints, preferences, exemplars and original submitted_at; expose those protocol fields accessibly.
+  - Compose approved brief to replayable retrieval link to shortlist to immutable longlist entry, with policy-filtered queue/detail reads and role-appropriate forms.
+  - Compose valid scout assignment, comments, structured rubric observations, confidence, local evidence/clip-link references, private/team visibility, disagreement and immutable amendments/history.
+  - Compose entry state transitions, rejection reason, next action/owner, rejected-to-longlist reconsideration, optimistic concurrency and an explicit reload/retry recovery path preserving the winning revision.
+  - Compose privileged local evidence-pack create, verified read and append-only revocation plus authorised audit receipt view; denied users and objects receive no existence side-channel.
+  - Use HUMAN_ENTERED_LOCAL only for actual submitted study/UI actions; synthetic automated fixtures/tests must remain explicitly labelled and may use SYNTHETIC_AUTOMATED_TEST. Never claim that either is representative-user evidence.
+  - Make scripts/run_w08_study.py start the actual app only on 127.0.0.1 with an explicit bounded port option, fresh/restart-safe study root, ephemeral credentials and unambiguous participant-data warnings.
+  - Retain W06 NO_GO/MISSING_EXPERT_RELEVANCE_EVIDENCE, resemblance_only, synthetic_development_only, LIMITED and no_recommendation_evidence wording on model-assisted views.
+  - Add dense TestClient coverage for complete authorised journeys and denial, expiry, fixation/rotation, CSRF, IDOR, role escalation, private/team visibility, stale conflict, revocation and recoverable failure.
+definition_of_done:
+  - All web-testable moderated-protocol service journeys are reachable and focused TestClient tests prove the accepted service boundaries.
+  - No route uses direct database mutation or bypasses a domain service; read SQL is tenant-scoped and followed by exact resource authorisation where required.
+  - No UI/test wording invents representative-user or positive model-quality evidence.
+focused_checks:
+  - Full analyst to approver to scout to approver/analyst local workflow with role switching through distinct clients.
+  - Negative IDOR, unauthorised read/write, missing/stale CSRF, session rotation/revocation/expiry, private observation and privileged export cases.
+  - Stale lock and injected failure leave the winning revision, audit chain and storage/database intent recoverable without partial rows.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+stop_conditions:
+  - An accepted service or contract cannot support one named journey without a shared-path change.
+  - A network/external service, external identity provider, model call, Node/npm, container, hosted endpoint, protected-output access, destructive action or dependency/lock change is required.
+  - A correction would weaken authentication, deny-by-default access, confidentiality, audit/reversibility, accessibility or evidence honesty.
+mandatory_return:
+  - task ID, revision and one-sentence objective
+  - exact changed-file list
+  - route-to-domain-service map and policy filtering choices
+  - exact commands, exit statuses and concise results
+  - test count by authorised and denied/recovery category
+  - residual risks and follow-ups
+  - confirmations of no Git operations, no dependency/lock change, no protected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R5
+state: ACCEPTED
+objective: >-
+  Close the sole R4 finding by binding complete no-follow cache-directory lstat
+  identity and clocks into both operational PYC inventories, while preserving all
+  accepted stable meanings and the child's zero-PYC-content-read role.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R4:REWORK_P0_0_P1_1_P2_0
+assigned_role: w04_runtime_control_r5_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R4.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R5.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/contracts/**
+fixed_bindings:
+  r4_admission_child_sha256: c91f98c8d02a647d1eada8636f864382c6c7468c2d9b9b61cff51db92ac3f94e
+  r4_launcher_sha256: 5c4c081b5b5049de6f9aad444e95ccf2e4d38fa7484d56add67cd1cb03b193a0
+  r4_tests_sha256: 215d4c08af21e2768a98c16defa80c4bfefa44fb690dbe1fbc295cea254f0bad
+  r4_producer_return_sha256: 959fbdeb9b5dd3800b4d007227ccfd29c3ed798afbcf187b518736144f2291ee
+  r4_review_sha256: 74e5ff009bac72196739551f4c1aca724f9710636cce39ab429da1394d4514ab
+  r4_reviewer_return_sha256: 926bfbb77f6f3561e94f2f75f3e5113266748d02e55a01d36505ec5e8cf4156f
+requirements:
+  - Verify every fixed binding and preserve every green R4 predicate and stable digest meaning.
+  - >-
+    For every cache directory in both independently implemented inventories, take
+    one no-follow lstat snapshot and bind exact role/path/kind, device, inode,
+    mode, link_count, size_bytes, mtime_ns and ctime_ns. Continue requiring a real
+    non-link mode-0755 directory.
+  - >-
+    Compare complete rows at all existing child reconstruction/pre-result and
+    launcher pre/post boundaries. These rows are operational only and must not
+    enter stable identity; the child must perform zero PYC content reads.
+  - >-
+    Add direct child and launcher attacks for same-path mode-0755 directory
+    replacement and same-inode directory clock drift, plus explicit link, mode,
+    size/entry drift rejection. Freeze only after the complete final-hash gate and
+    actual two-run admission pass following the last edit.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R5 correction, adversarial tests and mandatory producer return.
+stop_conditions:
+  - None for bounded defects; continue until the complete final-hash gate passes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

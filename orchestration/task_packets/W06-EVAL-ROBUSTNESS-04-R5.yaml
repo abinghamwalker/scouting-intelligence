@@ -1,0 +1,131 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R5
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R4.yaml
+objective: >-
+  Close the single independently reproduced R4 numeric-child lineage P1 by using one
+  shared canonical derivation for complete metric, interval and rank-comparison values.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-REVIEW-04-R4:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: high
+bounded_scope:
+  retained_without_reopening:
+    - all R3 stress/control/authority closures
+    - public fixture computed and unsupported populations and literal identities
+    - typed incoherent-label and common-candidate deficits
+    - pair-evidence absence, applicability and failure retention
+    - accepted W06 formulas, protocol and gate core
+  exact_open_class:
+    - persisted numeric metric, interval and rank-comparison child derivation
+  convergence_rule: >-
+    This is the post-convergence single-root correction. Share pure deterministic
+    calculations between core producers and owning validators; do not create another
+    metric implementation or architecture authority.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R4.yaml
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R4.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R4.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R4.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R4.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R4.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R5.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Extract one pure canonical comparison derivation over query ID, exact ordered left
+    and right rankings and k. It must derive left/right input digests, Spearman or exact
+    insufficiency reason, overlap count/rate, Jaccard, candidate churn and canonical
+    disagreements. Use it from both core.rank_comparison and the StressComparison and
+    DeterministicControlResult validators; require exact complete child equality.
+  - >-
+    Extract or expose one pure canonical ranking-metric derivation over protocol, exact
+    RankedObservation rows, metric and k. Use the same accepted formula path from core
+    production and owning stress/control validators. Require exact per-query and
+    aggregate MetricResult equality, not only input digests or internal arithmetic.
+  - >-
+    Reconstruct the exact deterministic bootstrap interval for each StressCohort from
+    its persisted rows, protocol, metric and k, including point, resample identity,
+    bounds and digest; require complete equality. Preserve seed, resample unit/count,
+    confidence, method and stable ordering without changing accepted formulas.
+  - >-
+    Add normal-constructor regressions for comparison parent
+    fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb,
+    control metric parent
+    e67c82c8800e1e4c0efa360153cd918f36d21859079ef630b3fe3d2fab477815,
+    and stress metric/interval parent
+    2e70e316301230b85db9bae9785c16f431f1cf3a251affd9ba3d792174741404.
+    Each must reject for exact value derivation while unmodified public identities pass.
+  - >-
+    Re-pin fixture identities only where the shared implementation mechanically changes
+    canonical bytes. Retain all prior exact closure regressions and implementation-only
+    evidence boundaries.
+deliverables:
+  - One shared complete value-derivation path used by executors and validators.
+  - Exact three-witness regressions and retained public identities.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R5.md.
+definition_of_done:
+  - All three exact R4 value witnesses reject under normal construction.
+  - Persisted stress/control metric, interval and comparison children equal the single canonical derivation from their bound rows.
+  - No accepted metric formula, protocol field, evidence boundary or gate behavior changes.
+  - Focused W06 tests and static checks pass.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R5.md
+stop_conditions:
+  - Closing the one value-lineage class requires a formula or protocol change, new dependency, protected output, external access, model tuning or W05 mutation.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - single-shared-derivation explanation
+  - exact three-witness reject outcomes
+  - exact fixture identities and SHA values
+  - exact focused commands/statuses/results
+  - remaining P0/P1 risk or none
+  - implementation-only/no-fabricated-expert boundary confirmation
+  - no Git/dependency/protected/external/tuning/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

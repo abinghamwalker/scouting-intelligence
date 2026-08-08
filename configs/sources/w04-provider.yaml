@@ -1,0 +1,221 @@
+schema_version: 1
+source_id: wyscout-soccer-match-events-figshare-v5
+status: authorised_frozen_poc_source
+
+identity:
+  dataset_title: Soccer match event dataset
+  source_data_provider: Wyscout
+  dataset_authors: Pappalardo et al.
+  publisher: figshare
+  collection_id: 4415000
+  collection_version: 5
+  collection_doi: 10.6084/m9.figshare.c.4415000.v5
+  collection_published_at: "2020-01-28T14:24:27Z"
+  data_paper_doi: 10.1038/s41597-019-0247-7
+
+purpose:
+  allowed:
+    - local_noncommercial_proof_of_concept
+    - deterministic_raw_to_gold_engineering
+    - feature_and_model_training
+    - model_evaluation
+    - local_internal_ui
+    - attributed_derived_output
+  claims_allowed:
+    - frozen_historical_engineering_evidence
+    - frozen_historical_player_retrieval_evidence
+  claims_forbidden:
+    - current_player_availability
+    - current_scouting_coverage
+    - live_or_operational_provider_continuity
+    - women_or_youth_coverage
+    - prospective_recruitment_effectiveness
+    - provider_commercial_product_equivalence
+
+rights:
+  licence_name: Creative Commons Attribution 4.0 International
+  licence_id: CC-BY-4.0
+  licence_url: https://creativecommons.org/licenses/by/4.0/
+  evidence:
+    - https://www.nature.com/articles/s41597-019-0247-7
+    - https://doi.org/10.6084/m9.figshare.c.4415000.v5
+  local_retention: allowed
+  raw_reproduction: allowed
+  transformation: allowed
+  feature_and_model_use: allowed
+  internal_display: allowed
+  derived_export: allowed_with_attribution
+  raw_redistribution: allowed_with_attribution
+  commercial_use: allowed_with_attribution
+  project_control:
+    raw_export: forbidden
+    network_transfer_after_acquisition: forbidden
+    public_or_hosted_display: forbidden
+    external_model_call: forbidden
+  attribution:
+    required: true
+    text: >-
+      Data source: Pappalardo et al., Soccer match event dataset, supplied by
+      Wyscout, figshare collection v5, licensed CC BY 4.0.
+    licence_link_required: true
+    change_notice: >-
+      This project normalises source JSON, reconstructs lineup stints and
+      possessions, and derives player-window aggregates.
+
+coverage:
+  population: male_senior
+  domestic_season: 2017/2018
+  included_competitions:
+    - country: England
+      source_file_suffix: England
+      competition: English first division
+    - country: France
+      source_file_suffix: France
+      competition: French first division
+    - country: Germany
+      source_file_suffix: Germany
+      competition: German first division
+    - country: Italy
+      source_file_suffix: Italy
+      competition: Italian first division
+    - country: Spain
+      source_file_suffix: Spain
+      competition: Spanish first division
+  excluded_from_first_pass:
+    - UEFA Euro 2016
+    - FIFA World Cup 2018
+  collection_reference_counts:
+    matches_all_seven_competitions: 1941
+    events_all_seven_competitions: 3251294
+    players_all_seven_competitions: 4299
+  absent:
+    - women
+    - youth
+    - native_possession_id
+    - tracking
+    - freeze_frame
+    - record_level_correction_history
+    - first_publication_timestamp_per_record
+
+objects:
+  - article_id: 7765316
+    article_doi: 10.6084/m9.figshare.7765316.v4
+    file_id: 15073685
+    name: competitions.json
+    size_bytes: 1209
+    expected_md5: 3dc210a4805dda5337b0ff9f7eaa407a
+    url: https://ndownloader.figshare.com/files/15073685
+  - article_id: 7765310
+    article_doi: 10.6084/m9.figshare.7765310.v3
+    file_id: 15073697
+    name: teams.json
+    size_bytes: 27404
+    expected_md5: 1381ff9449f21105090729cf0e086b5b
+    url: https://ndownloader.figshare.com/files/15073697
+  - article_id: 7765196
+    article_doi: 10.6084/m9.figshare.7765196.v3
+    file_id: 15073721
+    name: players.json
+    size_bytes: 1737347
+    expected_md5: f28ddf6326281efeda6488b2169f5609
+    url: https://ndownloader.figshare.com/files/15073721
+  - article_id: 7770422
+    article_doi: 10.6084/m9.figshare.7770422.v1
+    file_id: 14464622
+    name: matches.zip
+    size_bytes: 645097
+    expected_md5: 51d80beb17480919f69a53a0152c2d71
+    url: https://ndownloader.figshare.com/files/14464622
+  - article_id: 7770599
+    article_doi: 10.6084/m9.figshare.7770599.v1
+    file_id: 14464685
+    name: events.zip
+    size_bytes: 77323413
+    expected_md5: 7c20e8647e7eda58d7838a0c7b1ec6ab
+    url: https://ndownloader.figshare.com/files/14464685
+  - article_id: 11743836
+    article_doi: 10.6084/m9.figshare.11743836.v1
+    file_id: 21385245
+    name: eventid2name.csv
+    size_bytes: 1001
+    expected_md5: 46daf16100ece0c743eedc9adcfea162
+    url: https://ndownloader.figshare.com/files/21385245
+  - article_id: 11743818
+    article_doi: 10.6084/m9.figshare.11743818.v1
+    file_id: 21385239
+    name: tags2name.csv
+    size_bytes: 1754
+    expected_md5: e7acb14918d00e40c80a898b1da8fc39
+    url: https://ndownloader.figshare.com/files/21385239
+
+archive_admission:
+  matches:
+    - matches_England.json
+    - matches_France.json
+    - matches_Germany.json
+    - matches_Italy.json
+    - matches_Spain.json
+  events:
+    - events_England.json
+    - events_France.json
+    - events_Germany.json
+    - events_Italy.json
+    - events_Spain.json
+  known_scope_excluded:
+    matches:
+      - matches_European_Championship.json
+      - matches_World_Cup.json
+    events:
+      - events_European_Championship.json
+      - events_World_Cup.json
+  excluded_member_handling: verify_directory_entry_but_do_not_extract_or_admit_payload
+  reject_unknown_members: true
+  reject_links: true
+  reject_absolute_or_parent_paths: true
+
+temporal_semantics:
+  match_observed_at: matches.dateutc
+  event_observed_at: match_start_plus_match_period_and_event_sec
+  source_available_at: "2020-01-28T14:24:27Z"
+  source_available_at_basis: frozen_collection_release_time
+  generated_at_is_evidence: false
+  historical_replay_before_collection_release: forbidden
+  correction_policy: frozen_v5_no_record_level_correction_channel
+  late_data_policy: no_inference_before_collection_release
+  research_only_when_availability_missing: true
+
+acquisition:
+  method: unauthenticated_https_file_download
+  credentials_required: false
+  account_required: false
+  redirect_authority:
+    status_code: 302
+    maximum_hops: 1
+    destination_scheme: https
+    destination_host: s3-eu-west-1.amazonaws.com
+    destination_path_template: pfigshare-u-files/{file_id}/{name}
+    exact_query_keys:
+      - X-Amz-Algorithm
+      - X-Amz-Credential
+      - X-Amz-Date
+      - X-Amz-Expires
+      - X-Amz-SignedHeaders
+      - X-Amz-Signature
+    algorithm: AWS4-HMAC-SHA256
+    credential_scope_suffix: eu-west-1/s3/aws4_request
+    credential_separator_encoding: literal_slash
+    signed_headers: host
+    maximum_expiry_seconds: 60
+  destination_root: data/source/wyscout/v5
+  working_root: data/working/wyscout/v5
+  tracked_payloads: false
+  verify_before_admission:
+    - exact_url_allowlist
+    - exact_file_name
+    - exact_size_bytes
+    - expected_md5
+    - computed_sha256
+    - safe_archive_members
+  immutable_manifest: true
+  retries_bounded: true
+  resume_supported: true

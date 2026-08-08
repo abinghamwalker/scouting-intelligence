@@ -1,0 +1,116 @@
+schema_version: 1
+task_id: W04-STAGED-IMMUTABLE-PUBLISHER-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct the bounded R1 publisher by closing its admitted root-name vocabulary to
+  the three exact W04 named roots and adding explicit post-link failure-boundary
+  evidence, without changing the accepted publication architecture or any frozen byte.
+depends_on:
+  - W04-STAGED-IMMUTABLE-PUBLISHER-01-R1:MASTER_REWORK_REQUIRED
+assigned_role: bounded_w04_staged_immutable_publisher_r2_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.yaml
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.yaml
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/wyscout_publication.py
+  - tests/unit/test_w04_staged_product_publisher.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/wyscout_publication.py
+  - tests/unit/test_w04_staged_product_publisher.py
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.md
+  - src/scouting/storage/__init__.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - src/scouting/contracts/**
+fixed_bindings:
+  r1_packet_sha256: 99921ecc50e6a60bd5a482473cc1cdb051c0aced025f278decbff48e8a26d5fe
+  r1_publisher_sha256: a43126421f1576abc5c142fe53d9ac0bfd397d06a34be0b101f9802f986fde9d
+  r1_test_sha256: 23e35833c7765e7c782ef55052bcc25b93fea57d693ce99b535560fe7ffa5c8e
+  r1_return_sha256: 31f8cfef9726b24d4cea0b3efbc9adf804c1d4110fa7a1178c54d81e8f9a883e
+  complete_repository_gate_sha256: 22b0b73078d4d2f0cc7e5eed3920a5401fd3d0e02d9ee3c66d9c7af02f76f469
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  guarded_storage_sha256: 62a026560c4821d123d42afcd3438be18572ec0fef03f1747a0cbcfa97f030ef
+  parquet_encoder_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+findings:
+  - id: W04-PUBLISHER-R1-P1-ROOT-NAME-CLOSURE
+    priority: P1
+    evidence: >-
+      The accepted vertical-slice audit states that the publisher maps only the
+      exact names wyscout-working, wyscout-manifests and w04-rebuild-runs. R1
+      instead admits every value matching a generic root-name regular expression,
+      and its positive tests use the unauthorized name silver.
+  - id: W04-PUBLISHER-R1-P2-POST-LINK-FAILURE-COVERAGE
+    priority: P2
+    evidence: >-
+      R1 covers unlink failure after the hard link, but does not independently
+      target final-directory fsync failure after link creation or staging-directory
+      fsync failure after staged-name unlink. Those state boundaries must be
+      executable and fail closed before independent review.
+requirements:
+  - Verify every fixed hash and stop on drift before editing.
+  - >-
+    Replace the generic admitted root-name vocabulary with exactly the three
+    literals wyscout-working, wyscout-manifests and w04-rebuild-runs. A non-empty
+    subset of those exact names is permitted so one bounded writer need not receive
+    unrelated roots; every other string/type must fail before directory or file write.
+  - >-
+    Update every positive temporary-root test to use an authorized exact root name,
+    prove all three authorized names can be declared, and prove canonical-looking
+    aliases including silver, bronze, gold, manifests, runs and arbitrary valid
+    tokens fail before write. Do not hard-code real repository absolute paths into
+    the testable publisher; downstream wiring remains responsible for exact local
+    root locations and tests use tmp_path mirrors only.
+  - >-
+    Add targeted fault injection after hard-link creation for the final-parent fsync
+    and after staged-name unlink for the staging-parent fsync. Require no success
+    result, no replacement of any pre-existing final, and exact observable retained
+    evidence/link-count state for each boundary. Do not weaken R1's earlier staged
+    evidence, replay, no-follow, mode, race, cross-device or readback guarantees.
+  - >-
+    Preserve every other R1 behavior and all frozen inputs byte-identically. Add no
+    sidecar, real product path, dependency, public export, Git, provider/network or
+    infrastructure action.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run ruff check src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run mypy src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run pytest -q tests/unit/test_w04_staged_product_publisher.py tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/wyscout_publication.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Bounded root-name and post-link-failure correction with mandatory R2 return.
+stop_conditions:
+  - Any accepted publication semantic or fixed binding must change.
+  - Exact real root paths must be hard-coded into this testable primitive.
+  - Any sidecar, replacement, real product write, dependency, Git, provider/network or external-infrastructure action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

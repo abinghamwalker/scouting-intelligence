@@ -1,0 +1,123 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Freshly and independently re-review the complete R3 serializer candidate,
+  proving closure of W04-LAP-IMPL-R1-P1-01 while preserving the failed R1 review
+  and independently re-running the full descriptor/digest/build boundary audit.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_logical_arrow_projection_r3_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2.yaml
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-acceptance-v1.json
+  - reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3.yaml
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3.md
+  - reports/verification/W04/wyscout-logical-arrow-projection-implementation-R3-master-verification.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-design-R1.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R4.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-acceptance.md
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-independent-review-R1.md
+  - src/**
+  - tests/**
+fixed_bindings:
+  authority_decision_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  authority_acceptance_sha256: 647ce58093485717a50037eeb6e46d09c2dfad88a8f60bdef7bce8d35f8d31c3
+  authority_master_acceptance_sha256: 2918b19595297ecfcd029e1f04c2b6be23bcbfcc9b2c79e298222fd389435d86
+  failed_r1_review_packet_sha256: f4afbf9ae5996e76d79fafb7c8a9744955f4daa5da77ac0c4c6cb2d040500856
+  failed_r1_review_sha256: 8b40285f742be1434670fecca743c9d94c3513b1edc7e583ab073d913c9db9eb
+  failed_r1_review_return_sha256: 1a7db7673711a6fa3e824661ccb9a748c06daf62e769f328142c7f170b2eba32
+  r3_packet_sha256: 886b5c28192074d2fd494c178c47e36c54c327ade80d3fe4e9d8a4a47720e8a7
+  r3_return_sha256: 3ea3633cb6adcec96912e53b280b6ea3c19f41a8cb4f2340f7160d3bb68571a6
+  r3_master_verification_sha256: 208cd225cf8e0f0709cc5f8026f8d4de1efdac79aa755ece77f8b0eaaf824142
+  formats_r3_sha256: 309ee2821913022c3ce82b713a53e74dd4ac3190af0047a621ba4ab2cd0f7209
+  formats_test_r3_sha256: 0d6acf199d230257656f91c0c191c3bbef5dfb23c5cf49e6f731da4d57c8f317
+  build_contract_frozen_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  build_contract_test_frozen_sha256: f39e34daac144369444e1701003efdec0c1a97f83ba5fb0beecaf844c21e4692
+  implementation_design_sha256: 75cc8ff80cbb3c125a7164499b36c9cf1bad200ea1e8dcf096c019ad1c9adead
+  accepted_encoder_review_sha256: eb5928d0bc06be4ecbe8317d9d3387e2db5d6d8631d08ac3dacbc45583c5ad9d
+  accepted_encoder_master_acceptance_sha256: 1cfcd5bde3128a7736c75360460e61f73cc9910772d80d5e0b062abb606ce519
+  accepted_build_master_acceptance_sha256: 26026181020650779bd7319c0672abf5dc5e78313fd38a33aff385bcb65c3449
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - Read every line of both implementation modules and both tests.
+  - >-
+    Independently reproduce the exact R1 P1 exploit with both model_copy and
+    model_construct, direct and nested. Prove invalid raw state is rejected before
+    Pydantic JSON dump, semantic hashing and Parquet writing.
+  - >-
+    Attack exact class/field-roster/extra-state/field-set/discriminator checks;
+    Boolean/float/string/integer substitutions; tuple/list and typed-child/dict
+    substitutions; duplicate/unsorted members; finite Decimal; NFC/surrogate and
+    nested combinations. Confirm fresh validation cannot change the union arm.
+  - >-
+    Re-run all seven valid tagged variants, strict physical inverse, tagged-null/
+    outer-null, positional tuple, homogeneous list, recursive metadata,
+    descriptor runtime/API authority and zero-write matrices.
+  - >-
+    Independently reconstruct the sole semantic preimage and both exact identity
+    golden vectors. Search for any second semantic derivation, projection digest,
+    unavailable-schema formula or accepted placeholder claim.
+  - >-
+    Re-audit the frozen build adaptation and local-only/scope boundaries. Confirm
+    no root descriptor/schema/product, feature, population, dependency, provider,
+    publication, cloud/container/CI/deployment or Git remote was created.
+  - >-
+    Write only new R2 review/return paths. Preserve the R1 failed review and return
+    byte-identically. Return PASS only with zero P0/P1/P2 findings; otherwise
+    REWORK and do not repair your own finding.
+definition_of_done:
+  - Fresh independent R2 review with exact P1 closure and full-regression evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent R2 implementation review and reviewer return only.
+stop_conditions:
+  - Fixed hash drift or inability to preserve failed R1 evidence.
+  - Need to edit implementation/tests/authority/schema/product/data/dependencies.
+  - Need for Git, provider/network or external action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

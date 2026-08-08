@@ -1,0 +1,78 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01
+phase_id: W04
+revision: R8
+state: ACCEPTED
+objective: >-
+  Independently review the test-only R8 SilverAction matrix correction while
+  retaining every R7 schema/ledger/constants/Decimal acceptance proof.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8:COMPLETE
+assigned_role: independent_w04_23_root_schema_r8_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.yaml
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R7.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.md
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R8.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  accepted_r7_schema_sha256: 8ff15eb36e588806d3768e7a3769d7e5cad9a95ea994f676f5930bc63205d0f4
+  r8_test_sha256: 5daaa32082cc0f82ed9b8b0b61cc06fe9d2db633cb15ed9c9837e491f2b9a5b8
+  r8_producer_return_sha256: 2d92e13e53a2d8a8aa3104145c1947da882ef85eeb57bfcefc4acad4310a9a99
+  r7_independent_review_sha256: f4c74753d9a168bb00ee503066e088ea897d445c6cd6bdbaa9a7b1be07bfc2ec
+  r7_reviewer_return_sha256: 2cacfc08b21f4c3dbf536d9037bb108afb09f25ca4b70ea830ffb43fa2b8d746
+  r5_acceptance_oracle_sha256: a3f15f92a14ff342efd0f5b2848b60eab4898ea79eb69c7fd6f09e6946077efa
+requirements:
+  - Verify every fixed binding and confirm the accepted schema hash is unchanged.
+  - >-
+    Independently instantiate/read back the exact 29-row matrix and require the
+    frozen cardinality vector. For SilverAction require three distinct action IDs,
+    action source IDs and physical source identities with internally exact one-row
+    sequences/lineages; positions 0/1/2; scales 0/18/18; exact all-five-null zero-
+    seconds unmapped/ineligible row; CONTROL one-position row; RESTART two-position
+    row; exact 9999.999999999999999999 capacity value; exact position exponents;
+    and descriptor-led logical JSON-byte reproduction with no rounding.
+  - >-
+    Reconfirm by hash/reconstruction that the R7 56-row ledger, C1-C11 resolver,
+    23 roots, 12/11 descriptor split, exact Decimal mappings and root digests remain
+    unchanged. Run focused and adjacent gates. Return PASS only with 0/0/0.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent R8 matrix/schema review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without editing producer bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

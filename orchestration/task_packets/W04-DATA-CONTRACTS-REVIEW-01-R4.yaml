@@ -1,0 +1,154 @@
+schema_version: 1
+task_id: W04-DATA-CONTRACTS-REVIEW-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent, read-only review of the bounded W04 data-contract
+  R4 correction. Reproduce the three R3 findings, challenge whether complete
+  period evidence and all six fact coverage populations are actually
+  source-bound rather than self-declared, and recommend PASS only with zero
+  open P0-P2 findings. Do not modify implementation.
+depends_on:
+  - W04-DATA-CONTRACTS-01-R4:RETURNED_FOR_FRESH_INDEPENDENT_REVIEW
+assigned_role: fresh_independent_w04_data_contracts_reviewer_r4
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R4.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-01-R4.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-REVIEW-01-R3.yaml
+  - reports/verification/W04/wyscout-data-contracts-R3-master-verification.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/wyscout-data-contracts-independent-review-R4.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R1.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R2.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R4.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R3.md
+fixed_bindings:
+  corrected_implementation_sha256: 2ca2862550c48a8db899f25c26612d694a7ca8041416cf0aae4dcd39b5a2bb5e
+  corrected_focused_test_sha256: 0ddb9e2bd31dded899a68b7b6344cf17321dffe947ab6dffc98267eb918bdc69
+  r4_producer_return_sha256: f66c4ea9133a23394d67d81d4f7badf989be39594eb2fec7165f9928a429be68
+  r3_independent_review_sha256: a86e30a1d56ae1c88f9bbb36e067f74f4fb234664a4ba08e9e05589b2e2bb066
+  identity_acceptance_sha256: 37764392cdaf9626ffaff26e119fb142218d36489e87a8b1d55402e3e2dc7f86
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+  feature_acceptance_sha256: d3b3c552784f4734f6b002569d9add1b4dd2d2eaaed57643a8ca4d5226fca78c
+  product_contract_preimage_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+  schema_bundle_preimage_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+requirements:
+  - >-
+    Read every listed input fully, recompute every fixed digest, inspect the
+    complete implementation/test candidate, and reproduce every packet check.
+  - >-
+    Reproduce all three R3 probes at both Fact and Gold boundaries: six-dimension
+    2/2 forgery; out-of-bounds/mixed/three-position accepted-feature drift; and
+    singleton contested possession promotion.
+  - >-
+    Independently challenge the claimed period completeness by removing one
+    source action, lowering period_action_count to the remaining tuple, and
+    attempting a consistent SilverAction, SilverPossession,
+    SilverPlayerMatchFact, and GoldPlayerWindow chain while the lineage still
+    contains the omitted physical action row. A literal complete flag and a
+    caller-mirrored count are not source completeness evidence.
+  - >-
+    Challenge the frozen equal-clock cross-team rule with two CONTROL actions
+    at the same period-relative clock but different teams. Verify
+    UNCERTAIN_BOUNDARY_UNASSIGNED does not leave either simultaneous action
+    resolved merely because source ordinal imposes a serialization order.
+  - >-
+    Challenge fact coverage population completeness, other-player sequence
+    entries, possession source-row closure, predicate/action identity binding,
+    period omission, and any route where internally derived coverage merely
+    derives from a caller-selected subset.
+  - >-
+    Verify exactly four supported features remain and no serializer, product
+    byte, manifest, receipt, runtime, build, dependency, architecture revision,
+    provider access, or external service was created.
+  - >-
+    Write only the two allowed review artifacts, with exact byte identities,
+    commands/results, all new P0-P2 findings, recommendation, and scope
+    confirmation. PASS requires zero open P0-P2.
+definition_of_done:
+  - Every R4 correction is independently closed or returned with exact evidence.
+  - Every new P0-P2 finding is reported.
+  - Reviewed and authority bytes remain unchanged.
+  - Exact focused static, security, and local-only checks complete.
+acceptance_checks:
+  - >-
+    uv run ruff format --check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run ruff check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run mypy src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - >-
+    uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+    tests/contracts/test_foundation_contracts.py
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any reviewed implementation, test, return, authority, preimage, R20/R21, or prior evidence byte changes.
+  - Any P0-P2 finding remains reproducible.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

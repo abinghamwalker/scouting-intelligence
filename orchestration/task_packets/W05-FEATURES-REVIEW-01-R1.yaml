@@ -1,0 +1,70 @@
+schema_version: 1
+task_id: W05-FEATURES-REVIEW-01
+phase_id: W05
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Independently verify the W05 feature registry, exact W04 bridge, synthetic-only
+  separation, deterministic formulas/states and temporal-lineage fail-closed behavior.
+depends_on:
+  - W05-FEATURES-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-FEATURES-01-R1.yaml
+  - reports/reviews/W05/returns/W05-FEATURES-01-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/unit/test_w05_features.py
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-feature-registry-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+review_questions:
+  - Are W04 real and synthetic development identities, schema hashes, digests, lineage and claims cryptographically distinct and impossible to cross-wire?
+  - Is W04 admission mechanically exact-four with minutes/rates/per90 still suppressed and no unsupported value imputed or converted to zero?
+  - Does every descriptor bind exact type/unit/order/numerator/denominator/formula/imputation/suppression/missing/zero/unavailable/as-of/lineage policy?
+  - Are canonical registry/fixture bytes and digests reproducible and unknown/reordered/substituted data rejected?
+  - Do synthetic materialization and fixtures preserve unavailable, suppressed, missing and observed zero as distinct FeatureValue states?
+  - Do equality/post-cutoff time, dependency lineage, W04/synthetic identity and manifest attacks fail closed?
+  - Is every broader feature/metadata/peer-group label explicitly constructed development-only with no provider, production, expert or W06 claim?
+deliverables:
+  - Independent P0/P1/P2 verdict and exact adversarial evidence under the six W05 blocker tests.
+  - Smallest bounded correction only for reproducible product blockers; W10-only observations excluded.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - Feature bytes/states/lineage and evidence-class boundary are independently reproduced.
+  - No source/test/config/orchestration/dependency/Git/accepted W04 changes.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run ruff check src/scouting/features tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any authority conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

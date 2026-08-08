@@ -1,0 +1,200 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the single additive W04 source-completion-index correction and bounded
+  equal-clock correction authorized on 2026-07-31. Preserve all R20/R21 bytes, the
+  R21 checkpoint and every failed-review artifact. Create no Bronze, Silver, Gold or
+  other product byte.
+depends_on:
+  - W04-DATA-CONTRACTS-01-R5:BLOCKED_WITH_EXECUTABLE_CONTRADICTION
+  - USER-SOURCE-COMPLETION-INDEX-AUTHORITY:AUTHORIZED
+assigned_role: w04_data_contracts_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R1.yaml
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - orchestration/task_packets/W04-DATA-CONTRACTS-01-R5.yaml
+  - reports/verification/W04/wyscout-data-contracts-R4-master-verification.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_manifest.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - data/manifests/wyscout/v5/source-completion/**
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/source/**
+  - data/working/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R1.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R2.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R3.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R4.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R3.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R4.md
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+fixed_bindings:
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r21_checkpoint_commit: 82a9f05
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  completion_manifest_sha256: 69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1
+  authorized_event_members:
+    - path: archive-members/events_England.json
+      sha256: 301599543aa1a7fa457bb8ef33c9fe860bf81dca65d418d618d68abcda3defad
+      row_count: 643150
+    - path: archive-members/events_France.json
+      sha256: 18e6316ab3efd357e99f90847791780e279765ba06b4bd60cf483adba5b9a317
+      row_count: 632807
+    - path: archive-members/events_Germany.json
+      sha256: 2612a6f8cbd8209acf39d5e3c7d2a43689138b1134d09b36e23a4b0422a781f3
+      row_count: 519407
+    - path: archive-members/events_Italy.json
+      sha256: b41f2d545b5cf80aeab0f9619e3091dbce159ca8e0a6e2d87ae2daee4d040a84
+      row_count: 647372
+    - path: archive-members/events_Spain.json
+      sha256: b55fabec6624e469b9396100de915eaca334d4457de2c61a887a7a67de79a154
+      row_count: 628659
+  aggregate_event_row_count: 3071395
+  supported_features:
+    - action_count
+    - coordinate_known_action_count
+    - match_count
+    - resolved_possession_action_count
+requirements:
+  - >-
+    Before deriving any index member, invoke or exactly reproduce the accepted source
+    bridge verification so the completion document, source-manifest identity, every
+    authorized event member's whole-file SHA-256/size and top-level row count are
+    verified against frozen evidence. Do not discover paths or read excluded members.
+  - >-
+    Derive one deterministic canonical index with exact source-manifest ID/digest and
+    exact five-member scope bindings. For every source match-period, commit its exact
+    count and an ordered membership digest whose framed preimage covers physical
+    ordinal, strict provider event identity, strict provider match identity, exact
+    period and clock/order fields, strict integer-or-null player/team, strict integer
+    event and integer-or-null subevent, exact raw tags plus strict-integer possession
+    tag projection, and canonical raw-record SHA-256. Strings remain unmapped or fail;
+    no integer coercion is allowed.
+  - >-
+    Canonical index ordering, member/period uniqueness, per-member and aggregate count
+    reconciliation are mandatory. Write only canonical immutable bytes under
+    data/manifests/wyscout/v5/source-completion/ with a filename or containing directory
+    whose address is the exact SHA-256 of the canonical payload. Re-running must be
+    byte-idempotent; conflicting existing bytes fail closed.
+  - >-
+    Provide a public completion-reader validation boundary that loads only that exact
+    local content-addressed index, independently verifies its payload address, source
+    bindings, ordering, uniqueness and reconciliations, and compares an entire supplied
+    match-period Bronze/source action population in its supplied order with the indexed
+    count and membership digest. Missing, extra, duplicate, reordered, stale,
+    cross-member, cross-match and cross-period evidence must fail closed. A submitted
+    Boolean/count/witness/subset-only digest must never establish completeness.
+  - >-
+    Bind the accepted index SHA-256 through Silver possession, Silver player-match fact,
+    Gold player-window provenance and dependency-lineage hashing. Preserve causal
+    other-player/ineligible source rows. Do not use RETRIEVAL_INDEX as a semantic alias
+    for this source control. Keep contract-module import direction compliant.
+  - >-
+    Apply group-first equal-clock CONTROL/RESTART resolution: a same-clock multi-team
+    group and dependent contested buffer are wholly unassigned, while deterministic
+    possessions completed strictly earlier remain. Source ordinal/event ID cannot pick
+    a team within an ambiguous clock.
+  - >-
+    Add named adversarial tests for source/index digest drift, count drift, canonical
+    order/uniqueness/aggregate drift, truncation through Gold, whole-period omission,
+    missing/additional/duplicate/reordered/stale/cross-period input, all six R20 coverage
+    omissions, other-player causal provenance, and both equal-clock cases. Existing R1-
+    R4 closures and the exact four-feature roster must remain.
+definition_of_done:
+  - The actual frozen five-member source derives exactly one content-addressed index.
+  - The accepted index reconciles exactly 3071395 source action rows.
+  - Every required adversarial case fails at the public completion-reader boundary.
+  - Silver/Gold provenance and dependency lineage bind the accepted index digest.
+  - All focused checks pass without product writes or unauthorized byte changes.
+acceptance_checks:
+  - >-
+    uv run ruff format --check src/scouting/sources/wyscout_completion_index.py
+    src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run ruff check src/scouting/sources/wyscout_completion_index.py
+    src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run mypy src/scouting/sources/wyscout_completion_index.py
+    src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - >-
+    uv run pytest -q tests/unit/test_wyscout_source_completion_index.py
+    tests/unit/test_wyscout_source_manifest.py tests/contracts/test_wyscout_data_contracts.py
+    tests/contracts/test_foundation_contracts.py
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py
+    src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+  - >-
+    uv run python -m scouting.sources.wyscout_completion_index derive
+    --source-root data/source/wyscout/v5 --manifest-root data/manifests
+master_only_checks:
+  - shasum -a 256 reports/reviews/W04/wyscout-schema-design-R20.md reports/reviews/W04/wyscout-schema-design-R21.md
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any R20/R21, accepted preimage, R21 checkpoint, prior return/review, raw source, source manifest, dependency/lock, or unrelated user byte changes.
+  - Any provider access, network, new dependency, cloud, container, hosted CI, endpoint, remote, deployment, product write, or feature beyond the four fixed counts.
+  - Correctness requires another architecture, provider-rights, project-root, dependency, storage, or product decision.
+  - A bounded cryptographic/content-address verification cannot close the public boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

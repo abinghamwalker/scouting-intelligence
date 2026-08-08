@@ -1,0 +1,90 @@
+schema_version: 1
+task_id: W04-R21-PROGRESSION-FIXTURE-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent review of the bounded R21 progression-fixture
+  correction, bind the corrected cross-authority test in the fixed machine
+  review record, and issue PASS or concrete bounded REWORK.
+depends_on:
+  - W04-R21-PROGRESSION-FIXTURE-01-R1:MASTER_REPRODUCED
+assigned_role: independent_r21_progression_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-PROGRESSION-FIXTURE-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R4.md
+  - reports/reviews/W04/returns/W04-R21-PROGRESSION-FIXTURE-01-R1.md
+  - reports/reviews/W04/archive/wyscout-r21-cross-authority-composability-independent-review-R1-superseded-progression-fixture-f266477e.md
+  - reports/phase-gates/W04/archive/wyscout-r21-correction-gate-superseded-progression-fixture.json
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-R21-PROGRESSION-FIXTURE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/verification/**
+  - reports/phase-gates/**
+fixed_bindings:
+  review_id: w04-wyscout-r21-cross-authority-composability-independent-review-R1
+  review_path: reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  corrected_test_physical_sha256: c51d16e1de99c28cfe5cde2feeeb8cbfc908516a59edc47cd53b08e955e75b26
+  fixed_test_return_physical_sha256: 9f45ccd44c9f27c53b72331609dd040fc1ca9211c630181117ad34f17ca5efb5
+  progression_return_physical_sha256: 2270248b8ae07724dbd28e14a1de1a0d43eff8484c261c27418f09f8b0263ee3
+  superseded_review_physical_sha256: f266477e21be381f9acb014e9caa3669e9295dcc57422a8dbb5602fa413d28bb
+  preserved_design_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+requirements:
+  - Independently read the complete corrected test and prove the diff is limited to identity lifecycle presence.
+  - >-
+    Challenge all invalid partial identity states, including candidate halves,
+    review-before-candidate, acceptance-before-review, and unknown extra paths.
+  - Reproduce the exact 30-resource roster and unchanged path-list digest.
+  - Reproduce all R21 preimage, field v2, possession v2, feature, product, dependency, and serializer cases.
+  - >-
+    Use a fresh canonical UUID reviewer distinct from every master, producer,
+    authority reviewer, and superseded cross-authority reviewer.
+  - >-
+    Write exactly one w04-r21-cross-authority-review-v1 machine fence with the
+    closed six-key record binding the corrected test SHA and unchanged R4 test
+    return SHA required by the executable contract.
+  - Do not create gate evidence or identity/product runtime paths.
+definition_of_done:
+  - Corrected R21 test and the complete focused authority suite pass.
+  - The fixed review path receives fresh independent PASS or concrete REWORK.
+  - Superseded review/gate evidence remains byte-identical in the archive.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run ruff check tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run pytest -q tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    uv run pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+stop_conditions:
+  - Any fixed binding, archived byte, or R21 semantic differs.
+  - Review requires changing any test, candidate, authority, gate, dependency, product, or broader-scope path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

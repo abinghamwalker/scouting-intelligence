@@ -1,0 +1,119 @@
+schema_version: 1
+task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Correct only the R2 outer evidence-wrapper transport-digest predicate, retain
+  the complete core-success/wrapper-failure output as negative evidence, and
+  execute exactly two additional fully wrapper-verified complete invocations of
+  the unchanged accepted R10 launcher/rebuild against the immutable local roots.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10:MASTER_ACCEPTED
+  - W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R2:REWORK_RETAINED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R2.yaml
+  - reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - data/manifests/wyscout/v5/code/**
+  - data/manifests/wyscout/v5/bronze/**
+  - data/manifests/wyscout/v5/silver/**
+  - data/manifests/wyscout/v5/gold/**
+  - data/working/wyscout/v5/.staging/**
+  - data/working/wyscout/v5/bronze/**
+  - data/working/wyscout/v5/silver/**
+  - data/working/wyscout/v5/gold/**
+  - runs/w04/wyscout-rebuild/**
+  - reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r2_packet_sha256: 207886a6c14bdb7415d96d532c073b1565d94f5188e8046a69f980f5619ac757
+  defective_r2_wrapper_sha256: eeb2a067fc6786fcb0d2dd5ed8446623f676aed1ea060ddb1ff4f71e47be42cc
+  corrected_r3_wrapper_sha256: e5b557790d02c41f457c683d59756509c48df2b15854c4c6d6914feec875d537
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  rebuild_child_sha256: fff279d4d4a6a1c76ea6ee2cc9c7a88a4d5fd2c56ca677984a1dcce765ef9339
+  accepted_current_code_manifest_sha256: c94e650146a982174820ba694a2dcd1b20dc6648426527213bf2e6de09861c2c
+  accepted_build_id: b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79
+  r2_control_run_id: 0291c474-324e-457a-a26e-58262474c89e
+  r2_admission_run_id: 0935e9cb-5269-4687-932f-ef4605012598
+  r2_rebuild_run_id: 140f995e-7024-49a9-a764-1131fe326045
+  r2_rebuild_receipt_sha256: a70a977f76f775e31f0ae3d9d7c28c51df99490733ebe76f20972107402d31cb
+  r2_boundary_receipt_sha256: 521581b50ca008a6c6e5ef6a7886018337ea904e896b85d9980d35a42f204f53
+  bronze_manifest_sha256: abdc5d89fdac08638f4877f9a44dceb9356d789741bd93981cce4a9b6825d9c1
+  silver_manifest_sha256: 089673ff01edd7de7b6e5777958d19cbaffaa9f429b042ab4986746d80a7c36a
+  gold_manifest_sha256: 08de1349a532c3f455d792ee56aafc3d8c587828bc9934dc7f77a58a71c90068
+  normalized_outer_environment_authority_sha256: d832fe0a0e8249465b1c77f135a5b8da07c100fee0586127cdf8a4099133eaf1
+requirements:
+  - >-
+    Keep every accepted source/code/product/manifest/receipt and every retained
+    failed or successful prefix read-only except for the accepted launcher's
+    content-addressed/idempotent creation of new run families. Perform no cleanup,
+    overwrite, rename, reuse, Git operation or code change.
+  - >-
+    Classify R2 exactly: the accepted launcher and rebuild completed and published
+    the fixed code manifest/build/products/layer manifests plus one invocation and
+    boundary receipt family. The extra master wrapper then exited `1` because it
+    compared dynamic `outer_transport_environment_sha256` against the normalized
+    fixed-environment authority digest. Retain R2 as core-complete but wrapper-
+    unverified evidence; do not count it among the two R3 wrapper-verified runs.
+  - >-
+    The R3 wrapper correction must change no launch input, command, environment,
+    descriptor, product, manifest, receipt or accepted code byte. Before process
+    creation it mechanically reconstructs the exact 30-key post-uv child transport
+    environment, including venv-prefixed PATH, recursion depth `1`, dynamic control
+    prefix and inherited source descriptor, hashes its canonical JSON bytes, and
+    compares the returned dynamic digest to that value. The normalized fixed-
+    authority digest remains independently frozen in the accepted bootstrap tuple.
+  - >-
+    Execute exactly two additional fresh runs. Require wrapper exit `0`, one exact
+    canonical COMPLETE status line, no extra stdout, distinct fresh control,
+    admission and rebuild UUIDv4 values, exact dynamic transport digest equality,
+    empty unchanged runtime prefixes, the fixed current code manifest/build ID,
+    byte-identical seven products/three manifests and two new complete receipt
+    families.
+  - >-
+    Guard-read/reopen every output and reconstruct code manifest, 25-key projection,
+    build ID/inverse, product schemas/rows/digests, layer parent chain, temporal
+    proof, receipt cross-fields and equality across the two R3 runs. Retain R1, R2
+    and both R3 evidence families and all pre/mid/post inventories.
+acceptance_checks:
+  - uv run pytest -q -p no:cacheprovider tests/security/test_w04_wyscout_vertical_slice_publication.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/unit/test_w04_staged_product_publisher.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/install_local_git_guards.py --check
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Two additional wrapper-verified complete run families, retained R1/R2 negative evidence, exact readback/equality report and return.
+stop_conditions:
+  - None for bounded wrapper/evidence defects; continue rework without cleanup. User input only for a true standing-authority boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

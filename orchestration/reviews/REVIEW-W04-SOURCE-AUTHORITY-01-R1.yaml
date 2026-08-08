@@ -1,0 +1,39 @@
+schema_version: 1
+review_id: REVIEW-W04-SOURCE-AUTHORITY-01-R1
+task_id: W04-SOURCE-AUTHORITY-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: N/A
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - id: W04-AUTH-DEFECT-01
+    severity: P1
+    status: corrected
+    detail: >-
+      The local-only verifier initially rejected the exact approved HTTPS evidence and
+      download URLs. It now permits only the ten reviewed W04 source URLs at the exact
+      source-config path and continues to reject every other remote URL.
+decision: ACCEPT
+next_packet: W04-SOURCE-INGEST-01-R1
+reviewer: master
+evidence:
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - docs/dataset-cards/w04-source.md
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - tests/governance/test_w04_source_authority.py
+checks:
+  - command: uv run pytest -q tests/governance/test_w04_source_authority.py tests/governance/test_w03_policies.py
+    result: 41 passed
+  - command: uv run ruff check scripts/verify_local_only.py tests/governance/test_w04_source_authority.py
+    result: PASS
+  - command: uv run mypy scripts/verify_local_only.py
+    result: PASS
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS
+  - command: git remote
+    result: empty
+

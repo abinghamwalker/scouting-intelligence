@@ -1,0 +1,37 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-GATE-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Complete the second master-only R21 gate after the bounded test correction
+  and fresh independent review, resolving every complete repository failure
+  before authorizing downstream implementation.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-REVIEW-01-R2:ACCEPTED_FOR_MASTER_GATE_R2
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-GATE-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/verification/W04/wyscout-r21-full-repository-gate-R1-failure.md
+  - reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+allowed_paths:
+  - reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+  - reports/phase-gates/W04/wyscout-r21-correction-gate.json
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-GATE-01-R1.md
+requirements:
+  - Run the complete AGENTS.md repository suite in exact order.
+  - Resolve every failure, including phase-verifier/control-state failures.
+  - Rerun the 478-test R21 focused suite and exact retained inventory checks.
+  - Bind fresh review SHA-256 f266477e21be381f9acb014e9caa3669e9295dcc57422a8dbb5602fa413d28bb and PASS.
+  - Prove zero remotes and no product path before materializing PASS.
+  - Materialize only the three fixed gate paths as a single master-owned step.
+stop_conditions:
+  - Any complete repository or R21-specific check remains failing.
+  - Passing requires changing frozen architecture, product semantics, local-only boundary, or dependency policy.
+delegation: forbidden
+git_operations: master_only
+self_approval: master_authority_required

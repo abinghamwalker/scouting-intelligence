@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "phase_id": "W10",
+  "status": "ENGINEERING_READY_HUMAN_GATE_PENDING",
+  "decision": "PAUSE_FOR_PROTOCOL_APPROVAL_AND_FORMAL_PARTICIPATION",
+  "verified_at_utc": "2026-08-05T00:00:00Z",
+  "claim_boundary": "historical football-relevance research engineering only; no recruitment advice, recommendation, current-market, value, availability, fit or outcome claim",
+  "authority": {
+    "protocol_digest": "7420c3ec94e10b72276854d25aca37fffa64b4fbc26890e898b9f20ccdf0927f",
+    "query_pack_digest": "cf6796d5fd6905129548d194404f4de0577df1c2b0c5183cf2da7848a309ffd5",
+    "presentation_digest": "4ca84a2b9873cbc9c402dc85a740753c8a876ac9e72f4e37481b4973b0f5da96"
+  },
+  "gates": [
+    {
+      "id": "G-RW4-PROTOCOL",
+      "status": "PENDING_HUMAN_APPROVAL",
+      "detail": "The exact draft is frozen and engineering-verified; no human approval exists."
+    },
+    {
+      "id": "G-RW4-STUDY",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "detail": "No real eligible expert was recruited and no formal submission exists."
+    },
+    {
+      "id": "G-RW4-RESULT",
+      "status": "INSUFFICIENT_EVIDENCE",
+      "detail": "No protected input was accepted and no formal run or result exists."
+    }
+  ],
+  "engineering_checks": [
+    {"id": "frozen-authority-rebuild", "status": "PASS"},
+    {"id": "focused-w10-suite", "status": "PASS", "passed": 54, "failed": 0},
+    {"id": "retained-w04-runtime", "status": "PASS", "passed": 298, "failed": 0},
+    {"id": "complete-repository-suite", "status": "PASS", "passed": 3049, "failed": 0, "errors": 0, "duration_seconds": 2048.80},
+    {"id": "static-import-security", "status": "PASS"},
+    {"id": "local-only-controls", "status": "PASS", "passed": 25, "failed": 0},
+    {"id": "independent-review", "status": "PASS", "open_p0": 0, "open_p1": 0, "open_p2": 0, "open_p3": 0}
+  ],
+  "formal_study_performed": false,
+  "overall_g_rw4_passed": false,
+  "engineering_checkpoint_ready": true,
+  "w10_accepted_checkpoint_ready": false,
+  "w11_start_authorized": false,
+  "engineering_checkpoint": {
+    "tag": "checkpoint/w10-engineering-ready",
+    "annotated_tag_object": "0ab4202098816629d9313a0bf982082cd5d925a6",
+    "commit": "638ba874d0d248e284b805f1295fc233729db42d"
+  },
+  "evidence": {
+    "acceptance_report": "reports/phase-gates/W10/acceptance-report.md",
+    "master_review": "reports/reviews/W10/master-review.md",
+    "independent_review": "reports/reviews/W10/independent-review.md",
+    "verification_report": "reports/verification/W10/verification-report.md",
+    "human_boundary": "reports/verification/W10/user-approval-and-participation.md",
+    "phase_verifier_diagnostic": "reports/verification/W10/phase-verifier-candidate.json"
+  }
+}

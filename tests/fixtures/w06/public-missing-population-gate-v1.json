@@ -1,0 +1,9 @@
+{
+  "fixture_id": "w06-public-missing-population-gate-v1",
+  "evidence_class": "IMPLEMENTATION_FIXTURE_ONLY",
+  "preregistration_path": "configs/evaluation/w06-protected-preregistration-v1.json",
+  "expected_preregistration_digest": "13d26404f788466993d7cd3663c787e6da182005dd68c0dd48c70783f7c20ae5",
+  "expected_decision": "NO_GO",
+  "expected_reason": "MISSING_EXPERT_RELEVANCE_EVIDENCE",
+  "expected_access_outcome": "NOT_ACCESSED_MISSING_POPULATION"
+}

@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W04-FEATURE-REGISTRY-ACCEPT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize the master-owned canonical feature-registry acceptance, bind the
+  fresh independent R4 PASS review and frozen candidate, and release only the
+  serial R21 cross-authority test packet.
+depends_on:
+  - W04-FEATURE-REGISTRY-REVIEW-01-R4:MASTER_ACCEPTED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FEATURE-REGISTRY-ACCEPT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - tests/contracts/test_w04_supported_feature_authority.py
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R4.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - reports/verification/W04/wyscout-supported-feature-registry-acceptance-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-ACCEPT-01-R1.md
+authority:
+  acceptance_id: w04-wyscout-supported-feature-registry-acceptance-v1
+  acceptance_schema_version: w04-authority-acceptance-v1
+  accepted_at: "2026-07-31T10:12:27Z"
+  accepted_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  candidate_id: w04-wyscout-supported-count-features-v1
+  candidate_physical_sha256: 8901e09c8b0cd9ab2bfce9f6855702e518e36efa98c7f7653082eee52fcc2d95
+  candidate_sha256: 49065bcfe762caa7585082d897d845d82c9a9ef2f57a84a5312e55a12ffea10f
+  decision_id: w04-wyscout-supported-feature-registry-decisions-v1
+  decision_physical_sha256: bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941
+  decision_sha256: bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941
+  review_id: w04-wyscout-supported-feature-registry-independent-review-R1
+  review_physical_sha256: a692cc4aaa002882f92209256f1bdecb96b3eb6bdba8a9bc3f645569daa31c73
+  review_record_sha256: 039a3a0e8cbd68e6bdb7a1a8871c20f6af8095aac754e2ef1e0fb913c81a84e2
+  review_recommendation: PASS
+  supersedes_acceptance_id: null
+requirements:
+  - Write exactly one canonical fifteen-key JSON acceptance with one terminal LF.
+  - Independently reconstruct every decision/candidate/review digest, UUIDv5 actor, clock, and zero-finding PASS.
+  - Preserve all producer, reviewer, predecessor, preimage, and archived evidence bytes.
+  - Rerun the complete 371-test focused suite and local-only verifier with acceptance present.
+  - Release only the serial cross-authority test packet; do not begin product work.
+definition_of_done:
+  - Canonical acceptance validates as state ACCEPTED.
+  - Accepted candidate canonical digest becomes the feature_schema_hash.
+  - Focused/local-only/inventory/remote checks pass.
+  - Master verification and return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any bound digest, actor, clock, recommendation, or canonical byte differs.
+  - Any focused/local-only/inventory/product-absence check fails.
+  - Any architecture, dependency, network, cloud, container, or product change is required.
+delegation: forbidden
+git_operations: master_only_no_mutation_required
+self_approval: master_authority_required

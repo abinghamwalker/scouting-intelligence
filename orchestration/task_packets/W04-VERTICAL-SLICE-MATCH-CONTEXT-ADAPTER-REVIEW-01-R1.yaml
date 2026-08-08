@@ -1,0 +1,81 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-REVIEW-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Independently review the exact selected-match context adapter against the real
+  accepted source, identity, season/lineup and checked event population.
+depends_on:
+  - W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1:COMPLETE
+assigned_role: independent_w04_vertical_slice_match_context_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1.yaml
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - src/scouting/sources/wyscout_vertical_slice.py
+  - tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/identity/wyscout.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-vertical-slice-match-context-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  adapter_sha256: 2479f0db6eb949cb8856aa4efee5005f5531619726751230486039251e5fe4a3
+  tests_sha256: a3a4d26edb34d53a66dc6e36a6b9c75f102942731846dc08d301feba064d165e
+  producer_return_sha256: a4f9fca7125ec41b26fc0b52af62a2d48225fe677f11b12f649dd563758b3591
+  completion_adapter_sha256: b1cdb309c3d81e7a3b0606987fdf6c456d61a66c393ca681d93e212e805ac43c
+  identity_runtime_sha256: a9bc386ec759252464e5d6b4b14b95082a3a4218a9a48cbea97ffbcbd11b95cd
+  match_member_sha256: 620725c2e6a58b4db3e574ed6c559136477451d81af543f8a06bd85c3da3fe29
+requirements:
+  - Verify every fixed binding before reviewing and never edit producer bytes.
+  - >-
+    Independently open and hash the real match member, parse all 380 rows and
+    reconstruct ordinal 379, its raw digest, strict match/competition/season/start/
+    team values, player bench membership and minute-82 substitution without using
+    candidate fixtures as authority.
+  - >-
+    Reproduce the accepted season UUID, identity rows, 1768-action checked
+    population, 901/867 period counts and membership digests. Audit immutable
+    nested values, no-follow/exact-root/file mode checks and zero writer surface.
+  - >-
+    Run the focused producer gate and independently attack truncation, additions,
+    duplicates, ordinal/digest/type/cross-scope/lineup/identity/event-population
+    mutations. Return PASS only with P0/P1/P2=0/0/0; otherwise bounded REWORK.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_vertical_slice_context.py tests/unit/test_wyscout_source_completion_index.py tests/unit/test_wyscout_identity.py
+  - uv run ruff check src/scouting/sources/wyscout_vertical_slice.py tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - uv run mypy src/scouting/sources/wyscout_vertical_slice.py tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_vertical_slice.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent match-context review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without editing producer bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,75 @@
+schema_version: 1
+task_id: W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently challenge the claimed W04 build/receipt product-authority blocker and
+  the minimal recommended resolution. Confirm whether implementation can proceed from
+  accepted bytes alone or must obtain the bounded user authorization. Review only.
+depends_on:
+  - W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R1:USER_CLARIFICATION_REQUIRED
+assigned_role: fresh_independent_w04_build_receipt_blocker_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R1.yaml
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-BUILD-AUTHORITY-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  audit_sha256: 2d0fd4c6a797c6f04879772075d068560ccbca23456cc559160eb259c5d7ef18
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Attempt to derive complete receipt contents, real POC window/snapshot authority
+    and completion-index-bound aggregates solely from accepted R20/R21 bytes. Identify
+    any route that avoids a product decision without contradicting those bytes.
+  - >-
+    Confirm or reject the claim that R20's 25-key projection and one-hash algorithm are
+    already implementable while only the aggregate values/window/receipt authority are
+    blocked.
+  - >-
+    Validate that the recommended 2017-08-11 one-day window contains the authentic
+    match, the 2026-08-01 cutoff is strictly after every dependency clock, the snapshot
+    rule is explicit, the completion index is bound, the receipt graph is acyclic and
+    no 26th build key or R20/R21 rewrite is introduced.
+  - >-
+    Return PASS_TO_USER_QUESTION only if user authorization is truly required and the
+    recommended bounded decision is sufficient. Otherwise return REWORK with exact
+    executable evidence and a narrower safe route.
+  - Confirm no implementation/data/product/receipt/Git/provider/network/cloud/container/CI/remote/deployment action.
+definition_of_done:
+  - Independent verdict with P0/P1/P2 counts and exact user decision surface.
+stop_conditions:
+  - Any repository implementation, authority/data byte or external action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

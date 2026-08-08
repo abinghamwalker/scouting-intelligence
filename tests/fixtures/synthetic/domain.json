@@ -1,0 +1,211 @@
+{
+  "manifest": {
+    "schema_version": 1,
+    "fixture_id": "w03-synthetic-development-v1",
+    "partition": "development",
+    "classification": "w03_synthetic_generated",
+    "content_digest": "03972808bd6628dd4ffb66a975108bb15f649a0b778e493c85874ef107953e2a"
+  },
+  "payload": {
+    "decision_cutoff_ts": "2026-03-01T00:00:00Z",
+    "competitions": [
+      {
+        "id": "10000000-0000-4000-8000-000000000101",
+        "name": "Synthetic North League"
+      },
+      {
+        "id": "10000000-0000-4000-8000-000000000102",
+        "name": "Synthetic South League"
+      }
+    ],
+    "teams": [
+      {
+        "id": "20000000-0000-4000-8000-000000000101",
+        "competition_id": "10000000-0000-4000-8000-000000000101",
+        "name": "Synthetic Northbridge Athletic"
+      },
+      {
+        "id": "20000000-0000-4000-8000-000000000102",
+        "competition_id": "10000000-0000-4000-8000-000000000101",
+        "name": "Synthetic Harbour Vale"
+      },
+      {
+        "id": "20000000-0000-4000-8000-000000000103",
+        "competition_id": "10000000-0000-4000-8000-000000000102",
+        "name": "Synthetic Meridian FC"
+      },
+      {
+        "id": "20000000-0000-4000-8000-000000000104",
+        "competition_id": "10000000-0000-4000-8000-000000000102",
+        "name": "Synthetic Summit Town"
+      }
+    ],
+    "players": [
+      {
+        "id": "30000000-0000-4000-8000-000000000101",
+        "team_id": "20000000-0000-4000-8000-000000000101",
+        "display_name": "Synthetic Player Alder",
+        "position": "wide_forward"
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000102",
+        "team_id": "20000000-0000-4000-8000-000000000102",
+        "display_name": "Synthetic Player Birch",
+        "position": "wide_forward"
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000103",
+        "team_id": "20000000-0000-4000-8000-000000000103",
+        "display_name": "Synthetic Player Cedar",
+        "position": "central_midfielder"
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000104",
+        "team_id": "20000000-0000-4000-8000-000000000104",
+        "display_name": "Synthetic Player Dogwood",
+        "position": "wide_forward"
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000105",
+        "team_id": "20000000-0000-4000-8000-000000000101",
+        "display_name": "Synthetic Player Elm",
+        "position": "full_back"
+      },
+      {
+        "id": "30000000-0000-4000-8000-000000000106",
+        "team_id": "20000000-0000-4000-8000-000000000102",
+        "display_name": "Synthetic Player Fir",
+        "position": "full_back"
+      }
+    ],
+    "matches": [
+      {
+        "id": "40000000-0000-4000-8000-000000000101",
+        "competition_id": "10000000-0000-4000-8000-000000000101",
+        "home_team_id": "20000000-0000-4000-8000-000000000101",
+        "away_team_id": "20000000-0000-4000-8000-000000000102",
+        "started_at": "2026-01-10T15:00:00Z"
+      },
+      {
+        "id": "40000000-0000-4000-8000-000000000102",
+        "competition_id": "10000000-0000-4000-8000-000000000102",
+        "home_team_id": "20000000-0000-4000-8000-000000000103",
+        "away_team_id": "20000000-0000-4000-8000-000000000104",
+        "started_at": "2026-02-05T19:30:00Z"
+      }
+    ],
+    "identity_records": [
+      {
+        "provider": "w03-synthetic-provider",
+        "source_id": "syn-dev-player-alder",
+        "source_version": "v1",
+        "resolution_status": "resolved",
+        "canonical_player_id": "30000000-0000-4000-8000-000000000101",
+        "candidate_player_ids": []
+      },
+      {
+        "provider": "w03-synthetic-provider",
+        "source_id": "syn-dev-ambiguous-fullback",
+        "source_version": "v1",
+        "resolution_status": "review_required",
+        "canonical_player_id": null,
+        "candidate_player_ids": [
+          "30000000-0000-4000-8000-000000000105",
+          "30000000-0000-4000-8000-000000000106"
+        ]
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "50000000-0000-4000-8000-000000000101",
+        "player_id": "30000000-0000-4000-8000-000000000101",
+        "metric": "progressive_actions_per_90",
+        "value": 7.2,
+        "observed_at": "2026-01-10T16:45:00Z",
+        "available_at": "2026-01-11T09:00:00Z",
+        "expected_admission": true,
+        "arrival_class": "on_time"
+      },
+      {
+        "fact_id": "50000000-0000-4000-8000-000000000102",
+        "player_id": "30000000-0000-4000-8000-000000000102",
+        "metric": "progressive_actions_per_90",
+        "value": 6.9,
+        "observed_at": "2026-01-10T16:45:00Z",
+        "available_at": "2026-01-11T09:05:00Z",
+        "expected_admission": true,
+        "arrival_class": "on_time"
+      },
+      {
+        "fact_id": "50000000-0000-4000-8000-000000000103",
+        "player_id": "30000000-0000-4000-8000-000000000104",
+        "metric": "high_regains_per_90",
+        "value": 2.3,
+        "observed_at": "2026-01-05T20:00:00Z",
+        "available_at": "2026-02-12T08:30:00Z",
+        "expected_admission": true,
+        "arrival_class": "late"
+      },
+      {
+        "fact_id": "50000000-0000-4000-8000-000000000104",
+        "player_id": "30000000-0000-4000-8000-000000000103",
+        "metric": "line_breaking_passes_per_90",
+        "value": 4.1,
+        "observed_at": "2026-02-05T21:15:00Z",
+        "available_at": "2026-02-06T10:00:00Z",
+        "expected_admission": true,
+        "arrival_class": "on_time"
+      },
+      {
+        "fact_id": "50000000-0000-4000-8000-000000000105",
+        "player_id": "30000000-0000-4000-8000-000000000105",
+        "metric": "wide_overlaps_per_90",
+        "value": 5.0,
+        "observed_at": "2026-02-20T20:00:00Z",
+        "available_at": "2026-03-01T00:00:00Z",
+        "expected_admission": false,
+        "arrival_class": "late"
+      },
+      {
+        "fact_id": "50000000-0000-4000-8000-000000000106",
+        "player_id": "30000000-0000-4000-8000-000000000106",
+        "metric": "wide_overlaps_per_90",
+        "value": 4.8,
+        "observed_at": "2026-02-20T20:00:00Z",
+        "available_at": null,
+        "expected_admission": false,
+        "arrival_class": "late"
+      }
+    ],
+    "negative_cases": {
+      "attempted_storage_path": "../../outside-w03-fixture.json",
+      "authorised_actor": {
+        "actor_id": "60000000-0000-4000-8000-000000000101",
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "role": "analyst"
+      },
+      "unauthorised_actor": {
+        "actor_id": "60000000-0000-4000-8000-000000000102",
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "role": "unknown"
+      },
+      "cross_tenant_actor": {
+        "actor_id": "60000000-0000-4000-8000-000000000103",
+        "tenant_id": "70000000-0000-4000-8000-000000000102",
+        "role": "analyst"
+      },
+      "confidential_evidence": {
+        "evidence_id": "80000000-0000-4000-8000-000000000101",
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "classification": "synthetic_confidential",
+        "exportable": false
+      },
+      "attempted_actions": [
+        "confidential_evidence.read_unauthorised",
+        "confidential_evidence.export_unauthorised",
+        "audit_event.update",
+        "audit_event.delete"
+      ]
+    }
+  }
+}

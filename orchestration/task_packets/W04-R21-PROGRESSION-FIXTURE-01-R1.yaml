@@ -1,0 +1,64 @@
+schema_version: 1
+task_id: W04-R21-PROGRESSION-FIXTURE-01
+phase_id: W04
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Correct only the stale R21 future-identity absence fixture so it admits the
+  exact serial identity authority lifecycle required by R21 while retaining
+  fail-closed partial-order checks and all frozen R21 semantics.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-GATE-01-R2:ACCEPTED
+  - W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1:MASTER_ACCEPTED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-PROGRESSION-FIXTURE-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - reports/phase-gates/W04/wyscout-r21-correction-gate.json
+allowed_paths:
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-PROGRESSION-FIXTURE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - src/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+  - reports/phase-gates/**
+  - reports/verification/**
+fixed_context:
+  prior_test_sha256: fffb71d4d382816f3572b575cbcd9e951309f92239ca540327cdb02304c4f9b0
+  corrected_test_sha256: c51d16e1de99c28cfe5cde2feeeb8cbfc908516a59edc47cd53b08e955e75b26
+  preserved_design_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+requirements:
+  - >-
+    Replace only the perpetual absence assertion with the exact valid presence
+    states: all absent; decision plus candidate; then review; then acceptance.
+  - Reject every partial candidate, review-before-candidate, or acceptance-before-review state.
+  - Preserve the exact 30-resource path roster and its path-list digest.
+  - Preserve every R21 field, possession, feature, preimage, product, dependency, and serializer assertion.
+  - Archive superseded review/gate evidence before fresh independent review; do not delete it.
+definition_of_done:
+  - The corrected test proves the serial identity lifecycle without changing any route value.
+  - A fresh independent review binds the corrected test before a replacement gate is accepted.
+  - No identity runtime, Bronze, Silver, Gold, build, model, network, cloud, endpoint, CI, or deployment is created.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run ruff check tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run pytest -q tests/contracts/test_w04_r21_cross_authority_composability.py
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any R21 semantic, roster path/digest, authority binding, or product rule changes.
+  - Correctness requires an architecture revision rather than a progression-fixture correction.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only_no_mutation_required
+self_approval: master_authority_required

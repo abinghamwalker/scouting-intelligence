@@ -1,0 +1,81 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-REVIEW-04
+phase_id: W06
+revision: R7
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R6.yaml
+objective: >-
+  Perform the final fresh report-only review of the R7 exact three-parent regression and
+  confirm the already accepted R6 single-core implementation remains unchanged.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-04-R7:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R7.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R7.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R6.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R7.md
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/unit/test_w06_robustness.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-robustness-independent-review-R7.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R7.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Does each test substitution exactly reproduce its original reviewer witness shape and literal parent digest before rejection?
+  - Do the owning rejection messages prove comparison, control metric and stress metric/interval derivation separately?
+  - Are all production, contract, fixture and one-core calculation bytes unchanged by R7?
+  - Do the focused suite, Ruff, literal grep and fixture identities pass independently?
+  - Is any P0/P1 defect left that can change metrics, intervals, partitions, leakage, applicability or the protected gate?
+deliverables:
+  - One final report-only ACCEPT or REWORK verdict with exact P0/P1 counts and three-parent matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R7.md.
+definition_of_done:
+  - Exact three-parent committed regression closure is independently reproduced.
+  - R6 one-core closure remains intact without source or fixture change.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check tests/unit/test_w06_robustness.py
+  - rg -n 'fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb|e67c82c8800e1e4c0efa360153cd918f36d21859079ef630b3fe3d2fab477815|2e70e316301230b85db9bae9785c16f431f1cf3a251affd9ba3d792174741404' tests/unit/test_w06_robustness.py
+  - shasum -a 256 tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - final verdict and exact severity counts
+  - exact three-parent matrix and source/fixture non-change evidence
+  - exact commands/statuses/results
+  - remaining P0/P1 risks and smallest correction or none
+  - no Git/dependency/protected/external/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

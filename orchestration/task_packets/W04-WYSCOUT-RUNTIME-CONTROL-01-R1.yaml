@@ -1,0 +1,118 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R1
+state: REWORK
+objective: >-
+  Implement the exact local-only W04 code/environment admission child and sole
+  launcher control plane that materializes one immutable admitted code manifest,
+  binds the accepted v2 aggregate digests into the exact 25-key pre-build
+  projection, computes the sole build hash, and hands a strictly inverse-checked
+  invocation to the later rebuild without writing product/layer/receipt bytes.
+depends_on:
+  - W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01-R1:MASTER_ACCEPTED
+assigned_role: w04_runtime_control_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-v2-aggregate-materialization-R1-master-acceptance.md
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-acceptance.md
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_aggregates.py
+  - src/scouting/storage/wyscout_publication.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/contracts/**
+fixed_bindings:
+  aggregate_master_acceptance_sha256: 3b9cd3810aa453c3d6470ce5ee4d54f6ea0d4f825fb95812af9f5fbac66f005e
+  schema_bundle_v2_logical_sha256: ba5db90f2b130af450fba609520984f6e07c255be4fbddc3f933f94149ef63be
+  product_contract_v2_logical_sha256: fe68e8f31b7dd6f6fb9e8eb3a025de3e78d8825eabeeeea72327481101489fc0
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  staged_publisher_sha256: 01b56c0400af0a4fba1adbf06b53b4e94a8571be66c7e0770ca6d72b4c740c13
+  r20_design_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  pyproject_sha256: 963db0004a52d36097bb66d7b5893044e7ac706580b14bae9e7e70e12ce5a89b
+  uv_lock_sha256: 1c4d3408f3fd900443356f8387a1fed3554f9e0b69e74d9997cd99b60be134ca
+requirements:
+  - Verify every fixed binding before implementation and retain all accepted bytes.
+  - >-
+    The admission entrypoint must remain stdlib-only under the exact accepted
+    locked/no-sync, no-site, no-bytecode argv. It must consume one closed canonical
+    input, guard-read exact repository/lock/runtime/resource paths without Git or
+    directory shorthand, independently derive the exact ordered twenty stable
+    COMPONENT_KEYS values and positive evidence counts, and return a canonical
+    PreBuildAdmissionResult/ChildResultEnvelope that validates without coercion.
+    No placeholder, caller-supplied component digest, ambient Git value, clock,
+    host path, run ID, output digest, product observation or network value may enter
+    the stable code/environment manifest.
+  - >-
+    Reproduce the exact v15 stable-manifest key order, canonical no-LF bytes,
+    environment digest over the exact twenty components, repository-code digest,
+    component-proof digest, uv 0.9.21 authority, selected lock closure, exact
+    seventeen-resource digest, local launcher/process/result schema authorities,
+    and content-addressed UUIDv5/path. Reject missing/additional/reordered/mutable,
+    symlink/nonregular/hardlinked/unsafe-mode/changed-during-read bytes and any
+    pyproject/lock/resource/source drift.
+  - >-
+    The launcher is the sole code-manifest writer and build calculator. Through the
+    accepted sidecar-free publisher, it may write only
+    data/manifests/wyscout/v5/code/<digest>.code-manifest.json under caller-supplied
+    exact manifest/staging roots after child-result and independently retained
+    component validation. It must guard-read exact accepted v2 config bytes and use
+    the two accepted logical no-LF digests, never their physical hashes or v1 values.
+  - >-
+    Only after immutable manifest readback, construct the exact PreBuildProjection
+    with accepted authority/dependency/window/tenant/identity values and admitted
+    code/environment/resource/lock values. Compute build_id only through
+    build_id_for_projection(), construct only through invocation_from_projection(),
+    and require projection_from_invocation() strict inverse equality. Return a
+    frozen launch plan with exact code path, three layer paths, rebuild prefix and
+    receipt path for a strict caller-supplied v4 run ID. Do not execute the absent
+    rebuild or write any product, layer manifest, boundary, invocation receipt or
+    run byte in this packet.
+  - >-
+    Tests must use isolated exact-root mirrors and the actual admission subprocess;
+    prove two-run stable manifest/build determinism with different operational UUIDs,
+    exact existing-manifest idempotency, no real-root writes, single build hash and
+    v2 binding. Attack environment/input/result/frame/argv/descriptor/repository/
+    lock/resource/component/proof/manifest/config/publisher/build/inverse/run/path
+    substitutions plus symlink, race, unequal-existing and terminal-byte drift.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact offline admission child, launcher preparation control, adversarial tests and mandatory producer return.
+stop_conditions:
+  - None for bounded implementation defects; return REWORK evidence if the exact R20 process contract cannot be implemented without changing authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

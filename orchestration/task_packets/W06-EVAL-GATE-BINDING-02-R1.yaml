@@ -1,0 +1,100 @@
+schema_version: 1
+task_id: W06-EVAL-GATE-BINDING-02
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement only the converged protected gate population/lineage correction so every
+  evaluated decision binds one protocol, one canonical query population, its access,
+  results and intervals, while retaining either a complete negative run or an explicit
+  missing-population NO_GO.
+depends_on:
+  - W06-EVAL-CORE-REVIEW-01-R3:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-CORE-01-R3.yaml
+  - orchestration/task_packets/W06-EVAL-CORE-REVIEW-01-R3.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R3.md
+  - src/scouting/contracts/evaluation.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/**
+  - tests/fixtures/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Add a canonical, non-empty evaluated-query roster and recomputed digest to protected
+    access and run identities; bind each persisted metric and interval to that exact
+    population preimage.
+  - >-
+    At gate validation, require gate.protocol, bundle.protocol and run.protocol to be the
+    same validated protocol; require every evaluated query to exist in the bundle, have
+    the run partition, and exactly cover the selected protected population.
+  - >-
+    Require ACCEPT_CLAIM and NARROW_APPLICABILITY to use governed evidence and computed
+    primary results/intervals for the same evaluated protected population. An unsupported
+    or evidence-empty protected population must not validate as narrowing.
+  - >-
+    Define exactly two NO_GO shapes: neither bundle nor run with an explicit
+    MISSING_EXPERT_RELEVANCE_EVIDENCE or MISSING_PROTECTED_POPULATION reason; or both a
+    bundle and fully linked run retained under the same relational checks. Reject exactly
+    one object.
+  - >-
+    Add normal-constructor adversarial regressions for mixed partitions, protocol
+    substitution, zero-evidence narrowing, complete negative retention, orphan shapes,
+    roster/digest substitution and metric/interval population substitution.
+deliverables:
+  - Strict population-bound contract implementation and public-only adversarial tests.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R1.md.
+definition_of_done:
+  - All three independent R3 P0 constructors reject.
+  - Complete linked negative evidence validates for NO_GO; explicit missing-population
+    NO_GO validates; bundle-only and run-only NO_GO reject.
+  - Caller-supplied roster or population digests cannot substitute validated objects.
+  - Existing focused metric behavior is unchanged except for required new population fields.
+acceptance_checks:
+  - uv run --no-sync pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R1.md
+stop_conditions:
+  - A required change needs a new dependency, protected expected output, external/provider access or a protocol decision beyond this frozen correction.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - The requested relation cannot be represented without changing the accepted W05 model, artifact, feature, taxonomy or retrieval bytes.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - exact schema and invariant changes
+  - exact commands, exit statuses and concise results
+  - exact adversarial constructors and resulting rejection or acceptance
+  - residual metric, identity, interval, leakage, applicability and claim risks reserved for the serial second split
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

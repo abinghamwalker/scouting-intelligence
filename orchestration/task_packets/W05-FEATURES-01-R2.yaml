@@ -1,0 +1,144 @@
+schema_version: 1
+task_id: W05-FEATURES-01
+phase_id: W05
+revision: R2
+state: IMPLEMENTED
+objective: >-
+  Close the three accepted R1 feature-boundary P1s by independently pinning every W05
+  registry/fixture identity, authenticating the sole retained W04 research-only Gold
+  projection and removing premature production/protected-evaluation claims.
+depends_on:
+  - REVIEW-W05-FEATURES-01-R1:REWORK
+assigned_role: feature_registry_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-FEATURES-01-R1.yaml
+  - reports/reviews/W05/w05-feature-registry-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R1.md
+  - orchestration/task_packets/W05-FEATURES-01-R1.yaml
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/unit/test_w05_features.py
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - data/manifests/wyscout/v5/gold/b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79.manifest.json
+  - reports/verification/W04/wyscout-four-feature-vertical-slice-R1-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/features/w05-m0-feature-registry-v1.json
+  - src/scouting/features/__init__.py
+  - src/scouting/features/registry.py
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/unit/test_w05_features.py
+  - reports/reviews/W05/returns/W05-FEATURES-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - configs/roles/**
+  - configs/models/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/returns/W05-FEATURES-01-R1.md
+  - reports/reviews/W05/w05-feature-registry-independent-review-R1.md
+  - src/scouting/contracts/**
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+  - tests/contracts/**
+requirements:
+  - >-
+    Add immutable W05 v1 load-boundary pins for the exact registry ID/version/digest,
+    both family IDs/versions/digests, all three schema IDs/versions/hashes, and the
+    synthetic fixture ID/version/digest. Recompute pins after the R2 claim correction.
+    A candidate may still verify its own nested hashes, but successful loading also
+    requires exact equality with these independently coded pins. Do not silently derive
+    or overwrite expected pins from the candidate document.
+  - >-
+    Add attacks that change registry/root ID, fixture ID, cross the family IDs, change
+    an exact-four descriptor, and insert Wyscout/production/expert language into a
+    synthetic descriptor; recompute every affected schema, family, root or fixture
+    digest and canonical byte sequence. Every fully re-signed attack must reject for an
+    accepted-identity mismatch. Preserve normal exact canonical reload.
+  - >-
+    Bind W04 admission to the sole retained accepted research-only Gold product rather
+    than trusting caller labels. Exact accepted identities are build
+    b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79,
+    Gold manifest physical SHA-256
+    08de1349a532c3f455d792ee56aafc3d8c587828bc9934dc7f77a58a71c90068,
+    Gold product physical SHA-256
+    6e49b4322c766352fdc427b8d35d73ddaed036d0bd19f1d65435fe3a72edcd17,
+    Gold product semantic SHA-256
+    f1751b4f1ff7911ad339fa1954cd5c88483fc09c733547dba87d7aa301c1bffa,
+    dependency lineage
+    ded9ae0a3bece552eb047e005809837871a0ccd2cf76ead47e33abcb9288ea9d,
+    player be8da881-2b15-513f-978f-6bb3865bc8e2, competition
+    cb5c5317-fa4a-571e-93dc-ef6ce482eab7, season
+    4696aa1f-b512-5d18-af79-33cf031455cf and window definition
+    a0af8d56-e41d-5467-b46e-82887c4861e0. Also pin the exact manifest relative path,
+    product relative path, one-row count, schema hash, 2017-08-11T18:45:00Z snapshot,
+    2026-07-31T14:15:26Z availability watermark, cutoff and research_only
+    applicability from the unchanged accepted W04 bytes.
+  - >-
+    W04 dependency admission must equal the complete ordered five-dependency envelope
+    in the accepted Gold manifest, including kind, UUID, lowercase SHA-256 digest,
+    observed_at and available_at, and must recompute to the accepted lineage hash.
+    Validate every digest as exactly 64 lowercase hexadecimal characters. Retain strict
+    available_at/observed_at before cutoff. Do not read provider or Gold files at
+    materialization time and do not copy, mutate or reinterpret an accepted W04 byte.
+  - >-
+    Pin and require the exact accepted four values (2, 2, 1, 2), in accepted feature
+    order, for that sole one-row product. Reject a different player, product/manifest
+    identity, clock, applicability, dependency, reordered dependency, count or
+    caller-supplied state even if the attacker recomputes every self-digest. The W04
+    public function remains an admission bridge for a supplied authenticated projection;
+    it never opens provider/product data itself.
+  - >-
+    Set production_evidence=false and protected_evaluation=false for both evidence
+    families. Make the W04 claim explicitly accepted-four-count, resemblance-only and
+    research-only. Update loader expectations, all affected family/root/fixture digests
+    and tests. No config, code, test or return may call W04 production evidence,
+    protected evaluation, validation evidence, expert evidence or recruitment fitness.
+  - >-
+    Retain all accepted R1 exact definitions/formulas, Decimal conversion, exact-four
+    closure, suppression/no-imputation/state separation, synthetic-only control schema,
+    canonical bytes, cutoff rejection, deterministic fixture values and no-provider
+    behavior. Do not expand W04 beyond its exact four counts or start model/role work.
+deliverables:
+  - Independently pinned W05 registry/fixture v1 loader boundary.
+  - Authenticated exact retained W04 research-only Gold projection admission.
+  - Fully re-signed substitution and fabricated-Gold adversarial tests.
+  - Complete mandatory R2 return.
+definition_of_done:
+  - All three R1 P1 probes fail closed for exact accepted-identity, W04-product/lineage
+    or research-only-claim reasons and every accepted R1 positive remains green.
+  - No accepted W04, shared contract, dependency, Git, role/model/serving or W06 byte changes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/features tests/unit/test_w05_features.py
+  - uv run ruff check src/scouting/features tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to mutate/reinterpret accepted W04 product, authority, evidence or Gold bytes.
+  - Any materially different feature/product behavior beyond exact R1 P1 closure.
+  - Any new dependency, external/provider access, credential, service,
+    deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

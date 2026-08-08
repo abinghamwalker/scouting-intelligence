@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W08-WEB-BRIEF-HISTORY-04E
+phase_id: W08
+revision: R2
+state: DISPATCHED
+objective: >-
+  Implement the bounded role-brief history gap identified by R1: controlled rejection,
+  rejected-to-corrected draft, exact history rendering and role-correct controls.
+depends_on:
+  - W08-WEB-BRIEF-HISTORY-04E:R1_REWORK_REQUIRED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Status decisions preserve the prior interpretation byte-for-byte; a correction
+  appends one attributable changed draft and the rejected version stays immutable.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-BRIEF-HISTORY-04E-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-HISTORY-04E-R1.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/web/w08.py
+  - src/scouting/web/w07.py
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-HISTORY-04E-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - src/scouting/serving/**
+  - src/scouting/web/w07.py
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Analyst-only creation form with fixed retained template/taxonomy, selectable supported responsibility code, preference weight, hard constraint and local synthetic-development exemplar derived from the public W07 default request.
+  - Role-correct create/submit/correct/replay and approve/reject controls; scout approved-read only; admin no workflow mutations; direct POST remains service/policy protected.
+  - Reject submits RoleBriefRejectionReason plus note; correct submits expected lock and exact changed title/responsibilities/constraint/preference/exemplars, produces DRAFT with submission/decision fields cleared and leaves rejection unchanged.
+  - Detail renders every immutable template/taxonomy/visibility/responsibility/constraint/preference/exemplar/status/reason/note/timestamp/actor field and labels weights as retained replay context not applied by W05 scoring.
+  - A five-version create-submit-reject-correct-resubmit-approve automated chain proves old/new values, actors and timestamps, plus role/CSRF/stale/invalid/foreign denial without revision/lock/audit partial state.
+definition_of_done:
+  - All R1 gaps are implemented within allowed paths and focused tests pass; replay equality/candidate membership remains explicitly deferred to 04F.
+focused_checks:
+  - Five immutable versions and exact content preservation/change boundary.
+  - Rendered role controls and complete history fields.
+  - Negative attempts leave revision, lock and receipt counts unchanged.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+stop_conditions:
+  - A shared contract/service/policy/migration/dependency, W05/W07 or protected-output change is required.
+  - A network/provider/model call, fitting/training, Node/npm, container, destructive action or Git operation is required.
+  - Correctness would rewrite history, invent retained options, bypass policy or widen evidence claims.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed-file list
+  - role-control and old/new version maps
+  - exact commands/exits/test counts
+  - five-version and negative atomicity witnesses
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/out-of-scope confirmations
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

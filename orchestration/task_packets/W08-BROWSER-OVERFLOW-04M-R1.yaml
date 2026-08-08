@@ -1,0 +1,71 @@
+schema_version: 1
+task_id: W08-BROWSER-OVERFLOW-04M
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct and retain a real-browser regression for the 320-pixel horizontal overflow
+  found by master inspection on the role-brief history page.
+depends_on:
+  - W08-BROWSER-A11Y-04B:MASTER_ACCEPTED_PENDING_INDEPENDENT_REVIEW
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: medium
+invariant: >-
+  Evidence-boundary and immutable-history text wraps without hiding or clipping
+  content, while wide tables remain internally scrollable and every required control
+  remains visible and keyboard operable.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-BROWSER-A11Y-04B-R2.yaml
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R2.md
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/static/w08/app.css
+  - tests/e2e/test_w08_local_workflow_playwright.py
+allowed_paths:
+  - apps/web/static/w08/app.css
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - reports/reviews/W08/returns/W08-BROWSER-OVERFLOW-04M-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - apps/web/templates/**
+  - services/**
+  - scripts/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Apply a bounded wrapping rule to ordinary evidence/limitation/history text; do
+    not use root/body overflow clipping and do not hide content.
+  - Add a real Chromium 320x700 regression that creates or opens a role brief with
+    the fixed W06 boundary, proves body scroll width does not exceed inner width,
+    and proves the immutable history table remains internally scrollable/reachable.
+  - Reproduce the existing 1440/390/320 browser suite and retain evidence-honest
+    wording and visible focus.
+definition_of_done:
+  - Focused browser checks pass and the exact master-observed paragraph overflow is
+    covered without clipping or changing the W06 boundary.
+focused_checks:
+  - uv run ruff format --check tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run ruff check tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run pytest -q tests/e2e/test_w08_local_workflow_playwright.py
+stop_conditions:
+  - A template, route, shared service, contract, policy, dependency, protected output,
+    external service, Node/npm, container, destructive action or Git command is required.
+  - Passing requires clipping/hiding evidence text or weakening accessibility assertions.
+mandatory_return:
+  - task/revision and invariant
+  - exact directly inspected/changed files
+  - root cause and correction
+  - exact commands/exits/test counts
+  - 320-pixel body/table scroll measurements
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-evidence/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

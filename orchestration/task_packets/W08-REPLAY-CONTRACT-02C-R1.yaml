@@ -1,0 +1,93 @@
+schema_version: 1
+task_id: W08-REPLAY-CONTRACT-02C
+phase_id: W08
+revision: R1
+state: DISPATCHED
+objective: >-
+  Correct the uncommitted W08 replay-link contract/schema so it retains exactly one
+  truthful local query mode: a query player or a non-empty exemplar set.
+depends_on:
+  - W08-WORKFLOW-INTEGRITY-02B:MASTER_ACCEPTED
+  - W08-WEB-BRIEF-04D:R1_SHARED_CONTRACT_BLOCKER
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  ReplayableRetrievalLink and its persisted row must encode exactly one of
+  query_player_id or exemplar_player_ids, preserving the exact accepted serving request
+  without substituting, dropping or inventing query identity.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-BRIEF-04D-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-04D-R1.md
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/m0.py
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/storage/embedded.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/operations/evidence_export.py
+  - tests/contracts/test_w08_workflow_contracts.py
+  - tests/integration/test_migrations.py
+  - tests/integration/test_w08_workflow.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+allowed_paths:
+  - src/scouting/contracts/workflow.py
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/workflow/r1.py
+  - src/scouting/operations/evidence_export.py
+  - tests/contracts/test_w08_workflow_contracts.py
+  - tests/integration/test_migrations.py
+  - tests/integration/test_w08_workflow.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - reports/reviews/W08/returns/W08-REPLAY-CONTRACT-02C-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - src/scouting/contracts/m0.py
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/observations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - ReplayableRetrievalLink makes query_player_id optional, adds immutable exemplar_player_ids, rejects neither-mode, both-mode and duplicate exemplars, and retains existing player-query compatibility.
+  - W08 migration makes query_player_id nullable, adds a required canonical JSON exemplar_player_ids array and enforces at the SQLite layer that exactly one query mode is populated and exemplar IDs are non-empty only in exemplar mode.
+  - R1WorkflowService persists both fields atomically and its audit after-digest includes the complete exact query mode.
+  - LocalEvidenceExporter decodes exemplar_player_ids into underlying canonical values rather than exporting an opaque JSON string; checksums and claim boundary remain unchanged.
+  - All existing direct SQL fixtures are upgraded to name columns and store an empty exemplar array for player-query mode; add exemplar-mode persistence/export/migration witnesses.
+  - Negative contract and database tests cover both mode, neither mode, duplicate exemplar and malformed/non-array JSON.
+definition_of_done:
+  - Both query modes round-trip contract → database → export exactly and all focused migration/workflow/export tests pass.
+  - No W05/W07 serving core, policy, audit allowlist, web code, dependency or W06 evidence is changed.
+focused_checks:
+  - Player-query backward-compatible round trip.
+  - Exemplar-only non-empty ordered set round trip and decoded export.
+  - Both/neither/duplicate/malformed modes fail before an unaudited row can persist.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/workflow.py src/scouting/workflow/r1.py src/scouting/operations/evidence_export.py tests/contracts/test_w08_workflow_contracts.py tests/integration/test_migrations.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run ruff check src/scouting/contracts/workflow.py src/scouting/workflow/r1.py src/scouting/operations/evidence_export.py tests/contracts/test_w08_workflow_contracts.py tests/integration/test_migrations.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run mypy src/scouting/contracts/workflow.py src/scouting/workflow/r1.py src/scouting/operations/evidence_export.py
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/integration/test_migrations.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+stop_conditions:
+  - The invariant requires changing an accepted W05/W07 serving contract/core, a policy/audit boundary, a dependency, or any protected W06 output.
+  - A network/external/model provider, fitting/training, Node/npm, container, destructive action or Git operation is required.
+  - Correctness would require weakening exact-one query-mode validation or inventing query identity.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - contract/schema/service/export field map
+  - exact commands, exit statuses and test counts
+  - positive player/exemplar and negative both/neither/malformed results
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

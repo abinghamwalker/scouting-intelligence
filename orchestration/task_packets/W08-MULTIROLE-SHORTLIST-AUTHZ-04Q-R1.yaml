@@ -1,0 +1,102 @@
+schema_version: 1
+task_id: W08-MULTIROLE-SHORTLIST-AUTHZ-04Q
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct the single R3 P2 multi-role shortlist/entry composition defect by applying
+  union semantics to read and transition decisions without broadening scout-only or
+  cross-object access.
+depends_on:
+  - W08-INDEPENDENT-SECURITY-05:R3_FAIL_0P1_1P2
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+invariant: >-
+  For one shortlist or entry resource, access succeeds when at least one explicit
+  applicable grant held by the principal authorises it; role presence never chooses
+  or suppresses another grant, while scout-only access still requires exact current
+  assignment and all owner, visibility and tenant restrictions remain unchanged.
+read_first:
+  - AGENTS.md
+  - reports/reviews/W08/w08-independent-security-review-R3.md
+  - orchestration/task_packets/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.md
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - tests/integration/test_w08_local_workflow_app.py
+allowed_paths:
+  - src/scouting/workflow/r1.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - reports/reviews/W08/returns/W08-MULTIROLE-SHORTLIST-AUTHZ-04Q-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - >-
+    Replace shortlist/entry read role-presence selection with one shared explicit
+    union decision: try `shortlist.read`, then the exact current-assignment resource
+    for `shortlist.read_assigned`; use it consistently in queue, shortlist and entry
+    routes without exposing an unassigned/former/private/foreign object.
+  - Replace transition action selection with an any-applicable-grant decision for the
+    exact target/resource. Special targets retain their sole approve/hold/reject grant;
+    ordinary targets may succeed through either `transition_owned` or `transition`
+    only when that explicit action independently authorises the resource.
+  - Share service and presentation transition semantics so the rendered target list
+    cannot advertise a transition that the service denies or suppress one it accepts.
+  - Add focused service/route witnesses for analyst+scout owner TEAM and OWNER_ONLY,
+    approver+scout TEAM, analyst+approver non-owner ordinary transition, scout-only
+    current/unassigned/former assignment, owner/private visibility and cross-tenant
+    denial. Preserve all exact-link replay restrictions from 04P.
+definition_of_done:
+  - The exact R3 policy-true/route-404 probe becomes policy-true/route-200, every
+    multi-role case follows any-applicable-grant semantics, all single-role negative
+    boundaries stay denied, and focused regressions pass.
+focused_checks:
+  - uv run ruff format --check src/scouting/workflow/r1.py src/scouting/web/w08.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/integration/test_w08_local_workflow_app.py
+  - uv run ruff check src/scouting/workflow/r1.py src/scouting/web/w08.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/integration/test_w08_local_workflow_app.py
+  - uv run mypy src/scouting/workflow/r1.py src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_auth_audit.py tests/security/test_w08_web_security.py
+  - uv run bandit -q src/scouting/workflow/r1.py src/scouting/web/w08.py
+stop_conditions:
+  - A policy grant, contract, schema, migration, dependency, audit/export/observation
+    core, template, protected output, external service, container, Node/npm, destructive
+    action or Git command is required.
+  - Passing would infer authority from role presence, tenant membership or action-name
+    suffix, or would broaden scout-only/private/former-assignment access.
+mandatory_return:
+  - task/revision and exact invariant
+  - exact changed files and shared-decision design
+  - read and transition decision matrices for all required single/multi-role cases
+  - exact R3 probe before/after and former-assignment/private/cross-tenant witnesses
+  - exact commands/exits/test counts
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-evidence/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,68 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Resolve only the R1 packet's contracts-to-storage layering ambiguity. Produce
+  exact canonical logical and Arrow projection descriptor content in the contract
+  owner without importing or duplicating the higher storage implementation.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R1:STOPPED_PACKET_LAYERING_AMBIGUITY
+assigned_role: w04_23_root_schema_closure_implementer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R2.yaml
+  - all R1 read_first paths
+allowed_paths:
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R2.md
+forbidden_paths:
+  - all R1 forbidden_paths
+fixed_bindings:
+  r1_packet_sha256: 2d26092dcb2319f5682cab608c0b0dbb5cfccbabde92013fbaa0937c6c5846b6
+  all_r1_fixed_bindings: UNCHANGED_AND_REQUIRED
+correction:
+  - >-
+    `src/scouting/contracts/wyscout_schema.py` must remain a standalone contract
+    module. It must not import `scouting.storage`, PyArrow, or another project
+    module outside the contracts package, statically, lazily or dynamically.
+  - >-
+    In this producer packet, "export the runtime descriptor and Arrow schema" means
+    export exact, canonical, recursively complete Arrow projection descriptor
+    content capable of one lossless mechanical instantiation of the already-
+    accepted WyscoutParquetProjectionDescriptor. The production contract module
+    does not instantiate a storage dataclass or PyArrow Schema.
+  - >-
+    Focused tests may import both the contract exporter and
+    `scouting.storage.formats`; mechanically convert the exported descriptor
+    content to the already-accepted frozen storage dataclasses; invoke only
+    `arrow_schema_from_w04_projection`; and prove exact schemas, recursive metadata
+    absence, schema independence from values/fixtures, round-trip behavior and
+    mutation rejection for all twelve Parquet roots. The conversion must have no
+    inference, defaults, callbacks, alternate mappings or production authority.
+  - >-
+    Downstream production composition will occur only in an appropriate higher
+    layer after this exact content and its digests receive independent review and
+    master acceptance. Do not create that adapter in this packet and do not make
+    Gold receipt closure executable.
+  - >-
+    All other R1 requirements, bindings, role/dependency/ID/version rules,
+    acceptance checks, prohibitions and stop conditions remain exact and binding.
+definition_of_done:
+  - The exact 23-root canonical content/rows and twelve descriptor contents pass the unchanged R1 acceptance intent without a layer inversion or duplicate production mapping.
+acceptance_checks:
+  - all R1 acceptance_checks with the R2 return path
+deliverables:
+  - In-memory content-only schema closure implementation.
+  - Focused lossless-instantiation and adversarial tests.
+  - Additive R2 return; no R1 return is required because R1 stopped before edits.
+stop_conditions:
+  - Any need for a contracts-to-storage/PyArrow import, duplicate production schema mapping, root/field/semantic/projection/digest/dependency change, or downstream byte write.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,33 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R1
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: REWORK
+artifact_lineage: PASS
+security_temporal_review: REWORK
+defects:
+  - id: W04-DESIGN-ARCHIVE-SCOPE-01
+    severity: P1
+    status: reproduced
+    detail: >-
+      The design treats every non-domestic archive member as unknown and would reject
+      the approved ZIPs, which are now preflight-proven to contain two exact excluded
+      tournament members apiece.
+  - id: W04-DESIGN-CLOCK-ORDER-01
+    severity: P2
+    status: reproduced
+    detail: >-
+      The design imposes available_at <= acquired_at on the generic contract and calls
+      for W03 migration. The implemented generic contract truthfully permits either
+      order; the Wyscout adapter alone enforces acquisition no earlier than release.
+  - id: W04-DESIGN-GOLD-DUPLICATE-01
+    severity: P3
+    status: reproduced
+    detail: Gold schema lists the player/competition/season row twice.
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R2
+reviewer: master
+

@@ -1,0 +1,36 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3
+task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-01
+phase_id: W04
+revision: R3
+decision: MASTER_ACCEPTED_RETAINED_OPERATIONAL_BASELINE
+producer_packet: orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.yaml
+producer_return: reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.md
+independent_review_packet: orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R3.yaml
+independent_review: reports/reviews/W04/wyscout-real-root-invocation-independent-review-R3.md
+independent_review_return: reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R3.md
+master_acceptance: reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+closure_steer_disposition: >-
+  Retained as the minimum W04 real-root/product operational baseline paired with
+  accepted runtime R11; no later real-root execution is required for terminal W04
+  closure and R3 is not relabelled as executing R11 or R12.
+finding_counts:
+  p0: 0
+  p1: 0
+  p2: 0
+accepted_bindings:
+  producer_packet_sha256: 836fdbf323a725adf11f24a47198a1789c37a9c2cb093465db71e10c72c6c831
+  producer_return_sha256: 13687bb55cc6594cd432102f3f031ecfa714e51405e5a0df485ad4d5178f07a3
+  independent_review_packet_sha256: 9b31cc19cf818606b5695b8cb968b490f5222fb5448fba2c4db4c4c8046a54cc
+  independent_review_sha256: 74517a54520015bbeb179a921e93190a4dc07d5ae307a2ba735501a66a368ada
+  independent_review_return_sha256: eadd5f85e56b2a1a6fec1d48a32dc7a54f7f8993f9e0df513e5614d644f99767
+  master_acceptance_sha256: 54c52d0b260225df1d7ec9b213fcca781ac13aa534f5d3596b2455b0f68f4cc6
+checks:
+  two_wrapper_verified_complete_runs: PASS
+  cross_run_product_manifest_receipt_equality: PASS
+  physical_semantic_logical_readback: PASS
+  exact_decimal_inverse_readback: PASS
+  strict_temporal_boundary_receipts: PASS
+  independent_review: PASS
+git_operations: none
+external_publication: none

@@ -1,0 +1,23 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-ROBUSTNESS-04-R4
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R4
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    evidence: >-
+      A normally reconstructed metadata DeterministicControlResult accepts comparison
+      child fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb
+      after changing only its Spearman value while retaining the exact persisted
+      baseline/challenger rows and canonical left/right input digests. The parent
+      checks comparison inputs but does not derive the comparison values from them.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R4.yaml
+reviewer: master

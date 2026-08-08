@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W08-AUDIT-EXPORT-TAMPER-05A
+phase_id: W08
+revision: R1
+state: DISPATCHED
+objective: >-
+  Fail closed on pre-existing audit-chain tampering and prevent invalid/disabled/non-scout
+  assignment rows from granting private export visibility.
+depends_on:
+  - W08-AUTH-POLICY-INTEGRITY-01B:MASTER_ACCEPTED
+  - W08-EXPORT-INTEGRITY-03B:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+invariant: >-
+  No audited mutation, export or verified export read may proceed over a malformed tenant
+  ledger, and only a current enabled same-tenant actor with an explicit scout role may
+  receive assignment-based private export visibility.
+read_first:
+  - AGENTS.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/integration/test_w08_evidence_export.py
+  - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R2.md
+allowed_paths:
+  - src/scouting/audit/ledger.py
+  - src/scouting/operations/evidence_export.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/integration/test_w08_evidence_export.py
+  - reports/reviews/W08/returns/W08-AUDIT-EXPORT-TAMPER-05A-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/web/**
+  - services/**
+  - scripts/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - AuditLedger.append verifies the complete existing tenant chain inside the caller transaction before appending; malformed/gapped/cross-tenant/orphan event or receipt state fails with AuditIntegrityError and the caller's nested mutation remains rolled back.
+  - AuditLedger.verify normalises malformed JSON, timestamp, UUID and SQL/row-shape failures to AuditIntegrityError and detects audit events without receipts as well as receipts without valid events.
+  - LocalEvidenceExporter create, verified read and revoke fail closed before returning/mutating when the tenant audit chain is invalid.
+  - Assignment-derived private comment/observation visibility is built only from latest assignment rows whose actor is enabled, same-tenant and explicitly has scout role; disabled, analyst-only, foreign-tenant and former-assignment rows grant nothing.
+  - Positive test for a current enabled actor with both scout and export-authorised role retaining only their legitimately assigned private scope; team/author visibility remains unchanged.
+  - Adversarial tests prove tampered ledger rollback for workflow/export and assignment corruption cannot leak private contents or workflow_action_origins.
+definition_of_done:
+  - Focused audit/export tests pass and no corruption witness can produce a new receipt, export row/bytes, revocation or private payload.
+  - The fix changes no policy allowlist or W06 claim/evidence boundary.
+focused_checks:
+  - Event/receipt mutation, deletion, gap, orphan and malformed payload cases before append/export/read/revoke.
+  - Analyst-only, disabled, foreign-tenant, former and valid current multi-role assignment visibility.
+  - Savepoint rollback and retry after repair.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/audit/ledger.py src/scouting/operations/evidence_export.py tests/security/test_w08_auth_audit.py tests/security/test_w08_export_boundaries.py tests/integration/test_w08_evidence_export.py
+  - uv run ruff check src/scouting/audit/ledger.py src/scouting/operations/evidence_export.py tests/security/test_w08_auth_audit.py tests/security/test_w08_export_boundaries.py tests/integration/test_w08_evidence_export.py
+  - uv run mypy src/scouting/audit/ledger.py src/scouting/operations/evidence_export.py
+  - uv run pytest -q tests/security/test_w08_auth_audit.py tests/security/test_w08_export_boundaries.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run bandit -q src/scouting/audit/ledger.py src/scouting/operations/evidence_export.py
+stop_conditions:
+  - A schema/policy/contract/dependency change, protected output, external service, model call, Node/npm, container, destructive action or Git operation would be required.
+  - Correctness would require trusting a malformed ledger or an assignment that cannot be proven current, enabled, same-tenant and scout-role qualified.
+  - A fix would widen export roles, private visibility or W06 claims.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - audit precondition and assignment-qualification logic
+  - exact commands, exit statuses and test counts
+  - tampering, rollback and confidentiality results
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

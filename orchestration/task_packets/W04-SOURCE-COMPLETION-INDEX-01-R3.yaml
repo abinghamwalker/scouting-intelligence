@@ -1,0 +1,133 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-01
+phase_id: W04
+revision: R3
+state: MASTER_FOCUSED_CHECKS_PASS_AWAITING_PARALLEL_INDEPENDENT_REVIEW
+objective: >-
+  Correct only W04SCIIDXR1-P1-001 by making the accepted completion-reader comparison
+  an executable prerequisite for every authorized downstream checked Silver/Gold
+  construction path. Direct low-level models may remain useful for isolated semantic
+  evaluation only if they are executablely incapable of becoming accepted product
+  provenance. Preserve the R2 index, population and equal-clock closures and create
+  no product byte.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1:MASTER_ACCEPTED_REWORK_EVIDENCE
+assigned_role: w04_data_contracts_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R3.yaml
+  - reports/verification/W04/wyscout-source-completion-index-review-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-source-completion-index-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R1.yaml
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R2.yaml
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R2.md
+  - reports/reviews/W04/wyscout-source-completion-index-independent-review-R1.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+fixed_bindings:
+  r2_source_sha256: d81acf16302ce47bffe6461181163e1607b8744ca68f75e5719a2e50c7e43285
+  r1_contract_sha256: acf5555d31c931dda6c3575e5b088401847e0b8efc50c50f349ca188ee019aa0
+  r2_source_test_sha256: 8b4194574e0d362c7ddcf43b3d6787de5672a9a71d1c938b20a5eb70781f2cef
+  r1_contract_test_sha256: ba01261521923bf2b62ea4a63930f43bc20e2df18fb3028accdf53b90d8e77c1
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  independent_review_sha256: 14d800764f2c2c0d7d50b93c05233b416e796033b107da81a5e80d4a37c48a55
+  independent_return_sha256: 0266f4987a022a07c7365892aba77614de5dd4a7b69f8400decd1dc3e0461295
+requirements:
+  - >-
+    Establish one explicit checked construction boundary issued only after
+    `validate_match_period_population` or `validate_match_population` succeeds against
+    the accepted content-addressed index. The evidence passed downstream must be bound
+    to that exact validated match-period population, not merely to the fixed index
+    digest or a caller-provided membership digest/count/Boolean/witness.
+  - >-
+    Every authorized SilverAction, SilverPossession, SilverPlayerMatchFact,
+    GoldPlayerWindow and layer-manifest construction/materialization entry point must
+    require and verify that completion result before returning an accepted value.
+    Direct low-level model construction, model_validate, copied model dumps, an
+    arbitrary membership digest, or a real indexed membership digest without the exact
+    population comparison must be incapable of crossing the authorized product
+    boundary.
+  - >-
+    An opaque in-process capability is acceptable only if ordinary public callers
+    cannot construct, copy, serialize/replay, or substitute it and every downstream
+    boundary verifies exact identity/scope. A documentation-only, underscore-only,
+    Boolean, fixed literal, caller-computable hash, or caller-selected validation
+    context is insufficient. Prefer a pure verifiable inclusion/preimage proof when
+    it can remain bounded and dependency-free.
+  - >-
+    Add a regression equivalent to the independent bypass: establish the membership
+    is absent from the accepted index, make every reader/validator/factory fail-fast,
+    then prove ordinary checked construction cannot return accepted Silver/Gold.
+    Repeat with a copied real membership digest but a non-equal population. Do not use
+    `model_construct` as either implementation or credited test evidence.
+  - >-
+    Preserve exact accepted index bytes/address, full 3071395 reconciliation, source
+    bindings, every R1/R2 mutation closure, strict integer-only action projection,
+    equal-clock group-first behavior, causal other-player provenance, dependency-
+    lineage binding, all six coverage authorities and exactly four Gold features.
+  - >-
+    Keep contracts free of filesystem/provider access and keep source-to-contract
+    import direction. Add no dependency, serializer, product artifact, provider access,
+    network, cloud, container, endpoint, hosted CI, remote or deployment.
+definition_of_done:
+  - The exact independent fail-fast-reader Gold bypass no longer returns accepted Silver or Gold.
+  - The accepted reader path still constructs exact source-bound sequences and supplies an enforceable downstream prerequisite.
+  - Direct test/semantic objects cannot be consumed by the authorized product boundary.
+  - The immutable index and every accepted R2 behavior remain byte/behavior stable.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run ruff check src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run mypy src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_identity_ruleset_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - shasum -a 256 data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json reports/reviews/W04/wyscout-schema-design-R20.md reports/reviews/W04/wyscout-schema-design-R21.md
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Enforcement requires changing the accepted index, R20/R21 bytes, dependencies, storage/runtime architecture, feature scope, provider rights or local-only boundary.
+  - The same fail-fast-reader bypass remains after this bounded correction.
+  - Any out-of-scope byte, Git operation, provider/network access, product write, cloud, container, hosted CI, endpoint, remote or deployment is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

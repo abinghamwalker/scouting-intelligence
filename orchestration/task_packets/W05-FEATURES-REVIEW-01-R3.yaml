@@ -1,0 +1,56 @@
+schema_version: 1
+task_id: W05-FEATURES-REVIEW-01
+phase_id: W05
+revision: R3
+state: DISPATCHED
+objective: >-
+  Independently confirm boolean/float Gold row-count substitutions reject and all R2
+  trust-root, Gold-lineage and claim closures remain intact.
+depends_on:
+  - W05-FEATURES-01-R3:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-FEATURES-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-FEATURES-01-R2.yaml
+  - reports/reviews/W05/w05-feature-registry-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-FEATURES-01-R3.md
+  - src/scouting/features/registry.py
+  - tests/unit/test_w05_features.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-feature-registry-independent-review-R3.md
+  - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+deliverables:
+  - Independent P0/P1/P2 verdict with direct true, 1.0 and integer-1 probes plus retained R2 attack replay.
+  - Complete mandatory R3 return.
+definition_of_done:
+  - The sole R2 P1 rejects for exact type/value reason with no accepted positive regression.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run ruff check src/scouting/features tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any authority conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

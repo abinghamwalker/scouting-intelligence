@@ -1,0 +1,119 @@
+schema_version: 1
+task_id: W07-DOMAIN-02
+phase_id: W07
+revision: R1
+state: DISPATCHED
+objective: >-
+  Prove the truthful-composition invariant: every W07 page context and result derives
+  from accepted local W04/W05/W06 authorities and the public W05 serving path, with
+  closed identities/states, genuine query/compare semantics, parity and immutability.
+depends_on:
+  - REVIEW-W07-APPLICATION-01-R2:REWORK_SPLIT
+assigned_role: w07_composition_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W07-APPLICATION-01-R2.yaml
+  - orchestration/task_packets/W07-DOMAIN-02-R1.yaml
+  - src/scouting/web/w07.py
+  - src/scouting/serving/m0.py
+  - tests/integration/test_w05_m0_serving.py
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/phase-gates/W06/gate-report.json
+  - reports/verification/W06/limitations.md
+  - reports/phase-gates/W04/data-health.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/web/w07.py
+  - src/scouting/web/__init__.py
+  - services/api/w07_main.py
+  - tests/integration/test_w07_local_evidence_app.py
+  - reports/reviews/W07/returns/W07-DOMAIN-02-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - apps/**
+  - src/scouting/contracts/**
+  - src/scouting/serving/**
+  - src/scouting/m0/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - runs/**
+  - configs/**
+  - reports/evaluation/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/w06/**
+context_contract:
+  authority: >-
+    source/evidence class, model and index ID/version, artifact ID, manifest/result,
+    feature registry/schema, taxonomy ID/version, configuration, data/model window,
+    cutoff, confidence, applicability, limitations and lineage identities.
+  players: >-
+    All 18 synthetic-development candidates from the accepted W05 loader, with stable
+    Synthetic candidate NN labels, UUID, position, age, feature states/values, roles,
+    feature cutoff and lineage; never claim these are real players.
+  result_rows: >-
+    Zipped scored candidate, retrieval candidate, confidence, dimension evidence and
+    explanation inputs from one M0RetrievalResult; do no score arithmetic.
+  w04: >-
+    Separate accepted descriptive real-data card with exact 2,2,1,2 counts and
+    SUPPRESSED minutes/rates/per-90.
+  w06: NO_GO and MISSING_EXPERT_RELEVANCE_EVIDENCE, protected_outputs_opened false.
+requirements:
+  - >-
+    Build accepted authorities once per app instance and never read a provider,
+    protected fixture/output or W06 gate executor. Keep all I/O repository-local.
+  - >-
+    Search must filter the accepted 18-candidate catalogue by bounded q and position,
+    preserve an honest empty state, and link to a validated candidate UUID. Player
+    pages must return explicit unavailable state for unknown/malformed UUIDs and show
+    that candidate's exact accepted synthetic feature/role evidence.
+  - >-
+    Retrieval /w07/retrieval/{query_id} must build a fully pinned request for that
+    accepted query and call serve_m0_request. Comparison
+    /w07/compare/{query_id}/{candidate_id} must call serve_m0_batch for the same request,
+    verify the candidate appears in its returned results and render a genuine query vs
+    candidate feature/dimension contrast. Invalid identities fail to an explicit
+    unavailable state without invoking the scorer.
+  - >-
+    Governed state is a closed enum of loading, empty, unavailable, error and no-go.
+    Unknown state routes return 404. Error is an explicit evidence state, not an
+    unhandled exception. All result contexts include exact accepted identities.
+  - >-
+    Set local CSP default-src 'self', connect-src 'self', no external asset origin and
+    no-store/referrer protections. Mount only the exact local W07 asset directory.
+  - >-
+    Expand integration tests to spy public serve_m0_request/serve_m0_batch and the sole
+    LoadedM0Artifact.score path, prove single/batch byte identity, accepted result,
+    lineage, manifest, registry, taxonomy and configuration digests, all four artifact
+    file hashes before/after, 18-candidate search/filter/empty/invalid behavior, genuine
+    compare selection, every closed state, unknown-state 404, CSP, no forbidden blended
+    score/claim labels and exact W04 values.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py
+  - uv run ruff check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py
+  - uv run mypy src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py
+  - uv run pytest -q tests/integration/test_w07_local_evidence_app.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run lint-imports
+stop_conditions:
+  - Accepted scoring, contract, artifact, authority or dependency change is required.
+  - Protected output access, provider access, external service/request, deployment, Node, Git or destructive action is required.
+  - Required work falls outside allowed_paths.
+deliverables:
+  - Truthful W07 composition and exhaustive focused integration witnesses.
+  - Mandatory return at reports/reviews/W07/returns/W07-DOMAIN-02-R1.md.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

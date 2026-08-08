@@ -1,0 +1,113 @@
+schema_version: 1
+task_id: W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently assess whether the frozen R3 receipt-composition candidate binds
+  the exact authorized Gold schema identity, while preserving all prior bytes and
+  limiting output to a review report and return.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R3:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_build_contract_conformance_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R3.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-build-contract-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-contract-conformance-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r3_packet_sha256: cefa3360dd9466c797abbaf2187e9c8c23edc5fe5a5b03d2b61e7593f6934048
+  r3_contract_sha256: ea0a5f4cd474a081d97b529e3ecf87f0e3852dccef0041f712544420c85d55fd
+  r3_test_sha256: c153c7a41120a88128301b18f6ee50f1721d0c65431eed1cc8136b5761d9d040
+  r3_return_sha256: dd50227ed1c9ab6fa8f21603a015a1d12a7a15f73da0fccadb6467a9ea38fb54
+  failed_review_sha256: 71191b27210014bf5767cad542f2f66d090a6868aa01290aba7583f4aac8e05c
+  failed_review_return_sha256: 57b489e147b3df3ec4d9fa57dff0386bfdb4a080d6fd0e3aaf028168e80e49fd
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  wyscout_data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  parquet_encoder_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Reproduce the two R1 nonconformances against R3: invalid locally shaped
+    manifests and claim-only product/proof digests must both be rejected.
+  - >-
+    Confirm that each supplied manifest is accepted from its exact canonical byte
+    stream by LayerManifest and that the typed readback equals the supplied bytes.
+  - >-
+    Confirm GoldProductReadback derives the physical bytes, row count, size,
+    semantic digest and temporal-proof digest from typed content.
+  - >-
+    Run a deterministic schema-substitution matrix that keeps the exact authorized
+    Gold row but varies one supported Arrow schema property at a time, including
+    nullability. Re-encode the supplied table using the accepted encoder and update
+    all dependent digests consistently. Record whether receipt closure accepts a
+    schema identity other than the exact authorized schema.
+  - >-
+    If more than one schema identity is accepted, return REWORK with the smallest
+    correction boundary. State explicitly whether that correction can be expressed
+    using existing authorized inputs or must wait for the already-planned canonical
+    schema-bundle authority. Do not invent a schema digest or edit implementation.
+  - >-
+    Confirm the exact one-match, one-Gold-row, four-feature, season and lineup
+    bindings remain unchanged, and confirm no product/data/run write or external
+    action occurs.
+definition_of_done:
+  - PASS with P0/P1/P2 equal 0/0/0, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent conformance review with finding counts.
+  - Reviewer return using the repository template.
+stop_conditions:
+  - Candidate or fixed hash drift.
+  - Need to edit any path outside the two allowed review outputs.
+  - Need for architecture, root, population, dependency, Git, product-write,
+    provider/network or external-infrastructure action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

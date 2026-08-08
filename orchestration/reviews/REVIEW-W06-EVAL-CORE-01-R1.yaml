@@ -1,0 +1,62 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-CORE-01-R1
+task_id: W06-EVAL-CORE-01
+phase_id: W06
+revision: R1
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P0
+    blocker_tests: [1, 2, 4, 6]
+    evidence: >-
+      Normal validated constructors admit implementation-fixture evidence in a protected
+      membership, a future query cutoff, unrelated reusable FIT access, empty protected
+      run and ACCEPT_CLAIM gate whose protocol differs from the run.
+    required_fix: >-
+      Relationally bind protocol, canonical evidence aggregate, protected membership,
+      preregistered candidate, one-use access consumption, non-empty run and claim gate;
+      fixture authority must be structurally ineligible for protected claim acceptance.
+  - severity: P1
+    blocker_tests: [1, 3, 4]
+    evidence: >-
+      Protocol root digests are opaque, the bundle has no digest/adjudications, empty
+      reviewer rosters bypass checks, and re-signed labels/reviewers/rubrics, duplicate
+      relevance, reversed pairs and nonexistent adjudications are accepted.
+    required_fix: >-
+      Recompute canonical nested roots and bundle digest, require roster/rubric/query/
+      candidate binding, semantic uniqueness, canonical order and valid adjudication.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Core executes undeclared k, treats unjudged candidates as irrelevant/zero, admits
+      out-of-universe labels, cannot express per-item abstention or ties, and hard-codes
+      an undeclared partial-relevance policy.
+    required_fix: >-
+      Evaluate a validated protocol/candidate universe and explicit mutually exclusive
+      per-item label states, enforce declared k and frozen tie/partial policies, and
+      return explicit unavailable statuses for missing denominators.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Partial-universe Spearman returns values outside [-1,1], disjoint churn is 2.0,
+      and pair preference, inter-rater agreement and explicit overlap are absent.
+    required_fix: >-
+      Implement declared valid correlation population/tie semantics, bounded churn,
+      overlap count/rate, pair preference and eligible agreement with insufficiency.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Bootstrap settings/identities are not protocol-bound; arbitrary metric arithmetic,
+      inverted/unmatched intervals, empty runs and noncanonical result ordering validate.
+    required_fix: >-
+      Freeze and bind bootstrap method/unit/seed/count/confidence, input and result
+      digests; validate metric ranges/formulas, interval arithmetic/links and canonical
+      non-empty run rosters.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-CORE-01-R2.yaml
+reviewer: master

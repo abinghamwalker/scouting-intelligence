@@ -1,0 +1,52 @@
+{
+  "allow_pending_checkpoint": false,
+  "checks": [
+    {
+      "detail": "state: 'VERIFIED'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'VERIFIED'",
+      "id": "PHASE_GATE_READY",
+      "status": "PASS"
+    },
+    {
+      "detail": "W05:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W06-PREFLIGHT-01:ACCEPTED:1 retained return(s), W06-PREFLIGHT-REVIEW-01:ACCEPTED:1 retained return(s), W06-EVAL-CORE-01:ACCEPTED:3 retained return(s), W06-EVAL-CORE-REVIEW-01:ACCEPTED:3 retained return(s), W06-EVAL-GATE-BINDING-02:ACCEPTED:2 retained return(s), W06-EVAL-GATE-BINDING-REVIEW-02:ACCEPTED:2 retained return(s), W06-EVAL-VALUE-IDENTITY-03:ACCEPTED:2 retained return(s), W06-EVAL-VALUE-IDENTITY-REVIEW-03:ACCEPTED:2 retained return(s), W06-EVAL-ROBUSTNESS-04:ACCEPTED:7 retained return(s), W06-EVAL-ROBUSTNESS-REVIEW-04:ACCEPTED:6 retained return(s), W06-PROTECTED-NO-GO-05:ACCEPTED:2 retained return(s), W06-PROTECTED-NO-GO-REVIEW-05:ACCEPTED:2 retained return(s), W06-CARDS-06:ACCEPTED:1 retained return(s), W06-CARDS-REVIEW-06:ACCEPTED:1 retained return(s), W06-OPTIMIZED-GUARDS-07:ACCEPTED:1 retained return(s), W06-OPTIMIZED-GUARDS-REVIEW-07:ACCEPTED:1 retained return(s)",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "PASS"
+    },
+    {
+      "detail": "reports/phase-gates/W06/acceptance-report.md, reports/phase-gates/W06/gate-report.json, reports/reviews/W06/master-review.md, reports/reviews/W06/cards-independent-review-R1.md, reports/reviews/W06/protected-no-go-independent-review-R2.md, reports/reviews/W06/optimized-guards-independent-review-R1.md, reports/verification/W06/verification-report.md, reports/verification/W06/limitations.md, reports/verification/W06/phase-verifier-candidate.json, reports/evaluation/W06/protected-access-outcome.json, reports/evaluation/W06/protected-gate-decision.json, reports/evaluation/W06/protected-execution-receipt.json",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "G-W06:PASS, deterministic-evaluation-core:PASS, robustness-null-applicability:PASS, one-use-protected-no-go:PASS, optimized-python-security:PASS, complete-repository-gate:PASS, local-only-controls:PASS, phase-state-and-evidence:PASS",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "PASS"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w06-start:518e91a20f440768003d6cc089f5fec9107b5539",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "phase_id": "W06",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "VERIFIED",
+  "status": "PASS",
+  "validator": "verify_phase"
+}

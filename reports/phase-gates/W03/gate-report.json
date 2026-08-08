@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "gate_id": "G-W03",
+  "phase_id": "W03",
+  "decision": "ACCEPT",
+  "verified_at_utc": "2026-07-29T12:52:54Z",
+  "checks": [
+    {
+      "id": "strict-contracts-and-temporal-boundaries",
+      "result": "PASS",
+      "evidence": "reports/verification/W03/verification-report.md"
+    },
+    {
+      "id": "guarded-storage",
+      "result": "PASS",
+      "evidence": "orchestration/reviews/REVIEW-W03-STORAGE-01-R1.yaml"
+    },
+    {
+      "id": "migration-rls-and-append-only-audit",
+      "result": "PASS",
+      "evidence": "orchestration/reviews/REVIEW-W03-DATABASE-01-R1.yaml"
+    },
+    {
+      "id": "synthetic-development-and-protected-partitions",
+      "result": "PASS",
+      "evidence": "reports/verification/W03/protected-gate-attempt-R4.json"
+    },
+    {
+      "id": "vertical-journey-and-conflict-aware-idempotency",
+      "result": "PASS",
+      "evidence": "orchestration/reviews/REVIEW-W03-VERTICAL-01-R6.yaml"
+    },
+    {
+      "id": "independent-boundary-review",
+      "result": "PASS",
+      "evidence": "orchestration/reviews/REVIEW-W03-BOUNDARY-REVIEW-01-R2.yaml"
+    },
+    {
+      "id": "architecture-import-contracts",
+      "result": "PASS",
+      "evidence": "orchestration/reviews/REVIEW-W03-ARCHITECTURE-01-R1.yaml"
+    },
+    {
+      "id": "local-security-dependency-and-containers",
+      "result": "PASS",
+      "evidence": "reports/verification/W03/security-dependency-container-report.md"
+    },
+    {
+      "id": "complete-master-suite",
+      "result": "PASS",
+      "evidence": "reports/verification/W03/verification-report.md"
+    },
+    {
+      "id": "checkpoint-clean-tree-procedure",
+      "result": "PASS",
+      "evidence": "reports/verification/W03/clean-tree-report.md"
+    }
+  ],
+  "corrective_loops": [
+    {
+      "defect": "P1 same-tenant persisted role-brief owner collision",
+      "found_by": "W03-BOUNDARY-REVIEW-01-R1",
+      "returned_to": "W03-VERTICAL-01-R6",
+      "closed_by": "W03-BOUNDARY-REVIEW-01-R2"
+    }
+  ],
+  "protected_gate": {
+    "decision": "PASS",
+    "result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+    "repeat_result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e"
+  },
+  "checkpoint": {
+    "start_tag": "checkpoint/w03-start",
+    "start_commit": "8e40321fc6d87bbd8adac4ba3efc85eee41554c5",
+    "commit_message": "phase(w03): accept contract first synthetic slice",
+    "accepted_tag": "checkpoint/w03-accepted"
+  },
+  "unresolved_defects": []
+}

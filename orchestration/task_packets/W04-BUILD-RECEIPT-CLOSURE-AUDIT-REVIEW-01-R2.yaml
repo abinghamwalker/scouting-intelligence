@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED_FRESH_REVIEW
+objective: >-
+  Independently challenge the corrected R2 user-decision surface for exactness,
+  sufficiency, completeness and acyclicity before it may be presented as authority.
+depends_on:
+  - W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R2:USER_CLARIFICATION_REQUIRED
+assigned_role: fresh_independent_w04_build_receipt_r2_authority_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r2_audit_sha256: 77cf8dcb79d202b960553dfd6da631af039e5ec0a382a0e7c30be770045d0491
+  r2_return_sha256: 71594f261beb772943b249b765144e3f929999789ef0fb6be5667fff08b24999
+  r1_review_sha256: b3c6009cf3ad826bddabfbd6b722f89dcbffb11bf7755bbe60d4df68b67c9a09
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Prove the selected-match snapshot is the retained R4/R5 value, the half-open
+    window contains exactly the authentic match, and the strict cutoff is after all
+    currently bound source/dependency/authority clocks.
+  - >-
+    Reconstruct the exact five-key canonical JSON bytes, SHA-256 name input and UUIDv5
+    derivation. Reject ambiguous fields, alternate encodings or invented index IDs.
+  - >-
+    Compare `required_root_roles` against every R20 externally serialized Bronze,
+    Silver, Gold, layer-manifest, result and receipt schema, including nested result
+    roots. Require exact complete coverage, dependency-before-consumer order and no
+    claim of a digest for absent schema bytes.
+  - >-
+    Attack both aggregate preimages for self/sibling/forward cycles, descriptor-only
+    substitution, placeholders, omitted completion index, missing receipt rules,
+    product authorization before schema closure, or any extra/26th projection key.
+  - >-
+    Verify both receipt key sets, direct Gold path hash, acyclic publication order,
+    guarded boundary readback and `started_at <= checked_at <= completed_at` for every
+    summarized receipt. Reject cross-run/build/Gold or stale/omitted/extra bytes.
+  - >-
+    Return PASS_TO_USER_QUESTION only if the exact Section 10 question is sufficient
+    and no narrower accepted-byte-only path exists. Otherwise bounded REWORK with
+    executable evidence.
+  - Confirm no implementation/data/authority/product/receipt/Git/provider/network/cloud/container/CI/remote/deployment action.
+definition_of_done:
+  - Independent verdict with exact P0/P1/P2 counts and decision surface.
+stop_conditions:
+  - Any implementation, authority/data byte, architecture/dependency/local-only change or external action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

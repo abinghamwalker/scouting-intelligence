@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently review the measured-evidence-grounded W04 schema/rebuild R3 design,
+  verify closure of all nine prior P1/P2 findings, and determine whether it is safe
+  to decompose into implementation packets.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R3:IMPLEMENTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R3.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - src/scouting/sources/wyscout.py
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_read_paths:
+  - data/source/wyscout/v5/completion-manifest.json
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+deliverables:
+  - >-
+    Ranked closure table for EVENT-CLOCK, SOURCE-SEAM, MANIFEST-BRIDGE,
+    REBUILD-CLOCK, POSSESSION-AUTHORITY, GOLD-GRAIN, MINUTES, COVERAGE, and
+    PLAYER-MATCH-FACT findings.
+  - >-
+    Independent challenge of authority fidelity, accepted physical paths, strict
+    manifest identity, semantic/physical determinism, temporal precision, identity
+    and possession authority sequencing, minutes applicability, coverage equations,
+    and every proposed implementation packet dependency/path boundary.
+  - >-
+    Explicit rejection of any design statement that exceeds measured profile/source
+    evidence or reintroduces a container/external service.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - All nine prior findings are demonstrably closed or the packet returns REWORK.
+  - The complete standalone design is implementable without guessed source semantics.
+  - Proposed implementation packets are serial where authority/shared paths require it and otherwise path-disjoint.
+  - No architecture, rights, dependency, migration, provider, or local-only boundary is changed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R2.md');
+    assert p.is_file() and p.stat().st_size > 6000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 design, temporal, lineage, determinism, coverage, authority, or local-only defect remains.
+  - Review requires producer/code/config/data/dependency edits or provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

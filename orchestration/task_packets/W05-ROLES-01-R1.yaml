@@ -1,0 +1,133 @@
+schema_version: 1
+task_id: W05-ROLES-01
+phase_id: W05
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Implement responsibility-first role taxonomy v1, deterministic contextual mappings
+  and probabilistic membership bound to taxonomy content, explicitly without permanent
+  player labels or unsupported expert-validation claims.
+depends_on:
+  - REVIEW-W05-FEATURES-01-R3:ACCEPT
+assigned_role: football_role_taxonomy_implementer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-FEATURES-01-R1.yaml
+  - orchestration/task_packets/W05-FEATURES-01-R2.yaml
+  - orchestration/task_packets/W05-FEATURES-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-FEATURES-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-FEATURES-REVIEW-01-R3.yaml
+  - reports/reviews/W05/returns/W05-FEATURES-01-R3.md
+  - reports/reviews/W05/w05-feature-registry-independent-review-R3.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/features/registry.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - ../scouting-ml-production-blueprint.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - src/scouting/roles/__init__.py
+  - src/scouting/roles/taxonomy.py
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - tests/unit/test_w05_roles.py
+  - reports/reviews/W05/returns/W05-ROLES-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/models/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+requirements:
+  - >-
+    Create one self-verifying canonical JSON taxonomy using the accepted W05 contract.
+    Responsibilities, roles and deterministic mappings use one documented canonical
+    order and the taxonomy digest binds every semantic field. Reject unknown keys,
+    duplicate/dangling responsibility or role codes, duplicate source labels, changed
+    content under the same ID/version and digest drift.
+  - >-
+    Use football-language responsibilities, not opaque clusters, with at least:
+    progress through pressure, advance play into the final third, create chances,
+    protect central space, regain possession, retain and recycle possession, secure
+    first contact, and threaten the penalty area. Role names must describe contextual
+    responsibilities rather than player quality, recruitment outcome or permanent
+    identity.
+  - >-
+    Define a small v1 taxonomy covering contextual responsibilities for at least a
+    ball-progressing centre-back, defensive midfield screen, progressive central
+    midfielder, chance-creating midfielder, wide progressor and penalty-area forward.
+    Each role references only declared responsibilities. Any position/source-label
+    mapping is a deterministic contextual prior, not a conclusive label.
+  - >-
+    Implement a pure deterministic membership function accepting player ID, context
+    ID, the exact taxonomy, optional admitted source-label prior and explicit
+    non-negative responsibility evidence. Raw role scores are computed only by the
+    canonical declared mapping; probabilities are emitted in sorted role-code order,
+    sum deterministically to exactly one under the W05 contract and retain taxonomy
+    ID/version/digest. All-zero evidence with no admitted prior fails closed rather
+    than inventing a role. Unknown labels/responsibilities and negative/non-finite
+    evidence fail closed.
+  - >-
+    Make context identity mandatory and test that one player may have different
+    probability distributions in different windows. Do not provide or persist a
+    permanent primary-role field. Exemplar player similarity is not part of taxonomy
+    inference; document in the config that exemplars may be an additional retrieval
+    query signal but never replace the falsifiable taxonomy.
+  - >-
+    The taxonomy must state expert_validation_status=NOT_PERFORMED,
+    external_expert_evidence=[] and claim=synthetic_development_taxonomy_only. No label,
+    comment, test or return may claim external expert approval, production validity or
+    Wyscout-derived role evidence.
+  - >-
+    Add a self-verifying role fixture aligned by player/window identity to all complete
+    rows in synthetic-development-features-v1.json. It contains declared synthetic
+    responsibility evidence, optional contextual source-label prior and exact expected
+    probability distribution. It must not alter the feature fixture or add protected
+    evaluation/recruitment-outcome labels.
+  - >-
+    Tests reproduce exact taxonomy/fixture bytes and digests; deterministic repeat
+    output; mapping order invariance after canonical loading; probability order/sum;
+    different context distributions; same-ID taxonomy substitution; unknown/dangling
+    codes; absent evidence; and explicit no-expert-validation/no-permanent-label claims.
+deliverables:
+  - Versioned responsibility taxonomy and contextual probability implementation.
+  - Synthetic development membership fixture aligned to the accepted feature fixture.
+  - Focused adversarial tests and complete mandatory return.
+definition_of_done:
+  - Every membership is contextual, probabilistic, deterministic and taxonomy-digest bound.
+  - Taxonomy remains falsifiable and exemplars cannot replace it.
+  - No external expert, production, provider or permanent-player-label claim exists.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/roles tests/unit/test_w05_roles.py
+  - uv run ruff check src/scouting/roles tests/unit/test_w05_roles.py
+  - uv run mypy src/scouting/roles
+  - uv run pytest -q tests/unit/test_w05_roles.py tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to change accepted feature or W03/W04 authority/evidence bytes.
+  - Any claim or behavior requiring real expert validation, provider access or permanent player labels.
+  - Any materially different role/product behavior or unresolved taxonomy decision beyond this packet.
+  - Any new dependency, external access/service, deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

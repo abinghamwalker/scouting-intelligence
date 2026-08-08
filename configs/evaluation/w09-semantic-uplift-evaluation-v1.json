@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "configuration_digest": "6340ec28d24150b3fe16174fb01c07c383119331f622fe6b9fad3582eb602fb6",
+  "evaluation_id": "w09-goal-event-semantic-uplift-v1",
+  "claim_boundary": "historical_resemblance_research_only",
+  "requested_at": "2026-08-07T12:00:00Z",
+  "generated_at": "2026-08-07T12:01:00Z",
+  "minimum_minutes": 900.0,
+  "limit": 10,
+  "feature_names": [
+    "passes_per90",
+    "accurate_passes_per90",
+    "crosses_per90",
+    "smart_passes_per90",
+    "shots_per90",
+    "shots_on_target_per90",
+    "goals_per90",
+    "key_passes_per90",
+    "assists_per90",
+    "duels_per90",
+    "duels_won_per90",
+    "interceptions_per90",
+    "clearances_per90",
+    "accelerations_per90",
+    "fouls_per90",
+    "touches_per90"
+  ],
+  "weight_profiles": {
+    "equal": {
+      "passes_per90": 1.0,
+      "accurate_passes_per90": 1.0,
+      "crosses_per90": 1.0,
+      "smart_passes_per90": 1.0,
+      "shots_per90": 1.0,
+      "shots_on_target_per90": 1.0,
+      "goals_per90": 1.0,
+      "key_passes_per90": 1.0,
+      "assists_per90": 1.0,
+      "duels_per90": 1.0,
+      "duels_won_per90": 1.0,
+      "interceptions_per90": 1.0,
+      "clearances_per90": 1.0,
+      "accelerations_per90": 1.0,
+      "fouls_per90": 1.0,
+      "touches_per90": 1.0
+    },
+    "defensive_reweight": {
+      "passes_per90": 1.0,
+      "accurate_passes_per90": 1.0,
+      "crosses_per90": 1.0,
+      "smart_passes_per90": 1.0,
+      "shots_per90": 0.5,
+      "shots_on_target_per90": 0.5,
+      "goals_per90": 0.5,
+      "key_passes_per90": 0.5,
+      "assists_per90": 0.5,
+      "duels_per90": 1.5,
+      "duels_won_per90": 1.5,
+      "interceptions_per90": 1.5,
+      "clearances_per90": 1.5,
+      "accelerations_per90": 0.5,
+      "fouls_per90": 1.5,
+      "touches_per90": 1.0
+    }
+  },
+  "scenarios": [
+    {
+      "scenario_id": "sirigu-italy-gk",
+      "exemplar_grain_id": "player=53d6328e-487b-5e55-8018-0e8292553115|competition=86c98bf2-f02b-5286-a13e-4bd614834ac0|season=181248",
+      "target_competition_id": "86c98bf2-f02b-5286-a13e-4bd614834ac0",
+      "target_season_id": "181248",
+      "position_code": "GK",
+      "expected_scored_rows": 23,
+      "methods": ["weighted_euclidean", "weighted_cosine"],
+      "weight_profiles": ["equal"]
+    },
+    {
+      "scenario_id": "van-dijk-england-df",
+      "exemplar_grain_id": "player=e1b2f8f6-e1e5-5396-b7ef-c490aaf24218|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+      "target_competition_id": "cb5c5317-fa4a-571e-93dc-ef6ce482eab7",
+      "target_season_id": "181150",
+      "position_code": "DF",
+      "expected_scored_rows": 123,
+      "methods": ["weighted_euclidean", "weighted_cosine"],
+      "weight_profiles": ["equal"]
+    },
+    {
+      "scenario_id": "kante-england-md",
+      "exemplar_grain_id": "player=26b1caf7-143a-5b30-8736-711ded65c032|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+      "target_competition_id": "cb5c5317-fa4a-571e-93dc-ef6ce482eab7",
+      "target_season_id": "181150",
+      "position_code": "MD",
+      "expected_scored_rows": 123,
+      "methods": ["weighted_euclidean", "weighted_cosine"],
+      "weight_profiles": ["equal", "defensive_reweight"]
+    },
+    {
+      "scenario_id": "salah-england-fw",
+      "exemplar_grain_id": "player=591f422d-40af-5117-814d-50c795c46ba3|competition=cb5c5317-fa4a-571e-93dc-ef6ce482eab7|season=181150",
+      "target_competition_id": "cb5c5317-fa4a-571e-93dc-ef6ce482eab7",
+      "target_season_id": "181150",
+      "position_code": "FW",
+      "expected_scored_rows": 59,
+      "methods": ["weighted_euclidean", "weighted_cosine"],
+      "weight_profiles": ["equal"]
+    },
+    {
+      "scenario_id": "messi-france-fw",
+      "exemplar_grain_id": "player=0bf0ed55-9518-5e0f-9a3f-717b0cf16217|competition=f3fccd8e-2d90-598b-9ac0-e3b5f86bfc18|season=181144",
+      "target_competition_id": "8cc4a37d-8bec-5972-a266-39e0d0286835",
+      "target_season_id": "181189",
+      "position_code": "FW",
+      "expected_scored_rows": 72,
+      "methods": ["weighted_euclidean", "weighted_cosine"],
+      "weight_profiles": ["equal"]
+    }
+  ],
+  "source_reconciliation": {
+    "current_goal_numerator": 9436,
+    "current_event_9_goal_rows": 4741,
+    "expected_post_uplift_goal_numerator": 4695,
+    "expected_post_uplift_event_9_goal_rows": 0,
+    "event_10_only_negative_control_goal_numerator": 4177,
+    "retained_non_event_10_set_piece_goal_rows": 518
+  },
+  "success_criteria": {
+    "minimum_non_goalkeeper_top_10_overlap": 8,
+    "candidate_population_must_be_unchanged": true,
+    "non_goal_features_must_be_unchanged": true,
+    "eligibility_and_catalogue_must_be_unchanged": true,
+    "canonical_authority_must_be_unchanged": true,
+    "thresholds_must_be_unchanged": true,
+    "football_relevance_claim_authorised": false
+  }
+}

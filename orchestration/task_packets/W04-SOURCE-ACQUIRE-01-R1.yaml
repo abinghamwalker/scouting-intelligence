@@ -1,0 +1,67 @@
+schema_version: 1
+task_id: W04-SOURCE-ACQUIRE-01
+phase_id: W04
+revision: R1
+state: VERIFIED
+objective: >-
+  Perform the single authorised master-owned acquisition of the exact frozen Wyscout
+  Figshare v5 objects, verify every reviewed byte and archive boundary, persist only
+  guarded ignored local data, and prove exact no-network replay.
+depends_on:
+  - W04-SOURCE-INGEST-01-R3:ACCEPTED
+  - W04-SOURCE-INGEST-REVIEW-01-R3:ACCEPTED
+  - W04-SOURCE-AUTHORITY-01-R2:VERIFIED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - configs/sources/w04-provider.yaml
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - reports/phase-gates/W04/download-redirect-preflight.md
+  - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R3.yaml
+  - src/scouting/sources/wyscout.py
+  - scripts/acquire_wyscout_v5.py
+allowed_paths:
+  - data/source/wyscout/v5/**
+  - data/working/wyscout/v5/**
+  - reports/verification/W04/wyscout-real-acquisition-R1.md
+  - orchestration/reviews/REVIEW-W04-SOURCE-ACQUIRE-01-R1.yaml
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/**
+  - scripts/**
+  - tests/**
+  - data/working/scouting.sqlite3
+  - data/reference/**
+  - runs/**
+deliverables:
+  - Exact seven-object guarded acquisition under the configured ignored source root.
+  - Completion manifest written last after exact size, MD5, SHA-256, and archive admission.
+  - Five admitted league members per archive and zero persisted excluded-member payloads.
+  - Exact second invocation replaying from durable bytes without creating a new manifest.
+  - Master verification record with stable manifest digest, counts, sizes, and boundary evidence.
+definition_of_done:
+  - All seven reviewed objects match exact configured size and MD5.
+  - Both archives match the exact five-admitted plus two-directory-only-excluded authority.
+  - Completion evidence is canonical, complete, temporally honest, and contains no signed URL.
+  - Replay returns the identical manifest digest and performs no provider acquisition.
+  - No path outside the two configured guarded roots is mutated except master evidence.
+acceptance_checks:
+  - uv run python scripts/acquire_wyscout_v5.py
+  - uv run python scripts/acquire_wyscout_v5.py
+  - uv run pytest -q tests/unit/test_wyscout_source.py tests/security/test_w04_wyscout_ingest_review.py
+  - uv run python scripts/verify_local_only.py
+  - git remote
+stop_conditions:
+  - Any exact source URL, redirect authority, size, or MD5 no longer matches.
+  - Any archive member is missing, duplicated, unsafe, encrypted, or outside the reviewed set.
+  - Any source requires an account, credential, licence change, or unreviewed network authority.
+  - Acquisition requires a config, dependency, source-code, storage, or architecture change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only

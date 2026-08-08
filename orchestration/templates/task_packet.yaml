@@ -1,0 +1,30 @@
+schema_version: 1
+task_id: WXX-LANE-NN
+phase_id: WXX
+revision: R1
+state: PLANNED
+objective: One bounded, testable objective.
+depends_on:
+  - PRIOR-TASK:VERIFIED
+assigned_role: named_specialist
+risk: low
+read_first:
+  - AGENTS.md
+allowed_paths:
+  - exact/or/glob/path
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+deliverables:
+  - Exact artifact or behaviour.
+definition_of_done:
+  - Observable acceptance condition.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_named_scope.py
+stop_conditions:
+  - Required work falls outside allowed_paths.
+  - A secret, external account, deployment, or destructive action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

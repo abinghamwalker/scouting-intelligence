@@ -1,0 +1,146 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-DECISION-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only R1-P1-01 by making the field-authority contract test
+  progression-safe across the mandated decision, review, acceptance, and later
+  Bronze sequence while preserving the frozen semantic decision and registry.
+depends_on:
+  - W04-FIELD-SEMANTIC-DECISION-01-R1:MASTER_REWORK
+assigned_role: field_semantic_contract_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-field-semantic-decision-R1-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R1.md
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R2.md"
+  - tests/**
+  - "!tests/contracts/test_wyscout_field_registry_authority.py"
+frozen_candidate:
+  decision_physical_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  registry_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  registry_canonical_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+authority:
+  master_actor_id: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  independent_reviewer_actor_id: 03a65770-02f6-5eb0-9bd2-e2ebb44b62bd
+  decision_id: w04-wyscout-field-semantic-decisions-v1
+  registry_id: w04-wyscout-field-registry-v1
+  review_id: w04-wyscout-field-semantic-independent-review-R1
+  acceptance_id: w04-wyscout-field-semantic-acceptance-v1
+requirements:
+  - >-
+    Resolve exactly R1-P1-01. Do not revise any of the 119 semantic choices,
+    transforms, rationales, source shapes, candidate bytes, actor, clock,
+    policies, inputs, IDs, or digests.
+  - >-
+    Remove the permanent requirement that the future review and acceptance
+    files never exist. Instead implement strict, progression-safe parsing and
+    validation for the R20 field review and acceptance states when their exact
+    paths are present. Their absence remains valid before their separately
+    owned packets execute.
+  - >-
+    A present review must contain arbitrary prose outside exactly one
+    `w04-authority-review-v1` fenced block and no second fenced block. The block
+    must contain exactly one canonical JSON record plus one LF with the exact
+    R20 keys, types, IDs, candidate decision/registry physical and canonical
+    digests, strict independent ActorId, truthful canonical clock at or after
+    `decided_at`, and PASS/empty-findings or REWORK/nonempty-findings
+    consistency. It must reject malformed/second blocks, candidate mutation,
+    self-review, false/backdated clocks, unknown keys, and digest mismatch.
+  - >-
+    A present acceptance must require a present valid PASS review and must be
+    strict canonical JSON with the exact R20 fields, IDs, actors, clocks,
+    unchanged candidate decision/registry digests, canonical review-record
+    digest, complete physical review digest, `review_recommendation: PASS`, and
+    `supersedes_acceptance_id: null`. Reject acceptance without PASS,
+    self-acceptance by the reviewer, clock inversion, candidate/review digest
+    mismatch, physical/canonical substitution, unknown keys, or noncanonical
+    bytes.
+  - >-
+    Bronze/product/runtime paths must be absent whenever no fully valid field
+    acceptance exists. A mere acceptance pathname, malformed bytes, REWORK
+    review, wrong actor, or wrong digest must never lift the block. Once an
+    exact valid acceptance exists, this field-authority test must not
+    permanently forbid later separately authorized Bronze paths.
+  - >-
+    Preserve the existing rejection of premature review, acceptance,
+    dependency, or Bronze claims embedded in the decision or registry
+    candidate. Add focused in-memory mutation tests for every newly implemented
+    review/acceptance authority edge without creating the actual future review
+    or acceptance artifact.
+  - >-
+    At R2 completion the actual review and acceptance paths must still be
+    absent, every Bronze/product/runtime path must still be absent, and the
+    frozen candidate digests above must be unchanged. Record these as
+    execution-time evidence in the R2 return, not as a permanent prohibition
+    against the later exact packets.
+  - >-
+    Use only root uv. Every Python command must start with
+    PYTHONDONTWRITEBYTECODE=1 and run through
+    `uv run --locked --no-sync python -B`; use `-S -B` when installed packages
+    are unnecessary. Do not sync. Take the exact shell-only complete pyc
+    inventory before Python and reproduce it identically at terminal
+    postflight. Do not clean, repair, or mutate pycs.
+  - >-
+    Change exactly the two owned paths. Do not run Git, delegate, self-approve,
+    access network/provider data, or begin review, acceptance, dependency,
+    possession, identity, feature, Bronze, Silver, Gold, quality,
+    runtime-entrypoint, cloud, container, endpoint, or deployment work.
+definition_of_done:
+  - R1-P1-01 is closed with a fail-closed progression-safe authority-state test.
+  - Frozen decision and registry bytes and digests are unchanged.
+  - Review, acceptance, and Bronze remain absent at R2 completion.
+  - Complete focused positive and mutation suites pass.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    Correct resolution requires changing candidate bytes, R20 architecture,
+    project root, dependency/lock policy, provider/rights authority, storage, or
+    local-only boundary.
+  - A frozen candidate digest differs.
+  - Work requires a third output path.
+  - Any preflight/postflight pyc or unexpected filesystem drift occurs.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

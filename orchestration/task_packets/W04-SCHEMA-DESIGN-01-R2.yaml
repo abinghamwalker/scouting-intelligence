@@ -1,0 +1,63 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R2
+state: READY
+objective: >-
+  Correct the W04 implementation design for the preflight-proven five-admitted plus
+  two-known-excluded archive shape, the independently ordered generic source clocks
+  with Wyscout-specific release-before-acquisition enforcement, and the duplicate Gold
+  field; retain every otherwise valid R1 schema and gate.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R1:REWORK
+assigned_role: data_architecture_reviewer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R1.md
+  - reports/phase-gates/W04/archive-directory-preflight.md
+  - configs/sources/w04-provider.yaml
+  - src/scouting/contracts/evidence.py
+  - reports/reviews/W04/returns/W04-CONTRACT-TEMPORAL-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R2.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - tests/**
+  - data/**
+  - runs/**
+deliverables:
+  - Complete corrected R2 design, not an addendum requiring R1 to implement.
+  - >-
+    Archive directory rules with exactly five admitted, two known excluded and
+    unextracted members per archive, and fail-closed handling for every other entry.
+  - >-
+    Generic clock semantics permitting either truthful order; Wyscout-specific
+    acquisition enforces acquired_at at/after the frozen release without changing W03.
+  - Deduplicated Gold schema and retained deterministic rebuild/gate map.
+definition_of_done:
+  - No accepted archive is rejected merely for its four known excluded entries.
+  - Excluded payload bytes are never extracted, admitted, parsed, or used.
+  - No W03 fixture or digest migration is requested.
+  - The full R2 design is internally consistent and above 5,000 bytes.
+acceptance_checks:
+  - uv run python -c "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-R2.md'); assert p.is_file() and p.stat().st_size > 5000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Correction needs a source, licence, architecture, dependency, or local-only change.
+  - Required work falls outside allowed paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

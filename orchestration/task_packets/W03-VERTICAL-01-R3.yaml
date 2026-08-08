@@ -1,0 +1,108 @@
+schema_version: 1
+task_id: W03-VERTICAL-01
+phase_id: W03
+revision: R3
+state: DISPATCHED
+supersedes: orchestration/task_packets/W03-VERTICAL-01-R2.yaml
+objective: >-
+  Remove the development-specific retrieval assumptions exposed by the
+  master-brokered protected gate without accessing protected data.
+depends_on:
+  - REVIEW-W03-VERTICAL-01-PROTECTED-R1:REWORK
+assigned_role: vertical_journey_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-VERTICAL-01-R3.yaml
+  - orchestration/reviews/REVIEW-W03-VERTICAL-01-PROTECTED-R1.yaml
+  - docs/architecture/evaluation-contract.md
+  - src/scouting/serving/synthetic.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/security/test_application_authorization.py
+allowed_paths:
+  - src/scouting/serving/__init__.py
+  - src/scouting/serving/synthetic.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/security/test_application_authorization.py
+  - reports/reviews/W03/returns/W03-VERTICAL-01-R3.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - scripts/**
+  - reports/verification/W03/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/operations/**
+  - src/scouting/workflow/**
+  - src/scouting/web/**
+  - services/**
+  - apps/**
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/synthetic/protected/expected_retrieval.json
+  - tests/fixtures/synthetic/expected_retrieval.json
+defects:
+  - code: PARTITION_SPECIFIC_RETRIEVAL_OVERFIT
+    required_fix: >-
+      For every explicitly selected snapshot, apply hard constraints,
+      exclusions and ambiguous-identity quarantine, then select from eligible
+      admitted facts with a deterministic metric-agnostic rule and stable
+      tie-break. Do not branch on protected fixture values.
+  - code: STATIC_RETRIEVAL_OUTPUT_IDENTITIES
+    required_fix: >-
+      Distinct request IDs must produce distinct stable retrieval-result and
+      retrieval-run IDs through a documented domain-separated derivation. The
+      canonical development oracle must remain unchanged.
+  - code: DEVELOPMENT_LINEAGE_CONSTANTS
+    required_fix: >-
+      Move source, feature-schema, model and index observation/availability
+      instants into the selected artifact catalog. Serving must build lineage
+      only from that catalog and the snapshot digest.
+deliverables:
+  - Partition-agnostic deterministic evidence selection.
+  - Request-bound deterministic result and run identities.
+  - Catalog-bound lineage with no development-only dependency timestamps in serving logic.
+  - >-
+    Blind alternate-partition tests made only from temporary development-derived
+    envelopes; they must vary the eligible metric and request ID.
+  - Complete R3 mandatory return.
+definition_of_done:
+  - The frozen development end-to-end oracle remains byte-for-byte equal.
+  - Two distinct requests cannot reuse result or run IDs.
+  - >-
+    A temporary alternate protected_test envelope whose eligible facts use a
+    non-development metric still produces a constrained, non-ambiguous candidate.
+  - Every dependency ID, digest and timestamp comes from the selected snapshot/catalog.
+  - Repeated identical inputs return identical results and explanations.
+  - Missing model or index remains labelled unavailable with no fallback.
+  - No runtime module reads or names an expected-output file.
+  - No protected fixture or expected output is accessed.
+acceptance_checks:
+  - >-
+    uv run pytest -q tests/e2e/test_w03_vertical_journey.py
+    tests/security/test_application_authorization.py
+  - >-
+    uv run ruff format --check src/scouting/serving
+    tests/e2e/test_w03_vertical_journey.py
+    tests/security/test_application_authorization.py
+  - >-
+    uv run ruff check src/scouting/serving
+    tests/e2e/test_w03_vertical_journey.py
+    tests/security/test_application_authorization.py
+  - uv run mypy src/scouting/serving
+  - uv run bandit -q -r src/scouting/serving
+  - "! rg -n \"expected_retrieval\\\\.json\" src/scouting/serving"
+stop_conditions:
+  - A protected fixture or protected expected output has been accessed.
+  - The correction requires a contract, fixture, workflow, database, dependency or migration change.
+  - A path outside allowed_paths must change.
+  - A Git command, Docker command, external service, credential, public bind or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

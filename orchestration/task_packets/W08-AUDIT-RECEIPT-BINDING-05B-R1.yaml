@@ -1,0 +1,83 @@
+schema_version: 1
+task_id: W08-AUDIT-RECEIPT-BINDING-05B
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct independent-review P1 by binding and verifying every claimed immutable
+  receipt identity/context field in the append-only audit receipt digest.
+depends_on:
+  - W08-INDEPENDENT-SECURITY-05:R1_FAIL_P1_AUDIT_RECEIPT_BINDING
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+invariant: >-
+  Tenant ID, receipt ID, audit-event ID, predecessor digest, event digest, sequence and
+  recorded-at timestamp are canonical digest inputs and any isolated mutation makes
+  full-chain verification fail before another audited action.
+read_first:
+  - AGENTS.md
+  - reports/reviews/W08/w08-independent-security-review-R1.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/audit.py
+  - src/scouting/audit/ledger.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/integration/test_w08_evidence_export.py
+allowed_paths:
+  - src/scouting/audit/ledger.py
+  - tests/security/test_w08_auth_audit.py
+  - reports/reviews/W08/returns/W08-AUDIT-RECEIPT-BINDING-05B-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Generate receipt ID and recorded-at before digest construction and encode tenant,
+    receipt ID, event ID, predecessor digest, event digest, sequence and recorded-at
+    in one unambiguous canonical digest representation.
+  - Make full-chain verification select, parse and validate every bound field, strict
+    timestamp/UUID/digest formats, predecessor order and event/tenant linkage.
+  - In isolated temporary databases only, remove the receipt-update trigger and apply
+    same-format receipt-ID and recorded-at mutations plus a tenant-context mutation;
+    each must make verification and a following audited mutation fail closed with
+    exact row baselines unchanged.
+  - Preserve current receipt/export contracts and the fixed W06 boundary.
+definition_of_done:
+  - All focused audit/auth/export regression witnesses pass and the P1 exploit no
+    longer verifies under any mutated immutable receipt field.
+focused_checks:
+  - uv run ruff format --check src/scouting/audit/ledger.py tests/security/test_w08_auth_audit.py
+  - uv run ruff check src/scouting/audit/ledger.py tests/security/test_w08_auth_audit.py
+  - uv run mypy src/scouting/audit/ledger.py
+  - uv run pytest -q tests/security/test_w08_auth_audit.py tests/security/test_w08_export_boundaries.py tests/integration/test_w08_evidence_export.py
+  - uv run bandit -q src/scouting/audit/ledger.py
+stop_conditions:
+  - A contract/schema/migration/policy/dependency, web/exporter, protected-output,
+    network/external service, container, Node/npm, destructive action or Git command
+    is required.
+  - Passing would omit or normalize away a claimed immutable receipt field.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - old exploit and corrected canonical digest map
+  - exact commands/exits/test counts
+  - isolated receipt-ID/time/tenant mutation and baseline outcomes
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-evidence/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

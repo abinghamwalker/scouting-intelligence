@@ -1,0 +1,10 @@
+{
+  "failures": [],
+  "handback": "orchestration/reviews/W02-SYNTH-01-return-R2.md",
+  "packet": "orchestration/task_packets/W02-SYNTH-01-R2.yaml",
+  "schema_version": 1,
+  "status": "PASS",
+  "structured_return": "tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml",
+  "task_id": "W02-SYNTH-01",
+  "validator": "verify_task_return"
+}

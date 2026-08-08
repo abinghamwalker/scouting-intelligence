@@ -1,0 +1,23 @@
+schema_version: 1
+review_id: REVIEW-W07-EVIDENCE-TEST-04-R1
+task_id: W07-EVIDENCE-TEST-04
+phase_id: W07
+revision: R1
+reviewer: master
+decision: ACCEPT
+scope: Executable integration and genuine Python Playwright evidence for G-W07.
+evidence:
+  - reports/reviews/W07/returns/W07-EVIDENCE-TEST-04-R1.md
+  - reports/reviews/W07/w07-application-independent-review-R1.md
+findings:
+  - priority: RESOLVED_TEST_CORRECTION
+    id: ACCEPTED-LIMITATION-WORDING
+    evidence: The master narrowed a generic prohibited-word assertion so the required no_recommendation_evidence limitation remains visible while positive recommendation claims remain prohibited.
+  - priority: RESOLVED_FIXTURE-TRUTH
+    id: ACCEPTED-CENTRAL-IDENTITY
+    evidence: The master corrected the test to the accepted catalogue truth that candidate 01 is CENTRAL and candidate 02 is not.
+p0_findings: 0
+p1_findings: 0
+p2_findings: 0
+acceptance: The retained failing evidence drove production correction; the final 17-test focused W07/W05 run passes without weakening the evidence boundary.
+self_approval: forbidden

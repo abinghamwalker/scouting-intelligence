@@ -1,0 +1,18 @@
+schema_version: 1
+review_id: REVIEW-W07-APPLICATION-01-R3
+task_id: W07-APPLICATION-01
+phase_id: W07
+revision: R3
+reviewer: master
+decision: ACCEPT_AFTER_SPLIT
+scope: Integrated application contract after the R2 split into domain, presentation and executable-evidence invariants.
+evidence:
+  - reports/reviews/W07/w07-application-independent-review-R1.md
+  - tests/integration/test_w07_local_evidence_app.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+findings: []
+p0_findings: 0
+p1_findings: 0
+p2_findings: 0
+acceptance: The split invariants are integrated; the master reproduced 17 focused W07/W05 tests and the independent reviewer returned PASS.
+self_approval: forbidden

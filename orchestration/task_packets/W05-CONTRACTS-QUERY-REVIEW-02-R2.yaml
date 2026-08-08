@@ -1,0 +1,59 @@
+schema_version: 1
+task_id: W05-CONTRACTS-QUERY-REVIEW-02
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently confirm the new expected resolved-query digest rejects same-ID semantic
+  substitution without regressing the accepted query/ranking checks.
+depends_on:
+  - W05-CONTRACTS-QUERY-02-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CONTRACTS-QUERY-02-R2.yaml
+  - reports/reviews/W05/w05-m0-query-ranking-contracts-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R2.md
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-query-ranking-contracts-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-REVIEW-02-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Does an independently supplied expected_resolved_query_digest exactly match the nested query digest and remain bound by the outer result digest?
+  - Does a same-brief semantic responsibility/weight substitution fail after recomputing both attacker-controlled digests while leaving the expected pin unchanged?
+  - Do all previously passing negative-zero, request/result identity, exclusion, feature-axis and distance-then-UUID tie probes still reject?
+deliverables:
+  - Independent PASS/REWORK verdict with P0/P1/P2 counts and direct probe evidence.
+  - Complete mandatory R2 return at the exact allowed path.
+definition_of_done:
+  - The R1 P1 is closed or reproduced with the smallest remaining correction.
+  - No source/test/config/orchestration/dependency/Git/accepted W04 changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any external access, provider use, dependency, destructive action or out-of-scope write is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

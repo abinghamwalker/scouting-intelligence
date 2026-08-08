@@ -1,0 +1,58 @@
+[importlinter]
+root_packages =
+    scouting
+
+[importlinter:contract:scouting-current-layers]
+name = Current scouting modules follow the approved dependency direction
+type = layers
+layers =
+    scouting.web
+    scouting.workflow
+    scouting.operations | scouting.policy
+    scouting.serving
+    scouting.sources
+    scouting.storage
+    scouting.audit
+    scouting.contracts
+
+[importlinter:contract:serving-cannot-import-provider-sources]
+name = Serving never imports provider adapters
+type = forbidden
+source_modules =
+    scouting.serving
+forbidden_modules =
+    scouting.sources
+
+[importlinter:contract:workflow-policy-cannot-import-provider-sources]
+name = Workflow and policy never import provider adapters
+type = forbidden
+source_modules =
+    scouting.workflow
+    scouting.policy
+forbidden_modules =
+    scouting.sources
+
+[importlinter:contract:w09-features-cannot-import-downstream-runtime]
+name = W09 feature construction stays independent of modeling and serving
+type = forbidden
+source_modules =
+    scouting.features.historical
+forbidden_modules =
+    scouting.modeling
+    scouting.serving
+    scouting.api
+    scouting.web
+
+[importlinter:contract:w09-research-layer-direction]
+name = W09 research modules follow the provider-to-presentation direction
+type = layers
+layers =
+    scouting.web.w09
+    scouting.api.research
+    scouting.serving.research | scouting.reporting.research
+    scouting.modeling.research
+    scouting.features.historical
+    scouting.data_products.wyscout.historical
+    scouting.sources.wyscout_historical
+    scouting.storage
+    scouting.contracts

@@ -1,0 +1,53 @@
+schema_version: 1
+task_id: W10-V2-EVIDENCE-DESIGN-08A
+phase_id: W10
+revision: R1
+state: ACCEPTED
+objective: >-
+  Define the football construct and prove which position-specific model-input and independent
+  descriptors can be derived from the retained governed source before any v2 contract or UI is built.
+depends_on:
+  - W09:CLOSED
+  - W10_A01_EXPERT_EVIDENCE_PRESENTATION_V2:AUTHORISED
+assigned_role: research_methodologist
+risk: high
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-relevance-validation.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - configs/features/w09-historical-player-window-v1.json
+  - reports/verification/W10/presentation-v1-pilot-finding.md
+allowed_paths:
+  - reports/verification/W10/v2-evidence-capability-and-construct.md
+  - reports/reviews/W10/returns/W10-V2-EVIDENCE-DESIGN-08A-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - src/**
+  - services/**
+  - apps/**
+  - scripts/**
+  - tests/**
+requirements:
+  - Define role/style relevance independently of W09 distance and recruitment outcomes.
+  - Map evidence separately for GK, DF, MD and FW, including unsupported and coverage-limited states.
+  - Inventory retained-source capability for model inputs, position percentiles, locations/territory, passing, chance creation/shooting, defensive actions and goalkeeper evidence.
+  - Identify every proposed descriptor as W09_INPUT or INDEPENDENT_DESCRIPTOR and prove the latter is not read by W09 ranking.
+  - Recommend query-population redesign when a position lacks enough independent evidence; never fill gaps with generic zeroes or reputation.
+deliverables:
+  - reports/verification/W10/v2-evidence-capability-and-construct.md
+  - reports/reviews/W10/returns/W10-V2-EVIDENCE-DESIGN-08A-R1.md
+definition_of_done:
+  - The master can freeze a position-complete participant evidence contract without guessing source capability or construct meaning.
+acceptance_checks:
+  - Every retained position has an explicit answerability decision and evidence roster.
+  - The report distinguishes evidence quantity, model inputs, independent evidence, professional knowledge and unsupported inference.
+stop_conditions:
+  - Required evidence needs a new provider, network, credential, licence or current data.
+  - The retained source cannot support a valid construct for any proposed formal position and query redesign needs user approval.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

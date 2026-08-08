@@ -1,0 +1,131 @@
+schema_version: 1
+task_id: W08-INDEPENDENT-SECURITY-05
+phase_id: W08
+revision: R2
+state: PLANNED
+objective: >-
+  Freshly and independently review the complete corrected W08 implementation, with
+  explicit exploit-level retest of all three R1 P1 findings and every original
+  security, confidentiality, accessibility and evidence-honesty boundary.
+depends_on:
+  - W08-AUDIT-RECEIPT-BINDING-05B:MASTER_ACCEPTED
+  - W08-WEB-EVIDENCE-ORIGIN-04N:MASTER_ACCEPTED
+  - W08-EXPORT-BYTE-TAMPER-05C:MASTER_ACCEPTED
+assigned_role: independent_reviewer_gpt-5.6-sol_medium
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-INDEPENDENT-SECURITY-05-R1.yaml
+  - reports/reviews/W08/w08-independent-security-review-R1.md
+  - orchestration/task_packets/W08-AUDIT-RECEIPT-BINDING-05B-R1.yaml
+  - reports/reviews/W08/returns/W08-AUDIT-RECEIPT-BINDING-05B-R1.md
+  - orchestration/task_packets/W08-WEB-EVIDENCE-ORIGIN-04N-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-EVIDENCE-ORIGIN-04N-R1.md
+  - orchestration/task_packets/W08-EXPORT-BYTE-TAMPER-05C-R1.yaml
+  - reports/reviews/W08/returns/W08-EXPORT-BYTE-TAMPER-05C-R1.md
+  - orchestration/task_packets/W08-BROWSER-A11Y-04B-R2.yaml
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R2.md
+  - orchestration/task_packets/W08-BROWSER-OVERFLOW-04M-R1.yaml
+  - reports/reviews/W08/returns/W08-BROWSER-OVERFLOW-04M-R1.md
+  - orchestration/task_packets/W08-STUDY-HARNESS-07A-R1.yaml
+  - reports/reviews/W08/returns/W08-STUDY-HARNESS-07A-R1.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/audit.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - services/api/w08_main.py
+  - scripts/run_w08_study.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/landing.html
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/entry.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - apps/web/templates/w08/error.html
+  - apps/web/static/w08/app.css
+  - tests/contracts/test_w08_workflow_contracts.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_workflow_access.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/integration/test_w08_workflow.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/integration/test_w08_study_harness.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/verification/W08/moderated-study-capture-template.yaml
+  - reports/verification/W08/moderated-study-summary-template.yaml
+  - reports/verification/W08/authentication-authorization-report.md
+  - reports/verification/W08/workflow-audit-export-recovery-report.md
+  - reports/verification/W08/browser-accessibility-report.md
+  - reports/verification/W08/limitations.md
+  - reports/verification/W08/protected-output-boundary.md
+  - reports/verification/W08/representative-user-evidence-status.md
+allowed_paths:
+  - reports/reviews/W08/w08-independent-security-review-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Fresh code- and evidence-grounded P0/P1/P2/P3 findings with exact file/line,
+    exploit/failure preconditions and required corrections; explicit PASS or FAIL.
+  - >-
+    Independently prove or refute R1 P1 closure: server-controlled synthetic versus
+    human evidence origin including hostile form override and DB/render/audit/export;
+    independent byte-tamper denial for inventory/read/create/revoke; receipt digest
+    binding and mutation detection for tenant, receipt ID and recorded-at.
+  - Re-review IDOR/cross-object access, role escalation, session expiry/revocation/
+    rotation/CSRF, private/team visibility, privileged export, sensitive leakage,
+    path/input handling, replay/candidate allowlist, concurrency and recovery.
+  - Re-review keyboard/semantic/responsive accessibility at 1440/390/320, fixed W06
+    wording, protected-output non-access and synthetic-versus-human claim honesty.
+  - Explicitly state that synthetic automation is not representative-user evidence
+    and whether five genuine authorised reviewed participant records exist.
+definition_of_done:
+  - The full corrected focused suite and Bandit pass and the report gives an explicit
+    verdict; any P0/P1 in security, confidentiality, authorisation, accessibility,
+    evidence honesty or audit integrity requires FAIL.
+focused_checks:
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/security/test_w08_auth_audit.py tests/security/test_w08_workflow_access.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/integration/test_w08_study_harness.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run bandit -q -r src/scouting/policy/r1.py src/scouting/audit/ledger.py src/scouting/workflow/r1.py src/scouting/observations/r1.py src/scouting/operations/evidence_export.py src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+stop_conditions:
+  - A protected W06 expected output would need to be opened or reconstructed.
+  - Review would mutate product, tests, config, orchestration, dependencies, Git or an
+    external system, or require a network/public service.
+mandatory_return:
+  - review ID and exact reviewed paths
+  - exact commands/exits/test counts
+  - findings ordered P0 through P3 with exact evidence
+  - explicit outcome for each of the three R1 P1 findings
+  - authn/authz, confidentiality/export, audit/concurrency/recovery,
+    browser/accessibility and W06 claim-boundary outcomes
+  - representative-user evidence count/status
+  - final PASS/FAIL and required rework
+  - no Git, product/test edit, protected-output or participant-evidence confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+  <div id="study-status" class="status-card {% if error_message %}error{% else %}ready{% endif %}" role="status" aria-live="polite" data-state="{% if error_message %}validation-error{% else %}in-progress{% endif %}">{% if error_message %}{{ error_message }}{% else %}<strong>Response state loaded from local storage.</strong> Refreshing safely resumes this session.{% endif %}</div>
+  <section id="study-content" class="panel" aria-labelledby="progress-title">
+    <div class="section-heading"><div><p class="section-kicker">{% if pilot %}Mechanics pilot · not formal evidence{% else %}Formal frozen study{% endif %}</p><h2 id="progress-title">Progress</h2></div><strong>{{ snapshot.answered_count }} / {{ snapshot.total_count }}</strong></div>
+    <progress value="{{ snapshot.answered_count }}" max="{{ snapshot.total_count }}">{{ snapshot.answered_count }} of {{ snapshot.total_count }}</progress>
+    {% if task %}
+      <article class="task-card" aria-labelledby="task-title">
+        <div class="task-counter">Candidate assessment {{ task.ordinal }} of {{ task.total }}</div>
+        <div class="comparison-grid">
+          <section class="player-card exemplar"><p class="card-label">Exemplar</p><h3 id="task-title">{{ task.query.exemplar_display_name }}</h3><p>{{ task.query.exemplar_position_code }} · {{ task.query.exemplar_competition_name }}</p><p>{{ task.query.exemplar_team_names|join(', ') }} · {{ '%.1f'|format(task.query.exemplar_minutes) }} evidenced minutes</p></section>
+          <section class="player-card"><p class="card-label">Candidate</p><h3>{{ task.candidate.display_name }}</h3><p>{{ task.candidate.position_code }} · {{ task.candidate.competition_name }}</p><p>{{ task.candidate.team_names|join(', ') }} · {{ '%.1f'|format(task.candidate.minutes) }} evidenced minutes</p></section>
+        </div>
+        <p class="prompt">{{ task.query.football_prompt }}</p>
+        <form method="post" action="/w10/judgements" id="judgement-form" class="form-grid judgement-form">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <input type="hidden" name="command_id" value="{{ command_id }}">
+          <input type="hidden" name="expected_revision" value="{{ snapshot.revision }}">
+          <input type="hidden" name="presentation_id" value="{{ task.presentation.presentation_id }}">
+          <fieldset class="full"><legend>Can you provide a rating?</legend><div class="choice-row">
+            <label class="choice"><input type="radio" name="state" value="rated" checked><span>Rate candidate</span></label>
+            <label class="choice"><input type="radio" name="state" value="abstain"><span>Abstain</span></label>
+            <label class="choice"><input type="radio" name="state" value="unable_to_assess"><span>Unable to assess</span></label>
+          </div></fieldset>
+          <label class="rating-field">Football relevance (0–4)<select name="relevance_rating" required><option value="" selected disabled>Select a relevance rating</option>{% for anchor in rating_anchors %}<option value="{{ anchor.value }}">{{ anchor.value }} — {{ anchor.label }}: {{ anchor.definition }}</option>{% endfor %}</select></label>
+          <label class="rating-field">Confidence (1–5)<select name="confidence" required><option value="" selected disabled>Select confidence</option>{% for value in range(1, 6) %}<option value="{{ value }}">{{ value }}</option>{% endfor %}</select></label>
+          <label>Failure category <span class="optional">optional</span><select name="failure_category"><option value="">None recorded</option>{% for category in failure_categories %}<option value="{{ category.value }}">{{ category.value|replace('_', ' ')|title }}</option>{% endfor %}</select></label>
+          <label class="full">Brief football explanation <span class="optional">optional</span><textarea name="explanation" maxlength="1000" rows="3"></textarea></label>
+          <button class="button primary" type="submit">Save and continue</button>
+        </form>
+      </article>
+    {% else %}
+      <div class="review-card"><h3>Review and correct responses before sealing</h3><p>All {{ snapshot.total_count }} blinded presentations have an explicit response. Review the participant-safe ordinal and response values below. Candidate origin, presentation kind, expected results, and cross-response links remain hidden. Corrections are retained as append-only local revisions.</p><dl><dt>Rated</dt><dd>{{ snapshot.judgements|selectattr('state.value', 'equalto', 'rated')|list|length }}</dd><dt>Abstained or unable</dt><dd>{{ snapshot.judgements|rejectattr('state.value', 'equalto', 'rated')|list|length }}</dd></dl></div>
+      <div class="review-list" aria-label="Pre-submit response review">
+      {% for row in review_rows %}
+        <details class="review-card"><summary>Assessment {{ row.ordinal }} · {{ row.judgement.state.value|replace('_', ' ')|title }}{% if row.judgement.relevance_rating is not none %} · relevance {{ row.judgement.relevance_rating }} · confidence {{ row.judgement.confidence }}{% endif %}</summary>
+          <form method="post" action="/w10/corrections" class="form-grid judgement-form">
+            <input type="hidden" name="csrf" value="{{ csrf }}">
+            <input type="hidden" name="command_id" value="{{ row.command_id }}">
+            <input type="hidden" name="expected_revision" value="{{ snapshot.revision }}">
+            <input type="hidden" name="presentation_id" value="{{ row.judgement.presentation_id }}">
+            <fieldset class="full"><legend>Correct response state</legend><div class="choice-row">
+              {% for state in ('rated', 'abstain', 'unable_to_assess') %}<label class="choice"><input type="radio" name="state" value="{{ state }}"{% if row.judgement.state.value == state %} checked{% endif %}><span>{{ state|replace('_', ' ')|title }}</span></label>{% endfor %}
+            </div></fieldset>
+            <label class="rating-field">Football relevance (0–4)<select name="relevance_rating"><option value=""{% if row.judgement.relevance_rating is none %} selected{% endif %}>Select a relevance rating</option>{% for anchor in rating_anchors %}<option value="{{ anchor.value }}"{% if row.judgement.relevance_rating == anchor.value %} selected{% endif %}>{{ anchor.value }} — {{ anchor.label }}</option>{% endfor %}</select></label>
+            <label class="rating-field">Confidence (1–5)<select name="confidence"><option value=""{% if row.judgement.confidence is none %} selected{% endif %}>Select confidence</option>{% for value in range(1, 6) %}<option value="{{ value }}"{% if row.judgement.confidence == value %} selected{% endif %}>{{ value }}</option>{% endfor %}</select></label>
+            <label>Failure category <span class="optional">optional</span><select name="failure_category"><option value=""{% if row.judgement.failure_category is none %} selected{% endif %}>None recorded</option>{% for category in failure_categories %}<option value="{{ category.value }}"{% if row.judgement.failure_category == category %} selected{% endif %}>{{ category.value|replace('_', ' ')|title }}</option>{% endfor %}</select></label>
+            <label class="full">Brief football explanation <span class="optional">optional</span><textarea name="explanation" maxlength="1000" rows="3">{{ row.judgement.explanation or '' }}</textarea></label>
+            <button class="button" type="submit">Save append-only correction</button>
+          </form>
+        </details>
+      {% endfor %}
+      </div>
+      <div class="review-card"><p>When every response is correct, submit once. Submission makes the final response set immutable.</p><form method="post" action="/w10/submit"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="command_id" value="{{ completion_command_id }}"><input type="hidden" name="expected_revision" value="{{ snapshot.revision }}"><button class="button danger" type="submit">Submit once and make responses immutable</button></form></div>
+    {% endif %}
+  </section>
+{% endblock %}

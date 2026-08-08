@@ -1,0 +1,45 @@
+schema_version: 1
+review_id: REVIEW-W05-CONTRACTS-01-R1
+task_id: W05-CONTRACTS-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PENDING
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    blocker_test: >-
+      1 — can change fitted artifact, ranking and result bytes; 2 — permits
+      lineage substitution; 4 — can make displayed identity/explanation evidence false.
+    evidence: >-
+      src/scouting/contracts/m0.py defines array_payload_digest but no canonical
+      artifact-manifest content digest. PinnedM0ServingRequest pins artifact_id and
+      selected fields but not array_payload_digest, model_family, serialization_format
+      or the whole manifest. A substituted array payload plus amended manifest can
+      retain every request pin and be admitted.
+    required_fix: >-
+      Make M0ArtifactManifest canonically content-addressed and self-verifying; pin
+      its exact manifest digest in PinnedM0ServingRequest and cover substitutions of
+      payload, feature order, family and format.
+  - severity: P1
+    blocker_test: >-
+      2 — permits taxonomy/schema/model/index lineage substitution; 4 — can produce
+      a false explanation or claim identity.
+    evidence: >-
+      M0RetrievalResult carries only artifact_id and artifact_model_family beyond the
+      embedded W03 RetrievalResult. It does not bind the artifact manifest,
+      feature-schema hash, taxonomy version, configuration, fitting population or
+      lineage identity, and it does not cross-check the embedded result's feature,
+      model and index versions against the artifact.
+    required_fix: >-
+      Bind the complete self-verifying M0ArtifactManifest into the M0 result digest
+      (or bind every equivalent identity explicitly), then validate exact feature
+      schema, model and index agreement with the embedded RetrievalResult. Every W05
+      result must expose and bind the taxonomy version and fitting population.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-CONTRACTS-01-R2.yaml
+reviewer: master

@@ -1,0 +1,49 @@
+schema_version: 1
+review_id: REVIEW-W05-MODEL-01-R1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: NOT_RUN_STOP_CONDITION
+integration_checks: NOT_RUN_STOP_CONDITION
+artifact_lineage: NOT_PRODUCED
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    blocker_tests: [1, 6]
+    evidence: >-
+      The attempted all-player leave-one-out comparison on the accepted W05 feature
+      materialization fixture scores metadata_control=0.8518518518518519 and
+      raw_euclidean_control=0.8518518518518519, while robust-scaled cosine, weighted
+      cosine, PCA and the role-aware restriction each score 0.7777777777777778 at
+      k=3. The producer exhausted its declared finite 729-vector positive-weight
+      lattice and eight role-overlap variants without improving that result.
+    required_fix: >-
+      Do not promote an artifact from this check. Preserve the accepted W05.1 and
+      W05.2 fixtures byte-for-byte, retain the failed comparison, and add one separate
+      self-verifying synthetic M0 development fixture whose construction is frozen
+      before scoring and is suitable for testing the declared M0 geometry.
+architecture_adjudication:
+  classification: DEVELOPMENT_FIXTURE_GEOMETRY_DEFECT
+  evidence: >-
+    The W05.1 fixture was accepted to prove feature definitions, state handling and
+    lineage. Its 18 complete feature vectors are nearly monotonic with player order;
+    its three constructed peer groups are consecutive six-row blocks; and synthetic
+    elapsed minutes are also monotonic in that same order. Raw Euclidean distance and
+    the minutes-bearing metadata control therefore receive an unintended direct
+    geometric proxy for the construction labels. The responsibility fixture repeats
+    source priors every three rows and does not encode those consecutive peer groups.
+    The failure is reproducible and is not safely correctable by more weight search.
+  bounded_decision: >-
+    R2 may add, but must not replace or mutate, an explicitly synthetic-development
+    candidate/query fixture for M0. Its exact construction rules, global weights and
+    role threshold are preregistered in the R2 packet. R2 gets one scoring attempt;
+    fixture labels, weights and thresholds may not change in response to the result.
+  retained_negative_evidence: >-
+    R1 scores and the complete finite exploration remain in the R1 return and must be
+    carried into the W05 limitations report. They are not a W06 validation result.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-MODEL-01-R2.yaml
+reviewer: master

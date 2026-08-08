@@ -1,0 +1,102 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only W04SCIR1-P1-001 by pinning every public completion-index load,
+  validation and materialization path to the accepted R1 content address, while
+  retaining independent byte-address verification and every accepted R1 behavior.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-01-R1:MASTER_REWORK
+assigned_role: w04_data_contracts_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R2.yaml
+  - reports/verification/W04/wyscout-source-completion-index-R1-master-verification.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R1.yaml
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout_completion_index.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+  - src/scouting/contracts/**
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+  - tests/contracts/**
+fixed_bindings:
+  accepted_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  accepted_index_size_bytes: 644037
+  accepted_index_row_count: 3071395
+  r1_source_sha256: 8dea0c12678667c80171dc19890d672a88403b9c5f77e06438f53a4cd5cb4565
+  r1_unit_test_sha256: ea569ca0c41348842893ae5f51d0b147cb309f0421c259141c47a4b7c737439b
+  r1_contract_sha256: acf5555d31c931dda6c3575e5b088401847e0b8efc50c50f349ca188ee019aa0
+  r1_contract_test_sha256: ba01261521923bf2b62ea4a63930f43bc20e2df18fb3028accdf53b90d8e77c1
+requirements:
+  - >-
+    `validate_index` must reject every otherwise internally valid index whose computed
+    and stored SHA-256 is not exactly the accepted index SHA-256.
+  - >-
+    `load_source_completion_index` must reject a requested digest other than the
+    accepted digest before opening any file, then still recompute the loaded payload
+    digest and canonical structure.
+  - >-
+    Materialization and all population validators/factories must inherit the exact pin;
+    no caller-selected lookalike content address may become authority.
+  - >-
+    Add a named regression that mutates a period membership digest, recomputes a
+    self-consistent canonical index and address, and proves rejection because the
+    address is not accepted. Also prove an unaccepted load argument fails before open.
+  - >-
+    Preserve the exact accepted index artifact, Wyscout contracts and contract tests,
+    every frozen authority/source/preimage byte, dependency/lock state, four-feature
+    scope, local-only boundary and all R1 closures.
+definition_of_done:
+  - The exact master probe is closed at every public index boundary.
+  - The accepted index still loads, validates, materializes idempotently and reconciles 3071395 rows.
+  - No file outside the three allowed paths changes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_completion_index.py tests/unit/test_wyscout_source_completion_index.py
+  - uv run ruff check src/scouting/sources/wyscout_completion_index.py tests/unit/test_wyscout_source_completion_index.py
+  - uv run mypy src/scouting/sources/wyscout_completion_index.py tests/unit/test_wyscout_source_completion_index.py
+  - uv run lint-imports
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - shasum -a 256 data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json src/scouting/contracts/wyscout_data.py tests/contracts/test_wyscout_data_contracts.py
+  - git diff --check
+  - git remote
+stop_conditions:
+  - The pin requires changing the accepted index, contracts, product scope, dependencies, or architecture.
+  - Any frozen, prior-review, source, index-artifact, product, or unrelated byte changes.
+  - Any Git operation, provider/network access, cloud, container, hosted CI, endpoint, remote, or deployment.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,77 @@
+schema_version: 1
+task_id: W04-SOURCE-INGEST-REVIEW-01
+phase_id: W04
+revision: R2
+state: READY
+objective: >-
+  Independently review the corrected W04 R2 Wyscout acquisition seam against the
+  exact redirect authority and complete the archive, completion, replay, temporal,
+  rights, and local-only challenge matrix that the R1 stop condition deferred.
+depends_on:
+  - W04-SOURCE-INGEST-01-R2:IMPLEMENTED
+  - W04-SOURCE-INGEST-REVIEW-01-R1:REWORK
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-INGEST-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R1.yaml
+  - configs/sources/w04-provider.yaml
+  - reports/phase-gates/W04/download-redirect-preflight.md
+  - src/scouting/sources/wyscout.py
+  - scripts/acquire_wyscout_v5.py
+  - tests/unit/test_wyscout_source.py
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - reports/reviews/W04/wyscout-ingest-review-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - reports/reviews/W04/wyscout-ingest-review-R2.md
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Retain the R1 independent regressions, adapted to the canonical R2 config.
+  - >-
+    Independently prove the exact literal-slash credential form succeeds before body
+    read and encoded, mixed, double-encoded, backslash, empty, extra-segment,
+    lowercase, short, and overlong access-key variants fail before body read.
+  - >-
+    Independently challenge status, second hop, scheme, host, port, userinfo, path,
+    query keys, algorithm, date/scope, expiry, signed headers, signature, response
+    status/length/hash, bounded retry, cleanup, and import-time network denial.
+  - >-
+    Independently challenge ZIP member equality, duplicate/traversal/link/encryption/
+    expansion controls, zero reads of excluded payloads, completion-last semantics,
+    exact no-network replay, durable-byte reverification, malformed/conflicting
+    manifests, honest acquisition/availability fields, and frozen rights evidence.
+  - R2 audit and mandatory return with an ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - Canonical config loads and every representative authority-bearing mutation rejects.
+  - The exact observed signed-URL representation is executable without a real network.
+  - No invalid redirect response body is read.
+  - No excluded archive payload is opened or persisted.
+  - Replay validates every durable byte and performs no network call.
+  - No real provider object, network, protected fixture, data root, or container path is accessed.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source.py tests/security/test_w04_wyscout_ingest_review.py
+  - uv run ruff format --check tests/security/test_w04_wyscout_ingest_review.py
+  - uv run ruff check tests/security/test_w04_wyscout_ingest_review.py
+  - uv run mypy tests/security/test_w04_wyscout_ingest_review.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 acquisition, redirect, rights, archive, completion, replay, temporal, or local-only defect is reproduced.
+  - Review needs a producer/config/dependency/data/container edit or real provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

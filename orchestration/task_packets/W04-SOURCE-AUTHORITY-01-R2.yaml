@@ -1,0 +1,70 @@
+schema_version: 1
+task_id: W04-SOURCE-AUTHORITY-01
+phase_id: W04
+revision: R2
+state: MASTER_REVIEW
+objective: >-
+  Record the exact one-hop Figshare storage delivery redirect required by the approved
+  seven object URLs, without broadening source, rights, local-only, storage, export,
+  credential, service, or deployment authority.
+depends_on:
+  - W04-SOURCE-AUTHORITY-01-R1:VERIFIED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-AUTHORITY-01-R1.yaml
+  - orchestration/task_packets/W04-SOURCE-AUTHORITY-01-R2.yaml
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - reports/phase-gates/W04/download-redirect-preflight.md
+observed_defect:
+  id: W04-AUTH-REDIRECT-01
+  severity: P1
+  evidence: reports/phase-gates/W04/download-redirect-preflight.md
+  detail: >-
+    The exact approved ndownloader endpoint responds with HTTP 302 to a short-lived
+    signed URL on Figshare's S3 delivery backend; a deny-all redirect policy makes the
+    otherwise approved acquisition non-executable.
+allowed_paths:
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - docs/dataset-cards/w04-source.md
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - reports/phase-gates/W04/download-redirect-preflight.md
+  - tests/governance/test_w04_source_authority.py
+  - orchestration/task_packets/W04-SOURCE-AUTHORITY-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-AUTHORITY-01-R2.yaml
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/**
+  - services/**
+  - apps/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Header-only endpoint observation with no signed query retained.
+  - Exact one-hop redirect authority and fail-closed mutation boundary.
+  - Updated rights inheritance, dataset card, decision, and governance regression.
+definition_of_done:
+  - Only one 302 is permitted from an already exact approved source object URL.
+  - Destination scheme, host, file-ID/name path, query keys, and signature semantics are exact.
+  - Expiry is positive and no greater than 60 seconds.
+  - No new source, cloud storage, post-acquisition transfer, credential, or service is authorised.
+  - Independent R4 authority review recommends acceptance and the master reproduces it.
+acceptance_checks:
+  - uv run pytest -q tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff format --check tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff check tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run mypy tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run python scripts/verify_local_only.py
+  - git remote
+stop_conditions:
+  - The real endpoint requires a different host/bucket, more than one hop, or a credential/account.
+  - The correction would broaden local-only, rights, source, storage, or deployment authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only

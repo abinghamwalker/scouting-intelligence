@@ -1,0 +1,54 @@
+task_id: W09-UPLIFT-UI-EXPLANATION-03
+objective: >-
+  Add visible W09 methodology, contribution and selected-target explanations with focused browser
+  coverage, without changing scoring, authority, documentation, launcher or Git state.
+read_first:
+  - AGENTS.md
+  - docs/reviews/uplift-options.md
+  - apps/web/templates/w09/workbench.html
+  - apps/web/static/w09/workbench.js
+  - src/scouting/contracts/research.py
+  - src/scouting/serving/research.py
+  - src/scouting/m0/scoring.py
+  - tests/unit/test_w09_research_web.py
+  - tests/e2e/test_w09_research_workbench_playwright.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - apps/web/templates/w09/workbench.html
+  - apps/web/static/w09/workbench.js
+  - tests/unit/test_w09_research_web.py
+  - tests/e2e/test_w09_research_workbench_playwright.py
+forbidden_paths:
+  - configs
+  - src
+  - scripts
+  - docs
+  - data
+  - runs
+  - reports
+  - orchestration
+deliverables:
+  - Explain raw numerator rates, conservative-lower-bound minutes, global median/IQR scaling,
+    zero-IQR unit scale, and that filtering does not refit the scaler.
+  - Explain Euclidean and cosine contributions separately and state distances, contributions and
+    weights are not percentages, probabilities or calibrated match scores.
+  - Clarify that full-population scoring covers every filter-admitted row in one selected target
+    competition/season, while the exemplar may come from another competition.
+  - Explain the corrected goal feature as excluding recorded event-9 save-attempt actions, without
+    calling them goals conceded or save quality.
+  - Keep explanations visible or in accessible details, not tooltip-only, and add focused unit and
+    real-loopback-browser assertions without changing the journey.
+acceptance_commands:
+  - uv run --no-sync pytest -q tests/unit/test_w09_research_web.py
+  - uv run --no-sync pytest -q tests/e2e/test_w09_research_workbench_playwright.py
+  - uv run --no-sync ruff check tests/unit/test_w09_research_web.py tests/e2e/test_w09_research_workbench_playwright.py
+stop_conditions:
+  - Stop if accurate copy requires changing an API/scoring contract, introducing a dependency,
+    remote access, authority change, W10 state or a file outside allowed_paths.
+  - Any command expected to exceed 60 seconds must use command-scoped caffeinate -dimsu.
+constraints:
+  - No Git operations.
+  - No further delegation.
+  - No network/provider/credential access.
+  - Do not add a combined all-leagues pool or claim football relevance.
+  - Return using orchestration/templates/subagent_return.md exactly.

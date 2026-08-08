@@ -1,0 +1,47 @@
+schema_version: 1
+task_id: W04-IDENTITY-RULESET-ACCEPT-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Materialize and independently verify the separate master-owned identity-v1
+  acceptance bound to the unchanged candidate and fresh independent PASS
+  review. Authorize only the next serial data-contract task.
+depends_on:
+  - W04-IDENTITY-RULESET-REVIEW-01-R3:PASS
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-RULESET-ACCEPT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-IDENTITY-RULESET-REVIEW-01-R3.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - reports/reviews/W04/returns/W04-IDENTITY-RULESET-ACCEPT-01-R1.md
+  - reports/verification/W04/wyscout-identity-ruleset-acceptance-R1-master-verification.md
+  - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-REVIEW-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-ACCEPT-01-R1.yaml
+  - orchestration/phase_registry.yaml
+requirements:
+  - >-
+    Acceptance is strict canonical JSON with the exact 15-key common schema,
+    master actor, truthful clock after the review, exact decision/candidate and
+    review physical/record digests, PASS recommendation, and null supersession.
+  - Preserve all candidate, review, failed-generation, upstream, and R21 bytes.
+  - Release only W04-DATA-CONTRACTS-01-R1 after complete repository master gate.
+acceptance_checks:
+  - >-
+    uv run pytest -q tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+delegation: forbidden
+git_operations: master_only_no_mutation_required
+self_approval: master_authority_required

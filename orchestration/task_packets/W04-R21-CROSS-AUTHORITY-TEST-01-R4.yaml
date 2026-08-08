@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-TEST-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Correct only the cross-authority fixture's incompatibility with the frozen
+  unsuppressed complete repository pytest command, retain the resulting normal
+  pytest bytecode inventory, and bind the final R4 handback for fresh review.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-GATE-01-R1:MASTER_REWORK
+assigned_role: r21_cross_authority_test_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R4.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/verification/W04/wyscout-r21-full-repository-gate-R1-failure.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R3.md
+  - reports/reviews/W04/archive/wyscout-r21-cross-authority-composability-independent-review-R1-superseded-full-gate-30cd68f1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_r21_cross_authority_composability.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-*
+  - reports/verification/**
+  - reports/phase-gates/**
+retained_preflight_inventory:
+  pyc_files: 1151
+  pyc_path_list_sha256: d9c0a14033a78398072b597944de104470cb69aa3df97ee47ecdde3f182d9a48
+  cache_directories: 150
+  cache_path_list_sha256: 79250878e3cfb60a3b0131857ca7b0dc79878c5165725132223d95e32f7f9fd6
+defect:
+  code: FOCUSED_ONLY_BYTECODE_ENV_ASSUMPTION
+  severity: P1
+  evidence: >-
+    The module fixture asserts sys.dont_write_bytecode, so the exact mandatory
+    repository command uv run pytest -q produced 74 setup errors while 1,145
+    unaffected tests passed.
+requirements:
+  - >-
+    Remove only the assertion that the external interpreter must have
+    dont_write_bytecode enabled and any import made unused by that correction.
+    Do not alter Section 13 semantics, lifecycle, authority, review, gate,
+    product, or resource assertions.
+  - >-
+    The exact cross-authority test must pass both with and without
+    PYTHONDONTWRITEBYTECODE. Do not mutate interpreter global state inside the
+    test and do not delete or clean the normal pytest cache.
+  - >-
+    Change the review-bound return path to the final R4 return. Read its bytes
+    dynamically; embed no return digest. The R4 return records the final test
+    digest but not its own digest.
+  - >-
+    Preserve R1-R3 returns, the superseded review archive, every frozen
+    authority, and the retained 1151/150 inventory exactly. Do not run Git,
+    delegate, self-approve, or edit any other path.
+definition_of_done:
+  - Cross-authority suite passes with the exact unsuppressed uv command.
+  - The full focused suite still passes under the bounded suppressed command.
+  - Future review binds the final test and R4 return acyclically.
+  - Ruff, local-only, and retained inventory checks pass.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - The correction requires any authority, architecture, product, dependency, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

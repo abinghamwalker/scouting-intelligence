@@ -1,0 +1,56 @@
+schema_version: 1
+task_id: W04-PHASE-VERIFIER-READY-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Correct the generic phase verifier so the complete repository gate can verify a
+  fully evidenced in-progress READY phase and can distinguish master-owned tasks
+  from delegated tasks that require a subagent return.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-GATE-01-R2:CONTROL_FAILURE_REPRODUCED
+assigned_role: orchestration_control_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R1.yaml
+  - scripts/verify_phase.py
+  - scripts/verify_task_return.py
+  - tests/unit/test_orchestration_controls.py
+  - orchestration/phase_registry.yaml
+allowed_paths:
+  - scripts/verify_phase.py
+  - tests/unit/test_orchestration_controls.py
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/phase_registry.yaml
+  - orchestration/master_plan.yaml
+  - configs/**
+  - src/**
+  - data/**
+deliverables:
+  - A minimal generic verifier correction that admits READY without weakening task, evidence, check, dependency, checkpoint, or zero-remote gates.
+  - Packet-derived recognition that only tasks whose referenced packets are all master-assigned may omit delegated return files.
+  - Unit coverage for READY verification eligibility and master-versus-delegated return requirements.
+  - A complete Markdown handback using orchestration/templates/subagent_return.md.
+definition_of_done:
+  - READY is accepted only as a state eligible for repository/phase verification; all other gates remain enforced.
+  - Missing returns remain a failure for delegated tasks.
+  - Empty returns are allowed only when every referenced task packet exists, parses, and assigns the task to master.
+  - Existing accepted and closed phase behavior remains covered.
+acceptance_checks:
+  - uv run ruff format --check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run ruff check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run mypy scripts/verify_phase.py
+  - uv run pytest -q tests/unit/test_orchestration_controls.py
+stop_conditions:
+  - The correction would alter R21 authorities, product semantics, dependency policy, local-only boundaries, or phase lifecycle data.
+  - Required work falls outside allowed_paths.
+  - A secret, external account, deployment, destructive action, dependency change, or Git operation is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

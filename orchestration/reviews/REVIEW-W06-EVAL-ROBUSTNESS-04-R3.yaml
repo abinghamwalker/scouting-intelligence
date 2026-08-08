@@ -1,0 +1,31 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-ROBUSTNESS-04-R3
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R3
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    evidence: >-
+      Normal stress result 013da049ef32c63d7bf5d40e825b7d377000cca70fe8b6c86fb2becb05797598
+      retains correct split observation IDs while accepting rolling-window ranked rows,
+      per-query results, aggregate metric and interval children; comparisons are not
+      bound back to cohort rows.
+  - severity: P1
+    evidence: >-
+      Normal metadata control 75b2bc182bbd1e72816de51ce7516e1cf1ee2475328aa49cbabca80485699e1b
+      accepts foreign embedded control rows and authority digest while retaining metric
+      and comparison children derived from the original input.
+  - severity: P1
+    evidence: >-
+      Public fixture contains only the computed population and tests do not pin the R3
+      stress/control/applicability identities or execute typed unsupported stress cases.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.yaml
+reviewer: master

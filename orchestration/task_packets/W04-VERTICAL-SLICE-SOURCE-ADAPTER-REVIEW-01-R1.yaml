@@ -1,0 +1,86 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01
+phase_id: W04
+revision: R1
+state: REWORK_RETAINED
+objective: >-
+  Independently review the exact bounded public source adapter for fail-closed whole-
+  member verification, immutable raw/evidence binding and exact accepted match-
+  population equality. Review only; do not edit implementation, tests or data.
+depends_on:
+  - W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R1:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_source_adapter_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-vertical-slice-source-adapter-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-AUDIT-01-R1.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/sources/wyscout_manifest.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-vertical-slice-source-adapter-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: 3050b7a3c0ff47442db973fb18fee70c8bf3256827936739e63f87947cd07bed
+  source_test_sha256: d01a630f1ce2c345597dde7fef81589ca14e8690515e67d8ff476d1f4063423d
+  producer_return_sha256: c14691f01e8575d91e06882bcd2e1c78ee628d6993d1c89391590b93e957a0b1
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  member_path: archive-members/events_England.json
+  member_sha256: 301599543aa1a7fa457bb8ef33c9fe860bf81dca65d418d618d68abcda3defad
+  member_size_bytes: 188888614
+  member_row_count: 643150
+  match_source_id: 2499719
+  match_action_count: 1768
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Confirm all invalid caller pins fail before source-member read and all valid reads
+    verify stable manifest/index/member bytes and exact decoded row count before any
+    selected population is returned.
+  - >-
+    Confirm physical ordinals precede strict filtering; every selected raw record is
+    digest-bound to its evidence; exact 901 plus 867 period equality is required; and
+    the result is deeply immutable and retains the authentic checked capability.
+  - >-
+    Exercise or inspect adversarial omission, addition, duplication, reordering,
+    non-strict ID, row-count drift and mutation cases. Identify any bypass, authority
+    leak, time-of-check/use gap or downstream reliance on Boolean/count/digest only.
+  - Confirm no product byte, dependency, provider/network, Git, cloud, container, CI, endpoint, remote or deployment action.
+definition_of_done:
+  - Exact candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py -k 'verified_match_adapter or verified_member_reader'
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review with PASS or REWORK and exact P0/P1/P2 counts.
+  - Mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,15 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1
+task_id: W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01
+phase_id: W04
+revision: R1
+verdict: ACCEPTED
+findings: []
+next_packet: W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1
+evidence:
+  - orchestration/task_packets/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-v2-aggregate-materialization-R1.md
+  - reports/reviews/W04/wyscout-v2-aggregate-materialization-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-v2-aggregate-materialization-R1-master-acceptance.md

@@ -1,0 +1,62 @@
+schema_version: 1
+task_id: W04-WYSCOUT-DATASET-CARD-REVIEW-01
+phase_id: W04
+revision: R1
+state: PLANNED
+objective: >-
+  Independently verify every transformed-card claim against the immutable source,
+  build, layer and health evidence and return PASS only with zero P0-P2 findings.
+depends_on:
+  - W04-WYSCOUT-DATASET-CARD-01-R1:COMPLETE
+assigned_role: fresh_independent_w04_dataset_card_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-DATASET-CARD-01-R1.yaml
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - reports/phase-gates/W04/data-health.json
+  - reports/phase-gates/W04/data-health.md
+  - reports/verification/W04/wyscout-real-root-invocation-R1-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-transformed-dataset-card-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-DATASET-CARD-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+requirements:
+  - Keep the candidate card and every upstream artifact read-only.
+  - >-
+    Independently recompute every bound digest/count/path and audit intended use,
+    exclusions, population/coverage distinction, correction/transformation,
+    supported/suppressed features, temporal/minute limits, bias, rights and offline
+    reproduction. Reject any overclaim, missing limitation or evidence mismatch.
+  - PASS only with findings P0/P1/P2 exactly 0/0/0; otherwise bounded REWORK with the smallest exact correction.
+acceptance_checks:
+  - git diff --check
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent card review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded card defects; return REWORK without editing the candidate.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

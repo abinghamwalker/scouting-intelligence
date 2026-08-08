@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-03
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the exact R3 candidate for source-completion semantics,
+  four-feature derivation, provenance/lineage and exact bounded layer-manifest scope.
+  Return PASS only if R1/R2/R21 behavior remains closed and the real match path proves
+  exact raw-source population through checked Gold without claiming wider completeness.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-01-R3:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: independent_w04_semantics_provenance_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-03-R1.yaml
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R3.yaml
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R3.md
+  - reports/verification/W04/wyscout-source-completion-index-R3-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-source-completion-index-correction-R1.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-source-completion-index-semantic-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-03-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: 22d825631af0d27d1583a79ce4bb8adb10643bb32fe139630871727f814f1415
+  contract_implementation_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  source_test_sha256: 5beb37ee5fffadcab1d7355b879fcb65b76816b969c5581a943b1096afd98580
+  contract_test_sha256: 7ef542d5ed65437683063e2980e08a94b260771405147a860ca5d4541f1c004b
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  aggregate_action_count: 3071395
+  index_size_bytes: 644037
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+review_requirements:
+  - Verify every fixed binding before review and stop on drift.
+  - Reproduce accepted-index content address, five-member and 3071395-action reconciliation without altering frozen bytes.
+  - Verify strict integer-only event/subevent projection, unmapped/quarantined strings, equal-clock group-first behavior and causal provenance remain intact.
+  - Reproduce the real match 2499719 exact full-population path through checked Action, Possession, Fact and exact four-feature Gold.
+  - Verify Gold feature values, source rows, completion-index digest, dependency lineage, temporal proof and six coverage authorities reconcile exactly.
+  - Challenge one-match manifest scopes with omission, extra, duplicate/overlap, stale/substitution and cross-scope cases. Require exact product-scope equality without requiring all 3652 indexed periods.
+  - Confirm no new feature, product artifact, dependency, provider/network, Git, cloud, container, hosted CI, endpoint, remote or deployment change.
+definition_of_done:
+  - Every fixed candidate and frozen authority hash is exact.
+  - Source/index, semantic, provenance, four-feature and bounded-manifest checks independently pass, or an exact defect is returned for rework.
+  - The review and mandatory return record PASS or REWORK with P0/P1/P2 counts and executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_identity_ruleset_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_wyscout_source_manifest.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - One independent review with PASS or REWORK and exact P0/P1/P2 findings.
+  - One mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or any need to edit implementation/test/data/frozen paths.
+  - Any Git/destructive/provider/network/dependency/product/cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

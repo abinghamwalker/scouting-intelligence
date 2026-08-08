@@ -1,0 +1,105 @@
+schema_version: 1
+review_id: REVIEW-W05-SERVING-01-R1
+task_id: W05-SERVING-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS_AS_REPORTED_BUT_INADEQUATE
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+master_reproduction:
+  producer_focused_tests: 42_PASSED_38_PREDECESSOR_PLUS_4_NEW
+  forged_resolved_query_with_carried_digest: ADMITTED
+  forged_query_changed_results: true
+  forged_query_retained_result_id: true
+  distinct_valid_request_time_result_id_collision: true
+  distinct_valid_request_time_run_id_collision: true
+  invalid_later_constraint_after_false_constraint: SILENTLY_ADMITTED_EMPTY_RESULT
+  no_constraint_reason: hard_constraints_applied
+  synthetic_applicability: applicable
+  synthetic_limitations: []
+  emitted_snapshot_as_of: 2025-01-01T00:00:00Z
+  emitted_available_at_watermark: 2025-01-02T00:00:00Z
+  actual_feature_observed_at: 2025-01-03T00:00:00Z
+  actual_feature_available_at: 2025-01-04T00:00:00Z
+defects:
+  - severity: P1
+    blocker_tests: [1, 3, 4, 6]
+    evidence: >-
+      A model_copy/model_construct-equivalent M0ResolvedQuery changed query_player_id
+      while retaining the old resolved_query_digest and expected pin. M0ServingCore
+      admitted it, changed retrieval bytes and retained the same m0_result_id. Serving
+      checks only isinstance and carried digests; it does not normally revalidate the
+      complete PinnedM0ServingRequest and nested resolved query.
+    required_fix: >-
+      Normally revalidate the full request from its Python semantic dump before any
+      loader/scorer call, thereby recomputing nested validators and both request/query
+      digests. Add direct model_construct/model_copy attacks for every behavior pin.
+  - severity: P1
+    blocker_tests: [1, 3, 6]
+    evidence: >-
+      Two normally valid pinned requests with the same retrieval_request_id and query
+      digest but different requested_at values emitted different result bytes while
+      colliding on m0_result_id, retrieval_result_id and retrieval_run_id. The UUID
+      derivation omits the complete canonical pinned-request bytes.
+    required_fix: >-
+      Derive every serving/result/run UUID from a domain separator plus the canonical
+      digest of the complete normally validated pinned request and accepted artifact
+      identity. Distinct request bytes must not share a result identity.
+  - severity: P1
+    blocker_tests: [1, 3, 4, 6]
+    evidence: >-
+      An always-false supported age constraint placed before an unsupported position
+      operator returned an empty accepted result. Reversing the order rejected. Row-
+      by-row short-circuiting therefore silently ignores later invalid constraints and
+      makes result behavior depend on constraint order.
+    required_fix: >-
+      Parse and validate every constraint field/operator/value into a canonical plan
+      before scanning candidates. Apply only after the complete plan is accepted.
+      Permutations of equivalent constraints must produce byte-identical results.
+  - severity: P1
+    blocker_tests: [4, 6]
+    evidence: >-
+      A request with no hard constraints emits hard_constraints_applied. Constructed
+      synthetic-development evidence is presented with recommendation-oriented
+      applicability=applicable and no limitation, despite the resemblance-only and
+      non-validation boundary.
+    required_fix: >-
+      Emit action reason codes only when the action occurred. Synthetic development
+      confidence must remain explicitly limited with a deterministic
+      synthetic_development_only limitation and matching legacy/state reasons; it may
+      not claim recommendation applicability.
+  - severity: P1
+    blocker_tests: [2, 4, 6]
+    evidence: >-
+      TemporalEvidence reports snapshot 2025-01-01, availability watermark/valid_from
+      2025-01-02, while every admitted feature row declares observed_at 2025-01-03 and
+      available_at 2025-01-04. Derived feature/model/index dependencies are assigned
+      source dependency times rather than explicit truthful evidence. The result thus
+      understates its actual evidence watermark and presents fabricated derived times.
+    required_fix: >-
+      Include feature-row observed/available evidence when deriving the exact maximum
+      snapshot/watermark/valid_from. Bind derived identities without inventing earlier
+      availability: use the latest admitted row/source times as the explicit bounded
+      derivation watermark and state that deterministic policy in reasons/tests.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      Only four new tests were added. There is no direct scorer spy, request-forgery,
+      request-identity collision, cutoff-equality, pin-by-pin substitution, filter
+      permutation, role-threshold, evidence-state, confidence limitation, explanation
+      parity or forbidden complete-wire claim matrix.
+    required_fix: >-
+      Add the packet-required adversarial integration/e2e suite through production
+      serving APIs. Do not duplicate scoring or change accepted model/artifact bytes.
+independent_review:
+  packet: orchestration/task_packets/W05-SERVING-REVIEW-01-R1.yaml
+  state: REWORK
+  report: reports/reviews/W05/w05-m0-serving-independent-review-R1.md
+  return: reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R1.md
+decision: REWORK
+next_packet: orchestration/task_packets/W05-SERVING-01-R2.yaml
+reviewer: master

@@ -1,0 +1,116 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the final frozen R21 cross-authority contract and R3
+  producer return, materializing only the fixed review Markdown and mandatory
+  review return.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-TEST-01-R3:ACCEPTED_FOR_INDEPENDENT_REVIEW
+assigned_role: independent_r21_cross_authority_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R3.md
+  - reports/verification/W04/wyscout-r21-cross-authority-test-R3-master-verification.md
+  - tests/contracts/test_w04_supported_feature_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/verification/**
+  - reports/phase-gates/**
+fixed_bindings:
+  review_id: w04-wyscout-r21-cross-authority-composability-independent-review-R1
+  review_path: reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  test_artifact_physical_sha256: 31574e6d1919455c0d358e1f11758049d55dcc568c8c622e94aaed0fc438a749
+  test_return_path: reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R3.md
+  test_return_physical_sha256: 33fa1d3982643cc32e7b2f51b0436799d4de94d81dd3ab3fa2d52cea5be3ec4b
+review_machine_record:
+  fence: w04-r21-cross-authority-review-v1
+  exact_keys:
+    - recommendation
+    - review_id
+    - review_path
+    - reviewed_by
+    - test_artifact_physical_sha256
+    - test_return_physical_sha256
+requirements:
+  - >-
+    Inspect the complete final test and R3 return, and independently map every
+    R21 Section 13.1 positive and Section 13.2 negative to executable coverage.
+    Do not trust the producer summary.
+  - >-
+    Challenge the four lifecycle states, exact review/gate physical binding,
+    no-product-before-gate rule, and permission for later gate-authorized
+    product presence.
+  - >-
+    The fixed review Markdown contains exactly one
+    w04-r21-cross-authority-review-v1 fence. Its body is one closed canonical
+    JSON object plus one terminal LF with the six exact keys above.
+  - >-
+    PASS requires findings absent and the record recommendation PASS. REWORK
+    must identify concrete findings in prose and use recommendation REWORK.
+  - >-
+    reviewed_by is a newly selected canonical UUID distinct from the test
+    producer and every field-v2, possession-v2, and feature decision, review,
+    and acceptance actor. Do not reuse any existing actor UUID.
+  - >-
+    Bind the complete final physical test and R3 return digests exactly. Do not
+    bind R1/R2 returns or any canonical substitute.
+  - >-
+    Use root uv --locked --no-sync, PYTHONDONTWRITEBYTECODE=1, and Python -B.
+    Preserve retained inventory. Do not run Git, delegate, self-approve, create
+    gate/product paths, or change any read-only artifact.
+definition_of_done:
+  - Final R21 contract receives a fresh independent PASS or concrete REWORK.
+  - Review machine record uses the fixed ID/path and exact physical bindings.
+  - Complete focused suite, Ruff, and local-only checks pass.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any fixed test/return digest differs.
+  - Review requires editing a candidate, authority, test, gate, product, or broader-scope path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

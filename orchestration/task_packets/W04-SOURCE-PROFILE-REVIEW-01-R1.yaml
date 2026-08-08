@@ -1,0 +1,70 @@
+schema_version: 1
+task_id: W04-SOURCE-PROFILE-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently verify that the measured Wyscout source profile is deterministic,
+  completion-bound, aggregate-only, complete enough for schema design, and derived
+  solely from admitted durable paths.
+depends_on:
+  - W04-SOURCE-PROFILE-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-PROFILE-01-R1.yaml
+  - data/source/wyscout/v5/completion-manifest.json
+  - scripts/profile_wyscout_v5.py
+  - tests/unit/test_wyscout_profile.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_read_paths:
+  - data/source/wyscout/v5/**
+allowed_paths:
+  - tests/security/test_w04_wyscout_profile_review.py
+  - reports/reviews/W04/wyscout-source-profile-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-PROFILE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+deliverables:
+  - >-
+    Independent recomputation of the profile's completion binding, path inventory,
+    major counts, field/type/null shapes, ID relations, clock ranges, and minutes/
+    terminal evidence.
+  - >-
+    Proof that only completion-declared admitted paths are read, excluded ZIP entries
+    remain unopened, report reruns are byte-stable, and no raw record or player name
+    appears in tracked output.
+  - >-
+    Challenge whether the report supplies every measured input required by the nine
+    open schema-design R3 corrections without converting unknown evidence into a fact.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - Independent aggregate recomputation matches the tracked profile.
+  - The profiler's check mode is network-free, read-only, and byte-stable.
+  - The tracked profile contains aggregate authority only and explicitly retains unsupported semantics as unknown.
+  - No provider request, data mutation, protected fixture, or architecture change occurs.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_profile.py tests/security/test_w04_wyscout_profile_review.py
+  - uv run python scripts/profile_wyscout_v5.py --check
+  - uv run ruff format --check tests/security/test_w04_wyscout_profile_review.py
+  - uv run ruff check tests/security/test_w04_wyscout_profile_review.py
+  - uv run mypy tests/security/test_w04_wyscout_profile_review.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 completeness, determinism, privacy, excluded-member, lineage, or local-only defect is reproduced.
+  - Review requires provider/network access, data mutation, or producer/design edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

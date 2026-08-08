@@ -1,0 +1,99 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Audit the frozen current runtime models and return the exact implementation
+  boundary for the already-approved 23-root canonical schema-closure packet,
+  including canonical Arrow identity, without creating or accepting schema bytes.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R4:CANDIDATE_FROZEN
+assigned_role: independent_w04_23_root_schema_readiness_auditor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01-R1.yaml
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-build-contract-conformance-review-R1.md
+  - reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-schema-readiness-audit-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r4_contract_candidate_sha256: f4433ebeaadee2f1d17f7f5f286f6eee21656c7408338e972270b9237ee8bce6
+  r4_test_candidate_sha256: c6a50ffc7963c15ace11d68d78a9a5abd0e80953e52696a765ac2a4e259da229
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r4_authority_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  parquet_encoder_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+audit_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Reconcile the exact ordered 23-root roster to the current owning runtime models
+    and enumerate any missing model or serialization surface. Do not append roots.
+  - >-
+    Determine the minimal canonical schema-content shape that truthfully closes
+    each root's complete field order, JSON types, literals/enums, nullability,
+    nested definitions, tuple/list cardinality and order, grammars, and every
+    model-validator cross-field rule without relying on symbol/code/serializer
+    digests as schema content.
+  - >-
+    Specify how the same accepted root content must bind the concrete canonical
+    Arrow field order, nested types, integer widths, nullability and metadata policy
+    for every Parquet product root, especially GOLD_PLAYER_WINDOW, without defining
+    a second schema authority or deriving schema from a single fixture row.
+  - >-
+    Reconcile the exact six-key implemented-schema row, canonical ID/version
+    ownership and earlier-only closure dependencies for all 23 roles. Identify any
+    ambiguous dependency or schema-identity decision that would require user input.
+  - >-
+    Return the smallest producer packet boundary, owned paths and focused checks.
+    Do not emit canonical schema bytes, compute or advertise accepted v2 content
+    digests, materialize an aggregate, or edit implementation/tests.
+definition_of_done:
+  - A report-only packet-readiness verdict with exact implementation guidance and no authority claim.
+deliverables:
+  - Readiness audit report.
+  - Return using the repository template.
+stop_conditions:
+  - Fixed hash drift.
+  - Need to choose a new root, schema authority, product population, dependency or
+    architecture rule not already fixed by the approved documents.
+  - Need to edit outside the two allowed report paths or perform Git/provider/
+    network/product-write/external-infrastructure action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

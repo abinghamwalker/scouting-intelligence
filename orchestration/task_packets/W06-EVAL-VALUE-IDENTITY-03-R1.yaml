@@ -1,0 +1,138 @@
+schema_version: 1
+task_id: W06-EVAL-VALUE-IDENTITY-03
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the second and final convergence split: exact deterministic metric values,
+  missingness, intervals, canonical comparison/pair/agreement identities, result-child
+  uniqueness and public regressions on top of the accepted gate-population preimage.
+depends_on:
+  - W06-EVAL-GATE-BINDING-REVIEW-02-R2:ACCEPTED
+assigned_role: implementation_engineer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R3.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-02-R2.yaml
+  - reports/reviews/W06/evaluation-gate-binding-independent-review-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - tests/fixtures/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Compute Precision@k as numerator/k for every complete judged ranking, including 0/k;
+    make Recall@k alone unavailable when eligible relevance has denominator zero. Keep
+    partial gain and REQUIRE_COMPLETE policies exact and never map UNJUDGED/ABSTAIN to 0.
+  - >-
+    Give pair predictions an explicit predicted/abstained/missing state with validated
+    candidate rules. Missing predictions must fail closed as unavailable, not count as
+    incorrect; explicit abstentions must be retained and excluded by declared behavior.
+  - >-
+    Produce typed immutable, canonical, content-addressed ranking, pair-preference,
+    agreement and rank-comparison results whose preimages bind protocol/method,
+    evaluated-query population, ordered governed inputs, predictions/exclusions,
+    sufficient statistics, values and reasons. Materially different predictions must
+    not share identities.
+  - >-
+    The core result objects must be the exact persisted MetricResult and
+    BootstrapInterval contracts accepted by EvaluationRun, including protocol and input
+    lineage in the canonical preimage. Do not retain a parallel EvaluationValue type or
+    translate by dropping lineage into a second result digest. EvaluationRun must verify
+    each persisted result/interval protocol identity as well as its population identity.
+  - >-
+    Canonicalize agreement reviewer/evidence orientation, bind agreement evidence to the
+    protocol rubric, and bind pair-preference evidence to that same protocol rubric.
+    Retain explicit insufficient/missing reasons. Rank comparison must bind ordered left
+    and right ranking input digests in its persisted contract, retain Spearman
+    availability, top-k overlap/Jaccard/churn, disagreements and a stable result digest
+    without discarding valid set metrics when correlation is unsupported.
+  - >-
+    Reject negative computed numerators, non-positive denominators, unit-metric values or
+    bootstrap bounds outside [0,1], and any primary metric/bootstrap configuration that
+    the protected positive-gate contract cannot execute.
+  - >-
+    Computed metrics and intervals must forbid unavailable reasons. Rank-comparison
+    contracts must enforce Spearman in [-1,1] and exact top-k set arithmetic:
+    overlap_count <= k, overlap_rate = overlap_count/k, churn = 1-overlap_rate,
+    Jaccard = overlap_count/(2k-overlap_count), and disagreement cardinality =
+    2(k-overlap_count) whenever set metrics are available.
+  - >-
+    Require canonical unique metric children inside slices and unique slice/failure IDs,
+    digests and semantic keys inside runs while preserving the accepted population checks.
+  - >-
+    Add one exact normal-constructor/core regression per R3 P1/P2 witness, including
+    zero-positive precision, missing pair prediction, pair identity collision,
+    orientation-stable agreement, rubric substitution, rank-comparison identity,
+    negative statistics, out-of-unit bounds, unsupported primary capability, and
+    duplicate slice/failure rows. Sort contract exports and make the literal Ruff check pass.
+  - >-
+    Add master-readback regressions proving distinct ranking inputs cannot share a
+    comparison digest, pair rubric substitution rejects, and a core-produced metric and
+    interval persist directly into EvaluationRun with exactly the same digests and no
+    lineage-dropping translation.
+  - >-
+    Add master semantic regressions rejecting Spearman 2.0, overlap_count 2 at k=1,
+    and COMPUTED MetricResult/BootstrapInterval objects carrying unavailable reasons.
+deliverables:
+  - One deterministic metric/result implementation shared by public development fixtures and future protected/prospective execution.
+  - Public-only adversarial tests with stable expected identities where appropriate.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R1.md.
+definition_of_done:
+  - Every R3 metric/value/identity/range/capability/duplicate/static P1/P2 counterexample rejects or returns the exact declared unavailable result.
+  - Core and persisted metric/interval identities are one implementation and one digest.
+  - Gate/population R2 tests remain green without weakening their validators.
+  - The public fixture digest and implementation-only authority notice remain unchanged.
+  - No second metric implementation, dependency or protected-data path is introduced.
+acceptance_checks:
+  - uv run --no-sync pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R1.md
+stop_conditions:
+  - A required change needs a new dependency, protected expected output, external/provider access or a protocol choice outside the already frozen R3 findings.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - The correction would weaken the accepted gate-population relation or alter accepted W05 evidence bytes.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - exact metric formulas, missingness and identity preimages implemented
+  - exact commands, exit statuses and concise results
+  - exact adversarial witness outcomes and stable identities
+  - residual metric, interval, identity, applicability and claim risks
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

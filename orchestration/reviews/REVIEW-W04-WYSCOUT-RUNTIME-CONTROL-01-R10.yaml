@@ -1,0 +1,35 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R10
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R10
+decision: MASTER_ACCEPTED
+producer_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.yaml
+producer_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.md
+independent_review_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10.yaml
+independent_review: reports/reviews/W04/wyscout-runtime-control-independent-review-R10.md
+independent_review_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10.md
+master_acceptance: reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+finding_counts:
+  p0: 0
+  p1: 0
+  p2: 0
+accepted_bindings:
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  rebuild_child_sha256: fff279d4d4a6a1c76ea6ee2cc9c7a88a4d5fd2c56ca677984a1dcce765ef9339
+  runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  security_tests_sha256: 5907b945fa61855ff1104a2e03dd13057a76863251258b8a53088e322b44d18d
+  producer_return_sha256: 56004852a1868b89579d65ee781b5ef9a26b922451f25dbbe61f1b94aaa55854
+  independent_review_sha256: 331082c9482cabae5957e950e0b61683194138e979c6cff07eff06cf51ae80d6
+  independent_review_return_sha256: 9da5ec8e400561459b1c2aba3a4fb8828ec4622c8e7d9e9f908313bc46ba95d0
+checks:
+  exact_json_boundary: PASS
+  strict_inverse_and_logical_bytes: PASS
+  adversarial_container_and_semantic_matrix: PASS
+  rejection_before_publication: PASS
+  exact_286_test_population: PASS
+  retained_root_and_pyc_pre_post: PASS
+  static_security_import_local_guard_phase: PASS
+git_operations: none
+real_root_publication: none

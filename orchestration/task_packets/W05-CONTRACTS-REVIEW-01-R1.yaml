@@ -1,0 +1,75 @@
+schema_version: 1
+task_id: W05-CONTRACTS-REVIEW-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review and adversarially challenge the current additive W05 M0
+  contracts after R2, reporting whether every accepted architecture-preflight P1 is
+  actually closed without changing candidate source or tests.
+depends_on:
+  - W05-CONTRACTS-01-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CONTRACTS-01-R1.yaml
+  - orchestration/task_packets/W05-CONTRACTS-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R1.yaml
+  - reports/reviews/W05/w05-architecture-preflight-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/evidence.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - tests/contracts/test_foundation_contracts.py
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-contracts-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Does the artifact/request/result content identity reject same-ID substitutions for every registry, evidence-class, fit, candidate, array, PCA, taxonomy, lineage, model and index field?
+  - Is canonical numeric handling complete, including finite values, negative zero, dtype/shape/order, PCA signs and deterministic component ordering?
+  - Can the contract itself bind and validate the declared tie policy from explicit scores/distances and UUID keys, or can rankings/result bytes drift while still validating?
+  - Is the query target/resolved brief/exemplar/exclusion/candidate universe sufficient and self-contained for one typed serving interface?
+  - Are dimension states candidate-specific, does valid ZERO remain distinct from missing/suppressed/unavailable, and can any legacy dimension contradict authoritative confidence or claim unsupported measured evidence?
+  - Must explanations follow exact artifact feature order and state, and can inputs/reasons/contributions be substituted without detection beyond a recomputed result digest?
+  - Are role taxonomy, deterministic mappings and contextual probability invariants still fully covered after the R2 test rewrite?
+  - Is the W04 registry binding exact and unambiguously named, with broader families impossible under W04_REAL_GOVERNED?
+deliverables:
+  - Independent verdict with P0/P1/P2 findings, exact code/test evidence and smallest bounded correction.
+  - Explicit adversarial probe results for negative zero, rank/tie drift, per-candidate state drift, explanation order and taxonomy tests.
+  - Complete mandatory return at the exact allowed return path.
+definition_of_done:
+  - Every finding is reproducible and classified under the six W05 blocker tests.
+  - No source, test, config, orchestration, dependency, Git or accepted W04 byte changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A required source is missing or authority conflicts materially.
+  - Any external access, provider use, dependency, destructive action or out-of-scope write is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

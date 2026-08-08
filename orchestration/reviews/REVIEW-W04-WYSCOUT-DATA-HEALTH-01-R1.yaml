@@ -1,0 +1,22 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-DATA-HEALTH-01-R1
+task_id: W04-WYSCOUT-DATA-HEALTH-01
+phase_id: W04
+revision: R1
+decision: MASTER_ACCEPTED_CLOSURE_READBACK
+packet: orchestration/task_packets/W04-WYSCOUT-DATA-HEALTH-01-R1.yaml
+return: reports/reviews/W04/returns/W04-WYSCOUT-DATA-HEALTH-01-R1.md
+artifacts:
+  json: reports/phase-gates/W04/data-health.json
+  markdown: reports/phase-gates/W04/data-health.md
+bindings:
+  json_sha256: ecbf0e52ec702a42b06a2b0a0528bd1716ee7c2922ab4924e468cca83fd9cfd5
+  markdown_sha256: 57092d3479769ca032be4144b1cb9d71e6167b36659ec557ec07c59ca624202c
+  return_sha256: 65ee74ae0416af78e18bc4570003626b69ec060d30c2a32a6440a325b947875c
+checks:
+  source_manifest_and_completion_readback: PASS
+  product_manifest_receipt_and_logical_readback: PASS
+  separate_source_and_gold_coverage: PASS
+  r11_r3_operational_baseline: PASS
+  terminal_r12_evidence: PASS
+  w10_deferred_host_state_visible: PASS

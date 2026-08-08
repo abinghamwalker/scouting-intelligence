@@ -1,0 +1,134 @@
+schema_version: 1
+task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  As master, preserve every retained R1 failed-attempt artifact and execute exactly
+  two new complete invocations of the accepted outer launcher with the accepted
+  R10 rebuild child against the fixed local roots, proving immutable/idempotent
+  raw-to-Gold output and complete operational evidence.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10:MASTER_ACCEPTED
+  - W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1:REWORK_RETAINED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1.yaml
+  - reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+  - reports/verification/W04/wyscout-four-feature-vertical-slice-R1-master-acceptance.md
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - data/manifests/wyscout/v5/code/**
+  - data/manifests/wyscout/v5/bronze/**
+  - data/manifests/wyscout/v5/silver/**
+  - data/manifests/wyscout/v5/gold/**
+  - data/working/wyscout/v5/.staging/**
+  - data/working/wyscout/v5/bronze/**
+  - data/working/wyscout/v5/silver/**
+  - data/working/wyscout/v5/gold/**
+  - runs/w04/wyscout-rebuild/**
+  - reports/verification/W04/wyscout-real-root-invocation-R2-master-acceptance.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r10_master_acceptance_sha256: 1f7c09f15ea7ae8f3fbac9f517ad2e9b444b177da719751013eae5c2b867562a
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  launcher_size_bytes: 192277
+  rebuild_child_sha256: fff279d4d4a6a1c76ea6ee2cc9c7a88a4d5fd2c56ca677984a1dcce765ef9339
+  runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  security_tests_sha256: 5907b945fa61855ff1104a2e03dd13057a76863251258b8a53088e322b44d18d
+  exact_outer_wrapper_sha256: eeb2a067fc6786fcb0d2dd5ed8446623f676aed1ea060ddb1ff4f71e47be42cc
+  outer_environment_digest: d832fe0a0e8249465b1c77f135a5b8da07c100fee0586127cdf8a4099133eaf1
+  retained_unaccepted_code_manifest_sha256: fb1bcca5772d71a0de2c116cd2539d1d2cd757554df8791dad8e0d952cf67083
+  retained_failed_build_id: 82fc7915284ea636574422e189375a522397dc0df796ba4ef42e5ee4e0053ea5
+  retained_pre_run_data_runs_census_sha256: e62878d96c76cc67a0fc0690fed674c1c61c2b82981a472b21649ffd981a686b
+  retained_site_pyc_inventory_sha256: ad6397ba9131fc7684bf9dbfdef4e3ae69ef9a7d9662f561948bef16868f835e
+  retained_repository_pyc_inventory_sha256: 9b1407d4f9d5adae170014b9a4852bc1e62331efd57c99d04e69df14ac8719a2
+  logical_uv_path_identity: exact_current_host_logical_uv_path_bound_by_outer_environment_digest
+  uv_raw_target_identity: exact_current_host_one_hop_relative_uv_target_bound_by_outer_environment_digest
+  uv_physical_sha256: 4f0c0c002bb4702c1bd6792edc15f7ae3948b5f19509c8d73cd5c9a26298097f
+  uv_version: uv 0.9.21 (Homebrew 2025-12-30)
+requirements:
+  - >-
+    Verify every fixed binding and repeat complete no-follow data/runs and PYC
+    preflight. Treat the immediately preceding accepted R10 master gate as the
+    complete locked/offline pre-run gate because no code, resource, dependency,
+    lock, source, identity, schema, authority or product byte may change between
+    that gate and the first launch. Prove main, zero remotes and active guard.
+  - >-
+    Retain without deletion, overwrite, rename or reuse the pre-bootstrap rejected
+    control prefix `control_run_id=aea8cb76-a49f-48a1-9bff-5f53591529ee`, the
+    first admitted failed control prefix
+    `control_run_id=1588bf8d-f84d-414f-8df3-94c67d007252`, admission prefix
+    `admission_run_id=4fd39d97-25e7-4b50-8035-cc7e902effdd`, rebuild prefix for
+    failed build/run
+    `82fc7915284ea636574422e189375a522397dc0df796ba4ef42e5ee4e0053ea5/3bda1ef9-0a98-42f0-a079-a757a0f3b467`, and
+    the exact retained unaccepted code manifest. Record both failure causes and
+    prove every retained prefix remains empty.
+  - >-
+    For each new run the master alone samples/creates one fresh control UUIDv4
+    prefix, no-follow opens and verifies the accepted launcher exactly once, and
+    passes only that inherited descriptor through the exact literal normal-PATH-
+    selected command `uv run --locked --no-sync python -S -B
+    scripts/launch_wyscout_v5.py` under the complete closed outer environment.
+    Never use a module, wrapper argv substitution, direct physical uv invocation,
+    alternate environment value, network or provider access.
+  - >-
+    Execute exactly two new COMPLETE runs after R10 acceptance. Require distinct
+    control/admission/rebuild UUIDs, one new current-repository accepted immutable
+    code manifest, one stable accepted build ID, byte-identical seven products and
+    three layer manifests, and two invocation/boundary receipt families. The
+    retained pre-R10 unaccepted manifest and failed build/prefix are additional
+    negative evidence and must never be counted as accepted output or removed.
+  - >-
+    Guard-read/reopen all seven Parquet products, three manifests, code manifest,
+    both boundary and invocation receipt families and every completion cross-field.
+    Independently reconstruct the code/environment manifest, exact 25-key
+    projection, build ID and inverse, physical/logical aggregate bindings, parent
+    chain, temporal proof, row counts and two-run equality from named bytes.
+  - >-
+    Record complete pre/mid/post no-follow inventories, PYC inventories, all
+    failed and successful prefixes, source descriptor/encoding/uv/frame/status
+    observations, row counts, SHA-256/semantic digests, run equality, local-only
+    checks and residual risk. Retain all staging and PYC evidence; do not clean.
+acceptance_checks:
+  - uv run ruff format --check .
+  - uv run ruff check .
+  - uv run mypy src/scouting scripts
+  - uv run lint-imports
+  - uv run pytest -q -p no:cacheprovider
+  - uv run bandit -q -r scripts src
+  - uv run python scripts/install_local_git_guards.py --check
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Two new complete real local run families, immutable products/manifests/receipts, retained failed-attempt evidence, master acceptance and return.
+stop_conditions:
+  - None for bounded implementation or evidence defects; rework without cleanup. User input only for a true standing-authority boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,83 @@
+schema_version: 1
+task_id: W06-EVAL-GATE-BINDING-REVIEW-02
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the split W06 gate/population lineage correction and decide
+  whether protocol, protected query roster, access, result, interval and retained
+  negative evidence now form one fail-closed relation.
+depends_on:
+  - W06-EVAL-GATE-BINDING-02-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R1.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R3.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R1.md
+  - src/scouting/contracts/evaluation.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-gate-binding-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Does GateDecision bind gate.protocol, bundle.protocol and run.protocol to exactly one validated protocol object/digest?
+  - Does the canonical evaluated-query roster bind access, run, every metric and interval, and exactly all PROTECTED_TEST memberships in the bundle?
+  - Can a FIT/TUNE/CALIBRATION/PROSPECTIVE or absent query enter a protected decision, or can any protected query be omitted?
+  - Do ACCEPT_CLAIM and NARROW_APPLICABILITY require governed relevance plus computed primary results and intervals for every evaluated protected query?
+  - Does NO_GO accept exactly neither bundle/run for one explicit missing-population reason or both fully linked objects for retained negative evidence, while rejecting either orphan shape?
+  - Do caller-supplied roster, digest, protocol, bundle, candidate, access, result or interval substitutions fail under normal constructors?
+  - Do the exact R3 mixed-membership, protocol-substitution and zero-evidence narrowing constructors now reject without breaking coherent positive and negative shapes?
+deliverables:
+  - One fresh report-only verdict limited to the gate/population split, with exact P0/P1 findings or explicit closure.
+  - Reproduction matrix for every review question and exact commands/results.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R1.md.
+definition_of_done:
+  - Every claimed closure is independently reproduced using public constructors.
+  - Any finding can demonstrably alter population membership, leakage, retained protected evidence or gate decision.
+  - Reserved R3 metric-value/identity/static defects are acknowledged but not re-reviewed here except where they break the new population relation.
+acceptance_checks:
+  - uv run --no-sync pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/evaluation-gate-binding-independent-review-R1.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R1.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and reproduction matrix with severities
+  - exact commands, exit statuses and concise results
+  - exact remaining counterexamples and identities or explicit closure
+  - residual population, leakage, negative-retention, applicability and claim risks
+  - smallest bounded correction or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

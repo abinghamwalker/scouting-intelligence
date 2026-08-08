@@ -1,0 +1,45 @@
+schema_version: 1
+review_id: REVIEW-W03-VERTICAL-01-PROTECTED-R1
+task_id: W03-VERTICAL-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+review_kind: master_brokered_protected_gate
+protected_access_owner: master
+fixture_contract_valid: PASS
+temporal_admission: PASS
+repeat_stability: PASS
+candidate_selection: FAIL
+result_binding: FAIL
+explanation_binding: FAIL
+defects:
+  - severity: P0
+    code: PARTITION_SPECIFIC_RETRIEVAL_OVERFIT
+    evidence: reports/verification/W03/protected-gate-attempt-R1.json
+    affected_definition_of_done: >-
+      The same preregistered serving implementation must execute a distinct
+      protected synthetic brief and admitted evidence without development-only
+      metric or candidate assumptions.
+    required_fix: >-
+      Make candidate selection partition-agnostic: apply the brief constraints,
+      exclusions and ambiguity quarantine, then rank eligible admitted evidence
+      deterministically without requiring one development-only metric name.
+  - severity: P1
+    code: STATIC_RETRIEVAL_OUTPUT_IDENTITIES
+    evidence: src/scouting/serving/synthetic.py:288
+    affected_definition_of_done: >-
+      Distinct requests and partitions must not reuse retrieval result/run IDs.
+    required_fix: >-
+      Derive stable, domain-separated result and run identities from the bound
+      retrieval request while preserving the frozen development oracle.
+  - severity: P1
+    code: DEVELOPMENT_LINEAGE_CONSTANTS
+    evidence: src/scouting/serving/synthetic.py:369
+    affected_definition_of_done: >-
+      Protected serving lineage must be supplied by the selected artifact
+      catalog and snapshot rather than borrowing development-only timestamps.
+    required_fix: >-
+      Carry dependency observation/availability metadata in the artifact
+      catalog and construct every lineage dependency exclusively from the
+      selected snapshot/catalog.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-VERTICAL-01-R3.yaml
+reviewer: master

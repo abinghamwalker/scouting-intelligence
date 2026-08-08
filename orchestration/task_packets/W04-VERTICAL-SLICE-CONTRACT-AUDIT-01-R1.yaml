@@ -1,0 +1,58 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-CONTRACT-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce a read-only implementation audit for the smallest executable, one-match,
+  one-player raw-to-Bronze-to-Silver-to-Gold slice using only R21's four supported
+  features. Identify the exact existing contract models, checked-product boundaries,
+  serializer/path/manifests, and deterministic build/receipt requirements a producer
+  must use. Do not implement or modify product, test, data, run, or control bytes.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1:INDEPENDENT_PASS_MASTER_ACCEPTED
+assigned_role: independent_contract_path_analyst
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1.yaml
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Enumerate exact public contract/build/check functions and model fields needed at each layer.
+  - Identify exact path-role, serializer, manifest-entry, layer-manifest, temporal-boundary and rebuild-receipt constraints.
+  - Identify how every written Silver/Gold value must remain derived from an authentic checked handle at the write boundary.
+  - Recommend the smallest honest artifact population and explicit bounded scope without claiming full-provider or full-W04 completeness.
+  - Flag any contradiction requiring architecture, dependency, feature, provider, cloud/container or deployment expansion.
+deliverables:
+  - One concise audit with code references, an exact producer checklist and PASS/BLOCKED verdict.
+stop_conditions:
+  - Any write outside the single allowed return path is needed.
+  - The analysis would require a Git, network, provider, dependency, cloud, container, endpoint, CI, remote or deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,15 @@
+{
+  "failures": [
+    {
+      "code": "RETURN_GIT_OPERATIONS_PERFORMED_TYPE",
+      "detail": "git_operations_performed must be a boolean, got str"
+    }
+  ],
+  "handback": "orchestration/reviews/W02-SYNTH-01-return-R1.md",
+  "packet": "orchestration/task_packets/W02-SYNTH-01-R1.yaml",
+  "schema_version": 1,
+  "status": "FAIL",
+  "structured_return": "tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml",
+  "task_id": "W02-SYNTH-01",
+  "validator": "verify_task_return"
+}

@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W08-WEB-E2E-04
+phase_id: W08
+revision: R1
+state: DISPATCHED
+objective: >-
+  Compose the accepted W08 services into a secure loopback-only, accessible local
+  workflow and automate every browser-testable core, denial, conflict and recovery journey.
+depends_on:
+  - W08-WORKFLOW-02:MASTER_ACCEPTED
+  - W08-EXPORT-03:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/threat-model.md
+  - docs/architecture/product-claim.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/verification/W06/limitations.md
+  - reports/verification/W07/browser-accessibility-report.md
+  - src/scouting/web/w07.py
+  - services/api/w07_main.py
+  - src/scouting/policy/r1.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - src/scouting/web/__init__.py
+  - services/api/w08_main.py
+  - apps/web/templates/w08/**
+  - apps/web/static/w08/**
+  - scripts/run_w08_study.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-E2E-04-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - A loopback-only study runtime that creates fresh explicitly synthetic analyst, scout, approver and admin accounts with untracked random credentials and no external identity/service dependency.
+  - Secure opaque session cookie and CSRF composition with rotation on login, logout revocation, expiry response, generic denial, no-store/CSP/referrer/frame/content-type headers and no secret or sensitive-data logging.
+  - Role-specific queue and forms for role-brief create/submit/approve/reject/history, replayable longlist linkage, scout assignment, structured observation/disagreement/amendment/history, shortlist transitions/reasons/next actions, local evidence-pack export and audit receipt view.
+  - Clear conflict and recoverable-failure responses that preserve the winning revision and give an explicit reload/retry path without partial mutations.
+  - Evidence-honest wording on every model-assisted view preserving NO_GO, MISSING_EXPERT_RELEVANCE_EVIDENCE, resemblance_only, synthetic_development_only, LIMITED and no_recommendation_evidence.
+  - Semantic header/nav/main/footer landmarks, one h1, explicit labels/errors/status messages, tables with captions and scoped headings, skip link, visible focus, logical keyboard order and responsive 1440/390/320 layouts without horizontal overflow.
+  - Python TestClient and real Python Playwright journeys for all authorised task paths plus denied/expired sessions, CSRF, IDOR, privilege escalation, private/team visibility, stale-write conflict, failure recovery, local-only requests, keyboard and responsive layout.
+definition_of_done:
+  - Every web-testable task in the W08 moderated protocol is automated using personas labelled synthetic automated tests.
+  - No test or UI wording treats automation as representative-user evidence or upgrades the W06 claim boundary.
+  - All focused checks and the mandatory return pass.
+focused_checks:
+  - Role-specific authorised and denied TestClient journeys, expiry, CSRF, IDOR, conflict and recovery.
+  - Real Python Playwright keyboard, landmarks, labels, focus, local-request and 1440/390/320 layout witnesses.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py tests/integration/test_w08_local_workflow_app.py tests/e2e/test_w08_local_workflow_playwright.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py tests/integration/test_w08_local_workflow_app.py tests/e2e/test_w08_local_workflow_playwright.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w08_local_workflow_playwright.py
+stop_conditions:
+  - An accepted service cannot support a required journey without changing a shared dependency.
+  - A network/external service, external identity provider, model call, Node/npm, container, hosted endpoint, protected-output access, destructive action or new dependency is required.
+  - A correction would weaken authentication, deny-by-default access, confidentiality, audit/reversibility, accessibility or evidence honesty.
+mandatory_return:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - behaviour, security and accessibility choices
+  - exact commands, exit statuses and concise results
+  - browser viewport and local-request evidence
+  - residual risks and follow-ups
+  - confirmations of no Git operations, no dependency or lock change, and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

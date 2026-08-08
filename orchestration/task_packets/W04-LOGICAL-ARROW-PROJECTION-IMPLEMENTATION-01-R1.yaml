@@ -1,0 +1,165 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement only the independently accepted descriptor-led logical-to-Arrow
+  projection serializer correction, preserving the existing semantic preimage,
+  identity golden vectors, build-contract fail-closed state and local-only scope.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-REVIEW-01-R1:MASTER_ACCEPTED
+assigned_role: w04_logical_arrow_projection_implementation_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.yaml
+  - reports/verification/W04/wyscout-logical-arrow-projection-authorization-R1.md
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-acceptance-v1.json
+  - reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-design-R1.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-DESIGN-01-R1.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R4.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-acceptance.md
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+fixed_bindings:
+  authorization_sha256: eeb28f62b631b70e6c7046f3e8a6cdba74c1a7a4996c7024e98c471b08b8dd69
+  decision_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  independent_authority_review_sha256: b864fcf19a72f8680fdc125b1ac92e7674d5edbc853adba45f7b8284efe76f52
+  authority_review_record_sha256: 121fb8c856bc9b31054171d445197f0ba25e6b138fa7198325b2f4fa679a91e7
+  authority_acceptance_sha256: 647ce58093485717a50037eeb6e46d09c2dfad88a8f60bdef7bce8d35f8d31c3
+  authority_master_acceptance_sha256: 2918b19595297ecfcd029e1f04c2b6be23bcbfcc9b2c79e298222fd389435d86
+  implementation_design_sha256: 75cc8ff80cbb3c125a7164499b36c9cf1bad200ea1e8dcf096c019ad1c9adead
+  implementation_design_return_sha256: e7d2448efa715ea699ada619ce2213141cbf8bf28150aaa8daf2226225379d80
+  accepted_formats_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+  accepted_formats_test_sha256: c0afb390ef44f19d4759b62495bc0125a14fb80ac0f1e4376972a798702e3a9f
+  accepted_build_contract_sha256: f4433ebeaadee2f1d17f7f5f286f6eee21656c7408338e972270b9237ee8bce6
+  accepted_build_contract_test_sha256: c6a50ffc7963c15ace11d68d78a9a5abd0e80953e52696a765ac2a4e259da229
+  authority_test_sha256: 39406164139b1c016b67ab14289c93a41e0a69b1da6a1b85a0ad818732fc0750
+  r21_composability_test_sha256: c51d16e1de99c28cfe5cde2feeeb8cbfc908516a59edc47cd53b08e955e75b26
+implementation_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - >-
+    Implement the design report's exact frozen slot dataclasses/enums for scalar,
+    struct, list, field and projection descriptor content. Validate exact runtime
+    types recursively before schema construction. Descriptor content contains no
+    callback, Arrow schema, row, fixture, digest, Boolean proof or alternate
+    authority object.
+  - >-
+    Provide `arrow_schema_from_w04_projection` and make both encoder and semantic
+    hash descriptor-led. Remove caller `schema` and `schema_role` authority from
+    those public APIs. Derive the physical schema and existing
+    WyscoutParquetSchemaDescriptor only from the exact projection descriptor.
+  - >-
+    Generate no schema from a table, row, fixture, observed value or empty
+    sequence. The supplied Arrow table is only a readback witness and its complete
+    recursive schema and metadata must exactly equal the generated schema.
+  - >-
+    Implement exact recursive identity, object-struct, positional-tuple-struct and
+    homogeneous-list projection. Positional structs restore logical arrays by
+    exact zero-based contiguous logical position; child names never become tuple
+    logical keys. List child schema and fixed cardinality are descriptor-owned.
+  - >-
+    Encode a present CanonicalJsonValue as exact canonical tagged logical JSON in
+    strict Arrow UTF-8 without LF. Validate the exact discriminated union before
+    encoding. Present tagged null must remain a non-null UTF-8 scalar.
+  - >-
+    Decode in the accepted exact order: strict UTF-8 bytes, duplicate-key and
+    invalid-constant/float-token rejection, Unicode scalar/NFC checks, exact typed
+    validation, canonical re-encoding without LF, and byte-for-byte equality.
+    Any failure is FormatError before semantic hashing or Parquet writing.
+  - >-
+    Preserve outer optionality exactly: only a descriptor-nullable outer field or
+    child accepts Arrow null; a present canonical JSON null can never be encoded
+    as Arrow null.
+  - >-
+    Validate descriptor, generated schema, table/schema equality, contract rows,
+    parents, keys, recursive inverse, contract-row equality and primary-key
+    equality before semantic hashing and before exactly one Parquet write. Every
+    malformed family must cause zero calls to `pq.write_table`.
+  - >-
+    Preserve WyscoutParquetSchemaDescriptor bytes and the sole exact
+    `w04-wyscout-parquet-semantic-v1` framing. Do not insert projection bytes,
+    projection kind, a projection digest, a field, version, formula or second
+    derivation into the semantic preimage.
+  - >-
+    Preserve the accepted identity fixture physical SHA-256
+    889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+    and semantic SHA-256
+    6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7.
+  - >-
+    Adapt the build-contract call site and tests only mechanically for the new
+    descriptor-led API. Do not synthesize GOLD_PLAYER_WINDOW authority from its
+    row, fixture, Arrow schema or equivalent object. The runtime build remains
+    fail-closed with GoldSchemaAuthorityUnavailableError until the later exact
+    root descriptor is independently accepted.
+  - >-
+    Add the design report's complete focused adversarial matrix, including all
+    seven tagged variants, nested mixed values, present-null/outer-null
+    distinction, strict malformed encodings, tuple/list descriptor and schema
+    drift, empty/nonempty sequence schema identity, fixed sizes, recursive
+    metadata, API-unrepresentable caller authority substitutes, and zero-write
+    tripwires.
+  - >-
+    Do not create an accepted root descriptor, root schema, schema bundle, product
+    byte, manifest, receipt, build, aggregate, feature, population, dependency,
+    provider access, publication, deployment or external state.
+definition_of_done:
+  - Descriptor-led serializer correction and focused tests pass with exact golden preservation.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact implementation candidate, focused tests and producer return only.
+stop_conditions:
+  - Fixed hash drift.
+  - Need for a second semantic derivation, accepted root descriptor, product/schema
+    byte, new logical field/root/feature/population/dependency or broader build
+    contract behavior.
+  - Need to edit outside the five allowed paths.
+  - Need for Git, provider/network, cloud, container, hosted CI, public endpoint,
+    publication or deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

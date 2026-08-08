@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W08-WEB-EXPORT-SECURITY-04J
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Add the route-level adversarial, input-boundary, tamper and failure-recovery evidence
+  left after export UI reachability is stable.
+depends_on:
+  - W08-WEB-EXPORT-UI-04I:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Denied, malformed, replayed, tampered and injected-failure HTTP requests change no
+  database, audit or evidence-pack state and disclose no protected/private values.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-EXPORT-04C-R2.yaml
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R2.md
+  - orchestration/task_packets/W08-WEB-EXPORT-UI-04I-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-UI-04I-R1.md
+  - src/scouting/audit/ledger.py
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/error.html
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-SECURITY-04J-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - TestClient role/tenant/object witnesses for analyst owner and approver success, other analyst/scout/admin/foreign IDOR denial, bad/missing CSRF, wrong object tuple and private observation non-disclosure with unchanged export/revocation/audit/file counts.
+  - Deterministic repeat create retains one row, one immutable file and one export receipt; repeat revoke and read-after-revoke deny without a second revocation/receipt.
+  - Isolated tmp-root byte tamper and audit-chain corruption make read/inventory/create/revoke fail closed; no checksum/private payload appears in denial responses.
+  - Injected storage write/read, database insert and audit append failures at the HTTP route leave exporter row, receipt/revocation and file manifests at the exact baseline; retry after removing injection succeeds once.
+  - Wrong/missing media type, non-decimal/over-limit declared content length, invalid UTF-8 and streamed actual body beyond 64 KiB all return generic 4xx without echoing submitted secret markers and retain exact database/audit/file baselines.
+  - Parser stream loop checks the next chunk against remaining capacity before appending so application accumulation never exceeds 64 KiB; no multipart/file-upload path is admitted.
+definition_of_done:
+  - All HTTP adversarial and recovery witnesses pass; no core exporter/audit/policy/template change occurs.
+focused_checks:
+  - Exact baseline tuples before/after every denial/failure.
+  - Tamper and audit corruption fail closed across all export routes.
+  - Boundary parser never accumulates beyond 64 KiB and echoes no input.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run bandit -q src/scouting/web/w08.py
+stop_conditions:
+  - A core exporter/audit/policy/contract/schema/dependency, template or protected-output change is required.
+  - A network/external destination, Node/npm, container, destructive repository action or Git operation is required.
+  - Passing requires weakening denial, tamper, audit or streaming-input guarantees.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - adversarial case and baseline maps
+  - exact commands/exits/test counts
+  - denial/tamper/failure/retry/boundary results
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/out-of-scope confirmations
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W08-EXPORT-INTEGRITY-03B
+phase_id: W08
+revision: R1
+state: MASTER_REVIEW_WITH_CURRENT_ASSIGNMENT_FINDING
+objective: >-
+  Make the local evidence pack complete for visible workflow history and truthful for
+  automated versus human-entered action provenance without widening model claims.
+depends_on:
+  - W08-EXPORT-03-R1:MASTER_REPRODUCED_WITH_EVIDENCE_FINDINGS
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-EXPORT-03-R1.yaml
+  - reports/reviews/W08/returns/W08-EXPORT-03-R1.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - docs/architecture/product-claim.md
+  - docs/architecture/workflow-state-machines.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/operations/evidence_export.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+allowed_paths:
+  - src/scouting/operations/evidence_export.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Include every retained shortlist-entry revision, every exporter-visible comment and every exporter-visible observation version in deterministic order; do not export only latest rows.
+  - Apply current tenant/OWNER_ONLY/TEAM/assignment policy to each comment and observation version and prove private history is excluded without disclosing its existence.
+  - Report the exact sorted set of persisted evidence_origin values as workflow_action_origins; never hard-code human actions as automated or automated actions as human.
+  - Keep model_evidence fixed to synthetic_development_only, claim_boundary resemblance_only, applicability LIMITED and the W06 NO_GO limitation regardless of workflow_action_origins.
+  - Retain the configured export-policy path at construction and validate that same path for every export/read/revoke operation; clean duplicate/redundant implementation text without changing public behavior.
+  - Recompute underlying-values and pack digests across the complete visible history; idempotent retry, tamper denial, revocation and savepoint recovery remain green.
+definition_of_done:
+  - Mixed automated/human provenance and complete-history/confidentiality adversarial tests pass with the complete prior export suite.
+  - No participant/user evidence is invented and the mandatory return is complete.
+focused_checks:
+  - Full visible revision/comment/observation history and private-history exclusion.
+  - Exact provenance set, fixed model boundary, retained policy path and prior recovery/tamper regression.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/operations/evidence_export.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run ruff check src/scouting/operations/evidence_export.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+  - uv run mypy src/scouting/operations/evidence_export.py
+  - uv run pytest -q tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_auth_audit.py tests/unit/test_guarded_storage.py
+stop_conditions:
+  - Complete visible history cannot be represented without a shared contract/migration/policy change.
+  - Any external destination/service/model, protected-output access, destructive action or forbidden-path edit is required.
+  - A correction would widen confidentiality, model claims or synthetic/representative-user evidence boundaries.
+mandatory_return:
+  - task ID and exact history/provenance invariant
+  - exact changed-file list
+  - adversarial proof and key choices
+  - exact commands, exit statuses and concise results
+  - residual risks and follow-ups
+  - confirmations of no Git, dependency/lock, external/protected or out-of-allowlist action
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

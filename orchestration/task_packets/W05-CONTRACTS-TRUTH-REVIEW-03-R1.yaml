@@ -1,0 +1,68 @@
+schema_version: 1
+task_id: W05-CONTRACTS-TRUTH-REVIEW-03
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review and adversarially challenge the final split W05 contract truth
+  surface for candidate states, explanations, W04 authority identity, taxonomy
+  membership and family array semantics.
+depends_on:
+  - W05-CONTRACTS-TRUTH-03-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R1.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R1.md
+  - reports/reviews/W05/w05-m0-contracts-independent-review-R1.md
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-contract-truth-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-REVIEW-03-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Is six-dimension state candidate-specific, aligned by player/rank and canonical dimension order, with observed ZERO distinct and rank-eligible but absence states non-ranking?
+  - Are data-confidence projection and the W04/synthetic measured-dimension boundaries non-contradictory for every candidate?
+  - Must explanations exactly equal scored query/candidate values and contributions in artifact feature order, including re-signed/reordered/re-digested attacks?
+  - Does contextual role membership bind taxonomy ID/version/digest and reject same-ID changed taxonomy content, bad order, bad sum and unknown roles?
+  - Are W04 candidate digest, decision digest and mechanically derived exact-four descriptor digest separate and exact without any change to W04 bytes?
+  - Are ordered family-specific array roles, dtypes and every feature/component/candidate shape relationship executable for controls, robust, weighted, role-aware and PCA?
+  - Do negative zero, PCA-only-feature-matrix, W04 two-column, descriptor reorder and result re-digest substitutions fail for the intended reason?
+deliverables:
+  - Independent verdict with P0/P1/P2 findings and direct attack evidence under the six W05 blocker tests.
+  - Exact reproduction of the W04 descriptor digest from the unchanged accepted YAML.
+  - Smallest bounded correction for any reproducible blocker; no speculative or W10-only findings.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - Every prior R2 independent-review finding is closed or precisely reproduced.
+  - No source/test/config/orchestration/dependency/Git/accepted W04 changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run ruff check src/scouting/contracts/m0.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A required authority is missing/conflicting or any external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,41 @@
+task_id: W09-FULL-CANONICAL-BUILD-02B
+revision: R2
+owner: subagent
+objective: >-
+  Resolve the master review findings on rights authority, strict-before temporal
+  semantics, retained output roots, action-file TOCTOU protection and evidence wording
+  without expanding the accepted R1 packet scope.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R1.yaml
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - scripts/build_w09_historical_canonical.py
+allowed_paths:
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - scripts/build_w09_historical_canonical.py
+  - tests/unit/test_w09_wyscout_historical_adapter.py
+  - tests/integration/test_w09_full_canonical_build.py
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R2.md
+deliverables:
+  - Correct the rights classification to the exact retained authority identifier.
+  - Enforce strict-before source, identity and match temporal admission.
+  - Bind production outputs to the two exact retained roots while retaining explicit fixtures.
+  - Detect admitted action-payload replacement or mutation around every retained read.
+  - Add adversarial tests and correct the bounded-memory evidence wording.
+checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run ruff check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run mypy src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+  - uv run pytest -q tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py scripts/build_w09_historical_canonical.py
+stop_conditions:
+  - Any accepted rights, source, completion, identity, checksum or temporal authority conflict.
+  - Any need for network/provider access, dependencies, orchestration edits by the subagent, Git operations or paths outside allowed_paths.
+constraints:
+  - No Git operations, dependency/lock changes or production artifact generation.
+  - Use apply_patch for manual edits and preserve W04/W05/W07/W08 paths.

@@ -1,0 +1,56 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-CORE-01-R2
+task_id: W06-EVAL-CORE-01
+phase_id: W06
+revision: R2
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P0
+    blocker_tests: [1, 2, 4, 6]
+    evidence: >-
+      R2 still admits non-one-use FIT access, empty PROTECTED_TEST run and
+      mismatched-protocol ACCEPT_CLAIM; query feature cutoff remains unbound.
+    required_fix: >-
+      Make protocol, bundle, candidate, protected access consumption, non-empty run and
+      claim gate actual nested validated relations, not unrelated digest strings.
+  - severity: P1
+    blocker_tests: [1, 3, 4]
+    evidence: >-
+      Duplicate/reordered relevance, reversed same-ID pairs, duplicate hard negatives,
+      opaque candidate roster identity and cross-subject adjudication still validate.
+    required_fix: >-
+      Canonicalize and uniquely bind every evidence family, candidate roster and actual
+      same-subject disagreement/adjudicator relation.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Partial exclusion can produce recall 1.5, zero eligible gain can divide by zero,
+      non-finite scores are accepted and missingness policy is inert.
+    required_fix: >-
+      Use policy-specific numerator/denominator gains, explicit zero insufficiency,
+      finite canonical scores and an executable frozen missingness/tie policy.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Low-common early return overwrites real overlap/churn and pair/agreement metrics
+      lack governed relational identity and a protocol-declared statistic.
+    required_fix: >-
+      Separate set metrics from correlation availability and validate canonical pair,
+      item and reviewer identities under a declared agreement method.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Metric value 2.0 for 1/2, inverted arbitrary interval, opaque run/gate links and
+      unsupported resampling/metric configurations still validate.
+    required_fix: >-
+      Enforce typed metric arithmetic/ranges/roster, interval point/order/method/resample
+      links, query-unit capability and canonical linked non-empty run contents.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-CORE-01-R3.yaml
+reviewer: master

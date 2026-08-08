@@ -1,0 +1,15 @@
+schema_version: 1
+review_id: REVIEW-W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1
+task_id: W04-NESTED-PHYSICAL-PRIMARY-KEY-01
+phase_id: W04
+revision: R1
+verdict: ACCEPTED
+findings: []
+next_packet: W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1
+evidence:
+  - orchestration/task_packets/W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1.yaml
+  - orchestration/task_packets/W04-NESTED-PHYSICAL-PRIMARY-KEY-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-nested-physical-primary-key-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1.md
+  - reports/reviews/W04/returns/W04-NESTED-PHYSICAL-PRIMARY-KEY-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-nested-physical-primary-key-R1-master-acceptance.md

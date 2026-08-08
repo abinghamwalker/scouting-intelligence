@@ -1,0 +1,95 @@
+schema_version: 1
+task_id: W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently derive, without inspecting the R5 candidate, the exact frozen
+  acceptance oracle for the reachable runtime-predicate operands/constants and
+  the deficient 29-row Bronze/SilverAction variant roster.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4:REWORK_P1_01_TO_P1_02
+assigned_role: w04_schema_closure_r5_acceptance_oracle
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R4.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R4-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_wyscout_data_contracts.py
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/storage/**
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+fixed_bindings:
+  primitives_sha256: ee3fa657174cc949a5b7a389d60560abbdef596dbab913060a70516f0b988691
+  evidence_sha256: ff771aee3c9e23eb9ebe7e3919f75557f919919b232f752c4f708abf6c7cce10
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  data_fixture_sha256: 139683be6a9e6dc4d8be90cd81bb0827c1dbeea00b4ad01aebe3bdcaf9d5be9e
+  r3_oracle_sha256: de4a4119cf1a1158156d55f49f26bae8c1c08b46d36f93bb6c6afe102fdd145f
+  r4_review_sha256: 676f911ad8e2ad4bff9900e7b53b7d57408a69b51f35f3dc61dc865666abed65
+  r4_master_sha256: 956c6463ba34db257cae64c20e3924e0796672a447938af0d4ad9dabbab85a0b
+requirements:
+  - Verify every fixed binding before work and again before return; stop on drift.
+  - Never read, import, execute or hash either forbidden R5 candidate file.
+  - >-
+    Starting only from the frozen 23 root model roster and their serialization
+    annotations, derive the exact reachable model and effective validator set.
+  - >-
+    For every reachable owner/validator binding, inspect the actual validator and
+    any material same-contract helper/property it invokes. Record exact ordered
+    operand paths, exact operation and material constants sufficient to reproduce
+    its cross-field decision. Distinguish direct, composed and external predicates.
+  - >-
+    Produce a canonical comparison ledger and SHA-256 that a later reviewer can
+    compare to the candidate without using candidate-generated expected values.
+  - >-
+    Derive the exact valid 29-row per-root cardinalities and the required corrected
+    Bronze-known, Bronze-rejected-record and SilverAction variant properties. Give
+    executable contract-valid construction constraints, including digest/lineage/
+    complete-sequence equalities, without writing implementation fixtures.
+  - >-
+    Record any ambiguity or contradiction as BLOCKED. Do not reinterpret the
+    architecture, add a root/field/feature/population, or approve the candidate.
+acceptance_checks:
+  - uv run python -c read-only validator and variant derivation probes
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01-R1.md
+stop_conditions:
+  - Fixed binding drift.
+  - Need to inspect the R5 candidate or edit outside owned reports.
+  - Genuine contradiction requiring model or architecture change.
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden
+return_template: orchestration/templates/subagent_return.md

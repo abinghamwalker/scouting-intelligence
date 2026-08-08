@@ -1,0 +1,36 @@
+schema_version: 1
+review_id: REVIEW-W03-VERTICAL-01-R2
+task_id: W03-VERTICAL-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+verified_results:
+  database_backed_vertical_tests: 22_passed
+  unknown_session_generic_denial: PASS
+  cross_tenant_generic_denial: PASS
+  protected_input_explicit_selection: PASS
+  escaped_symlink_and_path_escape_denial: PASS
+  confidential_read_export_denial_audit: PASS
+  exact_cutoff_exclusion: PASS
+  missing_model_index_fail_closed: PASS
+  worker_listener_disabled: PASS
+  runtime_expected_output_references: 0
+  ruff_format: PASS
+  ruff_lint: PASS
+  mypy_strict: PASS
+  bandit: PASS
+master_notes:
+  - >-
+    The protected-selection regression uses only a temporary envelope derived
+    from the development fixture; neither the protected input nor protected
+    expected output was accessed by the implementer.
+  - >-
+    The master separately retained ownership of the brokered protected gate and
+    independently reproduced all packet checks.
+defects: []
+decision: ACCEPT
+reviewer: master

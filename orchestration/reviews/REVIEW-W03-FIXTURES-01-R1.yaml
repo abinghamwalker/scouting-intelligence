@@ -1,0 +1,23 @@
+schema_version: 1
+review_id: REVIEW-W03-FIXTURES-01-R1
+task_id: W03-FIXTURES-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    code: OBSERVATION_AT_CUTOFF_ADMITTED
+    evidence: src/scouting/sources/synthetic.py:440
+    affected_definition_of_done: >-
+      The synthetic loader must implement the accepted strict-before temporal
+      contract for both observed_at and available_at.
+    required_fix: >-
+      Reject facts whose observed_at is at or after decision_cutoff_ts, retain
+      an explicit rejection reason, and add equality/after-boundary tests.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-FIXTURES-01-R2.yaml
+reviewer: master

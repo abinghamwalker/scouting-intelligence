@@ -1,0 +1,42 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R11
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R11
+decision: MASTER_ACCEPTED
+producer_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R11.yaml
+producer_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R11.md
+independent_review_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R11.yaml
+independent_review: reports/reviews/W04/wyscout-runtime-control-independent-review-R11.md
+independent_review_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R11.md
+master_acceptance: reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md
+finding_counts:
+  p0: 0
+  p1: 0
+  p2: 0
+accepted_bindings:
+  admission_child_sha256: 68cb2e96a8006ab7e529d614d037a18e4b0dbd982c0c3e119ef23319f66b78cc
+  launcher_sha256: db77870605410ca16554b5ed869a6304c2b24b60122b21f1646b2d09c3dc2779
+  runtime_tests_sha256: bd65a02b5dfa73e1f6bbf7d5e3bf32937c62233c9f12f07eeca4a9de65313332
+  security_tests_sha256: 5907b945fa61855ff1104a2e03dd13057a76863251258b8a53088e322b44d18d
+  resource_algorithm: w04-local-resource-exact-30-v1
+  resource_detail_sha256: 29d8a7cf4c4acab8a52d6008fc5f8975509cc445f5680e45e5974687e65c7bfb
+  producer_packet_sha256: dd047fbbe8ad9199dddcc23a6970ee351b9f0c6b62c3776cab2f0879a54d7804
+  producer_return_sha256: 01f5f2f076f3e096f937a00d46be3b83968eae63586f150883321affa76d20b3
+  independent_review_packet_sha256: b3401e8afd95a7304eaff56c41e37dd035d80d4fcb93f6e2d8adcbb3c565a33a
+  independent_review_sha256: d2fa07e7df97ca528ce6c7e0c08c8f84278f49f2541f60e22a48558c50325fcc
+  independent_review_return_sha256: 17451dd5c5ef9c92032a6a50df3ef532095381a13bc309cd4e1687178bf372a7
+  master_acceptance_sha256: fbc120702b8c58526da4a43d9727a0645f856fc15e325813756b71bb5082164e
+checks:
+  exact_r21_ordered_30_roster: PASS
+  immutable_first_17_exact_appended_13: PASS
+  physical_rows_modes_and_detail_digest: PASS
+  strict_component_authority: PASS
+  independent_17_attack_matrix: PASS
+  producer_exact_403_test_population: PASS
+  reviewer_exact_403_test_population: PASS
+  master_exact_403_test_population: PASS
+  retained_root_and_pyc_pre_post: PASS
+  static_security_import_local_guard: PASS
+git_operations: none
+real_root_publication: none

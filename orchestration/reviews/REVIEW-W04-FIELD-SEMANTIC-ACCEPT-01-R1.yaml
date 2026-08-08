@@ -1,0 +1,49 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-ACCEPT-01-R1
+task_id: W04-FIELD-SEMANTIC-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: NOT_APPLICABLE_MASTER_OWNED
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - id: R1-P1-01
+    severity: P1
+    path: reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+    line: 1
+    summary: >-
+      The first master rendering is strict JSON but not canonical JSON because
+      `review_record_sha256` precedes `review_recommendation`; canonical
+      lexicographic order requires `review_recommendation` before
+      `review_record_sha256`. The actual acceptance-state contract therefore
+      fails closed. R2 must resample the truthful master acceptance clock,
+      render the exact sorted record, and rerun every acceptance-present check.
+decision: REWORK
+next_packet: W04-FIELD-SEMANTIC-ACCEPT-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/verification/W04/wyscout-field-semantic-acceptance-R1-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-ACCEPT-01-R1.yaml
+checks:
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest
+      -q tests/contracts/test_wyscout_field_registry_authority.py
+    result: FAIL_1_122_PASS_NONCANONICAL_ACCEPTANCE
+  - command: frozen upstream digests and actor/clock edges
+    result: PASS
+  - command: acceptance R1 physical SHA-256
+    result: 22530f7afdf964902b085eb4befd384ab566e6b8fab87e0a125b4c38cc61dae5
+  - command: downstream absence
+    result: PASS_13_ABSENT
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The contract rejected the master artifact before any downstream work. No
+    acceptance return, Bronze path, dependency, or product output was created.
+  - >-
+    R2 is bounded to canonical rendering and verification of the same accepted
+    candidate/review graph with a newly sampled truthful accepted_at.

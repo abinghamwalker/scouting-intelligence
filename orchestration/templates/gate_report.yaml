@@ -1,0 +1,23 @@
+schema_version: 1
+phase_id: WXX
+gate_id: G-WXX
+decision: ACCEPT
+verified_at_utc: YYYY-MM-DDTHH:MM:SSZ
+dependencies:
+  - phase_id: WPREV
+    state: CLOSED
+evidence:
+  - path: reports/phase-gates/WXX/acceptance-report.md
+    status: PASS
+checks:
+  - id: named-check
+    command: uv run command
+    exit_status: 0
+    result: PASS
+reviews:
+  - path: orchestration/reviews/REVIEW-WXX-LANE-NN-R1.yaml
+    decision: ACCEPT
+checkpoint:
+  commit_message: "phase(wxx): accepted scope"
+  accepted_tag: checkpoint/wxx-accepted
+unresolved_defects: []

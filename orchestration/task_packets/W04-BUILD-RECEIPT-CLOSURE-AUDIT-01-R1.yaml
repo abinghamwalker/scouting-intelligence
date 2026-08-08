@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W04-BUILD-RECEIPT-CLOSURE-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Audit the exact remaining R20 build-identity, code/environment admission, invocation,
+  temporal-boundary and rebuild-receipt gaps; distinguish bounded serialization
+  omissions from genuine architecture/product decisions and return the shortest
+  closed serial implementation/review packet chain. Do not implement or write data.
+depends_on:
+  - W04-VERTICAL-SLICE-BUILD-AUTHORITY-AUDIT-01-R1:BLOCKED_SCOPE
+  - W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1:CHECKED_GRAPH_COMPOSABLE
+assigned_role: independent_w04_build_receipt_closure_analyst
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R1.yaml
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-BUILD-AUTHORITY-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+requirements:
+  - >-
+    Reconcile every exact R20 field, path, ordering, hash, clock, ID and preimage for
+    code manifest, environment manifest, build invocation, 25-key build projection,
+    build ID, temporal-boundary receipt and rebuild receipt.
+  - >-
+    Enumerate every currently absent executable model/reader/writer/launcher and every
+    named-but-underived namespace, token, key, receipt field or canonicalization rule.
+  - >-
+    Classify each gap as: already fixed and implementable; bounded additive
+    serialization value the master can freeze; or genuine architecture/product/local-
+    only/dependency decision requiring user clarification. Give executable evidence.
+  - >-
+    Propose the smallest exact schemas and serial producer/reviewer/master packets,
+    with non-overlapping path ownership and focused adversarial tests. Preserve the
+    accepted source adapter, index, R20/R21, identity/encoder work and failed evidence.
+  - >-
+    Do not calculate an authoritative build ID, create a receipt, implement code, edit
+    tests/contracts, write product/control/data bytes, or perform Git/network/provider/
+    cloud/container/CI/endpoint/remote/deployment actions.
+deliverables:
+  - PASS_TO_PACKET or USER_CLARIFICATION_REQUIRED with exact gap table and shortest packet chain.
+stop_conditions:
+  - Any implementation, repository control edit, data/product/receipt byte or external action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

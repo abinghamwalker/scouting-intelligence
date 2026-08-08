@@ -1,0 +1,119 @@
+schema_version: 1
+task_id: W04-IDENTITY-RULESET-REVIEW-01
+phase_id: W04
+revision: R3
+state: ACCEPTED
+objective: >-
+  Perform a fresh independent review of the corrected R3 identity authority and
+  focused contract, explicitly reproducing closure of both prior review
+  generations. Issue PASS only with zero P0-P2 findings. Do not modify or
+  accept the candidate.
+depends_on:
+  - W04-IDENTITY-RULESET-DECISION-01-R3:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_identity_ruleset_reviewer_r3
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-RULESET-REVIEW-01-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/archive/wyscout-identity-ruleset-independent-review-R1-rework-1a92a3a3.md
+  - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R1-rework-a0f637b4.md
+  - reports/reviews/W04/archive/wyscout-identity-ruleset-independent-review-R2-rework-30c94d15.md
+  - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R2-rework-f20ecbd9.md
+  - reports/verification/W04/wyscout-identity-ruleset-review-R1-master-verification.md
+  - reports/verification/W04/wyscout-identity-ruleset-review-R2-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R3.md
+  - reports/verification/W04/wyscout-identity-ruleset-decision-R3-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-IDENTITY-RULESET-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+review_authority:
+  review_id: w04-wyscout-identity-ruleset-independent-review-R1
+  review_schema_version: w04-authority-independent-review-v1
+  independent_actor_id: f922af7e-e60b-5af7-b1ef-fa78511d1243
+  candidate_id: w04-wyscout-identity-ruleset-v1
+  candidate_physical_sha256: 8027321bda566188019850f9f9031e684d2d81d8df7851ba3c71b1685ae4f547
+  candidate_sha256: 9c34783214d084ce8fde42be771850e8f9332fa9fb9a1529b011a8600e34e87c
+  decision_id: w04-wyscout-identity-ruleset-decisions-v1
+  decision_physical_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+  decision_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+  corrected_contract_sha256: bcc9ae2675a33c5e08859ae57fc2f97977ecfec4fcc5925a052662622e139071
+  failed_r1_review_sha256: 1a92a3a38d050fb83cd5ee83e842d3f6919433ceeef17e36aa1a6db017aac5d9
+  failed_r1_return_sha256: a0f637b4fe13c3c393b86f5d44fb59c85af001659201e21c83113cf395434c24
+  failed_r2_review_sha256: 30c94d15dbce34315d2af5df3cebbd50ce863e7e865db509130b3a09e6e080f5
+  failed_r2_return_sha256: f20ecbd992fcec36ffe44375b2af9acf78b6e1ee4b552b81d51a1e27e37a7931
+requirements:
+  - >-
+    Read every listed input fully and independently reconstruct candidate,
+    upstream, canonical, and archived-evidence digests; exact four-rule order;
+    exact seven policies; UUIDv5 derivation; and the acyclic authority graph.
+  - >-
+    Reproduce every R1 clock/fraction/lifecycle finding and the R2 master-key
+    finding. Challenge master keys containing boolean, integral/non-integral
+    floats, strings, numeric-looking strings, negatives, zero, duplicate valid
+    matches, mixed invalid plus one valid match, and exactly one valid match.
+    Decide against the exact unique-valid-master-row policy, not Python
+    coercion.
+  - >-
+    Rechallenge every other strict source/reference, candidate, YAML/JSON,
+    actor, clock, digest, namespace, duplicate, name-only, review/acceptance,
+    fence, canonicality, and partial-path condition independently.
+  - >-
+    Write exactly one fixed review Markdown with one w04-authority-review-v1
+    fence containing compact canonical sorted JSON plus one LF and exact 12
+    keys. Use the fixed fresh actor and truthful fresh canonical UTC clock.
+    PASS requires findings=[]; REWORK requires one or more P0-P2 findings.
+  - >-
+    Use apply_patch only for the two exact allowed paths. Do not run Git,
+    delegate, modify candidate/test/dependencies, create acceptance, access
+    provider/network data, or begin identity runtime, Bronze, Silver, Gold,
+    build, model, product, cloud, container, endpoint, hosted-CI, or deployment.
+definition_of_done:
+  - Fresh review reports every P0-P2 finding and resolves all prior findings.
+  - Candidate, corrected contract, R21, and archived evidence remain unchanged.
+  - Exact focused and static checks complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+stop_conditions:
+  - Any candidate, corrected-contract, R21, or archived-evidence byte changes.
+  - Any prior finding remains reproducible.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

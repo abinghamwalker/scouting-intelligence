@@ -1,0 +1,150 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R11
+state: DISPATCHED
+objective: >-
+  Correct only the accepted-runtime local-resource roster so admission and launch
+  bind the effective R21 exact ordered 30-resource authority instead of the
+  superseded R20 17-resource subset, with no logical-model, root-roster, product-
+  population, intended-output, digest-meaning, or evidence-guarantee change.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R21:MASTER_ACCEPTED
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10:MASTER_ACCEPTED
+assigned_role: w04_runtime_control_r11_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/verification/W04/wyscout-schema-design-R21-master-verification.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R10.md
+  - reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R11.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - scripts/__pycache__/**
+  - scripts/rebuild_wyscout_v5.py
+  - src/**
+  - tests/contracts/**
+  - tests/e2e/**
+fixed_bindings:
+  r21_design_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r21_independent_review_sha256: 262fbf6f4cc3f239daebb8db69059d46125415647d58ffb432b630c44353c3aa
+  r21_master_acceptance_sha256: 5a50b633e7ea4384fb65dd4008f8fb25da0cbf40d42b4408687315adde07b85f
+  r10_master_acceptance_sha256: 1f7c09f15ea7ae8f3fbac9f517ad2e9b444b177da719751013eae5c2b867562a
+  r10_independent_review_sha256: 331082c9482cabae5957e950e0b61683194138e979c6cff07eff06cf51ae80d6
+  r10_producer_return_sha256: 56004852a1868b89579d65ee781b5ef9a26b922451f25dbbe61f1b94aaa55854
+  r10_admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  r10_launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  r10_runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  r10_security_tests_sha256: 5907b945fa61855ff1104a2e03dd13057a76863251258b8a53088e322b44d18d
+  exact_resource_digest_algorithm: w04-local-resource-exact-30-v1
+  exact_ordered_resource_paths:
+    - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+    - configs/schema/wyscout-v5-field-registry-v1.yaml
+    - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+    - configs/features/wyscout-v5-supported-count-features-v1.yaml
+    - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+    - reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+    - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+    - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+    - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+    - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+    - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+    - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+    - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+    - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+    - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+    - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+    - reports/phase-gates/W04/source-schema-profile.md
+    - reports/reviews/W04/wyscout-schema-design-R21.md
+    - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+    - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+    - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+    - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+    - configs/schema/wyscout-v5-field-registry-v2.yaml
+    - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+    - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+    - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+    - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+    - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+    - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+    - tests/contracts/test_w04_r21_cross_authority_composability.py
+requirements:
+  - >-
+    Verify every fixed binding before editing. Preserve the complete dirty tree,
+    all retained run families and prefixes, products, manifests, receipts,
+    logical contracts, physical schemas, source authority and unrelated bytes.
+    Do not run a real-root invocation, mutate PYC state, clean, use Git, or write
+    any generated product/evidence byte in this packet.
+  - >-
+    Replace both and only both duplicated 17-member local-resource path tuples
+    with the fixed exact ordered 30-member tuple. Members 1 through 17 must remain
+    byte-for-byte equal and in their existing positions; append R21 members 18
+    through 30 exactly as bound above. Admission and launcher must expose identical
+    tuple values and cardinality. No glob, discovery, directory shorthand,
+    optional path, substitution, duplicate, sorting, or normalization is allowed.
+  - >-
+    Change the resource digest component algorithm token in both admission and
+    launcher to exactly w04-local-resource-exact-30-v1. Retain the existing row
+    construction and stable digest meaning over each ordered row's exact path,
+    physical SHA-256, size, mode, purpose, parser/schema version and authority
+    link. Retain existence, regular-file, non-symlink, mode, hash and size checks.
+  - >-
+    Add focused positive and adversarial tests proving exact cardinality/order,
+    admission-launcher equality, immutable first 17, exact appended 13, algorithm
+    equality, stable digest agreement, and fail-closed behavior for omission,
+    insertion, duplicate, reorder, v1/v2 substitution and row-content mutation.
+    Prefer direct pure/unit boundaries; do not weaken existing tests or checks.
+  - >-
+    Preserve dependencies, lock state, root roster, product population, logical
+    fields, serialization contracts, inverse guarantees, manifest/build formulas
+    and digest meaning. Later code-manifest, repository-code digest, build ID,
+    product/manifests/receipt bytes may change only as mechanical consequences of
+    the corrected governed source bytes and require their own fresh real-root loop.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/contracts/test_w04_wyscout_build_contract.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/unit/test_w04_staged_product_publisher.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R11 admission/launcher 30-resource closure, focused positive and
+    adversarial tests, preserved retained evidence, and mandatory producer return.
+stop_conditions:
+  - >-
+    None for bounded implementation defects; continue rework without cleanup,
+    real-root execution, dependency change, PYC mutation, or Git.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

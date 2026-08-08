@@ -1,0 +1,69 @@
+schema_version: 1
+task_id: W04-SOURCE-INGEST-REVIEW-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Independently challenge the Wyscout v5 acquisition and raw-admission implementation
+  against the frozen W04 authority, with adversarial tests and an ACCEPT-or-REWORK
+  recommendation to the master.
+depends_on:
+  - W04-SOURCE-INGEST-01:IMPLEMENTED
+  - W04-AUTHORITY-REVIEW-01-R3:RECOMMENDED_ACCEPT
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-INGEST-01-R1.yaml
+  - configs/sources/w04-provider.yaml
+  - src/scouting/sources/wyscout.py
+  - scripts/acquire_wyscout_v5.py
+  - tests/unit/test_wyscout_source.py
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - reports/reviews/W04/wyscout-ingest-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Additive independent adversarial tests using only fabricated in-memory payloads.
+  - Review report with ranked defects and ACCEPT-or-REWORK recommendation.
+  - Mandatory return without self-approval.
+definition_of_done:
+  - >-
+    Exact reviewed identity and rights evidence cannot be changed in configuration
+    while still loading successfully.
+  - >-
+    Redirects, URL aliases, unexpected status/length/hash values, bounded retries,
+    temporary-file cleanup, and import-time network denial are independently tested.
+  - >-
+    ZIP duplicate, traversal, link, encryption, expansion, unknown-member, and
+    admitted-versus-excluded controls fail closed; excluded payloads are never opened.
+  - >-
+    Completion is last, replay performs no network, all durable bytes are reverified,
+    conflicting or malformed manifests fail closed, and temporal fields remain honest.
+  - No real provider object, archive, network service, or protected fixture is accessed.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source.py tests/security/test_w04_wyscout_ingest_review.py
+  - uv run ruff format --check tests/security/test_w04_wyscout_ingest_review.py
+  - uv run ruff check tests/security/test_w04_wyscout_ingest_review.py
+  - uv run mypy tests/security/test_w04_wyscout_ingest_review.py
+stop_conditions:
+  - A P0-P2 acquisition, archive, rights, lineage, or replay defect is reproduced.
+  - Review requires editing a forbidden producer or authority path.
+  - A real network/provider access or dependency change appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

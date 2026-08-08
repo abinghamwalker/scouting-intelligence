@@ -1,0 +1,150 @@
+schema_version: 1
+task_id: W07-APPLICATION-01
+phase_id: W07
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the complete local, read-only W07 evidence application and its focused
+  Python integration/Playwright journeys while preserving the W05 single-scorer
+  path and the W06 evidence-honest NO_GO boundary.
+depends_on:
+  - W06:CLOSED
+  - checkpoint/w07-start:CREATED
+assigned_role: local_evidence_application_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W07-APPLICATION-01-R1.yaml
+  - reports/phase-gates/W06/gate-report.json
+  - reports/phase-gates/W06/acceptance-report.md
+  - reports/reviews/W06/master-review.md
+  - reports/verification/W06/verification-report.md
+  - reports/verification/W06/limitations.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/phase-gates/W04/data-health.json
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - src/scouting/serving/m0.py
+  - src/scouting/web/app.py
+  - src/scouting/web/__init__.py
+  - services/api/main.py
+  - apps/web/templates/w03_journey.html
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - tests/integration/test_w03_local_telemetry.py
+  - tests/integration/test_w05_m0_serving.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/web/w07.py
+  - src/scouting/web/__init__.py
+  - services/api/w07_main.py
+  - apps/web/templates/w07/**
+  - apps/web/static/w07/**
+  - tests/integration/test_w07_local_evidence_app.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - reports/reviews/W07/returns/W07-APPLICATION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/evaluation/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - src/scouting/contracts/**
+  - src/scouting/evaluation/**
+  - src/scouting/features/**
+  - src/scouting/m0/**
+  - src/scouting/modeling/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/w06/**
+  - tests/contracts/**
+  - tests/unit/**
+frozen_authority:
+  selected_family: role_aware_restriction
+  feature_registry_digest: c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644
+  exact_four_w04_schema: cf8847f2b1f70ebf293ce90e48817e80a4e47b78316079bd88e8c2a80bc08127
+  synthetic_feature_schema: 1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f
+  taxonomy_digest: 59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097
+  configuration_digest: 5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a
+  artifact_uuid: 9a0d43c6-d177-51be-8280-3bf02bedbc99
+  manifest_digest: 2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9
+  accepted_result_digest: 9d08d8f0ddaba47a3461754d53d727709ea7a10276b438c18c9953b17ad3020e
+  accepted_lineage_hash: c291a1b99937100b9934537dc92d4628cd130684cc84388f8aebe109708e7491
+requirements:
+  - >-
+    Build server-rendered Jinja templates and local CSS/assets only. Provide design
+    tokens, responsive layout/navigation, skip link, visible focus, semantic landmarks,
+    accessible tables and distinct loading, error, empty, unavailable and NO_GO states.
+    Add no JavaScript requirement, Node tooling, external asset or network request.
+  - >-
+    Provide a local landing page, synthetic-development search, player evidence,
+    retrieval, comparison and evidence/validation centre. A user must reach a result
+    or explicit unavailable/NO_GO state in at most three clicks from landing. Every
+    result must visibly expose source, model/version, feature and taxonomy identities,
+    cutoff/window, confidence, applicability, lineage and limitations.
+  - >-
+    Visually and semantically distinguish W04 accepted real-data descriptive evidence,
+    W05 synthetic-development retrieval evidence and unavailable/suppressed measures.
+    Present the W04 bridge as exactly action_count, coordinate_known_action_count,
+    match_count and resolved_possession_action_count; elapsed minutes, rates and per-90
+    remain SUPPRESSED. Never substitute another value for absent evidence.
+  - >-
+    Retrieval and comparison must call the accepted M0ServingCore only through the
+    public serve_m0_request/serve_m0_batch path. Do not copy or implement distance,
+    scaling, contribution, role-overlap or ranking arithmetic. Expose role-aware output,
+    contrastive/dimension contribution evidence, reason codes, confidence/applicability,
+    underlying values and the accepted identities/digests. Do not display a match
+    percentage, blended score, recommendation or outcome-prediction label.
+  - >-
+    The evidence centre and all result surfaces must make W06 NO_GO and
+    MISSING_EXPERT_RELEVANCE_EVIDENCE prominent. Explain that a future positive rerun
+    requires governed expert relevance evidence, but do not access, inspect, acquire,
+    infer or execute protected evidence. Do not say validated, expert-approved,
+    recommended, transferable, recruitment-success, price/value or production-ready.
+  - >-
+    Add focused TestClient integration tests and genuine Python Playwright journeys for
+    desktop/mobile, keyboard focus/navigation, semantic landmarks/headings/labels,
+    three-click completion, empty/unavailable/error/loading/NO_GO states, request/batch
+    scorer parity, accepted digests, forbidden wording and absence of external requests.
+    Tests must use the existing Python/uv dependency set and a real local application.
+deliverables:
+  - Complete local W07 composition module and loopback entrypoint.
+  - Server-rendered W07 templates and local responsive CSS.
+  - Focused integration and Python Playwright evidence.
+  - Mandatory producer return with exact commands, outcomes and scope confirmation.
+definition_of_done:
+  - G-W07 behaviours 1 through 8 are directly witnessed by focused tests.
+  - The accepted scorer is spied through the public path and no second scorer exists.
+  - W06 NO_GO cannot be mistaken for positive validation on any result surface.
+  - No protected output or forbidden path is opened or changed.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+  - uv run ruff check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+  - uv run mypy src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py
+  - uv run pytest -q tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run lint-imports
+stop_conditions:
+  - Any need to open or reconstruct a protected expected-retrieval fixture or run the W06 protected gate.
+  - Any need to change accepted contracts, feature/taxonomy/model authorities, artifact bytes or scoring semantics.
+  - Any second scoring implementation, unsupported evidence substitution or positive retrieval-quality claim is required.
+  - Any new dependency, Node toolchain, external request/service, provider access, public endpoint, deployment, secret, destructive action or Git operation is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

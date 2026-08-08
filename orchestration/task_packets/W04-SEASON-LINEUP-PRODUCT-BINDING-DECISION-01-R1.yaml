@@ -1,0 +1,113 @@
+schema_version: 1
+task_id: W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01
+phase_id: W04
+revision: R1
+state: ACCEPTED_WITH_R2_TEST_CORRECTION
+objective: >-
+  Freeze one additive decision-only authority for the exact user-authorized
+  season UUID and sole right-censored lineup stint, with closed executable tests,
+  while preserving every prior authority byte and creating no product/runtime byte.
+depends_on:
+  - W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1:ACCEPTED_AUTHORITY_ONLY_PRODUCT_BLOCKED
+  - W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01-R1:ACCEPTED_AUTHORITY_ONLY_PRODUCT_BLOCKED
+assigned_role: bounded_w04_season_lineup_product_binding_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-season-lineup-correction-authorization-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/verification/W04/wyscout-build-product-authority-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-independent-review-R1.md
+fixed_bindings:
+  authorization_sha256: 9802e4ae037593c62db2b52d38acd4133e5a3d50e59e5ad346c982ad8cca47bb
+  prior_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  prior_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  prior_review_sha256: f780a1e4e6043562e9aa342559350eabbaeef3915c64280b096a08d160e522e9
+  prior_master_acceptance_sha256: a58f9b97e085a283ae1d26b7168d4f62c3e2366847ba8f2b482355443602d36a
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  product_contract_runtime_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+requirements:
+  - Verify every fixed binding and the authorization report hash before editing; stop on drift.
+  - >-
+    Write exactly one strict R20-canonical JSON-plus-one-LF decision at the
+    allowed authority path with a closed top-level schema, strict scalar types,
+    NFC strings, truthful UTC decided_at, master actor
+    4efe5691-8903-5148-8275-30d2e7e8aed0 and explicit decision-only lifecycle.
+  - >-
+    Bind the prior accepted build/product chain, authorization report, R20/R21,
+    exact source manifest and completion index by relative path and physical digest.
+  - >-
+    Freeze seasonId as strict positive JSON integer 181150, selected match source
+    ID 2499719, exact source/member/ordinal/raw-record binding, documented two-step
+    UUIDv5 namespaces/name and exact season UUID
+    4696aa1f-b512-5d18-af79-33cf031455cf. No string coercion, lookup, fallback,
+    identity-bundle kind/row or second season derivation is permitted.
+  - >-
+    Freeze exactly one lineup row for match/team/player source and canonical IDs,
+    ordinal 0, ruleset w04-wyscout-lineup-stint-v1, UUIDv5 name and exact ID
+    591cdf5b-2281-53c4-8225-150313ca2c01, start [82,83), absent end, absent
+    lower/upper/elapsed minutes, right_censored true, per90_eligible false and
+    suppression_reason suppressed_unsupported_denominator.
+  - >-
+    Freeze the complete lineup population as exact ordered cardinality one and
+    prohibit omission, addition, duplication, reordering, alternate ordinal,
+    inferred terminal/minutes/per90, or another season/match/team/player/stint.
+  - >-
+    Bind future consumption only through the existing authority_rows member of
+    the frozen 25-key build projection; prohibit a 26th key, altered build hash,
+    new schema root, feature, Gold row or wider population.
+  - >-
+    Add closed executable tests for canonical bytes, exact types/keys/values,
+    independent UUID reproduction, source binding, one-row equality, mutation
+    failures, prior-byte preservation, lifecycle and absence of downstream product bytes.
+  - Do not implement runtime code, schemas, aggregates, products, manifests, receipts, builds or data.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run mypy tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Canonical additive decision, closed tests and mandatory return with exact hashes.
+stop_conditions:
+  - Any fixed binding or prior frozen byte drifts.
+  - Any new identity kind/root, schema root, feature, Gold row, wider population or second derivation is required.
+  - Any dependency, provider/network, product/data write, cloud/container/CI/remote/deployment action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

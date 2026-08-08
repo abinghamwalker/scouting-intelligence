@@ -1,0 +1,73 @@
+schema_version: 1
+task_id: W03-FIXTURES-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Create the deterministic synthetic football domain and fail-closed temporal
+  fixture used by the W03 vertical journey.
+depends_on:
+  - W03-CONTRACTS-01:ACCEPTED
+  - W03-GOVERNANCE-01:ACCEPTED
+assigned_role: fixture_implementer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-FIXTURES-01-R1.yaml
+  - src/scouting/contracts/__init__.py
+  - docs/architecture/evaluation-contract.md
+  - configs/policies/data-rights.yaml
+allowed_paths:
+  - src/scouting/sources/__init__.py
+  - src/scouting/sources/synthetic.py
+  - tests/fixtures/synthetic/domain.json
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/domain.json
+  - tests/fixtures/synthetic/protected/expected_retrieval.json
+  - tests/unit/test_synthetic_fixture.py
+  - reports/reviews/W03/returns/W03-FIXTURES-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/**
+  - src/scouting/serving/**
+  - services/**
+  - apps/**
+deliverables:
+  - >-
+    Frozen deterministic fixture data with two competitions, at least four teams,
+    matches, and players with stable canonical UUIDs and UTC timestamps.
+  - One ambiguous provider identity requiring review.
+  - One late-arriving fact and one prohibited future fact.
+  - A contract-valid expected retrieval/explanation result and shortlist target.
+  - >-
+    A logically separated protected synthetic fixture and expected result with an
+    immutable manifest digest; downstream implementers must not read its expected
+    output before the master-brokered gate run.
+  - A loader that validates the fixture and rejects facts not knowable at the declared cutoff.
+  - Unit tests proving deterministic digest/order, ambiguity retention, and future-data rejection.
+definition_of_done:
+  - Fixture parsing uses W03 contracts rather than parallel ad-hoc cross-boundary models.
+  - The prohibited future fact is present as a negative fixture and is never admitted.
+  - The late fact remains attributable by event and availability time.
+  - Repeated loads have identical canonical digests and output order.
+  - Development and protected fixture manifests have different immutable digests.
+  - All acceptance checks pass through uv.
+  - The mandatory return is complete and confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_synthetic_fixture.py
+  - uv run ruff format --check src/scouting/sources tests/unit/test_synthetic_fixture.py
+  - uv run ruff check src/scouting/sources tests/unit/test_synthetic_fixture.py
+  - uv run mypy src/scouting/sources
+stop_conditions:
+  - A contract, storage, database, dependency, or application change is required.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, external service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

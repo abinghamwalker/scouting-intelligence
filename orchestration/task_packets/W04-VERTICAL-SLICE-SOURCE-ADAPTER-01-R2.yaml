@@ -1,0 +1,89 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-SOURCE-ADAPTER-01
+phase_id: W04
+revision: R2
+state: MASTER_ACCEPTED
+objective: >-
+  Correct only the independently reproduced R1 deep-immutability defect in
+  CompletionActionEvidence.raw_tags, while preserving byte-identical action frames,
+  membership digests, the accepted index and all other source-adapter behavior.
+depends_on:
+  - W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1:REWORK
+assigned_role: w04_verified_source_adapter_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.yaml
+  - reports/reviews/W04/wyscout-vertical-slice-source-adapter-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-vertical-slice-source-adapter-R1-master-verification.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout_completion_index.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/**
+  - src/scouting/data_products/**
+fixed_bindings:
+  r1_source_implementation_sha256: 3050b7a3c0ff47442db973fb18fee70c8bf3256827936739e63f87947cd07bed
+  r1_source_test_sha256: d01a630f1ce2c345597dde7fef81589ca14e8690515e67d8ff476d1f4063423d
+  r1_review_sha256: 8a8242975b5868c17854023eade7c8c25f5957c241579baf46047dffea4232ba
+  r1_review_return_sha256: 6dbc2ccb5e533d1c29e56dc3b18ce95c1dc45824f2ea99fb3764efe05df39621
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  member_sha256: 301599543aa1a7fa457bb8ef33c9fe860bf81dca65d418d618d68abcda3defad
+requirements:
+  - Verify all fixed hashes before editing and stop on drift.
+  - >-
+    Deep-freeze every tag mapping stored in CompletionActionEvidence.raw_tags so a
+    normal caller cannot mutate any authority-bearing nested value. Preserve exact
+    strict integer tag validation and duplicate-tag projection behavior.
+  - >-
+    If canonical encoding must accept the immutable mapping representation, do so
+    narrowly and prove the encoded object bytes are exactly unchanged. Do not admit
+    arbitrary unsupported values or change canonical ordering/number semantics.
+  - >-
+    Add a regression that attempts mutation through adapter-returned
+    action.evidence.raw_tags and receives TypeError, then independently consumes the
+    same authentic checked capability and obtains the exact 901 plus 867 periods.
+  - >-
+    Assert representative pre-correction action-frame and period-membership vectors,
+    and rehash the accepted index to prove no preimage or frozen-byte change.
+definition_of_done:
+  - R1 P1 is closed with no new P0-P2 finding and no behavior outside the bounded fix.
+  - Complete R1 producer suite plus new regression passes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_completion_index.py tests/unit/test_wyscout_source_completion_index.py
+  - uv run ruff check src/scouting/sources/wyscout_completion_index.py tests/unit/test_wyscout_source_completion_index.py
+  - uv run mypy src/scouting/sources/wyscout_completion_index.py tests/unit/test_wyscout_source_completion_index.py
+  - uv run lint-imports
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - shasum -a 256 data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json reports/reviews/W04/wyscout-schema-design-R20.md reports/reviews/W04/wyscout-schema-design-R21.md
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any accepted index, R20/R21, dependency, architecture, provider, product or deployment change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,128 @@
+schema_version: 1
+task_id: W05-MODEL-REVIEW-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently verify all M0 families, deterministic fitting/scoring, safe exact
+  reload, PCA canonicalization, artifact substitution closure and the declared
+  synthetic-development control improvement.
+depends_on:
+  - W05-MODEL-01-R5:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R1.yaml
+  - orchestration/task_packets/W05-MODEL-01-R2.yaml
+  - orchestration/task_packets/W05-MODEL-01-R3.yaml
+  - orchestration/task_packets/W05-MODEL-01-R4.yaml
+  - orchestration/task_packets/W05-MODEL-01-R5.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R4.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R4.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R5.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/baselines.py
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/arrays.npz
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-model-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Are metadata, raw Euclidean, robust cosine, weighted cosine, PCA and role-aware restriction implemented behind one typed interface with no learned/outcome/value/W06 behavior?
+  - Does one pure scouting.m0 runtime own all scoring/loading while fitting/writing is isolated to scouting.modeling and absent from serving-facing runtime APIs?
+  - Are feature order/schema, fitting/scaler population, candidate universe, taxonomy/config/lineage and deterministic seed exact and content-addressed?
+  - >-
+    Do the exact R3 player, metadata, numerator, dependency, responsibility, query and
+    claim-boundary constructions reproduce before scoring, with source-pinned typed
+    config and no R2/R3 search, retry, subset selection or control degradation?
+  - Are NPZ/JSON bytes deterministic and safely loaded with pickle/object/extra/missing/duplicate/path/dtype/shape/order/digest substitutions rejected?
+  - Is PCA sign orientation and tied-component ordering canonical and applied consistently to components/transformed index/reload?
+  - Do repeated fit/build/load/query cycles reproduce byte-identical artifacts, distances, contributions, ranks and digests including UUID ties?
+  - >-
+    Are metadata schema/matrix bytes consistent, malformed candidates rejected rather
+    than silently dropped, symlink roots rejected, nested loaded state immutable, role
+    threshold artifact-pinned and PCA contributions aligned to all six feature names?
+  - >-
+    Do indexed and canonical sorted-exemplar-mean queries call the same runtime scorer
+    with identical family logic and taxonomy-bound role eligibility?
+  - Does the selected baseline strictly clear both declared controls on the frozen synthetic development fixture, and is that fact explicitly not validation, protected evaluation, expert evidence or recruitment outcome?
+mandatory_fresh_attacks:
+  - >-
+    Construct normally typed M0Configuration, M0DevelopmentCandidates,
+    M0DevelopmentQueries, FeatureRegistry and RoleTaxonomy objects directly rather
+    than through their source loaders, retaining accepted IDs/digests while changing
+    one behavior-bearing nested value. Prove every fit/load/check boundary normally
+    revalidates the complete authority and fails closed; specifically attack the role
+    threshold, selected family, schema names/hash, taxonomy probabilities, candidate
+    lineage/cutoff and query relevance/order.
+  - >-
+    Fresh-build all six families twice in two bounded temporary roots. Compare all
+    four file bytes per family, exact array-payload digests, exact scores, complete
+    ordered ranking-digest lists, distances and contributions after reload.
+  - >-
+    Exercise PCA sign orientation and an exactly degenerate/tied-variance matrix.
+    Verify the canonical result is invariant to valid sign/basis/order ambiguity and
+    that all six original-feature contributions sum to the negative similarity term
+    for indexed and exemplar-mean queries.
+  - >-
+    Exercise zero-IQR and zero-norm paths and a total-distance tie whose ordering must
+    be raw UUID bytes. Exercise exemplar permutations, unknown IDs, duplicate IDs,
+    non-tuple collections and exclusion/query/exemplar overlap.
+  - >-
+    Mutate NPZ member names/order, comment, compression, timestamp, attributes,
+    object dtype, numeric dtype, shape, C order, raw bytes/digest and ZIP integrity;
+    also attack root and ancestor symlinks for both fitting and loading.
+  - >-
+    Fully re-sign otherwise self-consistent configuration, universe and manifest
+    substitutions, including model/index IDs, schema, taxonomy, fixture/query pins,
+    population/lineage, array descriptors and artifact UUID. Report whether any
+    changed behavior or authority is admitted.
+deliverables:
+  - Independent P0/P1/P2 verdict with fresh artifact build/reload and adversarial substitution evidence under the six W05 blocker tests.
+  - Exact family identities, artifact/config/population digests and development scores.
+  - Smallest bounded correction only for reproducible W05 blockers.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - All six family, artifact, PCA, deterministic and development-gate facts independently reproduce.
+  - No source/test/config/artifact/orchestration/dependency/Git/accepted predecessor changes.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted predecessor conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

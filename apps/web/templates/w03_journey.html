@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>W03 synthetic scouting review</title>
+  </head>
+  <body>
+    <main>
+      <h1>W03 synthetic scouting review</h1>
+      <p>This local page supports evidence inspection. It does not make a recruitment decision.</p>
+      <dl>
+        <dt>Actor</dt>
+        <dd>{{ actor_id }}</dd>
+        <dt>Tenant</dt>
+        <dd>{{ tenant_id }}</dd>
+        <dt>Claim boundary</dt>
+        <dd>{{ claim_boundary }}</dd>
+      </dl>
+      <p>
+        The JSON journey is available at <code>POST /api/w03/journey</code> with an
+        injected local session and strict contract payload.
+      </p>
+    </main>
+  </body>
+</html>

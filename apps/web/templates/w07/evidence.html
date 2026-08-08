@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "_authority.html" import no_go_banner, authority_panel %}
+{% block content %}
+  {{ no_go_banner(no_go) }}
+  <header class="page-intro"><p class="eyebrow">Evidence boundary register</p><h1>Evidence and validation centre</h1><p>Each authority has a defined scope. Unavailable or suppressed measures are never replaced with estimates.</p></header>
+  <section class="content-grid" aria-label="Accepted evidence cards">
+    <article><p class="eyebrow">W04</p><h2>Descriptive real-data bridge</h2><p>Exact counts: 2 actions, 2 coordinate-known actions, 1 match, 2 resolved-possession actions.</p><p><strong>SUPPRESSED:</strong> elapsed minutes, rates and per-90.</p></article>
+    <article><p class="eyebrow">W05</p><h2>Synthetic-development retrieval</h2><p>Resemblance-only, LIMITED applicability. It supplies no recruitment, transfer, outcome, price, value, or production-fitness evidence.</p></article>
+    <article><p class="eyebrow">W06</p><h2>Evaluation readiness</h2><p><strong>NO_GO: MISSING_EXPERT_RELEVANCE_EVIDENCE</strong>. Protected outputs were not opened; there are no governed expert relevance judgements.</p></article>
+  </section>
+  {{ authority_panel(authority|default({})) }}
+{% endblock %}

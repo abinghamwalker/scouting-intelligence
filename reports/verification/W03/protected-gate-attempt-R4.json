@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "gate_id": "W03-PROTECTED-SYNTHETIC-01",
+  "attempt": "R4",
+  "partition": "PROTECTED_TEST",
+  "claim_boundary": "foundation_properties_only",
+  "broker": "master",
+  "implementation_under_review": "W03-VERTICAL-01-R5",
+  "decision": "PASS",
+  "checks": {
+    "fixture_contract_valid": true,
+    "protected_partition_selected": true,
+    "serving_available": true,
+    "result_contract_match": true,
+    "candidate_identity_match": true,
+    "explanations_match": true,
+    "admitted_fact_set_match": true,
+    "rejected_fact_reasons_match": true,
+    "post_cutoff_admitted_zero": true,
+    "repeat_result_stable": true
+  },
+  "result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+  "expected_result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+  "repeat_result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+  "master_reproduction": {
+    "e2e_tests": "39 passed",
+    "ruff_format": "PASS",
+    "ruff_lint": "PASS",
+    "mypy": "PASS",
+    "bandit": "PASS",
+    "runtime_protected_reference_guard": "PASS"
+  },
+  "protected_access": {
+    "master_only": true,
+    "implementer_access": false,
+    "independent_reviewer_access": false
+  }
+}

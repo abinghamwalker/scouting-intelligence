@@ -1,0 +1,47 @@
+{
+  "captured_at_utc": "2026-07-29T09:33:22Z",
+  "git": {
+    "branch": "main",
+    "core_hooks_path": "/Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/.git/hooks",
+    "remote_stdout": "",
+    "version": "git version 2.54.0"
+  },
+  "guard": {
+    "path": ".git/hooks/pre-push",
+    "sha256": "b3925e33331735bfc5114c5cc7612ca341f64c718823e799ee6db71e509228bd",
+    "simulated_exit_code": 1
+  },
+  "lock": {
+    "package_records": 135,
+    "path": "uv.lock",
+    "sha256": "8a020d007f10bac044d5c690dee0247a433bb2c0f17d28a3e48cbcbbbdcad343"
+  },
+  "planning_files": [
+    {
+      "path": "../scouting-ml-production-blueprint.html",
+      "sha256": "9029ac8f934a4848bd81abe4d5ca1a8e7df73042a9b228b384111e522c78139f"
+    },
+    {
+      "path": "../scouting-ml-agent-implementation-workflow.html",
+      "sha256": "a1e6c41c82e9f332e54612fbeb0974ec58cc85a173089a5a1c30e6bf95410f5f"
+    },
+    {
+      "path": "../scouting-app-build-plan.html",
+      "sha256": "0b5b788b2422d7c1df1666e8df41d60a937795da7006278910839a99d593bf7c"
+    }
+  ],
+  "project": {
+    "pyproject_sha256": "f853b62d34b2d080ff263c52dbc879e925c7e36cfab9ae4ac3bfed6b75549aaa",
+    "root": "/Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence"
+  },
+  "python": {
+    "executable": "/Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/.venv/bin/python3",
+    "implementation": "CPython",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "version": "3.12.12"
+  },
+  "uv": {
+    "environment": ".venv",
+    "version": "uv 0.9.21 (Homebrew 2025-12-30)"
+  }
+}

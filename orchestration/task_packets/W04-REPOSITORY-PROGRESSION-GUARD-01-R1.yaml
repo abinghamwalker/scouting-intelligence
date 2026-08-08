@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W04-REPOSITORY-PROGRESSION-GUARD-01
+phase_id: W04
+revision: R1
+state: DISPATCHED_BOUNDED_TEST_CORRECTION
+objective: >-
+  Correct only the two stale lower-authority progression fixtures exposed by the
+  complete repository gate, so guarded downstream paths are permitted only after
+  direct validation of the exact accepted R21 master-gate evidence.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-GATE-01:ACCEPTED
+  - W04-COMPLETE-REPOSITORY-GATE:FAILED_2_STALE_PROGRESSIONS
+assigned_role: bounded_w04_progression_guard_test_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R1.yaml
+  - reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+  - reports/phase-gates/W04/wyscout-r21-correction-gate.json
+  - reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-GATE-01-R1.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+fixed_bindings:
+  field_test_sha256: 12a93afb72019f36e2c775a8e2898029fac8a26466e57114430edcc39e575d2f
+  possession_test_sha256: dd4167747b71203390ba04d7c0899dc98099e203368ba5b3c3942b1b9a6e3116
+  r21_gate_record_sha256: 980303642f5c58876ed157698a5ea8f25ee79acef3c9faeaf015266cf547f168
+  r21_review_sha256: e9eca309986140ddfe40c66645a3f640777ff700e6a7187d43f020060d35c070
+  r21_gate_report_sha256: 656769e7e9fe894421056230344ed9e976d583895cabe42600d1a2294042e14e
+  r21_gate_return_sha256: 8f45128b4609b2a575a9f7da5e147dd95c5ef83f203812d27ac97e6fbd9eb051
+requirements:
+  - Verify every fixed binding before editing and stop on drift.
+  - >-
+    Preserve both lower-authority validators and all synthetic pre-review/pre-gate
+    fail-closed tests. A field or possession acceptance alone must never authorize a
+    downstream path.
+  - >-
+    Add a small closed R21-gate evidence validator in each owned test module (or one
+    equivalently scoped shared test helper only if no new path is needed). It must
+    require the exact four evidence paths, strict canonical five-key gate JSON,
+    `decision=PASS`, exact gate/review paths, `review_recommendation=PASS`, and the
+    SHA-256 of the complete present review bytes.
+  - >-
+    In the actual-repository progression test only, allow a present identity/runtime/
+    product path after that exact gate validator succeeds. Missing evidence, changed
+    review bytes, changed decision/path/recommendation/digest, noncanonical JSON or a
+    partial gate must still fail closed.
+  - >-
+    Remove no governed path and do not weaken the central R21 lifecycle test, which
+    remains the sole complete product-progression authority. Do not classify identity
+    bytes as absent or delete/rename any path merely to pass.
+  - Add focused adversarial tests for the gate evidence validator in both modules.
+  - Preserve all fixed authority bytes, R20/R21 semantics and product blocking before the accepted gate.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run ruff check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run pytest -q tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact bounded test correction and mandatory return with new hashes and failed-gate evidence.
+stop_conditions:
+  - Any production/source/data/authority/gate byte, dependency, architecture, product scope or local-only change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

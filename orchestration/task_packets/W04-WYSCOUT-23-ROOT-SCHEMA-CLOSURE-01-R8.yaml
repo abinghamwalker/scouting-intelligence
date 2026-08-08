@@ -1,0 +1,92 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R8
+state: ACCEPTED
+objective: >-
+  Correct only the test-owned three-row SilverAction acceptance matrix so every
+  frozen R5 Section 5.6 adversarial variant is constructed through strict runtime
+  validation and asserted exactly, preserving the R7 schema bytes unchanged.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R7:REWORK
+assigned_role: bounded_w04_23_root_schema_r8_matrix_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7.yaml
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R7.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R7.md
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/unit/**
+fixed_bindings:
+  accepted_r7_schema_sha256: 8ff15eb36e588806d3768e7a3769d7e5cad9a95ea994f676f5930bc63205d0f4
+  r7_test_sha256: af355c891aa6472e778c2ad104ccd5a593700c9433bedaf3f7e2cc6f82eb8636
+  r7_independent_review_sha256: f4c74753d9a168bb00ee503066e088ea897d445c6cd6bdbaa9a7b1be07bfc2ec
+  r7_reviewer_return_sha256: 2cacfc08b21f4c3dbf536d9037bb108afb09f25ca4b70ea830ffb43fa2b8d746
+  r5_acceptance_oracle_sha256: a3f15f92a14ff342efd0f5b2848b60eab4898ea79eb69c7fd6f09e6946077efa
+requirements:
+  - Verify every fixed binding before editing and do not edit the accepted R7 schema.
+  - >-
+    Replace the three SilverAction matrix rows with three distinct strict-validated
+    action/source identities and internally matching source row, lineage and exact
+    one-action period sequence. Do not use model_construct or mutate validated rows.
+  - >-
+    SA-NULL-UNMAPPED must have competition_id, player_id, team_id, event taxonomy
+    and subevent taxonomy all explicitly null; positions empty; sorted tags;
+    PREDICATE_UNMAPPED/INELIGIBLE_UNMAPPED; Decimal("0") and source scale 0.
+  - >-
+    SA-ONE-POSITION must have one in-bounds position, non-null team, admitted CONTROL
+    pair (8,80), admitted/resolved state, and seconds lexical scale 18.
+    SA-TWO-POSITION must have two ordered in-bounds positions, non-null team,
+    admitted RESTART pair (3,30), admitted/resolved state, and scale 18. Across
+    these admitted rows include Decimal("9999.999999999999999999") exactly with no
+    rounding.
+  - >-
+    Add independent explicit assertions for three distinct action IDs, action
+    source IDs and physical source identities; exact (0,1,2) position variants;
+    scales (0,18,18); all five null fields and zero seconds; CONTROL versus RESTART;
+    admitted/unmapped eligibility states; capacity boundary; and descriptor-led
+    exact logical-byte round trips. Preserve the total 29-row vector and every
+    non-action matrix assertion.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact strict R5 SilverAction matrix evidence and assertions.
+  - Mandatory R8 producer return with unchanged schema hash and test/gate results.
+stop_conditions:
+  - Any need to change the schema, runtime contracts, logical model, roots, feature, population, digest meaning, authority, dependency or local-only boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

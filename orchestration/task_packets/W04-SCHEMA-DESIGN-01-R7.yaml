@@ -1,0 +1,87 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R7
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 schema/rebuild design by correcting only the
+  two new P1 defects independently returned against R6, while retaining all seven
+  R5 closures and every earlier accepted boundary.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R5:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R6.yaml
+  - reports/reviews/W04/wyscout-schema-design-R6.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R5.md
+  - pyproject.toml
+  - uv.lock
+  - configs/environments/local-only.yaml
+  - .gitignore
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R7.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R7.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Replace direct-import-only distribution selection with one exact deterministic
+    pre-execution closure. Prefer the conservative root environment rule: after
+    `uv sync --locked --all-groups`, admit every non-project installed distribution
+    selected from the root uv.lock for the exact environment, and require exact
+    equality between that locked selected set and installed distribution set.
+    Define normalized distribution identity, marker/extras/group selection,
+    import-root/file ownership from verified installed RECORD entries, namespace
+    and native-extension handling, and runtime loaded-owner subset checks. Apply
+    every R6 cache/extracted/installed/generated-file rule to every closure member.
+    Include exact pydantic→pydantic-core and polars→polars-runtime-32 positive tests,
+    ambiguous/unowned owner negatives, and no runtime-driven manifest expansion.
+  - >-
+    Define an exact fail-closed unknown record-kind quarantine formula beneath the
+    existing Bronze owner. Use a fixed `record_kind=unknown` partition plus an exact
+    canonical raw-kind state/value digest component, or an equivalently
+    collision-resistant reviewed grammar. Cover missing, null, non-string, unsafe
+    and unknown-string values; preserve the canonical original value/state in the
+    rejected row; fail on digest collision; and prove two unsafe values cannot
+    collide, escape or break two-root equality. Unknown records must not enter
+    known-kind raw or rejected-field families.
+  - >-
+    Retain all seven R5 P1 closures and all earlier accepted source, rights,
+    temporal, identity, path, resource, feature-authority, health/card, two-root,
+    gate and two-local-commit ledger decisions without other redesign.
+definition_of_done:
+  - Both new R6 P1 defects close with exact algorithms, schemas, paths, owners and tests.
+  - All seven R5 P1 closures and every earlier accepted finding remain intact.
+  - The standalone graph remains complete for W04.1-W04.7/P2.1-P2.9/G-W04.
+  - No runtime-driven dependency admission or implementation-time path choice remains.
+  - No architecture, rights, dependency, migration, provider, network or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R7.md');
+    assert p.is_file() and p.stat().st_size > 18000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A correction requires a dependency/lock change, network acquisition, new local root, ignore-policy change or provider access.
+  - Any retained closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

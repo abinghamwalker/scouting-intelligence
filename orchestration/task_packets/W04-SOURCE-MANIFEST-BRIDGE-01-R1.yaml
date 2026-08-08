@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W04-SOURCE-MANIFEST-BRIDGE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement and execute the sole strict bridge from the frozen Wyscout completion
+  evidence to one immutable SourceSnapshotManifest for the explicit local POC tenant.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-GATE-01:ACCEPTED
+assigned_role: source_manifest_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-MANIFEST-BRIDGE-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/phase-gates/W04/wyscout-r21-correction-gate.json
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/sources/wyscout.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+allowed_paths:
+  - src/scouting/sources/wyscout_manifest.py
+  - tests/unit/test_wyscout_source_manifest.py
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - reports/reviews/W04/returns/W04-SOURCE-MANIFEST-BRIDGE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/source/**
+  - data/working/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/scouting/contracts/**
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+fixed_context:
+  tenant_id: 65a43912-d412-5ff9-a364-7f84d1ad6c5d
+  club_id: null
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  trace_id: 2c441714-d968-5495-8339-c85ecaf5f596
+  completion_manifest_sha256: 69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1
+deliverables:
+  - A fail-closed bridge with no discovery, network, current-time, metadata-time, or provider-payload dispatch authority.
+  - Exact validation of the completion manifest and all 18 R20 source-evidence rows, including physical path, size, SHA-256, and declared row count.
+  - Exact manifest/trace UUIDv5 derivation from the R20 preimages and explicit fixed tenant context.
+  - A strict SourceSnapshotManifest with restricted use, derived/internal review allowed, export false, attribution required, exact acquisition/source clocks, and exact six-dimension 1.0 source coverage.
+  - Canonical JSON materialization only at the exact content-addressed manifest path, idempotent on byte equality and conflicting on byte drift.
+  - Focused positive, mutation, path, temporal, rights, coverage, and idempotency tests.
+  - A complete Markdown handback.
+definition_of_done:
+  - The exact local frozen source produces manifest ID 4e16bdb5-afe7-5601-88ad-adc124cfce3b and trace ID 2c441714-d968-5495-8339-c85ecaf5f596.
+  - The materialized manifest parses as SourceSnapshotManifest and round-trips to identical canonical bytes.
+  - Its files tuple is the exact R20 18-row order and its coverage is the exact six-row order with overall 1.0 and no missing dimensions.
+  - Any missing, extra, reordered, wrong-size, wrong-digest, wrong-row-count, clock, rights, tenant, path, or existing-byte conflict fails before acceptance.
+  - No Bronze, Silver, Gold, identity runtime, receipt, rebuild, model, network, remote, cloud, container, CI, endpoint, or deployment path is created.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_manifest.py tests/unit/test_wyscout_source_manifest.py
+  - uv run ruff check src/scouting/sources/wyscout_manifest.py tests/unit/test_wyscout_source_manifest.py
+  - uv run mypy src/scouting/sources/wyscout_manifest.py
+  - uv run pytest -q tests/unit/test_wyscout_source_manifest.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python -m scouting.sources.wyscout_manifest --source-root data/source/wyscout/v5 --manifest-root data/manifests --tenant-id 65a43912-d412-5ff9-a364-7f84d1ad6c5d
+stop_conditions:
+  - Any frozen source byte, exact R20 row, manifest ID, trace ID, rights value, or source/acquisition clock differs.
+  - Correctness requires changing R20/R21 authority, product architecture, project root, dependencies, or local-only boundaries.
+  - Required work falls outside allowed_paths.
+  - A secret, network call, external account, Git operation, delegation, destructive action, or unapproved product path is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

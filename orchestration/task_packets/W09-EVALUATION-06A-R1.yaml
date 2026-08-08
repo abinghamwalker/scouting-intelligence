@@ -1,0 +1,83 @@
+task_id: W09-EVALUATION-06A
+revision: R1
+owner: subagent
+objective: >-
+  Implement a deterministic local evaluation harness and frozen retained-data query suite for
+  W09 retrieval reproducibility, population coverage, stability, eligibility/filter behaviour
+  and explanation consistency without making football-quality claims.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/verification/W09/full-canonical-population.md
+  - reports/verification/W09/full-feature-matrix.md
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R2.md
+  - reports/reviews/W09/returns/W09-RESEARCH-SERVING-04C-R1.md
+  - src/scouting/contracts/research.py
+  - src/scouting/modeling/research.py
+  - src/scouting/serving/research.py
+  - src/scouting/reporting/research.py
+  - data/manifests/wyscout/v5/research_features/w09-historical-player-window-v1-22c725d54e41a916.feature-matrix.manifest.json
+  - runs/w09/historical-player-workbench-v1/manifest.json
+allowed_paths:
+  - src/scouting/evaluation/research.py
+  - configs/evaluation/w09-frozen-retrieval-evaluation-v1.json
+  - scripts/evaluate_w09_retrieval.py
+  - tests/unit/test_w09_research_evaluation.py
+  - tests/integration/test_w09_research_evaluation_integration.py
+  - reports/reviews/W09/returns/W09-EVALUATION-06A-R1.md
+deliverables:
+  - >-
+    One strict, canonical, version-pinned frozen-suite contract/loader covering retained real
+    player grains across all four positions and at least three domestic competitions; both
+    exemplar and weighted-profile modes; and both weighted Euclidean and weighted cosine.
+    Bind the exact matrix/index/registry/policy digests and use only accepted production
+    player/feature values. Never call the network or use a synthetic row in the frozen suite.
+  - >-
+    An injected evaluation runner over `ResearchServingService` that executes every frozen
+    query twice with distinct allowed generated timestamps, proves exact result IDs/digests,
+    candidate order/scores/explanations/population accounting are reproduced, and records
+    candidate/matrix/competition coverage without interpreting ranking quality.
+  - >-
+    Eligibility/filter witnesses for exemplar-self exclusion, position filtering, minimum
+    minutes at and above the matrix policy, explicit exclusion, full scoring before response
+    limit and an empty-admission case. Every mutually exclusive population count must
+    reconcile; stale pins or a candidate outside the governed matrix must fail closed.
+  - >-
+    Stability witnesses using fixed, explicitly declared bounded weight perturbations. Report
+    top-k overlap, ordered-rank displacement and score change deterministically and as
+    sensitivity evidence only. Do not set or imply a football-acceptable threshold.
+  - >-
+    Explanation witnesses recompute raw/scaled contrasts and method-specific contribution
+    aggregation from the public result and pinned scaler semantics, including zero-weight,
+    missingness and deterministic tie cases in test fixtures. Any inconsistency is an
+    evaluation failure, not a warning.
+  - >-
+    A canonical JSON evaluation result model and deterministic renderer payload suitable for
+    master publication under `runs/w09/evaluation-v1`. The packet may use only temporary test
+    roots; the master will execute the retained production evaluation, reconcile it and write
+    final verification evidence.
+  - >-
+    Result limitations and weaknesses must state that historical resemblance is not football
+    relevance or recruitment usefulness, all eligible retained rows use lower-bound minutes,
+    only five domestic competitions pass the current eligibility/window policy, no G-RW4
+    exists, and stability metrics do not validate rankings.
+checks:
+  - uv run ruff format --check src/scouting/evaluation/research.py scripts/evaluate_w09_retrieval.py tests/unit/test_w09_research_evaluation.py tests/integration/test_w09_research_evaluation_integration.py
+  - uv run ruff check src/scouting/evaluation/research.py scripts/evaluate_w09_retrieval.py tests/unit/test_w09_research_evaluation.py tests/integration/test_w09_research_evaluation_integration.py
+  - uv run mypy src/scouting/evaluation/research.py scripts/evaluate_w09_retrieval.py
+  - uv run pytest -q tests/unit/test_w09_research_evaluation.py tests/integration/test_w09_research_evaluation_integration.py tests/unit/test_w09_research_serving.py
+  - uv run bandit -q -r src/scouting/evaluation/research.py scripts/evaluate_w09_retrieval.py
+stop_conditions:
+  - Any accepted matrix/index/identity/cutoff/pin conflict or absence of a requested real grain.
+  - Evaluation requires a subjective football threshold, positive relevance claim, or new
+    product decision.
+  - Any need for network/provider access, dependencies, Git, orchestration-control/shared
+    contract/serving/model/report edits, production output writes, or paths outside allowed.
+constraints:
+  - No Git operations, dependency/lock changes, orchestration-control or shared-boundary edits.
+  - Use apply_patch for manual edits.
+  - Production retained artifacts are read-only inputs. Synthetic data is allowed only inside
+    automated test fixtures and cannot appear in the frozen retained-data configuration.

@@ -1,0 +1,90 @@
+schema_version: 1
+task_id: W06-PREFLIGHT-REVIEW-01
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the W06 readiness inventory for evidence honesty, exact local
+  population boundaries, and consistency with the requirement to implement the
+  executable harness and controls even when expert relevance evidence is absent.
+depends_on:
+  - W06-PREFLIGHT-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-PREFLIGHT-01-R1.yaml
+  - reports/readiness/W06/evaluation-readiness.md
+  - reports/reviews/W06/returns/W06-PREFLIGHT-01-R1.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - reports/phase-gates/W05/acceptance-report.md
+  - reports/phase-gates/W05/gate-report.json
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/limitations.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-readiness-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-PREFLIGHT-REVIEW-01-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/domain.json
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Is MISSING_EXPERT_RELEVANCE_EVIDENCE proved by retained local identities without inventing or impersonating a human expert?
+  - Are W03 protected synthetic fixtures kept outside W06 expert relevance evidence?
+  - Are W04 one-match exact-four and W05 synthetic-development-only populations stated exactly?
+  - Does the executable-versus-unsupported inventory distinguish implementable contracts, deterministic public-fixture metrics, intervals and null controls from unsupported empirical expert, transfer and prospective claims?
+  - Does the task graph continue through an evidence-honest protected NO_GO path rather than pausing for expert evidence or external access?
+  - Could any report statement change a W06 partition, metric, protected decision, applicability claim, or local-only boundary incorrectly?
+deliverables:
+  - Independent verdict with P0/P1/P2 findings, exact evidence and the smallest correction for each blocker.
+  - A direct answer to every review question.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-PREFLIGHT-REVIEW-01-R1.md.
+definition_of_done:
+  - Findings are reproducible, bounded to W06 decision correctness and classified by severity.
+  - Review is report-only and does not access protected expected outputs.
+  - Host-state hardening is not reopened unless it changes W06 evidence or decision correctness.
+acceptance_checks:
+  - test -s reports/reviews/W06/evaluation-readiness-independent-review-R1.md
+  - test -s reports/reviews/W06/returns/W06-PREFLIGHT-REVIEW-01-R1.md
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Required evidence needs protected expected-output, external/provider, credential or new-dependency access.
+  - Required work falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - verdict and finding table with severities
+  - exact commands, exit statuses and concise results
+  - exact evidence paths and identifiers
+  - residual leakage, schema, rights, scope and claim risks
+  - smallest bounded corrections or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,60 @@
+schema_version: 1
+task_id: W03-STORAGE-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Implement guarded, deterministic local artifact persistence for W03 without
+  introducing a second storage authority.
+depends_on:
+  - W03-CONTRACTS-01:ACCEPTED
+assigned_role: storage_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-STORAGE-01-R1.yaml
+  - src/scouting/contracts/__init__.py
+  - docs/adr/0001-local-only-uv-git-delivery.md
+allowed_paths:
+  - src/scouting/storage/__init__.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - tests/unit/test_guarded_storage.py
+  - reports/reviews/W03/returns/W03-STORAGE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/postgres.py
+  - services/**
+  - apps/**
+deliverables:
+  - Explicit configurable roots that reject absolute, parent-traversal, escaped-symlink, and undeclared paths.
+  - Atomic immutable byte/JSON/JSONL/Parquet writes with content hashes and restrictive file modes.
+  - Completion manifests written only after payload durability and carrying lineage/retention metadata.
+  - Idempotent retry semantics where identical content succeeds and conflicting content fails closed.
+  - Unit tests covering path escape, symlink escape, partial-write cleanup, immutability, hashing, formats, and idempotency.
+definition_of_done:
+  - No write can escape the explicitly supplied local root.
+  - No caller-controlled absolute path or unbounded path is accepted.
+  - Manifest creation cannot precede successful durable payload creation.
+  - JSON output is canonical and Parquet can be read back deterministically.
+  - All acceptance checks pass through uv.
+  - The mandatory return is complete and confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_guarded_storage.py
+  - uv run ruff format --check src/scouting/storage tests/unit/test_guarded_storage.py
+  - uv run ruff check src/scouting/storage tests/unit/test_guarded_storage.py
+  - uv run mypy src/scouting/storage
+  - uv run bandit -q -r src/scouting/storage
+stop_conditions:
+  - A contract, database, migration, dependency, or integration-file change is required.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, external service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

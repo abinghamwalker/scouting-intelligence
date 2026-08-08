@@ -1,0 +1,147 @@
+schema_version: 1
+task_id: W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Implement the exact accepted one-match Wyscout v5 raw-to-Gold vertical slice:
+  complete Bronze Action population and field quarantine, the checked 13-Action,
+  one-LineupStint, two-Possession, one-PlayerMatchFact Silver graph, exact one-row
+  four-feature Gold, three complete layer manifests, temporal boundary and rebuild
+  receipts, using only accepted local authorities and the sidecar-free publisher.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01:ACCEPTED
+  - W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1:ACCEPTED
+  - W04-STAGED-IMMUTABLE-PUBLISHER-01-R3:ACCEPTED
+  - W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1:ACCEPTED
+assigned_role: w04_wyscout_vertical_slice_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - reports/verification/W04/wyscout-season-lineup-product-binding-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v2.json
+  - configs/schema/wyscout-v5-product-contract-preimage-v2.json
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/contracts/wyscout_aggregates.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/sources/wyscout_vertical_slice.py
+  - src/scouting/storage/formats.py
+  - src/scouting/storage/wyscout_publication.py
+  - scripts/launch_wyscout_v5.py
+  - reports/verification/W04/wyscout-runtime-control-R5-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/data_products/wyscout/__init__.py
+  - src/scouting/data_products/wyscout/bronze.py
+  - src/scouting/data_products/wyscout/actions.py
+  - src/scouting/data_products/wyscout/lineups.py
+  - src/scouting/data_products/wyscout/possessions.py
+  - src/scouting/data_products/wyscout/player_match.py
+  - src/scouting/data_products/wyscout/silver_manifest.py
+  - src/scouting/data_products/wyscout/gold.py
+  - src/scouting/data_products/wyscout/temporal_boundary.py
+  - src/scouting/data_products/wyscout/rebuild.py
+  - scripts/rebuild_wyscout_v5.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - src/scouting/contracts/**
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+  - tests/contracts/**
+  - tests/unit/**
+fixed_bindings:
+  r20_design_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  source_completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  event_member_sha256: 301599543aa1a7fa457bb8ef33c9fe860bf81dca65d418d618d68abcda3defad
+  accepted_data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  season_lineup_decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  season_lineup_acceptance_sha256: 6cbf2cd2aea87489854eee208ee4cbb3f7d3dc2c603d32aa306515418863c27e
+  season_lineup_master_acceptance_sha256: a7a22ddcfc9ffc7b9bfb48163bdd6de7fd73cb81d17d36f1c9fc933cc8ba66f5
+  accepted_season_id: 4696aa1f-b512-5d18-af79-33cf031455cf
+  accepted_lineup_stint_id: 591cdf5b-2281-53c4-8225-150313ca2c01
+  accepted_admission_child_sha256: cba67d6a143951cbeefa2e63063f5f09aab73f6ec435a1378fb2451d59950cb5
+  accepted_launcher_sha256: d3ac8c84995c8475b0a4df983899ebf6b364f047dcbba45c411d55b62c808740
+  runtime_independent_review_sha256: 7578cd604af30e36d1ac801e7df2af93a55dbdfc7f1f2baaccd2f245d4d26f01
+  runtime_master_acceptance_sha256: a08d2a429c45a52cd7839c41ee3429f91fef227e9e9f41992c8f3a9fdbe8c24c
+requirements:
+  - Verify every fixed binding and consume only accepted upstream APIs and bytes.
+  - >-
+    Load and reverify the exact immutable match context and 901-plus-867 action
+    population. Emit all 1768 Bronze known Action rows plus exactly the
+    schema-authorized nonzero rejected-field traversal. Never emit rejected-record,
+    zero-row quarantine, entity or other product Parquet.
+  - >-
+    Build exactly thirteen checked SilverAction rows covering the two complete
+    resolved groups containing source action IDs 177960876 and 177961018, exactly
+    two checked SilverPossessions, the one accepted right-censored lineup row with
+    start [82,83), null end/minute bounds, and exactly one checked
+    SilverPlayerMatchFact. Call require_checked_product at every checked boundary.
+  - >-
+    Build exactly one checked GoldPlayerWindow for the accepted half-open window,
+    cutoff and five-dependency temporal proof with exact feature vector (2,2,1,2).
+    No fifth feature, rate, per-90, outcome, value, inferred role or provider
+    possession claim is permitted.
+  - >-
+    Instantiate every accepted complete Arrow descriptor mechanically through
+    w04_parquet_projection_content and encode with
+    encode_w04_wyscout_product_parquet. Require canonical primary-key order,
+    readback and semantic digest equality for every nonempty product.
+  - >-
+    Publish product Parquet before each checked canonical layer manifest through
+    WyscoutStagedPublisher only. Derive every layer summary using the accepted sole
+    two-key complete-manifest aggregate, and reconcile the exact Bronze-to-Silver-
+    to-Gold entry and manifest parent chains.
+  - >-
+    Reopen the Gold manifest and its complete parent/product chain to derive exactly
+    one 15-key boundary receipt, then exactly one nine-key invocation receipt with
+    started_at <= checked_at <= completed_at. Emit the accepted bounded child result
+    only after complete readback and exact code/environment/resource final recheck.
+  - >-
+    Tests publish only below two isolated exact-root mirrors and prove identical
+    product/manifest/receipt bytes for identical inputs, stable product/manifest
+    bytes across run IDs, adversarial source/schema/temporal/manifest/path/race/
+    receipt rejection, no provider/network access and no real-root write.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run ruff check src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run mypy src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_vertical_slice_context.py tests/unit/test_w04_staged_product_publisher.py tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact isolated raw-to-Gold implementation, focused evidence and mandatory producer return.
+stop_conditions:
+  - None for bounded defects; continue rework without real-root publication or Git.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

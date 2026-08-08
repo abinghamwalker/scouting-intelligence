@@ -1,0 +1,96 @@
+schema_version: 1
+task_id: W03-VERTICAL-01
+phase_id: W03
+revision: R4
+state: DISPATCHED
+supersedes: orchestration/task_packets/W03-VERTICAL-01-R3.yaml
+objective: >-
+  Remove the final development-only scoring and explanation constants by
+  binding presentation evidence to an immutable selected artifact profile.
+depends_on:
+  - REVIEW-W03-VERTICAL-01-R3:REWORK
+assigned_role: vertical_journey_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-VERTICAL-01-R4.yaml
+  - orchestration/reviews/REVIEW-W03-VERTICAL-01-R3.yaml
+  - docs/architecture/evaluation-contract.md
+  - src/scouting/serving/synthetic.py
+  - tests/e2e/test_w03_vertical_journey.py
+allowed_paths:
+  - src/scouting/serving/__init__.py
+  - src/scouting/serving/synthetic.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - reports/reviews/W03/returns/W03-VERTICAL-01-R4.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - scripts/**
+  - reports/verification/W03/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/operations/**
+  - src/scouting/workflow/**
+  - src/scouting/web/**
+  - services/**
+  - apps/**
+  - tests/security/**
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/synthetic/protected/expected_retrieval.json
+  - tests/fixtures/synthetic/expected_retrieval.json
+defects:
+  - code: DEVELOPMENT_PRESENTATION_PROFILE_HARDCODED
+    required_fix: >-
+      Add a strict immutable retrieval-presentation profile to the artifact
+      catalog and make every candidate dimension score/confidence/reason,
+      candidate confidence/limitation/reason, and explanation reason/template
+      come from it. Preserve dynamic coverage and the evidence-selected
+      candidate identity/rank.
+deliverables:
+  - A bounded immutable presentation-profile type exported by scouting.serving.
+  - A development profile that preserves the exact frozen development oracle.
+  - Serving output populated from the selected catalog profile with no partition branch.
+  - >-
+    A temporary alternate-profile regression proving changed scores, reasons,
+    limitations and explanation while candidate selection remains evidence-driven.
+  - Complete R4 mandatory return.
+definition_of_done:
+  - The frozen development end-to-end oracle remains byte-for-byte equal.
+  - >-
+    Profile construction rejects invalid unit-interval values, empty/duplicate
+    reason codes, empty limitations and an explanation template that cannot be
+    safely populated with the selected candidate display name.
+  - The profile contains no player/candidate ID, tenant, cutoff, rank or lineage field.
+  - Candidate identity still comes only from the admitted evidence selection path.
+  - Every fixed score, confidence, reason, limitation and explanation value comes from the profile.
+  - Repeated identical inputs return identical results and explanations.
+  - Missing model or index remains labelled unavailable with no fallback.
+  - No runtime module reads or names an expected-output file.
+  - No protected fixture or expected output is accessed.
+acceptance_checks:
+  - uv run pytest -q tests/e2e/test_w03_vertical_journey.py
+  - >-
+    uv run ruff format --check src/scouting/serving
+    tests/e2e/test_w03_vertical_journey.py
+  - >-
+    uv run ruff check src/scouting/serving
+    tests/e2e/test_w03_vertical_journey.py
+  - uv run mypy src/scouting/serving
+  - uv run bandit -q -r src/scouting/serving
+  - "! rg -n \"expected_retrieval\\\\.json\" src/scouting/serving"
+stop_conditions:
+  - A protected fixture or protected expected output has been accessed.
+  - The correction requires a contract, fixture, workflow, database, dependency or migration change.
+  - A path outside allowed_paths must change.
+  - A Git command, Docker command, external service, credential, public bind or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

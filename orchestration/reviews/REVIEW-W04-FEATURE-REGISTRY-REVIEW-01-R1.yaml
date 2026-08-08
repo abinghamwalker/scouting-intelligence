@@ -1,0 +1,39 @@
+schema_version: 1
+review_id: REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R1
+task_id: W04-FEATURE-REGISTRY-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P2
+    code: APPLICABILITY_ACCEPTED_EVIDENCE_GAP
+    resolution: RETURN_TO_BOUNDED_PRODUCER_R2
+  - severity: P2
+    code: BYTECODE_INVENTORY_DRIFT
+    resolution: FRESH_REVIEW_FROM_RETAINED_STABLE_BASELINE
+decision: REWORK
+next_packet: W04-FEATURE-REGISTRY-DECISION-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-supported-feature-registry-review-R1-master-verification.md
+checks:
+  - command: independent review record/digest/readback
+    result: PASS_REWORK_0_P0_0_P1_2_P2
+  - command: focused authority suite
+    result: PASS_290_TESTS
+  - command: reviewer applicability adversarial challenge
+    result: FAIL_REPRODUCED_ACCEPTED_EVIDENCE_GAP
+  - command: retained bytecode inventory
+    result: FAIL_CLOSED_1145_TO_1150_MASTER_DIAGNOSTIC_CAUSE
+  - command: early whole-repository pytest diagnostic
+    result: PASS_1031_TESTS_1_WARNING
+decision_notes:
+  - Exact decision and candidate bytes remain valid and frozen.
+  - R2 is limited to the focused applicability helper/tests and producer return.
+  - No cleanup, architecture revision, acceptance, cross-authority, or product work is permitted.

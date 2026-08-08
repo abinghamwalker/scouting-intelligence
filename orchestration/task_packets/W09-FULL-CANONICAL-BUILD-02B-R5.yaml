@@ -1,0 +1,36 @@
+task_id: W09-FULL-CANONICAL-BUILD-02B
+revision: R5
+owner: subagent
+objective: >-
+  Inventory and conservatively classify the retained substitution-shape anomaly,
+  preserve the exact/lower-bound/unusable minute policy, and complete a no-write
+  action-plus-appearance projection.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R4.yaml
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R4.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - src/scouting/data_products/wyscout/historical.py
+  - tests/integration/test_w09_full_canonical_build.py
+allowed_paths:
+  - src/scouting/data_products/wyscout/historical.py
+  - tests/integration/test_w09_full_canonical_build.py
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R5.md
+deliverables:
+  - Pin and classify the exact six retained string-null substitution sentinels.
+  - Keep lineup starters at a zero-minute lower bound and unknown bench entries unusable.
+  - Bound the 14 observed-entry floors and eight rejected zero-player entry occurrences.
+  - Complete a no-write projection over all actions and appearances with reconciled audit counts.
+checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run ruff check src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run mypy src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py
+  - uv run pytest -q tests/unit/test_w09_wyscout_historical_adapter.py tests/integration/test_w09_full_canonical_build.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py
+stop_conditions:
+  - The anomaly cannot be classified without player-action or current-team minute inference.
+  - Any new source conflict, arbitrary shape coercion, product decision, production write, external access, dependency, Git operation or path outside allowed_paths.
+constraints:
+  - No Git operations, dependencies, production artifact generation or orchestration edits by the subagent.
+  - Synthetic rows remain automated-test fixtures only.

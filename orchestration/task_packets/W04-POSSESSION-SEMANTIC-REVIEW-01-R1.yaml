@@ -1,0 +1,128 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the frozen R1 Wyscout possession-semantic decision,
+  taxonomy, and progression-safe contract against accepted R20 and the frozen
+  local evidence. Write only the exact independent review authority and return.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-DECISION-01-R1:MASTER_ACCEPTED
+assigned_role: possession_semantic_independent_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R13.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-possession-semantic-decision-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - configs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - "!reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md"
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-REVIEW-01-R1.md"
+frozen_candidate:
+  decision_id: w04-wyscout-possession-semantic-decisions-v1
+  decision_physical_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  decision_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  candidate_id: w04-wyscout-possession-taxonomy-v1
+  candidate_physical_sha256: e456377183d6e7f3742a64dcbbd2972eeb6cc70ef55184d40c2dbb822e15a78d
+  candidate_sha256: 6a598da111bdf4be71b59d5646d56560c0024ffd7532d95e1553aa6fcaf4fdfa
+  contract_sha256: a5539c6c2e19d15579a033bc276358479a737d12dffefe4fe211b3f6cb7877f5
+authority:
+  decision_actor_id: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  reviewer_actor_id: 03a65770-02f6-5eb0-9bd2-e2ebb44b62bd
+  review_id: w04-wyscout-possession-semantic-independent-review-R1
+  review_schema_version: w04-authority-independent-review-v1
+requirements:
+  - >-
+    Treat the decision, taxonomy, contract, accepted field authority, frozen
+    CSVs, and all orchestration evidence as read-only. Independently reproduce
+    every frozen digest and do not trust producer assertions or expected values
+    in the candidate contract without comparison to R20 and source bytes.
+  - >-
+    Audit all 36 semantic predicates row by row using only accepted R20 and the
+    frozen local taxonomy labels as bounded offline evidence. Determine whether
+    each CONTROL, RESTART, DEAD_BALL, CONTESTED, NON_CONTROL_ADMIN, UNMAPPED,
+    and attachment choice is conservative, internally coherent, and expressly
+    project-owned rather than provider-native.
+  - >-
+    Independently audit exact coverage, selector sorting, overlap, tag rules,
+    strict types, actor equality, rationales, the complete combination union,
+    closed policies, canonical JSON/YAML, decision/taxonomy equality, frozen
+    input hashes, and all candidate digest edges.
+  - >-
+    Audit the 112-case contract itself against the complete R20 rejection
+    matrix. Confirm it is progression-safe: the current absent review and
+    acceptance are allowed, this exact review is strictly validated once
+    written, a later exact acceptance can be validated, and downstream outputs
+    remain blocked without acceptance.
+  - >-
+    The review Markdown has arbitrary concise prose outside exactly one
+    `w04-authority-review-v1` fence. Its body is one strict canonical JSON
+    object with one terminal LF and exactly the R20 review keys. Bind all four
+    frozen candidate digests, use the fixed review ID and independent reviewer
+    ActorId, sample a truthful reviewed_at only after review work, and issue
+    PASS with no findings or REWORK with at least one exact finding.
+  - >-
+    After writing the review, rerun the focused contract so the actual
+    progression state is exercised. Run both focused Ruff checks and the
+    local-only verifier. Take a complete shell-only pyc preflight before Python
+    and prove exact terminal equality after the return is written.
+  - >-
+    Change exactly the two owned paths. Do not repair candidate defects, edit
+    tests, accept the authority, construct possessions, create dependencies or
+    Bronze outputs, run Git, delegate, access provider/network data, or create
+    cloud, container, endpoint, CI, or deployment state.
+definition_of_done:
+  - Independent semantic and contract audit is complete and evidence-backed.
+  - Exact review authority is canonical and binds the frozen candidate.
+  - Focused checks pass with the review present.
+  - Terminal inventory exactly equals fresh preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Candidate or frozen input bytes differ from the packet hashes.
+  - A P0/P1/P2 semantic, schema, contract, or progression defect is found.
+  - Any check, inventory, or allowed-path boundary fails.
+  - Work requires external knowledge or an architecture, dependency, rights,
+    storage, root, or local-only change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

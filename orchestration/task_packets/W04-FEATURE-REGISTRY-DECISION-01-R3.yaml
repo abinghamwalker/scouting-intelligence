@@ -1,0 +1,133 @@
+schema_version: 1
+task_id: W04-FEATURE-REGISTRY-DECISION-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Correct only the focused resolved-possession applicability proof so its exact
+  three selector fields compose with an accepted, resolution-capable
+  possession-v2 predicate, preserving every frozen authority byte.
+depends_on:
+  - W04-FEATURE-REGISTRY-REVIEW-01-R2:MASTER_REWORK
+assigned_role: supported_feature_contract_r3_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FEATURE-REGISTRY-DECISION-01-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - tests/contracts/test_w04_supported_feature_authority.py
+  - reports/reviews/W04/archive/wyscout-supported-feature-registry-independent-review-R1-rework-3b5738da.md
+  - reports/reviews/W04/archive/wyscout-supported-feature-registry-independent-review-R2-rework-31653ac8.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R2.md
+  - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R2.yaml
+  - reports/verification/W04/wyscout-supported-feature-registry-review-R2-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_supported_feature_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-*
+protected_digests:
+  decision_sha256: bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941
+  candidate_physical_sha256: 8901e09c8b0cd9ab2bfce9f6855702e518e36efa98c7f7653082eee52fcc2d95
+  candidate_canonical_sha256: 49065bcfe762caa7585082d897d845d82c9a9ef2f57a84a5312e55a12ffea10f
+  possession_taxonomy_canonical_sha256: 3a3c7cdb0e6ce441d3514e4f415bb5117ebc53f2d18b753206a6ca8d7fcdd881
+  possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+  failed_r1_review_sha256: 3b5738da3a3905f253aaca037e94c8d8ab421bc1c5b17db9f5226f098b9efb47
+  failed_r2_review_sha256: 31653ac8cc12333b91a82ea81e655a69ad71e7b8e20435e14d101c6b15ae62ac
+retained_preflight_inventory:
+  pyc_files: 1150
+  pyc_path_list_sha256: 7953ff36ecd0721d414d637085d0f2331dac35cafc160745e9bf35280f8a4f44
+  cache_directories: 150
+  cache_path_list_sha256: 79250878e3cfb60a3b0131857ca7b0dc79878c5165725132223d95e32f7f9fd6
+requirements:
+  - >-
+    Preserve every decision, candidate, predecessor, preimage, acceptance,
+    review, archive, and product byte. Change only the focused helper/tests and
+    R3 return.
+  - >-
+    Derive the exact accepted possession predicate pairs from the accepted
+    possession-v2 candidate at runtime in the focused proof. Do not hard-code an
+    unbound substitute list.
+  - >-
+    A pair is resolution-capable only when it occurs exactly once among the 36
+    accepted predicates and its decision is not `UNMAPPED`. Prove the derived
+    set has exactly 32 unique pairs and the remaining four exact pairs are
+    `UNMAPPED`.
+  - >-
+    Resolved-possession feature applicability requires the exact
+    `ELIGIBLE_RESOLVED` state, strict integer event/subevent selector values,
+    a strict positive integer team source ID, and membership in the derived
+    resolution-capable pair set.
+  - >-
+    Add positive cases across the non-UNMAPPED decision classes and negative
+    cases for `(0,0)`, `(7,999)`, `(999999,999999)`, all four exact `UNMAPPED`
+    pairs, zero/negative values, and the already-covered wrong scalar/team/state
+    cases.
+  - >-
+    Do not add possession eligibility, tags, raw IDs, names, labels, or any
+    other value to the feature row's exact three input_fields. Do not perform a
+    runtime label lookup.
+  - >-
+    Start and finish on the retained inventory above using shell-only
+    inventory, root uv --locked --no-sync, PYTHONDONTWRITEBYTECODE=1, and
+    Python -B. Do not clean, repair, sync, install, or run unsuppressed Python.
+  - >-
+    Use apply_patch only for the two exact allowed paths. Do not run Git,
+    delegate, self-approve, or begin acceptance, cross-authority, identity,
+    Bronze, Silver, Gold, build, model, product, network, cloud, container,
+    endpoint, hosted CI, or deployment work.
+definition_of_done:
+  - Every resolved-possession applicable pair is exact and resolution-capable.
+  - Unknown and exact UNMAPPED pairs fail closed.
+  - Exact three-input roster and all frozen digests/inventory remain unchanged.
+  - Focused/Ruff/local-only checks and mandatory R3 return pass.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_supported_feature_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_supported_feature_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any protected digest, archive, or retained terminal inventory differs.
+  - Exact predicate-pair composition cannot be proven without a hidden feature input.
+  - Any authority, candidate, review, predecessor, preimage, or product edit is required.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

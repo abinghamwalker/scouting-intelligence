@@ -1,0 +1,119 @@
+schema_version: 1
+task_id: W05-CONTRACTS-QUERY-02
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement only the self-verifying resolved-query and scored-candidate ordering
+  projections omitted from W05-CONTRACTS-01-R3, with exact request/result identity
+  checks and deterministic distance-then-UUID ordering.
+depends_on:
+  - REVIEW-W05-CONTRACTS-01-R3:SPLIT_REWORK
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R3.yaml
+  - orchestration/task_packets/W05-CONTRACTS-01-R3.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R3.md
+  - reports/reviews/W05/w05-m0-contracts-independent-review-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-*.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    Add one typed self-verifying resolved-query model. It must contain tenant context,
+    trace ID, role-brief ID/version, taxonomy ID/version/digest, ordered football
+    responsibilities, ordered responsibility weights, ordered hard constraints,
+    ordered exemplar player IDs, an optional query player ID, feature cutoff, limit,
+    ordered exclusions and a canonical SHA-256 digest over every field except itself.
+    Reject duplicate responsibilities, weights, exemplars and exclusions and reject a
+    weight for an undeclared responsibility. Do not invent free-text or learned-query
+    state.
+  - >-
+    Put the complete resolved query in PinnedM0ServingRequest, remove the opaque
+    resolved_role_brief_query_digest field, and cross-check every overlapping field
+    against RetrievalRequest: tenant, trace, brief ID/version, cutoff, limit,
+    exclusions, taxonomy pins and resemblance-only boundary. Keep the ordered
+    exclusion digest only if it remains an independently verified projection.
+  - >-
+    Add one explicit scored-candidate model with player ID, contiguous rank, finite
+    canonical non-negative distance, query FeatureValue tuple, candidate FeatureValue
+    tuple and finite canonical contribution tuple. Negative zero must fail for
+    distance and contribution. Do not add family maths here.
+  - >-
+    Add scored_candidates to M0RetrievalResult and require exact player/rank identity
+    with RetrievalResult.candidates, exact vector lengths equal to artifact
+    feature_names, and total order by ascending distance then canonical player UUID
+    bytes. Equal-distance candidates in inverse UUID order must fail.
+  - >-
+    Cross-check RetrievalResult against the pinned request for retrieval request ID,
+    tenant context, trace ID, role-brief ID/version, feature cutoff and
+    resemblance_only claim at request, result and candidate levels. Candidates must
+    still obey limit and exclusions.
+  - >-
+    Make the result digest bind the resolved query and scored candidates through the
+    complete model wire projection. Add direct mutation tests which recompute the
+    result digest yet still fail for tenant/trace/brief/cutoff/claim drift and UUID-
+    inverted equal ties.
+  - >-
+    Update focused fixtures and public exports. Do not modify candidate-specific
+    dimension-evidence structure, W04 registry constants/descriptor derivation, array
+    roles beyond what is necessary to keep fixtures valid, or explanation equality;
+    those are owned by the following W05-CONTRACTS-TRUTH-03 packet.
+deliverables:
+  - Self-verifying resolved query and explicit scored-candidate contract projections.
+  - Direct adversarial request/result identity and equal-tie tests.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - Same-ID query substitution, request/result drift and unstable equal ties fail closed.
+  - Existing W03/W04 contracts, authorities, evidence and serialized bytes are unchanged.
+  - No feature, role, artifact loader, model, serving or W06 implementation is introduced.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+stop_conditions:
+  - Any need to modify accepted W03/W04 contracts, authorities, evidence or product bytes.
+  - Any materially different product behaviour, weakened evidence guarantee or unresolved product decision.
+  - Any new dependency, external access/service, deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

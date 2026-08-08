@@ -1,0 +1,25 @@
+schema_version: 1
+review_id: REVIEW-W04-FEATURE-REGISTRY-ACCEPT-01-R2
+task_id: W04-FEATURE-REGISTRY-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: NOT_APPLICABLE_MASTER_OWNED
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPTED
+next_packet: W04-R21-CROSS-AUTHORITY-TEST-01-R1
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - reports/reviews/W04/archive/wyscout-supported-feature-registry-acceptance-v1-invalid-a2227b9c.json
+  - reports/verification/W04/wyscout-supported-feature-registry-acceptance-R2-master-verification.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-ACCEPT-01-R2.md
+decision_notes:
+  - Exact fenced record digest including terminal LF is now bound.
+  - Corrected acceptance physical SHA-256 is d3b3c552784f4734f6b002569d9add1b4dd2d2eaaed57643a8ca4d5226fca78c.
+  - Focused authority suite passed 371 checks and reconstructed state is ACCEPTED.
+  - Local-only verification passed 25 checks; git diff is clean and git remote is empty.
+  - Retained bytecode inventory remained exact at 1150 files and 150 directories.

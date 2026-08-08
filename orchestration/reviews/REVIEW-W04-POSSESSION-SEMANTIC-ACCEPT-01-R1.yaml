@@ -1,0 +1,54 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-ACCEPT-01-R1
+task_id: W04-POSSESSION-SEMANTIC-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: FAIL
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - code: NONCANONICAL_ACCEPTANCE_KEY_ORDER
+    severity: P1
+    summary: >-
+      The R1 acceptance bytes place review_record_sha256 before
+      review_recommendation. Canonical sort order requires review_recommendation
+      first, so strict JSON validation and the actual accepted-state contract
+      fail closed.
+decision: REWORK
+next_packet: W04-POSSESSION-SEMANTIC-ACCEPT-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/verification/W04/wyscout-possession-semantic-acceptance-R1-master-verification.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.yaml
+checks:
+  - command: independent canonical acceptance reconstruction
+    result: FAIL_NONCANONICAL_JSON
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest
+      -q tests/contracts/test_w04_possession_semantic_authority.py
+    result: FAIL_111_PASSED_1_FAILED
+  - command: >-
+      uv run --locked --no-sync ruff format --check
+      tests/contracts/test_w04_possession_semantic_authority.py
+    result: PASS
+  - command: >-
+      uv run --locked --no-sync ruff check
+      tests/contracts/test_w04_possession_semantic_authority.py
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: complete shell pyc inventory before and after failed R1 suite
+    result: PASS_IDENTICAL_1086_SITE_59_REPOSITORY
+decision_notes:
+  - >-
+    R1 is not accepted and grants no downstream authority. All field values and
+    digest edges remain correct, but canonical physical JSON is mandatory.
+  - >-
+    R2 is bounded to rerendering the same acceptance values in exact canonical
+    key order with a new truthful acceptance clock, writing its return, and
+    rerunning the full focused acceptance suite.

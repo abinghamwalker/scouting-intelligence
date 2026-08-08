@@ -1,0 +1,31 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-GATE-BINDING-02-R1
+task_id: W06-EVAL-GATE-BINDING-02
+phase_id: W06
+revision: R1
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P0
+    evidence: >-
+      Both positive decisions validate when every governed relevance row in the exact
+      protected population is ABSTAIN, despite the metric path declaring that population
+      unavailable.
+    required_fix: >-
+      Require at least one eligible non-ABSTAIN governed relevance judgment for every
+      evaluated protected query before either positive decision can validate.
+  - severity: P1
+    evidence: >-
+      A foreign-population metric nested in SliceResult and a FailureResult naming an
+      absent query validate through a retained linked NO_GO run.
+    required_fix: >-
+      Bind every nested slice metric to the run population and every failure query ID to
+      the evaluated roster.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R2.yaml
+reviewer: master

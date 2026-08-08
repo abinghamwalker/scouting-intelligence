@@ -1,0 +1,56 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS_BUT_MISSING_MULTISCOPE_DETERMINISM
+integration_checks: FAIL_MULTISCOPE_INPUT_ORDER
+artifact_lineage: PASS
+security_temporal_review: FAIL_P1
+defects:
+  - code: MULTISCOPE_POSSESSION_ID_INPUT_ORDER_DEPENDENCE
+    severity: P1
+    required_fix: >-
+      Make resolved possession identifiers deterministic within each
+      match-period scope regardless of the presentation order of other scopes,
+      and add a reversing/interleaving regression.
+decision: REWORK
+next_packet: W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R2-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: producer digest and structural reconstruction
+    result: PASS_8D59C06F_24223B25_3A3C7CDB_ABE342C9
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+      tests/contracts/test_w04_possession_semantic_v2_authority.py
+      tests/contracts/test_w04_possession_semantic_authority.py
+      tests/contracts/test_w04_field_semantic_v2_authority.py
+    result: PASS_327_TESTS_BUT_INCOMPLETE
+  - command: focused ruff format and lint
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: independent reversed multi-scope sequence challenge
+    result: FAIL_INPUT_ORDER_DEPENDENT_RESOLVED_POSSESSION_IDS
+  - command: retained bytecode/cache count
+    result: PASS_1145_FILES_150_DIRECTORIES_ZERO_SYMLINKS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The defect is bounded to the test-owned resolver and regression evidence;
+    the declarative decision/candidate bytes need no change.
+  - >-
+    No corrected review, acceptance, feature, cross-authority, or product
+    authority is implied.

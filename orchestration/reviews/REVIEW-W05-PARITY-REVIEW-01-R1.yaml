@@ -1,0 +1,51 @@
+schema_version: 1
+review_id: REVIEW-W05-PARITY-REVIEW-01-R1
+task_id: W05-PARITY-REVIEW-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+independent_review:
+  state: PASS
+  report: reports/reviews/W05/w05-training-serving-parity-independent-review-R1.md
+  return: reports/reviews/W05/returns/W05-PARITY-REVIEW-01-R1.md
+  focused_tests: 75_PASSED
+  two_root_all_six_bytes: EXACT
+  pca_orientation_and_projection: EXACT
+  direct_single_batch_replay_fresh_core_geometry: EXACT
+  request_pin_attacks: 18_REJECTED
+  temporal_cutoff_attacks: 8_REJECTED
+  resigned_substitutions: 19_REJECTED
+  registered_artifact_immutability: PASS
+parity_identities:
+  feature_schema_hash: 1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f
+  fitting_population_digest: 60c5a45f5bec8bed911f708cadaed4532759bcfc883b28e91d5d19195301a086
+  selected_artifact_id: 9a0d43c6-d177-51be-8280-3bf02bedbc99
+  selected_manifest_digest: 2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9
+  result_digest: 9d08d8f0ddaba47a3461754d53d727709ea7a10276b438c18c9953b17ad3020e
+  lineage_hash: c291a1b99937100b9934537dc92d4628cd130684cc84388f8aebe109708e7491
+development_scores:
+  metadata_control: 0.1111111111111111
+  raw_euclidean_control: 0.3333333333333333
+  robust_scaled_cosine: 1.0
+  weighted_cosine: 1.0
+  pca: 1.0
+  role_aware_restriction: 1.0
+claim_boundary: >-
+  Deterministic fixed constructed synthetic-development comparison only. This is not
+  W06 protected evaluation, robustness, calibration, provider/expert validation,
+  recruitment outcome, recommendation applicability or production readiness.
+residuals:
+  - severity: P2
+    blocking: false
+    detail: >-
+      The already-authorized registered artifact may be read before some typed semantic
+      preflight rejection; the scorer is never called and no result/evidence is emitted.
+decision: ACCEPT
+next_step: W05_FINAL_COMPLETE_REPOSITORY_GATE
+reviewer: master

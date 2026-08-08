@@ -1,0 +1,39 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R3
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-IDENTITY-AUTHORITY-CLOCK-01
+    severity: P1
+    status: master_reproduced
+  - id: W04-DESIGN-IDENTITY-LIFECYCLE-01
+    severity: P1
+    status: master_reproduced
+  - id: W04-DESIGN-PHASE-EVIDENCE-OWNERSHIP-01
+    severity: P1
+    status: master_reproduced
+  - id: W04-DESIGN-EXECUTABLE-RESOURCE-CLOSURE-01
+    severity: P1
+    status: master_reproduced
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R5
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+checks:
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R3.md');
+      assert p.is_file() and p.stat().st_size > 7000"
+    result: PASS_24186_BYTES
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+

@@ -1,0 +1,153 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R1.yaml
+objective: >-
+  Close the seven independently reproduced R1 P1 classes with one sound,
+  protocol-bound implementation of real transformed stress cohorts, evidence-specific
+  controls, full failure-source binding and result-derived fixture applicability.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-REVIEW-04-R1:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R1.yaml
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R1.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R1.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Replace the one-query-per-member inventory with canonical observation identity plus
+    evaluated-unit/query identity. Bind every observation to its candidate universe,
+    competition, team, provider, window and chronological index. Permit multiple unique
+    observations per evaluated unit, require coherent one-index-per-window chronology,
+    and reject duplicates or substituted ranking rows.
+  - >-
+    Embed the exact EvaluationProtocol and GovernedPopulationInventory in each stress
+    specification. At normal construction require a supported ranking metric, metric in
+    the protocol roster, k in declared_k, exact inventory protocol binding and exact
+    threshold rules. The executor must accept the specification as authority and reject
+    any supplied population or row substitution.
+  - >-
+    Represent content-addressed transformed cohorts in each computed result. Split-half
+    must build two non-empty deterministic halves within every evaluated unit with at
+    least four observations per unit; rolling-window must build and compare adjacent
+    chronological windows; minutes sensitivity must build each threshold population;
+    walk-forward must build earlier-train versus later-test populations with strict
+    separation; leave-group tests must build every exact leave-one-group-out population;
+    source comparison must build per-provider rankings restricted to a non-empty exact
+    governed candidate intersection. Never score the unchanged full population as a
+    substitute for a declared transformation.
+  - >-
+    Persist each cohort's exact observation/population digest, accepted core
+    MetricResult and BootstrapInterval, with interval-to-metric/protocol/input binding.
+    Persist required RankComparisonResult objects between declared cohorts using a
+    canonical score aggregation over only their governed common candidate universe.
+    Computed stress results require the exact cohort/comparison cardinality for their
+    kind; unsupported results retain exact deficits and no values.
+  - >-
+    Split controls by evidence semantics. Metadata/raw/coverage comparison inputs must
+    preserve score-derived rank order, require unique candidate IDs, and include a
+    frozen evidence/input digest. Shuffled-label nulls must permute labels within each
+    canonical query while preserving candidates, scores and label cardinality, then
+    call the accepted metric core. Shuffled-pair nulls must permute governed preferred
+    outcomes within canonical query groups while preserving pair identities/cardinality,
+    then call accepted pair_preference_accuracy. Include protocol seed, ordered
+    permutation identity, baseline result and null result; do not shuffle candidates.
+  - >-
+    Make FailureCaseRegister embed or otherwise normal-constructor-validate the complete
+    canonical source case population and derive total, retained worst ten and shortfall
+    from it. Exact R1 forged digest 31f5ab91dafe4377b5ec94b837a2cb01634e4d0883405ed25d39ee90abb99056
+    must reject.
+  - >-
+    Remove caller boolean authority from applicability. Derive exact missing reasons
+    from the inventory plus a canonical complete roster of mandatory stress/control
+    results. Bind their digests, preserve MISSING_EXPERT_RELEVANCE_EVIDENCE, enumerate
+    every absent/unsupported mandatory population, and retain implementation-only
+    supported population, exclusions and non-claims. Exact R1 caller-suppressed digest
+    ed497952ab334aeac02d2f0f7e513e78fa31137a458583353cdade96b5ca31e2
+    must reject.
+  - >-
+    Replace the label-only public fixture with full executable computed and unsupported
+    inputs. Test every stress kind, every control kind, exact chronology/intersection/
+    per-unit minima, specification/result/child substitutions, both full and shortfall
+    failure registers, result-derived applicability and every R1 witness. Pin exact
+    public identities and retain IMPLEMENTATION_FIXTURE_ONLY/non-expert notice.
+  - >-
+    Preserve all accepted evaluation metric, interval, identity and gate-population
+    regressions unchanged. Do not add dependencies or a second metric implementation.
+deliverables:
+  - Corrected strict contracts, reusable implementation and executable public fixture.
+  - Focused adversarial contract/unit tests closing all seven P1 classes.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R2.md.
+definition_of_done:
+  - Every computed stress result proves its named transformation through bound cohorts and comparisons.
+  - Every unsupported result states the exact deficit and retains no value.
+  - Null controls change labels or pair outcomes only, preserve cardinality and reproduce deterministically.
+  - R1 exact/semantic witnesses reject and no caller can suppress mandatory missing evidence or forge failure totals.
+  - Existing accepted W06 focused tests remain green.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R2.md
+stop_conditions:
+  - The correction requires a new dependency, protected expected output, external/provider access, model/protocol tuning or a positive empirical threshold.
+  - The accepted W05 artifact/configuration/taxonomy/candidate universe/feature order or accepted W06 metric core would need to change.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - exact seven-P1 closure matrix
+  - exact computed/unsupported stress cohort and comparison identities
+  - exact control/permutation/baseline/null identities
+  - exact failure-source/register and applicability identities
+  - exact commands, exit statuses and concise results
+  - risks and smallest follow-up or none
+  - confirmation of implementation-only evidence and unchanged non-claims
+  - confirmation of no Git operations, dependencies, protected/external access, tuning or edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

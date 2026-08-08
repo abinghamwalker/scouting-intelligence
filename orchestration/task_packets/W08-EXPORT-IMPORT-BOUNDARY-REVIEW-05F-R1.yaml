@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W08-EXPORT-IMPORT-BOUNDARY-REVIEW-05F
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Freshly and independently review the evidence-export layer relocation, prove the
+  import contract and functional/security surface, and decide whether any finding was
+  introduced by the final architecture correction.
+depends_on:
+  - W08-EXPORT-IMPORT-BOUNDARY-05E:MASTER_ACCEPTED
+assigned_role: independent_reviewer_gpt-5.6-sol_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - pyproject.toml
+  - orchestration/task_packets/W08-EXPORT-IMPORT-BOUNDARY-05E-R1.yaml
+  - reports/reviews/W08/returns/W08-EXPORT-IMPORT-BOUNDARY-05E-R1.md
+  - reports/verification/W08/export-import-boundary-report.md
+  - reports/reviews/W08/w08-independent-security-review-R4.md
+  - src/scouting/operations/__init__.py
+  - src/scouting/workflow/__init__.py
+  - src/scouting/workflow/evidence_export.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - reports/verification/W08/limitations.md
+  - reports/verification/W08/protected-output-boundary.md
+  - reports/verification/W08/representative-user-evidence-status.md
+allowed_paths:
+  - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Fresh P0/P1/P2/P3 findings and explicit PASS/FAIL for the architecture relocation;
+    verify the master-retained exact blob identity evidence and inspect the full current
+    exporter rather than assuming that path movement is harmless.
+  - Prove operations is telemetry-only, workflow is the sole exporter implementation,
+    every runtime/test caller uses the permitted package, and all three approved
+    import-linter contracts pass without policy/configuration weakening.
+  - Re-prove export authorisation/denial, byte tamper, receipt/revocation,
+    atomicity/retry, web, browser/accessibility and fixed claim/protected boundaries
+    through the complete W08 focused suite and Bandit.
+  - State separately that 0/5 genuine participant records remain and cannot be
+    satisfied by this architecture or automated evidence.
+definition_of_done:
+  - Current code inspection, import-linter, the complete focused suite and Bandit pass,
+    and no open architecture/security/confidentiality/audit/accessibility/evidence-
+    honesty finding remains.
+focused_checks:
+  - uv run lint-imports
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/security/test_w08_auth_audit.py tests/security/test_w08_workflow_access.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/integration/test_w08_study_harness.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run bandit -q -r src/scouting/policy/r1.py src/scouting/audit/ledger.py src/scouting/workflow/r1.py src/scouting/workflow/evidence_export.py src/scouting/observations/r1.py src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+stop_conditions:
+  - A Git command, Git-invoking verifier, protected W06 output, implementation/test/
+    policy/config/dependency mutation, external system, network or public service would
+    be required.
+mandatory_return:
+  - review/task ID and exact reviewed paths
+  - exact commands/exits/counts including import-linter, focused pytest and Bandit
+  - findings P0 through P3 and exact byte-identity/import-graph disposition
+  - export/security/browser/accessibility/W06/protected-boundary outcomes
+  - representative-user count/status
+  - final PASS/FAIL and required rework
+  - no Git/product/test/protected-output/external/participant-evidence confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

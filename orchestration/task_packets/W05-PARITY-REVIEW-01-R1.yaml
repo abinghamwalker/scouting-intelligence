@@ -1,0 +1,125 @@
+schema_version: 1
+task_id: W05-PARITY-REVIEW-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently prove W05 training-serving and batch-request parity, artifact reload
+  determinism, exact evidence lineage and the declared synthetic M0 control comparison.
+depends_on:
+  - REVIEW-W05-SERVING-01-R2:ACCEPT
+  - W05-SERVING-REVIEW-01-R2:PASS
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/master_plan.yaml
+  - orchestration/task_packets/W05-MODEL-01-R6.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R2.md
+  - orchestration/task_packets/W05-SERVING-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-SERVING-01-R2.yaml
+  - orchestration/task_packets/W05-SERVING-REVIEW-01-R2.yaml
+  - reports/reviews/W05/w05-m0-serving-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/baselines.py
+  - src/scouting/serving/m0.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - tests/unit/test_w05_m0_models.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-training-serving-parity-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-PARITY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+parity_claims:
+  - Exact feature names, order and schema hash are identical across registry, model configuration, artifact arrays/manifest, loader, scorer, serving explanations and returned evidence.
+  - Exact fitting population ID, count, ordered UUID projection and digest are explicit and identical across fitting, serialization and reload.
+  - Safe artifact serialization reloads exactly with stable manifest/array/file digests, deterministic PCA orientation and identical model-family score bytes.
+  - Direct accepted-artifact scoring, single-request serving, batch serving and fresh-core replay yield the same permitted candidate order, distances and contributions.
+  - Result IDs/digest, explanations, reasons, six evidence states and data-confidence projection are deterministic and request-bound.
+  - Strict temporal/source/feature lineage is preserved and model/schema/taxonomy/configuration/fitting/candidate/lineage/manifest substitutions fail closed.
+  - The selected role-aware restriction is better than both raw metadata and raw Euclidean-distance controls only on the one declared fixed synthetic development comparison, with no tuning or protected-evaluation claim.
+mandatory_fresh_proofs:
+  - >-
+    Independently load the registry, taxonomy, configuration, candidate/query fixtures
+    and accepted artifact. Extract and compare exact feature tuple/schema hash,
+    configuration digest, population IDs/counts/projection digests, selected model/index
+    identities and all physical/logical artifact hashes. No alias or fallback is allowed.
+  - >-
+    In fresh temporary roots outside the repository, refit/materialize all six fixed
+    model families twice from the immutable configuration and fixtures with no parameter
+    changes. Compare canonical manifests, arrays, rankings, distances, contributions,
+    PCA orientation and stable payload digests byte-for-byte, then remove only those
+    temporary roots. Do not modify the registered artifact.
+  - >-
+    For fixed query-player and exemplar requests, call the accepted LoadedM0Artifact.score
+    directly and compare with single, batch and fresh-core results after accounting only
+    for the exact declared exclusions/filter/role restriction. Candidate UUID order,
+    distance and contribution floats must match exactly; serving must not contain a
+    second transformation or scoring implementation.
+  - >-
+    Re-run identical requests and candidate/input permutations. Prove stable request,
+    run/result identities, result_digest, tie order, explanations, closed reasons,
+    evidence states and nonranking confidence. Distinct canonical request bytes must not
+    collide. Hash registered artifact files before and after every probe.
+  - >-
+    Substitute or re-sign every schema, taxonomy, configuration, artifact, fitting
+    population, candidate universe, lineage, model, index, manifest and request/query
+    pin independently. Exercise exact-cutoff row/source clocks. Every substitution or
+    leakage attempt must fail closed without provider access, fitting or artifact writes
+    from serving.
+  - >-
+    Recompute the one frozen declared synthetic development top-k comparison exactly
+    once from the fixed fixtures/configuration. Report all six family scores and prove
+    the selected role-aware restriction exceeds metadata_control and
+    raw_euclidean_control. Do not search, tune, retry configurations, inspect W06
+    protected data or claim robustness, calibration, provider/expert validation,
+    recruitment outcomes or production readiness.
+deliverables:
+  - Independent PASS/REWORK parity report with exact feature/model/artifact/result identities.
+  - Mandatory return with commands, hashes, score table and development-only limitations.
+definition_of_done:
+  - Every parity claim has fresh reproducible evidence and no P0/P1 remains.
+  - No repository source/test/config/artifact/orchestration/dependency/Git mutation.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/unit/test_w05_m0_models.py tests/contracts/test_w05_m0_contracts.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run ruff check src/scouting/features src/scouting/roles src/scouting/m0 src/scouting/modeling src/scouting/serving tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/unit/test_w05_m0_models.py tests/contracts/test_w05_m0_contracts.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run mypy src/scouting/features src/scouting/roles src/scouting/m0 src/scouting/modeling src/scouting/serving/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to tune/reselect a model, change an accepted authority, inspect W06 protected evidence, add a dependency, access an external source/service, weaken evidence or mutate repository product bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

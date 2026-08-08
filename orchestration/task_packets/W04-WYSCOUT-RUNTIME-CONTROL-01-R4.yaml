@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R4
+state: REWORK
+objective: >-
+  Correct the two bounded R3 findings: derive legitimate external installed
+  RECORD destinations exclusively from complete singular PEP 427 mapping, and
+  close actual site/repository PYC ownership/inventory independently in both the
+  child and launcher, without changing any accepted authority meaning.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R3:REWORK_P0_0_P1_2_P2_0
+assigned_role: w04_runtime_control_r4_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R3.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R3.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/contracts/**
+fixed_bindings:
+  r3_admission_child_sha256: 10b70fadc0f6eae5b6df463afda08413d810f5a4d8b46c4688a7dafee6d1cd34
+  r3_launcher_sha256: 3bfb912b9a1bf011248d2ad39e91947f176ba03b421cfb77a468458c858632cf
+  r3_tests_sha256: 17757be5f2db591b81fd2e13201d27c75bd095e3da536b67216463844aae74b7
+  r3_producer_return_sha256: 8d39fb2238851dfe9568debfd03905fe12d19edd32528cef2451d337de8aef71
+  r3_review_sha256: 4a9740bbb55196282481b204dc4ad540fd2baadb82f5af708d37c18e86c02824
+  r3_reviewer_return_sha256: 776b16aefb2dd53a3a12d4e1488631267f8e2cd95e75d26b37fab5fcfd1ad7a3
+requirements:
+  - Verify every fixed binding and preserve all already-corrected R3 predicates.
+  - >-
+    In both collectors, derive the complete owner-specific installed destination
+    set from each verified extracted RECORD and its collision-free PEP 427 root/
+    purelib/platlib/scripts/headers/data mapping before validating installed
+    RECORD paths. Admit Bandit's exact data destination and Greenlet's exact
+    headers destination only through that derivation with singular owner,
+    identical bytes/hash/size/mode and no collision/overwrite/escape. Reject every
+    unmapped, owner-substituted, aliased, colliding or escaping external row.
+  - >-
+    Remove OPERATIONAL_NON_STABLE_SOURCE_DENIED as an accepted repository-PYC
+    class. A non-orphan PYC must derive from a source present in the exact stable
+    repository-code manifest/source map; an unmanifested same-named source fails.
+  - >-
+    Add a child-owned operational census over every actual site/repository PYC and
+    cache directory using the stable source map and exact orphan predicates. It
+    must reject unowned/wrong-name/tag/magic/hash-mode/link states, take and compare
+    complete pre-result inventory snapshots, remain absent from stable identity,
+    and agree semantically but not by shared collector call with launcher checks.
+  - >-
+    Replace the prior source-present acceptance fixture with child and launcher
+    rejection attacks. Add positive exact Bandit-data/Greenlet-headers fixtures
+    plus negative unmapped/owner-swapped/collision/escape external paths and PYC
+    creation/deletion/content/header/mode/link drift. Rerun the complete final-hash
+    gate and actual two-run admission after every final source edit.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R4 bounded correction, adversarial tests and mandatory producer return.
+stop_conditions:
+  - None for bounded defects; continue until the complete final-hash gate passes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

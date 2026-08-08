@@ -1,0 +1,96 @@
+schema_version: 1
+task_id: W05-FEATURES-SECURITY-02
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Replace the five terminal-gate runtime asserts in the accepted W05 feature loader
+  with explicit fail-closed validation that remains active under optimized Python.
+depends_on:
+  - W05-FEATURES-01-R3:ACCEPTED
+  - W05-FEATURES-REVIEW-01-R3:PASS
+  - W05-PARITY-REVIEW-01-R1:PASS
+assigned_role: feature_security_corrector
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-FEATURES-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-FEATURES-01-R3.yaml
+  - reports/reviews/W05/w05-feature-registry-independent-review-R3.md
+  - orchestration/reviews/REVIEW-W05-PARITY-REVIEW-01-R1.yaml
+  - reports/reviews/W05/w05-training-serving-parity-independent-review-R1.md
+  - src/scouting/features/registry.py
+  - tests/unit/test_w05_features.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/features/registry.py
+  - tests/unit/test_w05_features.py
+  - reports/reviews/W05/returns/W05-FEATURES-SECURITY-02-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/w05-feature-registry-independent-review-R3.md
+  - src/scouting/contracts/**
+  - src/scouting/m0/**
+  - src/scouting/modeling/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+requirements:
+  - >-
+    Replace exactly the five production `assert` statements identified by terminal
+    Bandit at registry.py lines approximately 558, 584, 676, 826 and 866 with explicit
+    deterministic validation and FeatureRegistryError. No production assert may remain
+    in src/scouting/features/registry.py, and no security suppression comment is allowed.
+  - >-
+    Validate absent synthetic metadata-control schema, missing observed numeric value,
+    absent W04 authority and non-mapping W04 dependencies without relying on `assert`,
+    `__debug__` or test-only behavior. Preserve exact accepted positive outputs and
+    existing accepted error semantics wherever already explicit.
+  - >-
+    Add focused adversarial tests proving the new boundaries fail closed and an AST or
+    equivalent assertion that the production module contains no Assert node. Run a
+    direct optimized-Python (`-O`) public-boundary probe if it can be done without new
+    dependencies or repository writes.
+  - >-
+    Do not change any registry/config/fixture/Gold authority/digest, feature definition,
+    denominator, materialized value/state/lineage, model/serving identity, ranking,
+    result byte, claim boundary or W04 evidence byte. This is mechanical runtime
+    validation only and must not begin W06/W10.
+deliverables:
+  - Assert-free explicit feature-loader runtime validation.
+  - Focused tests including optimized-Python/fail-closed evidence.
+  - Mandatory return with exact checks and unchanged accepted identities.
+definition_of_done:
+  - Bandit reports zero findings for src/scouting/features/registry.py.
+  - Focused feature/contracts/model/serving predecessor tests remain green.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/features/registry.py tests/unit/test_w05_features.py
+  - uv run ruff check src/scouting/features/registry.py tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features/registry.py
+  - uv run bandit -q -r src/scouting/features/registry.py
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/unit/test_w05_m0_models.py tests/integration/test_w05_m0_serving.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to change accepted W04/W05 authority bytes, dependencies, public product behavior, model/serving code, evidence guarantees, external access or W06/W10 scope.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

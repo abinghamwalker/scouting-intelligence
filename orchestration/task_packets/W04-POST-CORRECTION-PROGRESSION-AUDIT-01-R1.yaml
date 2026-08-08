@@ -1,0 +1,89 @@
+schema_version: 1
+task_id: W04-POST-CORRECTION-PROGRESSION-AUDIT-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Read-only audit whether the candidate bounded season/lineup authority closes the
+  prior product blockers and return the shortest exact downstream packet sequence,
+  including any stale progression-test correction required before the full gate.
+depends_on:
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: bounded_read_only_w04_post_correction_progression_auditor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.yaml
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - reports/verification/W04/wyscout-season-lineup-product-binding-decision-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  correction_decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  correction_test_sha256: 0b5b933575f22451b5474323188619acec659c7291262c2e457086319fe93e29
+  master_verification_sha256: d635d3836bf98e46c09d640c89ec1433992836d7951545b81ddd484ef632ffd6
+  build_authority_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  build_authority_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  prior_build_schema_audit_sha256: 402106160add4af2d12b46022220b6d7d71b3f0243e85162b56fd1674c28fc24
+  prior_vertical_slice_audit_sha256: ccc7a7c803cf2acfb5a787f0f8594c7f2c1c446ba3365ced84bcde2e35b3cad7
+audit_requirements:
+  - Verify all fixed hashes before analysis and stop on drift.
+  - >-
+    Decide whether the exact season binding and cardinality-one lineup population
+    close both prior blockers without any new identity kind/root, schema root,
+    feature, Gold row or wider source/product population.
+  - >-
+    Inspect the candidate and prior authority tests for unconditional no-product
+    assertions. Determine whether they remain valid through later independently
+    accepted product implementation/publication or require a bounded progression
+    test correction; distinguish tests from frozen authority bytes.
+  - >-
+    Re-audit existing implementation surfaces and return the shortest executable
+    serial/parallel packet graph from fresh authority acceptance through build/schema
+    gates and the one-match four-feature raw-to-Gold slice. Give exact path ownership,
+    dependencies, checks and stop conditions; do not implement any packet.
+  - >-
+    Identify every remaining missing model/schema/reader/writer/publisher surface and
+    whether it is already authorized by R20/R21/R4. Stop and mark BLOCKED if any
+    wider decision is required.
+  - Run only read-only focused checks needed to substantiate the audit.
+deliverables:
+  - One mandatory return with PASS_TO_PACKET, REWORK_REQUIRED or BLOCKED verdict.
+stop_conditions:
+  - Any candidate/fixed hash drift or need to edit a forbidden path.
+  - Any wider architecture/product decision, dependency, provider/network or external action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

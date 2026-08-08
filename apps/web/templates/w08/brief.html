@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block body %}
+{% set state=rows[-1].status %}{% set lock=rows|length %}
+{% if guided_study %}<p class="eyebrow">Role brief history · Version {{ rows[-1].version }}</p><h1>{{ rows[-1].title }}</h1>{% else %}<h1>Role brief history</h1><p>{{ rows[-1].title }} · Version {{ rows[-1].version }}</p>{% endif %}
+
+{% if guided_study %}
+  <section class="next-action" aria-labelledby="brief-next-action">
+    <p class="eyebrow">Your next action</p>
+    {% if state == 'draft' and 'analyst' in principal.roles %}
+      <h2 id="brief-next-action">T1 · Submit this draft for approval</h2><p>You have already created it. Use the single action immediately below.</p>
+    {% elif state == 'submitted' and 'analyst' in principal.roles %}
+      <h2 id="brief-next-action">T2 · Continue as Approver</h2><p>The brief is submitted and waiting for approval. One click changes role and keeps this page open.</p>
+      <form method="post" action="/w08/guide/switch-role" class="role-switch-form"><input type="hidden" name="guide_csrf" value="{{ guided_switch_token }}"><input type="hidden" name="role" value="approver"><input type="hidden" name="return_to" value="/w08/briefs/{{ brief_id }}"><button class="role-switch" type="submit">Continue as Approver</button></form>
+    {% elif state == 'submitted' and 'approver' in principal.roles %}
+      <h2 id="brief-next-action">T2 · Approve this submitted brief</h2><p>Use “Approve brief” below. The rejection form is present only to test the controlled alternative path.</p>
+    {% elif state == 'approved' and 'approver' in principal.roles %}
+      <h2 id="brief-next-action">T2 · Continue as Analyst</h2><p>Approval is complete. Switch back to create the replayable retrieval link.</p>
+      <form method="post" action="/w08/guide/switch-role" class="role-switch-form"><input type="hidden" name="guide_csrf" value="{{ guided_switch_token }}"><input type="hidden" name="role" value="analyst"><input type="hidden" name="return_to" value="/w08/briefs/{{ brief_id }}"><button class="role-switch" type="submit">Continue as Analyst</button></form>
+    {% elif state == 'approved' and 'analyst' in principal.roles and not links %}
+      <h2 id="brief-next-action">T2 · Create the replayable retrieval link</h2><p>This records exactly which synthetic query, data and model versions were used.</p>
+    {% elif state == 'approved' and 'analyst' in principal.roles and links %}
+      <h2 id="brief-next-action">T2 complete · Start T3</h2><p>Create one local shortlist below, then add one synthetic candidate.</p>
+    {% else %}
+      <h2 id="brief-next-action">This role has no action on the current brief state</h2><p>Use the role bar or return to the journey guide.</p><a class="button-link" href="/w08/guide">Open journey guide</a>
+    {% endif %}
+  </section>
+{% endif %}
+
+<section><h2>Available action</h2>
+{% if state == 'draft' and 'analyst' in principal.roles %}
+  <form method="post" action="/w08/briefs/{{ brief_id }}/status/submit"><input type="hidden" name="csrf" value="{{ csrf }}"><button>Submit for approval</button></form>
+{% elif state == 'submitted' and 'approver' in principal.roles %}
+  <form method="post" action="/w08/briefs/{{ brief_id }}/status/approve"><input type="hidden" name="csrf" value="{{ csrf }}"><button>Approve brief</button></form>
+  <details class="technical-note"><summary>Test the controlled rejection alternative</summary><form method="post" action="/w08/briefs/{{ brief_id }}/status/reject"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Controlled reason <select name="rejection_reason"><option value="requirements_unclear">requirements unclear</option><option value="constraints_unapproved">constraints unapproved</option><option value="rights_or_policy_conflict">rights or policy conflict</option><option value="evidence_definition_incomplete">evidence definition incomplete</option><option value="other">other</option></select></label><label>Decision note <input name="decision_note" required></label><button>Reject brief</button></form></details>
+{% elif state == 'rejected' and 'analyst' in principal.roles %}
+  <form method="post" action="/w08/briefs/{{ brief_id }}/correct"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="expected_lock_version" value="{{ lock }}"><label>Corrected title <input name="title" required></label><label>Responsibility <select name="responsibility">{% for code in brief_options.responsibilities %}<option value="{{ code }}">{{ code }}</option>{% endfor %}</select></label><label>Preferred responsibility <select name="preference_dimension">{% for code in brief_options.responsibilities %}<option value="{{ code }}">{{ code }}</option>{% endfor %}</select></label><label>Preference weight <select name="preference_weight">{% for weight in brief_options.preference_weights %}<option value="{{ weight }}">{{ weight }}</option>{% endfor %}</select></label><input type="hidden" name="constraint_field" value="{{ brief_options.constraint_field }}"><input type="hidden" name="constraint_operator" value="{{ brief_options.constraint_operator }}"><label>Synthetic age at most <select name="constraint_value">{% for value in brief_options.constraint_values %}<option value="{{ value }}">{{ value }}</option>{% endfor %}</select></label><label>Synthetic exemplar <select name="exemplar_player_ids">{% for player_id in brief_options.exemplar_player_ids %}<option value="{{ player_id }}">Synthetic reference player</option>{% endfor %}</select></label><button>Append corrected draft</button></form>
+{% elif state == 'approved' and 'analyst' in principal.roles %}
+  {% if not links %}<form method="post" action="/w08/briefs/{{ brief_id }}/retrieval"><input type="hidden" name="csrf" value="{{ csrf }}"><button>Create replayable retrieval link</button></form>{% endif %}
+  {% if links %}<form method="post" action="/w08/briefs/{{ brief_id }}/shortlists"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Replay link <select name="retrieval_link_id">{% for link in links %}<option value="{{ link.retrieval_link_id }}">{% if guided_study %}Current verified replay link{% else %}{{ link.retrieval_link_id }}{% endif %}</option>{% endfor %}</select></label><label>Shortlist title <input name="title" {% if guided_study %}value="Pilot shortlist"{% endif %} required></label><button>{% if guided_study %}Create shortlist and continue{% else %}Create local shortlist{% endif %}</button></form>{% endif %}
+{% else %}
+  <p>No action is available to {{ principal.roles|join(', ')|title }} while this brief is <strong>{{ state }}</strong>.</p>
+{% endif %}
+</section>
+
+{% if guided_study %}<details class="technical-history"><summary>View immutable history and technical lineage</summary>{% endif %}
+<p>Preference weights are retained replay context; W05 scoring does not apply them and they are not quality evidence.</p>
+<table><caption>Immutable interpretations and decisions</caption><thead><tr><th scope="col">Version/status</th><th scope="col">Template/taxonomy/visibility</th><th scope="col">Title and responsibilities</th><th scope="col">Constraints/preferences/exemplars</th><th scope="col">Reason/note</th><th scope="col">Actors/times</th></tr></thead><tbody>{% for row in rows %}<tr><th scope="row">{{ row.version }} / {{ row.status }}</th><td>{{ row.template_id }} / {{ row.taxonomy_version }} / {{ row.visibility }}</td><td>{{ row.title }} / {{ row.responsibilities }}</td><td>{{ row.hard_constraints }} / {{ row.preferences }} / {{ row.exemplar_player_ids }}</td><td>{{ row.transition_reason }} / {{ row.rejection_reason or '—' }} / {{ row.decision_note or '—' }}</td><td>created {{ row.created_by }} {{ row.created_at }}; submitted {{ row.submitted_at or '—' }}; decided {{ row.decided_by or '—' }} {{ row.decided_at or '—' }}</td></tr>{% endfor %}</tbody></table>
+{% for link in links %}<section><h2>Exact local replay projection</h2><p>NO_GO; resemblance_only; synthetic_development_only; LIMITED; no_recommendation_evidence.</p><dl><dt>Link</dt><dd>{{ link.retrieval_link_id }}</dd><dt>Request / requested at / trace / brief</dt><dd>{{ link.projection.retrieval_request_id }} / {{ link.projection.requested_at }} / {{ link.projection.trace_id }} / {{ link.projection.role_brief_id }} v{{ link.projection.role_brief_version }}</dd><dt>Query digest and mode</dt><dd>{{ link.projection.resolved_query_digest }} / query player {{ link.projection.query_player_id or 'none' }} / exemplars {{ link.projection.exemplar_player_ids }}</dd><dt>Result / run / wrapper digest</dt><dd>{{ link.projection.retrieval_result_id }} / {{ link.projection.retrieval_run_id }} / {{ link.projection.wrapper_result_digest }}</dd><dt>Lineage / model / index / taxonomy / candidate universe</dt><dd>{{ link.projection.lineage_digest }} / {{ link.projection.model_version }} / {{ link.projection.index_version }} / {{ link.projection.taxonomy_version }} / {{ link.projection.data_version }}</dd><dt>Ordered synthetic resemblance candidates</dt><dd>{{ link.projection.ordered_candidate_ids }}</dd><dt>Applicability and limitations</dt><dd>{{ link.projection.applicability }} / {{ link.projection.limitations }}</dd></dl></section>{% endfor %}
+{% if guided_study %}</details>{% endif %}
+{% endblock %}

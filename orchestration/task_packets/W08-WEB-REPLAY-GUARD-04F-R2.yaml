@@ -1,0 +1,92 @@
+schema_version: 1
+task_id: W08-WEB-REPLAY-GUARD-04F
+phase_id: W08
+revision: R2
+state: DISPATCHED
+objective: >-
+  Close only the R1 replay-guard residual: persisted-link idempotency comparison,
+  exact replay metadata rendering and candidate dropdown/negative witnesses.
+depends_on:
+  - W08-WEB-REPLAY-GUARD-04F:R1_GUARD_COMPLETE
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Existing and newly created links must equal a fresh exact double replay, and the UI
+  may submit only ordered candidates from that same link's fresh result.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-REPLAY-GUARD-04F-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R1.md
+  - orchestration/task_packets/W08-WEB-BRIEF-WITNESS-04G-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-WITNESS-04G-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/web/w07.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - tests/e2e/test_w05_m0_retrieval.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - src/scouting/serving/**
+  - src/scouting/web/w07.py
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Factor one exact replay projection containing pinned request/trace/brief/version/query digest, query mode/exemplars, result/run/wrapper/lineage digests, model/index/taxonomy/candidate-universe version, ordered candidate IDs, applicability and limitations.
+  - On every link POST, fresh-double-replay first; when a row already exists, compare every persisted link field to the fresh projection and fail closed on any mismatch before returning idempotent success. A valid repeat adds neither link nor audit receipt.
+  - Brief detail renders every exact projection field and explicit NO_GO/resemblance_only/synthetic_development_only/LIMITED/no-recommendation limitations; no validation/recommendation/transfer/value/production wording.
+  - Shortlist detail resolves each tenant-local pinned link against its exact brief, fresh replays it and renders an ordered candidate select (not free-form player input) whose option value is the exact player ID and whose label remains synthetic resemblance mechanics.
+  - Entry POST validates link belongs to that shortlist brief/version, compares fresh link projection to persisted fields, then permits only a candidate in the exact ordered result before the service/audit mutation.
+  - Tests inject replay mismatch and persisted-field tamper, repeat valid link POST, submit a random candidate and a candidate from another link/brief, and assert unchanged link/entry/audit counts with generic denial. The positive entry is selected from the actual W08 exemplar+constraint replay, never the W07 default player-query result.
+definition_of_done:
+  - All residual R1 items have executable HTTP/database witnesses and focused checks pass without W05/W07/shared-service changes.
+focused_checks:
+  - Valid idempotent repeat retains one link and one link-create receipt.
+  - Rendered projection equals persisted row plus actual fresh replay.
+  - Positive dropdown candidate accepted; mismatch/tamper/random/other-link candidates leave counts unchanged.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w05_m0_retrieval.py
+stop_conditions:
+  - A contract/schema/service/policy/dependency or W05/W07/protected-output change is required.
+  - A network/provider/model call, fitting/training, Node/npm, container, destructive action or Git operation is required.
+  - Correctness requires accepting stale/tampered metadata, a non-result candidate or weakening exact comparison.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - projection field and route/candidate maps
+  - exact commands/exits/test counts
+  - idempotency, tamper, mismatch and allowlist witnesses
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/out-of-scope confirmations
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

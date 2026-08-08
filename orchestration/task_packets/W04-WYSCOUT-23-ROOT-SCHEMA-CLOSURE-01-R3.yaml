@@ -1,0 +1,184 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Correct all four preserved R2 P1 findings without expanding the accepted W04
+  product boundary: make the 23-root predicate authority exact and executable,
+  freeze its full constant corpus, extend coverage to all twelve Parquet roots,
+  and add the authorized canonical-Decimal UTF-8 projection for exactly two Gold
+  coverage logical fields.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R2:MASTER_REWORK_P1_01_TO_P1_04
+  - W04-CANONICAL-DECIMAL-ARROW-AUTHORIZATION-01-R1:AUTHORIZED
+assigned_role: w04_23_root_schema_closure_implementer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R2.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R3.yaml
+  - reports/verification/W04/wyscout-23-root-schema-closure-R2-master-verification.md
+  - reports/verification/W04/wyscout-canonical-decimal-arrow-authorization-R1.md
+  - reports/reviews/W04/wyscout-23-root-runtime-constraint-census-R2.md
+  - all R1 read_first paths
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/integration/**
+  - tests/security/**
+fixed_bindings:
+  r1_packet_sha256: 2d26092dcb2319f5682cab608c0b0dbb5cfccbabde92013fbaa0937c6c5846b6
+  r2_packet_sha256: 252638ddfc5101eb0054471b3c8ad981836b6eee772653b6dc37ce81ff7c4cf9
+  failed_r2_formats_sha256: 309ee2821913022c3ce82b713a53e74dd4ac3190af0047a621ba4ab2cd0f7209
+  failed_r2_formats_test_sha256: 0d6acf199d230257656f91c0c191c3bbef5dfb23c5cf49e6f731da4d57c8f317
+  failed_r2_schema_sha256: a7066f9e7cd97ead2fabe9410cd3507fc8a497bfc86fcaafd7182fbcd2704c95
+  failed_r2_schema_test_sha256: ce1af49ec56d48073979a3f178aa15d5336bb6aa7ff78bd6adaff5fb04167cb1
+  failed_r2_return_sha256: 9294582ddf8a2d26df047f86690c13837a27e3e4b524c2fc08dae814c268f8d1
+  r2_master_rework_sha256: 9c5092ccf75e4a77ebdb7079a1a3b4360b8b96e52823189355a1cd8e7953a76d
+  decimal_authorization_sha256: cddc7fae1ac256b2312a34dc1291dddebdff35162321b0215580103ba6569b5e
+  corrected_constraint_census_sha256: 3ac167f4a63f26d930abe039ec7417637d204f984db6f0cc578dd322526c2120
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  all_r1_and_r2_authority_bindings: UNCHANGED_AND_REQUIRED
+correction_boundary:
+  canonical_decimal_utf8:
+    projection_kind: CANONICAL_DECIMAL_UTF8
+    exact_logical_fields:
+      - GoldCoverageDimension.coverage
+      - GoldCoverage.coverage_overall
+    forward: >-
+      Require exact finite Decimal. Normalize every signed zero to `0`; otherwise
+      format fixed-point without exponent notation, strip redundant trailing
+      fractional zeros and a now-empty decimal point, perform no rounding, and
+      return exact UTF-8 text with no terminal LF.
+    inverse: >-
+      Require an exact non-null UTF-8 string, strict-parse directly to Decimal,
+      reject non-finite values, canonical re-encode, and require byte-for-byte
+      equality. Reject whitespace, BOM, exponent aliases, leading plus, leading
+      integer zeros, redundant fractional zeros, signed zero and any other alias.
+    null_rule: >-
+      The encoded value never uses Arrow null; only the owning projection field's
+      existing outer optionality may admit null.
+    unchanged_decimal_fields: >-
+      Every other Decimal, including event seconds, x/y coordinates and the
+      Decimal position in possession/action order tuples, remains exactly
+      decimal128(22,18).
+  predicate_operands:
+    - >-
+      Every runtime predicate operand must mechanically resolve against the exact
+      owning Pydantic model field graph. Correct all nine invalid R2 records named
+      in the master report; no conceptual or renamed operand can masquerade as a
+      runtime field.
+    - >-
+      Guarded-reader, source-completion, authority-composition, season binding,
+      exact one-lineup population, build receipt and other cross-object rules must
+      be explicit external/composed authority predicates with an exact authority
+      source and exact operands. They must not be attributed to a generic runtime
+      model validator.
+    - >-
+      Correct all known false constants and relations: coordinates are 0..100;
+      dependency clocks obey observed_at<=available_at; temporal boundary state is
+      STRICT_BEFORE_CUTOFF_PASS; descriptor number is not fixed to 3; data contract
+      authority/clocks have four rows; build composition has its separate fifth
+      season-lineup-product authority; generic SilverMatch and SilverLineupStint
+      validators do not themselves establish the POC population bindings.
+  frozen_constants:
+    - >-
+      Emit the exact structured constants used by every claimed equality. Labels,
+      counts, placeholder names, prose and symbolic concepts are insufficient.
+    - >-
+      At minimum reproduce the accepted source manifest/member paths, IDs, digests
+      and counts; exact authority candidate/review/acceptance rows and clocks;
+      exact 119-row field registry and digest; exact admitted event/subevent pairs,
+      strict integer-only mapping and all non-integer quarantine reasons; exact
+      possession admitted sets/order constants; exact completion-index source
+      binding plus 1H/2H counts and ordered-membership digests; five dependency
+      rows; season 181150 and UUID 4696aa1f-b512-5d18-af79-33cf031455cf; exact match
+      2499719/team 1631/player 285508/ordinal 0 lineup row and UUID
+      591cdf5b-2281-53c4-8225-150313ca2c01; and the accepted R4 sole complete
+      LayerManifest semantic derivation and receipt/readback composition constants.
+    - >-
+      Derive exact values directly from the frozen contracts and authority files;
+      do not transcribe an alternate semantic source or change any frozen byte.
+implementation_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - Preserve exactly 23 roots, 12 Parquet roots, 11 JSON-only roots, all role IDs,
+    fields, dependency edges, versions, semantics and digest paths.
+  - >-
+    Keep `wyscout_schema.py` contracts-layer only: no storage or PyArrow production
+    import. It exports exact descriptor content; tests alone mechanically instantiate
+    the accepted storage descriptor primitive without inference.
+  - Extend storage descriptor validation, Arrow schema generation and inverse
+    projection only enough to support CANONICAL_DECIMAL_UTF8. Do not add a second
+    schema source, alternate encoder, inference path or semantic digest.
+  - Preserve the four accepted CanonicalJsonValue tagged UTF-8 projection paths.
+  - No aggregate, product, manifest, receipt, provider, network, publication,
+    deployment, cloud, container, CI, dependency or Git action.
+focused_acceptance:
+  - Exact 23-root/order/key/ID/version/dependency assertions remain passing.
+  - Every emitted runtime predicate operand resolves; every external/composed
+    predicate is classified and bound to an exact frozen authority source.
+  - Exact constant corpus reproduces independently and placeholder/symbolic constant
+    substitution fails closed.
+  - Descriptor-led Arrow construction and inverse logical equality execute for all
+    twelve Parquet roots, including required logical-null fields and variant arms.
+  - Exactly the two authorized owning logical fields use CANONICAL_DECIMAL_UTF8 at
+    every occurrence; no other field does.
+  - Decimal tests include 0, signed zero rejection on inverse, 1, trailing-zero and
+    exponent input canonicalization, the valid 38-digit 1/3 coverage value, tiny and
+    large finite values, non-finite rejection, Arrow-null rejection, whitespace,
+    BOM, plus, exponent and redundant-zero alias rejection, no LF and byte equality.
+  - All other Decimal paths assert and successfully exercise decimal128(22,18).
+  - Width/nullability/metadata/position/inference/caller-authority mutations and all
+    R1/R2 adversarial cases fail closed.
+definition_of_done:
+  - All four R2 P1 findings are resolved inside this packet's exact boundary.
+  - Focused and adjacent checks pass with zero warnings or unexpected writes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/storage/formats.py src/scouting/contracts/wyscout_schema.py tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected storage projection primitive and adversarial unit coverage.
+  - Corrected 23-root in-memory schema closure and exhaustive tests.
+  - Additive R3 producer return using the repository template.
+stop_conditions:
+  - Need to change any logical contract, root, field, semantic digest, feature,
+    population, dependency, provider/local-only boundary, dependency policy or
+    deployment state.
+  - Need for a third Decimal projection field, rounding/quantization, another schema
+    authority, product/aggregate/runtime bytes, or any edit outside allowed paths.
+  - Any fixed binding drifts or the correction cannot close one of P1-01..P1-04.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

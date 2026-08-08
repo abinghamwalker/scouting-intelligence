@@ -1,0 +1,42 @@
+{% macro value(item, fallback='Not supplied') -%}
+  {{ item if item is defined and item is not none and item != '' else fallback }}
+{%- endmacro %}
+
+{% macro digest(label, digest_value) -%}
+  <dt>{{ label }}</dt>
+  <dd><details class="digest"><summary>Show {{ label|lower }}</summary><code>{{ value(digest_value) }}</code></details></dd>
+{%- endmacro %}
+
+{% macro no_go_banner(no_go_message) -%}
+<aside class="no-go-banner" aria-labelledby="no-go-heading" role="alert">
+  <p class="eyebrow">High-priority evidence boundary</p>
+  <h2 id="no-go-heading">{{ no_go_message|default('NO_GO: MISSING_EXPERT_RELEVANCE_EVIDENCE') }}</h2>
+  <p>Governed expert relevance evidence is absent. The interface reports local evidence states only. Human recruitment decisions remain outside this application.</p>
+</aside>
+{%- endmacro %}
+
+{% macro authority_panel(authority_data) -%}
+<section class="authority-panel" aria-labelledby="authority-heading">
+  <h2 id="authority-heading">Pinned evidence authority</h2>
+  <dl class="metadata-list">
+    <dt>Source / evidence class</dt><dd>{{ value(authority_data.source|default(authority_data.evidence_class|default('Local synthetic-development evidence'))) }}</dd>
+    <dt>Model / index</dt><dd>{{ value(authority_data.model_id|default('Not supplied')) }}@{{ value(authority_data.model_version|default('Not supplied')) }} · {{ value(authority_data.index_id|default('Not supplied')) }}@{{ value(authority_data.index_version|default('Not supplied')) }}</dd>
+    <dt>Artifact</dt><dd><code>{{ value(authority_data.artifact_id|default('Not supplied')) }}</code></dd>
+    {{ digest('Manifest digest', authority_data.manifest_digest|default('Not supplied')) }}
+    {{ digest('Result digest', authority_data.result_digest|default(authority_data.accepted_result_digest|default('Not supplied'))) }}
+    <dt>Feature registry</dt><dd>{{ value(authority_data.feature_registry_id|default('Not supplied')) }}</dd>
+    {{ digest('Feature registry digest', authority_data.feature_registry_digest|default('Not supplied')) }}
+    {{ digest('Feature schema hash', authority_data.feature_schema_hash|default('Not supplied')) }}
+    <dt>Taxonomy</dt><dd>{{ value(authority_data.taxonomy_id|default('Not supplied')) }}@{{ value(authority_data.taxonomy_version|default('Not supplied')) }}</dd>
+    {{ digest('Taxonomy digest', authority_data.taxonomy_digest|default('Not supplied')) }}
+    {{ digest('Configuration digest', authority_data.configuration_digest|default('Not supplied')) }}
+    <dt>Fitting population</dt><dd>{{ value(authority_data.fitting_population|default('Not supplied')) }}</dd>
+    <dt>Candidate population</dt><dd>{{ value(authority_data.candidate_population|default('Not supplied')) }}</dd>
+    <dt>Window / cutoff</dt><dd>{{ value(authority_data.window|default(authority_data.data_model_window|default('Not supplied'))) }} · {{ value(authority_data.cutoff|default(authority_data.feature_cutoff_ts|default('Not supplied'))) }}</dd>
+    <dt>Confidence / applicability</dt><dd>{{ value(authority_data.confidence|default('Not supplied')) }} · {{ value(authority_data.applicability|default('LIMITED')) }}</dd>
+    <dt>Limitations</dt><dd>{{ value(authority_data.limitations|default('resemblance_only; synthetic_development_only; no_recommendation_evidence')) }}</dd>
+    {{ digest('Artifact lineage identity', authority_data.lineage_identity|default('Not supplied')) }}
+    {{ digest('Result dependency lineage', authority_data.lineage|default(authority_data.accepted_lineage_hash|default('Not supplied'))) }}
+  </dl>
+</section>
+{%- endmacro %}

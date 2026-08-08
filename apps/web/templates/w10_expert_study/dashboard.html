@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block body %}
+  {% if error_message %}<div class="status-card error" role="alert"><strong>Action unavailable.</strong> {{ error_message }}</div>{% endif %}
+  <section id="study-content" class="panel" aria-labelledby="approval-title">
+    <p class="section-kicker">Human authority</p>
+    <h2 id="approval-title">Formal protocol approval</h2>
+    {% if approval %}
+      <div class="status-card ready" role="status"><strong>Exact protocol approved.</strong> Formal participant preparation is now authorized. Approval alone creates no relevance result.</div>
+    {% else %}
+      <p>A human product owner must inspect the frozen protocol and explicitly approve its exact protocol and blinded query-pack digests. Startup and fixtures cannot approve it.</p>
+      <dl class="authority-list"><dt>Protocol title</dt><dd>{{ protocol.title }}</dd><dt>Research question</dt><dd>{{ protocol.research_question }}</dd><dt>Protocol digest</dt><dd><code>{{ protocol.protocol_digest }}</code></dd><dt>Frozen query-pack digest</dt><dd><code>{{ presentation.query_pack_digest }}</code></dd><dt>Blinded presentation digest</dt><dd><code>{{ presentation.presentation_digest }}</code></dd></dl>
+      <form method="post" action="/w10/approval" class="form-grid">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
+        <label>Product-owner pseudonym <input name="approved_by_pseudonym" pattern="[A-Z0-9][A-Z0-9-]{5,31}" maxlength="32" autocomplete="off" required></label>
+        <label class="check full"><input type="checkbox" name="confirmation" value="{{ approval_confirmation }}" required><span>{{ approval_confirmation }}</span></label>
+        <button class="button primary" type="submit">Record exact human approval</button>
+      </form>
+    {% endif %}
+  </section>
+
+  <section class="panel" aria-labelledby="decision-title">
+    <p class="section-kicker">Before you decide</p>
+    <h2 id="decision-title">What formal participation involves</h2>
+    <p><strong>Time:</strong> approximately 30–35 minutes. You will assess 8 query sets: 80 blinded primary candidates plus 2 delayed, blinded repeat assessments, for 82 responses in total.</p>
+    <p><strong>Who is eligible:</strong> at least 2 years in one or more accepted professional football roles, player assessment within the last 5 years, and no material conflict involving a displayed player or club. The formal study needs at least 5 eligible experts.</p>
+    <p><strong>Each task:</strong> choose football relevance from 0–4 and confidence from 1–5, or explicitly abstain / mark unable to assess. All 82 presentations need an explicit response. Before immutable submission, you can review response values and retain append-only corrections.</p>
+    <p><strong>Retained locally:</strong> eligibility, consent, ratings, confidence, optional football explanations, timestamps, and a one-way participant-code digest in local SQLite and immutable local evidence files. No name or contact detail is requested.</p>
+    <details><summary>How the final decision is made</summary>
+      <p><strong>PASS</strong> requires exact authority and complete coverage, precision@5 ≥ 0.60, mean NDCG@5 ≥ 0.65, retrieved-control relevant-rate lift ≥ 0.20, paired NDCG@5 delta ≥ 0.05 with its paired 95% query-bootstrap lower bound above 0, ordinal agreement ≥ 0.40, repeat mean absolute difference ≤ 1.0, and repeat within-one rate ≥ 0.80.</p>
+      <p><strong>FAIL</strong> means stale/substituted authority, protected-label leakage or reuse, or a complete compatible formal study missing any preregistered PASS threshold.</p>
+      <p><strong>INSUFFICIENT_EVIDENCE</strong> means approval/evidence is absent, fewer than 5 eligible experts complete all 82 responses, required query/candidate coverage or 3 non-abstaining raters per candidate is missing, fewer than 80% of expected repeat pairs have two rated answers, or a required metric has no valid denominator.</p>
+    </details>
+    <p class="pilot-note"><strong>Pilot versus formal:</strong> the mechanics pilot uses only the first 2 query sets to rehearse the interface. It is never formal expert evidence, never enters formal files or metrics, and cannot unlock a gate.</p>
+  </section>
+
+  <section class="panel" aria-labelledby="entry-title">
+    <p class="section-kicker">Prepare</p><h2 id="entry-title">Start a pseudonymous local session</h2>
+    <p>No name, contact detail, account, fictional role or password is requested. The same browser resumes its server-stored session after refresh.</p>
+    <form method="post" action="/w10/sessions" class="form-grid">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label>Participant pseudonym <input name="participant_code" pattern="[A-Z0-9][A-Z0-9-]{5,31}" maxlength="32" autocomplete="off" required></label>
+      <label>Years of relevant experience <input name="years_experience" type="number" min="0" max="80" step="1" required></label>
+      <fieldset class="full"><legend>Relevant football experience</legend><div class="choice-grid">{% for kind in experience_kinds %}<label class="check"><input type="checkbox" name="experience_{{ kind.value }}" value="true"><span>{{ kind.value|replace('_', ' ')|title }}</span></label>{% endfor %}</div></fieldset>
+      <label class="check full"><input type="checkbox" name="assessed_players_within_window" value="true"><span>I have assessed players professionally within the protocol's recent-assessment window.</span></label>
+      <label class="check full"><input type="checkbox" name="conflict_declared" value="true"><span>I declare present or recent professional responsibility for a displayed player or club.</span></label>
+      <label class="full">Conflict note <span class="optional">required only when a conflict is declared</span><textarea name="conflict_note" maxlength="500" rows="2"></textarea></label>
+      <fieldset class="full"><legend>Consent — every item is required</legend><div class="check-stack">
+        <label class="check"><input type="checkbox" name="voluntary_participation" value="true" required><span>My participation is voluntary.</span></label>
+        <label class="check"><input type="checkbox" name="local_pseudonymous_storage" value="true" required><span>I understand my pseudonymous responses are stored only in local SQLite and immutable local files.</span></label>
+        <label class="check"><input type="checkbox" name="withdrawal_before_submission_understood" value="true" required><span>I may stop before final submission.</span></label>
+        <label class="check"><input type="checkbox" name="immutable_after_submission_understood" value="true" required><span>I understand final submission is immutable.</span></label>
+        <label class="check"><input type="checkbox" name="research_limitations_understood" value="true" required><span>I understand the historical-relevance boundary and non-claims.</span></label>
+      </div></fieldset>
+      <div class="entry-actions full">
+        <button class="button secondary" name="lane" value="pilot" type="submit">Start mechanics pilot</button>
+        <p class="pilot-note"><strong>Pilot:</strong> first two query sets only; mechanics evidence, never formal expert evidence and never a gate unlock.</p>
+        <button class="button primary" name="lane" value="formal" type="submit" {% if not approval %}disabled aria-disabled="true"{% endif %}>Start formal frozen study</button>
+        {% if not approval %}<p class="muted">Formal entry remains unavailable until exact human approval exists.</p>{% endif %}
+      </div>
+    </form>
+  </section>
+{% endblock %}

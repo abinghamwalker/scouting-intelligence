@@ -1,0 +1,105 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R2
+state: REWORK
+objective: >-
+  Correct the bounded R1 runtime-control findings by implementing every claimed
+  R20 v15 selector/lock/extracted/installed/executable/alias/stdlib/pyc/environment
+  predicate and a genuinely independent launcher-side retained reconstruction,
+  without changing component meanings, rosters, contracts, projection, roots or
+  dependencies.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R1:REWORK_P0_0_P1_2_P2_0
+assigned_role: w04_runtime_control_rework_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/contracts/wyscout_build.py
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/contracts/**
+fixed_bindings:
+  r1_admission_child_sha256: dc162985e6bccaa4ea4161d22ddf89c2b2017968c4703e65dc1c37645e78602a
+  r1_launcher_sha256: 4e97bb9828453c184dca14c78c71e2659df628d6aec6b459e41faf5e5da719a1
+  r1_tests_sha256: f596c5f353f162f16bc9e43cc0cb43e2c8d9553271ccb979075e98613e750422
+  r1_review_sha256: 3128813c2213ae5ceca33b3772963f3125747a892c4a2cf7498a237a330015ba
+  r1_reviewer_return_sha256: 699d94c00014514a5f6e6f153bf008c0ce8385be1ee60776dd048aa48e10e5d9
+  r20_design_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+requirements:
+  - Verify every fixed binding and preserve all accepted aggregate/build/publisher bytes.
+  - >-
+    Replace abbreviated component declarations with exact constructive predicates:
+    byte-admitted Packaging bootstrap and complete ordered compatible tags; exact
+    marker/extra selected lock closure with parent edges and one compatible wheel;
+    verified cache/extracted trees and PEP 427 mapping; L==I plus every RECORD-owned
+    and generated installed byte; exact installer/requested rows.
+  - >-
+    Validate the total 35-row executable census with exact 33-E/one-P/one-W
+    classes, 21 owners, groups/targets, RECORD identities, constructive per-row
+    four-tuple alias selector, exact 30-python/four-python3 split, wrapper
+    normalization and frozen bodies/bytes. Validate all three alias chains,
+    interpreter/libpython/loader/ABI and complete stdlib authority.
+  - >-
+    Construct the source-complete site and repository pyc authority map, all four
+    optional-orphan predicates, preflight classification/read denial and exact
+    postflight unchanged inventories. Observe the accepted normal logical uv
+    selection/version/one-hop physical authority rather than copying its version.
+    Close the required-absent environment roster and reject every additional,
+    missing, reordered or changed environment value.
+  - >-
+    The launcher must not import, execute or call the admission child collector.
+    Implement a separate explicit read-only reconstruction over the same fixed
+    authorities and independently compare all twenty component values/counts and
+    repository digest before immutable publication. Shared omissions must not be
+    able to agree.
+  - >-
+    Extend tests with isolated mutations for every corrected predicate and a
+    child-collector/manifest substitution that the independent launcher rejects.
+    Preserve exact frame, publisher, v2 digest, one-hash projection/inverse,
+    no-execution launch plan and generic REBUILD_ARGV behavior. No real-root write.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected exact v15 runtime control, adversarial tests and mandatory R2 return.
+stop_conditions:
+  - None for bounded implementation defects; reframe or split and return REWORK evidence if needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,185 @@
+schema_version: 1
+task_id: W06-PROTECTED-NO-GO-05
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the frozen, one-use, fail-closed missing-population protected gate for the
+  exact accepted W05 M0 candidate, producing an immutable NO_GO without reading or
+  inventing protected expected outputs.
+depends_on:
+  - W06-EVAL-CORE-01:ACCEPTED
+  - W06-EVAL-GATE-BINDING-02:ACCEPTED
+  - W06-EVAL-VALUE-IDENTITY-03:ACCEPTED
+  - W06-EVAL-ROBUSTNESS-04:ACCEPTED
+assigned_role: implementation_engineer
+risk: high
+read_first:
+  - AGENTS.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - reports/readiness/W06/evaluation-readiness.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/phase-gates/W05/gate-report.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/__init__.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/gate.py
+  - src/scouting/evaluation/__init__.py
+  - scripts/run_w06_missing_population_gate.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_missing_population_gate.py
+  - tests/fixtures/w06/public-missing-population-gate-v1.json
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - reports/evaluation/W06/protected-access-record.json
+  - reports/evaluation/W06/protected-gate-decision.json
+  - reports/evaluation/W06/protected-execution-receipt.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_frozen_candidate:
+  selected_family: role_aware_restriction
+  artifact_id: 9a0d43c6-d177-51be-8280-3bf02bedbc99
+  manifest_digest: 2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9
+  configuration_digest: 5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a
+  taxonomy_digest: 59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097
+  feature_registry_digest: c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644
+  feature_schema_hash: 1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f
+  accepted_result_digest: 9d08d8f0ddaba47a3461754d53d727709ea7a10276b438c18c9953b17ad3020e
+  lineage_hash: c291a1b99937100b9934537dc92d4628cd130684cc84388f8aebe109708e7491
+required_frozen_protocol:
+  claim_boundary: resemblance_only
+  evidence_boundary: GOVERNED_HUMAN_EXPERT_REQUIRED
+  protected_partition: PROTECTED_TEST
+  primary_metric: ndcg@10
+  secondary_metrics:
+    - precision@5
+    - precision@10
+    - recall@5
+    - recall@10
+    - ndcg@5
+    - coverage@5
+    - coverage@10
+    - pair_preference
+    - agreement_when_multiple_real_reviewers_exist
+  explicitly_unsupported_k:
+    - k: 25
+      reason: W05_CANDIDATE_UNIVERSE_HAS_18_MEMBERS
+  baselines:
+    - metadata
+    - raw_euclidean
+  nulls:
+    - shuffled_label
+    - shuffled_pair_when_governed_pair_evidence_exists
+  bootstrap:
+    unit: query
+    seed: 20260804
+    resamples: 2000
+    confidence: 0.95
+    method: percentile
+  minimum_useful_effect:
+    metric: ndcg@10_delta_vs_best_control
+    point_delta_at_least: 0.05
+    lower_interval_strictly_above: 0.0
+  fail_closed_order:
+    - AUTHENTIC_GOVERNED_EXPERT_EVIDENCE
+    - NONEMPTY_PROTECTED_POPULATION
+    - VALID_PARTITION_ACCESS
+    - TEMPORAL_AND_SOURCE_LINEAGE
+    - PRIMARY_EFFECT_AND_INTERVAL
+    - NULL_CONTROLS
+    - MANDATORY_SLICES_AND_APPLICABILITY
+    - UNCHANGED_EXPLANATION_AND_SERVING_PARITY
+  stop_rule: >-
+    The first failed prerequisite yields NO_GO; no protected outputs are opened when
+    governed expert evidence or a protected population is absent, and no retuning or
+    rerun is permitted after the one-use broker invocation.
+required_changes:
+  - >-
+    Add strict extra-forbid, content-addressed contracts for the exact W05 candidate
+    identity, frozen protected preregistration, governed evidence inventory, one-use
+    broker execution receipt and missing-population protected access outcome. Require
+    the candidate and protocol identities to agree with embedded validated objects;
+    reject caller digest, reason, candidate, protocol or evidence-count substitution.
+  - >-
+    Freeze the exact protocol and candidate values above in
+    configs/evaluation/w06-protected-preregistration-v1.json. The evidence inventory
+    must truthfully retain zero authentic governed human relevance reviewers, zero
+    governed relevance judgements, zero governed pair preferences and zero protected
+    queries; it must record MISSING_EXPERT_RELEVANCE_EVIDENCE and
+    MISSING_PROTECTED_POPULATION without fabricating an empty EvaluationBundle.
+  - >-
+    Implement one broker function and local CLI that accept only the frozen
+    preregistration, verify its digest and the exact W05 candidate identities, and use
+    exclusive output creation to enforce one invocation. With the frozen missing
+    inventory it must not construct an EvaluationBundle, EvaluationAccessRecord or
+    EvaluationRun and must not read any protected expected-output path. It must persist
+    exactly: a content-addressed access outcome NOT_ACCESSED_MISSING_POPULATION, an
+    execution receipt, and GateDecision NO_GO with the sole decision reason
+    MISSING_EXPERT_RELEVANCE_EVIDENCE.
+  - >-
+    The execution receipt must bind the preregistration digest, candidate identity,
+    access outcome, gate digest, invocation identity and output-file digests. A second
+    invocation with any output already present must fail before overwriting. Partial
+    output presence also fails closed; no cleanup or replacement is automatic.
+  - >-
+    Public deterministic tests may execute only in a temporary directory using the
+    public missing-population fixture. Test exact identities, unknown fields, nonzero
+    fabricated evidence counts, candidate/protocol substitution, caller digest
+    disagreement, exclusive one-use behavior, partial-output failure, absence of
+    bundle/run/access objects, and exact NO_GO reason. Do not execute the repository
+    production output paths; the master alone will broker them after review.
+deliverables:
+  - Strict frozen preregistration/evidence/access/receipt contracts and one-use broker.
+  - Content-addressed W05-bound preregistration and public deterministic fixture/tests.
+  - Mandatory return at reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R1.md.
+definition_of_done:
+  - The exact W05 candidate and conservative protocol are frozen before any protected access.
+  - Missing expert/protected populations fail closed without opening protected outputs or fabricating a bundle/run.
+  - The broker can be executed once by the master and cannot overwrite or rerun.
+  - Exact NO_GO reason and retained negative evidence are deterministic and content-addressed.
+  - Focused W06 tests and static checks pass.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation scripts/run_w06_missing_population_gate.py tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation scripts/run_w06_missing_population_gate.py
+  - uv run --no-sync lint-imports
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-missing-population-gate-v1.json
+  - test -s reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R1.md
+stop_conditions:
+  - Implementation requires protected expected-output, a real expert identity, external/provider access, a new dependency, model tuning, W05 mutation or protocol weakening.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - exact frozen candidate, protocol, preregistration and fixture identities
+  - exact missing evidence counts and NO_GO reason
+  - exact one-use/partial-output outcomes
+  - exact focused commands/statuses/results
+  - remaining P0/P1 risk or none
+  - no Git/dependency/protected/external/tuning/production-output/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

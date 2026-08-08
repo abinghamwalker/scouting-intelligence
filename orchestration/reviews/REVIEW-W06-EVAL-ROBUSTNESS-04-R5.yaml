@@ -1,0 +1,24 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-ROBUSTNESS-04-R5
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R5
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    evidence: >-
+      derive_ranking_metric_children in the contract module independently reimplements
+      the accepted evaluate_ranking and bootstrap_interval formulas while the original
+      core functions remain active for development/protected/future evaluation. The
+      exact value witnesses reject, but W06 now has two metric/interval implementations,
+      contrary to the required reusable single evaluation core and capable of producing
+      divergent protected versus robustness evidence after either path changes.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.yaml
+reviewer: master

@@ -1,0 +1,57 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-IDENTITY-BUNDLE-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Determine the smallest conformant accepted W04 identity bundle scope needed by
+  the one-match/one-player four-feature proof. Reconcile R20's exact bundle/queue/
+  crosswalk rules with the frozen source and accepted identity ruleset, and return
+  a bounded implementation packet. Do not implement or write identity/product bytes.
+depends_on:
+  - W04-VERTICAL-SLICE-BUILD-AUTHORITY-AUDIT-01-R1:BLOCKED_SCOPE
+assigned_role: independent_identity_bundle_scope_analyst
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-IDENTITY-BUNDLE-AUDIT-01-R1.yaml
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-BUILD-AUTHORITY-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-IDENTITY-BUNDLE-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Decide from accepted authority whether a bundle may honestly be one-match scoped or must close the full admitted source identity population.
+  - Enumerate exact current/historical crosswalk rows, review-queue items, counts, authority digests, clocks and canonical sort/hash rules required for the minimum conformant bundle.
+  - Reproduce the exact target competition 364, match 2499719, teams 1609/1631 and player 285508 source-key states without names or coercion.
+  - Identify any absent-source references that must enter the queue and whether lineup data is required for this four-feature slice.
+  - Return exact code/test/runtime path ownership and a bounded serial packet with no architecture or feature expansion.
+deliverables:
+  - One concise PASS_TO_PACKET or BLOCKED_SCOPE report with exact minimum population and implementation checklist.
+stop_conditions:
+  - Any implementation, Git, dependency, provider/network, product/control write, cloud/container/CI/endpoint/remote/deployment action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

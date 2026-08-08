@@ -1,0 +1,211 @@
+{
+  "manifest": {
+    "schema_version": 1,
+    "fixture_id": "w03-synthetic-protected-v1",
+    "partition": "protected_test",
+    "classification": "w03_synthetic_generated",
+    "content_digest": "51f56f2bc9d88196e1b37b6f28c9879a1cdc4ee4db5727a955c5c188b9bfbd7f"
+  },
+  "payload": {
+    "decision_cutoff_ts": "2026-04-01T00:00:00Z",
+    "competitions": [
+      {
+        "id": "11000000-0000-4000-8000-000000000201",
+        "name": "Protected Synthetic East League"
+      },
+      {
+        "id": "11000000-0000-4000-8000-000000000202",
+        "name": "Protected Synthetic West League"
+      }
+    ],
+    "teams": [
+      {
+        "id": "21000000-0000-4000-8000-000000000201",
+        "competition_id": "11000000-0000-4000-8000-000000000201",
+        "name": "Protected Synthetic Ash United"
+      },
+      {
+        "id": "21000000-0000-4000-8000-000000000202",
+        "competition_id": "11000000-0000-4000-8000-000000000201",
+        "name": "Protected Synthetic Beech Rovers"
+      },
+      {
+        "id": "21000000-0000-4000-8000-000000000203",
+        "competition_id": "11000000-0000-4000-8000-000000000202",
+        "name": "Protected Synthetic Cypress City"
+      },
+      {
+        "id": "21000000-0000-4000-8000-000000000204",
+        "competition_id": "11000000-0000-4000-8000-000000000202",
+        "name": "Protected Synthetic Hazel Albion"
+      }
+    ],
+    "players": [
+      {
+        "id": "31000000-0000-4000-8000-000000000201",
+        "team_id": "21000000-0000-4000-8000-000000000201",
+        "display_name": "Protected Synthetic Player Juniper",
+        "position": "central_midfielder"
+      },
+      {
+        "id": "31000000-0000-4000-8000-000000000202",
+        "team_id": "21000000-0000-4000-8000-000000000202",
+        "display_name": "Protected Synthetic Player Larch",
+        "position": "central_midfielder"
+      },
+      {
+        "id": "31000000-0000-4000-8000-000000000203",
+        "team_id": "21000000-0000-4000-8000-000000000203",
+        "display_name": "Protected Synthetic Player Maple",
+        "position": "wide_forward"
+      },
+      {
+        "id": "31000000-0000-4000-8000-000000000204",
+        "team_id": "21000000-0000-4000-8000-000000000204",
+        "display_name": "Protected Synthetic Player Oak",
+        "position": "central_midfielder"
+      },
+      {
+        "id": "31000000-0000-4000-8000-000000000205",
+        "team_id": "21000000-0000-4000-8000-000000000201",
+        "display_name": "Protected Synthetic Player Pine",
+        "position": "goalkeeper"
+      },
+      {
+        "id": "31000000-0000-4000-8000-000000000206",
+        "team_id": "21000000-0000-4000-8000-000000000202",
+        "display_name": "Protected Synthetic Player Rowan",
+        "position": "goalkeeper"
+      }
+    ],
+    "matches": [
+      {
+        "id": "41000000-0000-4000-8000-000000000201",
+        "competition_id": "11000000-0000-4000-8000-000000000201",
+        "home_team_id": "21000000-0000-4000-8000-000000000201",
+        "away_team_id": "21000000-0000-4000-8000-000000000202",
+        "started_at": "2026-02-18T18:00:00Z"
+      },
+      {
+        "id": "41000000-0000-4000-8000-000000000202",
+        "competition_id": "11000000-0000-4000-8000-000000000202",
+        "home_team_id": "21000000-0000-4000-8000-000000000203",
+        "away_team_id": "21000000-0000-4000-8000-000000000204",
+        "started_at": "2026-03-03T19:00:00Z"
+      }
+    ],
+    "identity_records": [
+      {
+        "provider": "w03-protected-synthetic-provider",
+        "source_id": "syn-protected-player-juniper",
+        "source_version": "v1",
+        "resolution_status": "resolved",
+        "canonical_player_id": "31000000-0000-4000-8000-000000000201",
+        "candidate_player_ids": []
+      },
+      {
+        "provider": "w03-protected-synthetic-provider",
+        "source_id": "syn-protected-ambiguous-keeper",
+        "source_version": "v1",
+        "resolution_status": "review_required",
+        "canonical_player_id": null,
+        "candidate_player_ids": [
+          "31000000-0000-4000-8000-000000000205",
+          "31000000-0000-4000-8000-000000000206"
+        ]
+      }
+    ],
+    "facts": [
+      {
+        "fact_id": "51000000-0000-4000-8000-000000000201",
+        "player_id": "31000000-0000-4000-8000-000000000201",
+        "metric": "line_breaking_passes_per_90",
+        "value": 5.4,
+        "observed_at": "2026-02-18T19:45:00Z",
+        "available_at": "2026-02-19T09:00:00Z",
+        "expected_admission": true,
+        "arrival_class": "on_time"
+      },
+      {
+        "fact_id": "51000000-0000-4000-8000-000000000202",
+        "player_id": "31000000-0000-4000-8000-000000000202",
+        "metric": "line_breaking_passes_per_90",
+        "value": 4.9,
+        "observed_at": "2026-02-18T19:45:00Z",
+        "available_at": "2026-02-19T09:10:00Z",
+        "expected_admission": true,
+        "arrival_class": "on_time"
+      },
+      {
+        "fact_id": "51000000-0000-4000-8000-000000000203",
+        "player_id": "31000000-0000-4000-8000-000000000204",
+        "metric": "counterpress_regains_per_90",
+        "value": 3.1,
+        "observed_at": "2026-02-10T20:00:00Z",
+        "available_at": "2026-03-12T08:30:00Z",
+        "expected_admission": true,
+        "arrival_class": "late"
+      },
+      {
+        "fact_id": "51000000-0000-4000-8000-000000000204",
+        "player_id": "31000000-0000-4000-8000-000000000203",
+        "metric": "progressive_actions_per_90",
+        "value": 7.0,
+        "observed_at": "2026-03-03T20:45:00Z",
+        "available_at": "2026-03-04T10:00:00Z",
+        "expected_admission": true,
+        "arrival_class": "on_time"
+      },
+      {
+        "fact_id": "51000000-0000-4000-8000-000000000205",
+        "player_id": "31000000-0000-4000-8000-000000000205",
+        "metric": "sweeper_actions_per_90",
+        "value": 2.0,
+        "observed_at": "2026-03-20T20:00:00Z",
+        "available_at": "2026-04-02T00:00:00Z",
+        "expected_admission": false,
+        "arrival_class": "late"
+      },
+      {
+        "fact_id": "51000000-0000-4000-8000-000000000206",
+        "player_id": "31000000-0000-4000-8000-000000000206",
+        "metric": "sweeper_actions_per_90",
+        "value": 2.1,
+        "observed_at": "2026-03-20T20:00:00Z",
+        "available_at": null,
+        "expected_admission": false,
+        "arrival_class": "late"
+      }
+    ],
+    "negative_cases": {
+      "attempted_storage_path": "../protected-outside.json",
+      "authorised_actor": {
+        "actor_id": "61000000-0000-4000-8000-000000000201",
+        "tenant_id": "71000000-0000-4000-8000-000000000201",
+        "role": "analyst"
+      },
+      "unauthorised_actor": {
+        "actor_id": "61000000-0000-4000-8000-000000000202",
+        "tenant_id": "71000000-0000-4000-8000-000000000201",
+        "role": "unknown"
+      },
+      "cross_tenant_actor": {
+        "actor_id": "61000000-0000-4000-8000-000000000203",
+        "tenant_id": "71000000-0000-4000-8000-000000000202",
+        "role": "analyst"
+      },
+      "confidential_evidence": {
+        "evidence_id": "81000000-0000-4000-8000-000000000201",
+        "tenant_id": "71000000-0000-4000-8000-000000000201",
+        "classification": "synthetic_confidential",
+        "exportable": false
+      },
+      "attempted_actions": [
+        "confidential_evidence.read_unauthorised",
+        "confidential_evidence.export_unauthorised",
+        "audit_event.update",
+        "audit_event.delete"
+      ]
+    }
+  }
+}

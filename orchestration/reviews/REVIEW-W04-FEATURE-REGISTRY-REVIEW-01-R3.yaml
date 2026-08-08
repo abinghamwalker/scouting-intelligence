@@ -1,0 +1,35 @@
+schema_version: 1
+review_id: REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R3
+task_id: W04-FEATURE-REGISTRY-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P2
+    code: POSSESSION_SEQUENCE_RESOLUTION_CAPABILITY_GAP
+    resolution: RETURN_TO_BOUNDED_PRODUCER_R4
+decision: REWORK
+next_packet: W04-FEATURE-REGISTRY-DECISION-01-R4
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R3.md
+  - reports/reviews/W04/archive/wyscout-supported-feature-registry-independent-review-R3-rework-acb43cec.md
+  - reports/verification/W04/wyscout-supported-feature-registry-review-R3-master-verification.md
+checks:
+  - command: review record, actor, clock, digest, and finding readback
+    result: PASS_REWORK_1_P2
+  - command: focused authority suite
+    result: PASS_370_TESTS
+  - command: feature-to-same-period-resolver composition challenge
+    result: FAIL_REPRODUCED_4_STRUCTURALLY_UNASSIGNABLE_PAIRS
+  - command: retained bytecode inventory
+    result: PASS_1150_FILES_150_DIRECTORIES
+decision_notes:
+  - Frozen authority/candidate/predecessor/preimage bytes remain valid.
+  - R4 is limited to exact sequence-capability derivation and focused tests.
+  - No architecture revision, hidden feature input, acceptance, or product work is permitted.

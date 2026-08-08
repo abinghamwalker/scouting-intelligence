@@ -1,0 +1,245 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R21
+state: DISPATCHED
+objective: >-
+  Produce the bounded additive R21 correction authorized by the user: preserve
+  accepted R20 evidence while defining an acyclic contract-digest preimage,
+  exact conservative POC feature roster, evidence-preserving v2 field and
+  possession supersession routes, strict integer-only action subevent mapping,
+  and cross-authority composability gates. Do not implement any product layer.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R20:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R13:MASTER_ACCEPTED
+  - W04-FIELD-SEMANTIC-ACCEPT-01-R2:MASTER_ACCEPTED
+  - W04-POSSESSION-SEMANTIC-ACCEPT-01-R2:MASTER_ACCEPTED
+assigned_role: bounded_r21_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R13.md
+  - reports/verification/W04/wyscout-possession-semantic-acceptance-R2-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+required_corrections:
+  - >-
+    R21 is an additive correction authority that binds the immutable R20
+    physical SHA-256
+    8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047.
+    Define an exact merge rule: every R20 clause remains authoritative except
+    the specifically enumerated field, possession, supported-feature,
+    resource-roster, dependency, and gate clauses R21 replaces. Do not silently
+    rewrite unrelated R20 architecture.
+  - >-
+    Preserve every existing v1 decision, candidate, review, acceptance, return,
+    and verification artifact as immutable evidence. Define new exact v2 IDs
+    and paths for field and possession decision/candidate/review/acceptance
+    authorities. Each v2 decision must bind the complete prior accepted v1
+    authority through a closed prior_authority object; each v2 acceptance must
+    name the prior acceptance in supersedes_acceptance_id. No in-place v1
+    mutation or history erasure is allowed.
+  - >-
+    Fix field v2 IDs as
+    w04-wyscout-field-semantic-decisions-v2,
+    w04-wyscout-field-registry-v2,
+    w04-wyscout-field-semantic-independent-review-v2-R1, and
+    w04-wyscout-field-semantic-acceptance-v2, with corresponding `-v2` paths.
+    Preserve all 119 v1 rows except the action $.subEventId row and any
+    route-level v2/supersession bindings required by R21.
+  - >-
+    Define one new closed transform
+    EVENT_SUBEVENT_TAXONOMY_ID_V2. It emits
+    action_subevent_taxonomy_id only when the measured JSON value has strict
+    type integer (boolean is not integer) and the integer is admitted by the
+    frozen event/subevent taxonomy. Numeric strings, all other strings, null,
+    booleans, decimals, arrays, and objects are never parsed or coerced and
+    produce no canonical value. The measured 7,821 strings remain raw
+    PRESERVE_UNMAPPED rejected-field evidence under an exact reason code; unknown
+    integers also remain unmapped. Runtime label/name lookup is forbidden.
+  - >-
+    Fix possession v2 IDs as
+    w04-wyscout-possession-semantic-decisions-v2,
+    w04-wyscout-possession-taxonomy-v2,
+    w04-wyscout-possession-semantic-independent-review-v2-R1, and
+    w04-wyscout-possession-semantic-acceptance-v2, with corresponding `-v2`
+    paths. Preserve the reviewed 36 project-owned predicate choices unless
+    composability requires a narrower explicit UNMAPPED outcome. Bind only the
+    accepted field v2 canonical digest/acceptance and the frozen taxonomy CSVs,
+    plus the complete prior possession v1 authority.
+  - >-
+    Define exact cross-authority composability: possession v2 selectors consume
+    only action_event_taxonomy_id, action_subevent_taxonomy_id,
+    action_team_source_id, and action_tag_ids emitted by field v2; a row lacking
+    the canonical integer subevent is UNMAPPED/ineligible and can never match by
+    raw string or name. Every feature input is emitted by field v2 or is an
+    explicitly declared output of accepted possession v2; no name-only or
+    derived-field guess is allowed.
+  - >-
+    Define two materialized canonical JSON control-contract preimages at
+    configs/schema/wyscout-v5-product-contract-preimage-v1.json and
+    configs/schema/wyscout-v5-schema-bundle-preimage-v1.json. Fix their IDs,
+    schema versions, exact top-level/row schemas, ordering, canonical JSON
+    rendering, one-terminal-LF rule, and digest definitions. Each binds the
+    frozen R20 digest and the accepted R21 digest after R21 freezes, but contains
+    no own digest, feature decision/candidate/review/acceptance digest, product
+    output byte, build/run ID, filesystem clock, root, host, or mutable runtime
+    observation.
+  - >-
+    Make the graph expressly acyclic:
+    R20 -> R21 -> product/schema preimage canonical bytes and digests -> field
+    v2 acceptance + possession v2 acceptance -> supported-feature decision ->
+    supported-feature candidate/review/acceptance -> later dependency/build
+    artifacts. The two preimages are control-plane contracts only and do not
+    claim that Bronze, Silver, Gold, result, receipt, or serializer
+    implementations exist.
+  - >-
+    The product-contract preimage must close only the already approved POC
+    product contract surface needed for later verification: exact R20/R21
+    authority links, layer order, path templates, serializer ownership,
+    primary-key contracts, manifest/receipt templates, and no-product-before-
+    gate policy. The schema-bundle preimage must close exact schema descriptor
+    IDs, versions, roles, dependency order, and typed feature_schema_hash
+    placeholder semantics without embedding a concrete feature hash. If making
+    either exact requires inventing broader product schemas or implementation
+    behavior, stop rather than expand R21.
+  - >-
+    Fix the exact conservative POC feature roster, sorted by feature_name, to
+    these 15 names and no others:
+    action_count, action_rate, actions_per_90, continuous_time_seconds,
+    coordinate_known_action_count, match_count, minutes_lower, minutes_upper,
+    outcome_dependent_count, provider_native_possession_count,
+    resolved_lineup_stint_count, resolved_possession_action_count,
+    role_inferred_count, unresolved_action_count, value_model_sum.
+    Define all eight exact row fields and their exact values.
+  - >-
+    Only action_count, coordinate_known_action_count, match_count, and
+    resolved_possession_action_count may be SUPPORTED. Bind them respectively
+    to exact accepted inputs: [action_source_id], [action_positions],
+    [match_source_id], and
+    [action_event_taxonomy_id,action_subevent_taxonomy_id,
+    action_team_source_id]. They use COUNT/COUNT/DISTINCT_COUNT/COUNT,
+    ACTION_PRESENT/POSITION_PRESENT/ALWAYS/POSSESSION_ELIGIBLE,
+    denominator NONE, and output int64. Every other roster row is exactly
+    SUPPRESSED_UNSUPPORTED_DENOMINATOR for action_rate, actions_per_90,
+    minutes_lower, and minutes_upper with denominator UNSUPPORTED_MINUTES, or
+    UNAVAILABLE for the remaining seven, with empty inputs, applicability
+    NEVER, aggregation NONE, denominator NONE, output null, and explicit
+    evidence-bounded reasons.
+  - >-
+    Keep the existing supported-feature v1 route IDs and paths because no prior
+    feature authority exists. Its bound_inputs must contain exactly field v2
+    candidate ID/canonical/acceptance, possession v2 candidate
+    ID/canonical/acceptance, and the product-contract/schema-bundle preimage IDs
+    and canonical digests. Remove the former unbound bare digest ambiguity.
+  - >-
+    Replace the R20 17-resource roster only by an exact evidence-preserving R21
+    roster that retains all existing v1 authority paths and adds, rather than
+    substitutes, field v2, possession v2, supported-feature v1, both control
+    preimages, R21, its independent review, and the cross-authority contract
+    test. Define deterministic order and exact cardinality.
+  - >-
+    Define serial packets and sole path ownership for: R21 design/review;
+    control-preimage materialization/review; field v2
+    decision/review/acceptance; possession v2 decision/review/acceptance;
+    supported-feature decision/review/acceptance; and a final cross-authority
+    composability/gate packet. No candidate producer may review or accept its
+    own work.
+  - >-
+    Define positive and negative cross-authority tests that reject string or
+    boolean subevent coercion, raw/name selector use, field/possession digest
+    drift, v1/v2 mixing, invalid supersession, a preimage cycle/self-hash,
+    unlisted feature rows, unsupported inputs, feature use before acceptance,
+    contract/schema digest substitution, and any Bronze/Silver/Gold/product
+    path before the complete R21 gate passes.
+  - >-
+    The final R21 gate is the complete AGENTS.md repository suite plus exact
+    R21 design, preimage, field v2, possession v2, feature, supersession,
+    composability, local-only, empty-remote, and forbidden-product-path checks.
+    No checkpoint commit or tag is required during intermediate packets. This
+    authorization ends before any Bronze, Silver, Gold, product, runtime,
+    cloud, container, endpoint, hosted CI, or deployment implementation.
+definition_of_done:
+  - R21 is exact, bounded, acyclic, evidence-preserving, and implementable.
+  - Strict integer-only subevent mapping and v2 supersession are closed.
+  - The 15-row feature roster has no implementer choice.
+  - Cross-authority composability and full-gate rules are exact.
+  - No product-layer implementation or broader architecture change is introduced.
+acceptance_checks:
+  - >-
+    before_site=$(find .venv/lib/python3.12/site-packages -name '*.pyc' -type f | wc -l);
+    before_repo=$(find . -path './.venv' -prune -o -name '*.pyc' -type f -print | wc -l);
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R21.md');
+    s=p.read_text();
+    assert p.stat().st_size > 20000;
+    required=('8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047',
+    'EVENT_SUBEVENT_TAXONOMY_ID_V2','action_subevent_taxonomy_id',
+    'w04-wyscout-field-registry-v2','w04-wyscout-possession-taxonomy-v2',
+    'wyscout-v5-product-contract-preimage-v1.json',
+    'wyscout-v5-schema-bundle-preimage-v1.json',
+    'resolved_possession_action_count','CROSS_AUTHORITY');
+    assert all(x in s for x in required)";
+    after_site=$(find .venv/lib/python3.12/site-packages -name '*.pyc' -type f | wc -l);
+    after_repo=$(find . -path './.venv' -prune -o -name '*.pyc' -type f -print | wc -l);
+    test "$before_site" = "$after_site";
+    test "$before_repo" = "$after_repo"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    Exact preimages cannot be defined without specifying broader product schema
+    or implementation behavior beyond this packet.
+  - >-
+    Evidence-preserving supersession requires v1 mutation, history erasure, or
+    a cyclic reference.
+  - >-
+    The strict integer-only mapping cannot preserve all non-integer source
+    values without coercion or loss of raw evidence.
+  - >-
+    Work requires product implementation, dependency/lock change, provider or
+    rights change, storage change, project-root change, network access, cloud,
+    container, endpoint, hosted CI, deployment, or edits outside the two report
+    paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

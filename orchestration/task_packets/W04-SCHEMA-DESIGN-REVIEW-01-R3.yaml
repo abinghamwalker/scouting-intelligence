@@ -1,0 +1,64 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Independently verify the standalone R4 W04 schema/rebuild design, all six R3 review
+  corrections, retention of the five closed findings, and ownership-complete readiness
+  for bounded implementation packets.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R4:IMPLEMENTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R4.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - docs/architecture/evaluation-contract.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+deliverables:
+  - Ranked closure table for the four P1 and two P2 R3 review defects.
+  - Retained closure table for the original nine findings.
+  - >-
+    Independent challenge of code-manifest truth, strict temporal compatibility,
+    dependency kinds/UUIDs/clocks, semantic authority provenance, exact 18-row source
+    manifest, strict source coverage fields, and every packet owner/dependency/path.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - All returned defects close or the packet returns REWORK.
+  - The implementation graph has one exact owner for every shared artifact.
+  - No architecture, rights, dependency, migration, provider, or local-only change is introduced.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R3.md');
+    assert p.is_file() and p.stat().st_size > 7000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 design, temporal, lineage, authority, ownership, or local-only defect remains.
+  - Review requires producer/code/config/data/dependency edits or provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

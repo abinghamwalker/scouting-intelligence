@@ -1,0 +1,102 @@
+schema_version: 1
+task_id: W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-REVIEW-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Freshly and independently review the exact isolated Wyscout four-feature
+  raw-to-Gold slice and sidecar-free publication chain before any real-root master
+  execution.
+depends_on:
+  - W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1:COMPLETE
+assigned_role: fresh_independent_w04_vertical_slice_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1.yaml
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/verification/W04/wyscout-nested-physical-primary-key-R1-master-acceptance.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-four-feature-vertical-slice-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  product_init_sha256: 93efbee9739a38cb1c19e43013263fab4e73d0e839117f150464f23c1f430a08
+  bronze_sha256: 672f2c88c6e43b154fd7e26710f5a3ba9d7712441a34d87397e926f90556cf36
+  actions_sha256: 34c2ef74b564713c4f0255574d071453aa1ef5d6eb8cb4df5813aa6b62b57087
+  lineups_sha256: 4c90c3a97b80cacea5046b945b797d6103c05888fca2dbbecf72c7bd49495b87
+  possessions_sha256: 197a6883c03c7e7ea26854c75aa3813d5f606cefed396984e7d4f95593f30e84
+  player_match_sha256: 784d6a50d6b2f455ed749839814a4c44e79895cd5094be1b2ab6f1ac3e6a75fd
+  silver_manifest_sha256: 56628bb9b5b4595f429a487383f35bb659a60728537abad419474417d20c423a
+  gold_sha256: 176495ded91497eca4ae8234889a7079d871eb65180b12fb0570cae4a62d4c04
+  temporal_boundary_sha256: c6a18363799cd714b38829412a0c5acda1fddd3b7c017e5135d6e8e41c1c2478
+  rebuild_composition_sha256: b5e9c5a2e37d3c3190e26496b78fca7deab5f31779d79ecea34113e920f74e55
+  rebuild_child_sha256: 82d7a22cc9d48bca19e0f4a6d05f60995f7486df829585fa7bf0b9ab7434ba99
+  e2e_tests_sha256: 5ce8de532124869eb7e88c55a5504db4d153222525cfa46eb897dc9232a4b83c
+  security_tests_sha256: 59e1f8837313690d38132442f789aa4ab4994291e2ef7455705347c1215d2e3e
+  producer_return_sha256: 865b3246746b57cc3240b091b63182e01471eadabeca7519cdddd3a14df9adcc
+  nested_key_master_acceptance_sha256: 5d346c183ac97078a3c9bd2ebe8373ae68ca491487f3ff5ad3403d623cced9ec
+  runtime_master_acceptance_sha256: a08d2a429c45a52cd7839c41ee3429f91fef227e9e9f41992c8f3a9fdbe8c24c
+requirements:
+  - Verify all producer and prerequisite hashes and keep every producer byte read-only.
+  - >-
+    Independently reconstruct the real source and accepted season/lineup values;
+    prove exact 1768 Bronze rows/quarantine, 13/2/1/1 Silver graph, one Gold
+    (2,2,1,2), complete schemas/keys/semantic digests and exact parent chains.
+  - >-
+    Reproduce the complete focused matrix in two isolated exact-root mirrors,
+    challenge all source, temporal, checked-capability, schema, aggregate, manifest,
+    receipt and immutable-publication adversarial cases, and prove deterministic
+    bytes plus zero real-root product/control writes.
+  - >-
+    Independently verify the exact no-site rebuild child reaches its closed-envelope
+    guard under -S -B and rechecks repository code, complete components/resources,
+    counts, PYC inventory and code-manifest bytes before every atomic publication.
+    Attack each retained equality and require failure before final promotion.
+  - >-
+    Require a complete no-follow recursive before/after inventory of the real
+    working, manifest and run roots. Top-directory timestamps alone are
+    insufficient; any descendant addition, deletion, mutation, link or kind drift
+    is a finding.
+  - >-
+    Return PASS only with P0/P1/P2=0/0/0; any implementation defect is bounded
+    REWORK with the smallest exact correction surface and no producer edits.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run ruff check src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run mypy src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_vertical_slice_context.py tests/unit/test_w04_staged_product_publisher.py tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r src/scouting/data_products/wyscout scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK and continue the correction loop.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

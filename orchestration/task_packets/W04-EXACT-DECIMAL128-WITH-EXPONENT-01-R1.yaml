@@ -1,0 +1,108 @@
+schema_version: 1
+task_id: W04-EXACT-DECIMAL128-WITH-EXPONENT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the authorized exact reversible physical Arrow projection primitive for
+  non-coverage Decimal fields, preserving decimal128(22,18) as the numeric child,
+  the original Decimal exponent, signed zero, strict inverse bytes and zero-write
+  failure behavior.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5:BLOCKED_DECIMAL_REVERSIBILITY
+assigned_role: bounded_w04_exact_decimal_projection_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.yaml
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-authorization-R1.md
+  - reports/verification/W04/wyscout-decimal128-exponent-reversibility-blocker-R1.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-acceptance.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R4.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/scouting/contracts/**
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+fixed_bindings:
+  authorized_formats_sha256: 84c04be89c6d726ab9129326e7815dda2331bf30ade2f8d41852120e2b6d144c
+  authorized_formats_test_sha256: 8e68548967293b28e694359509667106951bdc5ba8e1636a541f81f7c3773e1a
+  authorization_sha256: 57ef5ce132f732457df6dac4bfd99c554ba5497a9759bd322d0093a5af8b3131
+  blocked_r5_return_sha256: 7b85730b07f5cc1bbc26b988538fcca007ce32c99ec4342aac17db7b7fbb856b
+requirements:
+  - Verify the fixed implementation/test/R5 hashes before editing and report the authorization file hash.
+  - >-
+    Add exactly one projection kind named EXACT_DECIMAL128_WITH_EXPONENT. It is a
+    logical scalar represented by a WyscoutArrowStructNode whose only admitted
+    children, in exact order, are non-null `value` identity decimal128(22,18),
+    non-null `exponent` identity int8, and non-null `negative_zero` identity bool.
+    No metadata, aliases, child nulls, alternate order/type/name or logical-position
+    state is admitted.
+  - >-
+    Add a focused public forward helper that accepts only an exact finite built-in
+    Decimal plus an optional exact declared source scale, reruns the accepted
+    decimal128(22,18) lexical capacity rule, requires declared scale equality when
+    supplied, proves rescaling to the physical scale requires no rounding, and
+    returns only the exact three-child physical mapping. Preserve the tuple exponent
+    and set negative_zero exactly for signed zero; never set it for nonzero values.
+  - >-
+    Inverse projection must accept only the exact physical struct, validate the
+    three runtime child values, reject negative_zero=true for nonzero, reconstruct
+    the exact original exponent with a trapping/no-rounding operation, restore
+    negative zero, rerun the accepted capacity/source-scale rule, and return the
+    exact logical Decimal JSON token so the existing whole-row byte equality remains
+    controlling before semantic hashing/writing.
+  - >-
+    Keep all coverage Decimal fields and their helper on CANONICAL_DECIMAL_UTF8.
+    Preserve generic serializer behavior and the accepted semantic digest framing
+    and formula. Derived descriptor/physical/vector bytes for the new kind need not
+    match earlier scalar-decimal bytes.
+  - >-
+    Add focused success/adversarial tests for scale 0/18, positive exponent,
+    trailing zeros, signed zero, capacity boundaries, wrong logical/runtime types,
+    malformed exponent/sign, nonzero negative_zero, null children, descriptor
+    child/order/type/nullability/metadata drift, rounding attempts and capacity
+    failures. Instrument hashing and pq.write_table and require zero calls for every
+    invalid inverse/schema path.
+  - Do not map any W04 logical contract field in this packet; R5 owns descriptor adoption after acceptance.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact reversible projection primitive, adversarial tests and mandatory return with exact hashes/results.
+stop_conditions:
+  - Any need to change a logical contract, root, field, product, source/data-rights authority, digest meaning/formula or dependency.
+  - Any need for provider/network, credential, external service, cloud, container, CI, publication, deployment or destructive action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,168 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R17
+state: DISPATCHED
+objective: >-
+  Retain every passing R16 and independent R10 closure while removing absolute
+  uv host spellings from stable identity and making every W04 semantic-authority
+  route standalone and exactly implementable, beginning with the 119-path field
+  authority.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R16:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R10:REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R10.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R10-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R10.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R10.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R10.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R16.yaml
+  - reports/verification/W04/wyscout-schema-design-R16-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R16.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R16.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R17.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R17.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Keep invariant 7 without exception. The current actual logical
+    /opt/homebrew/bin/uv value, current physical Cellar path, actual raw link
+    bytes, and every other host-bearing uv spelling are operational admission
+    evidence only. Remove them from the stable bootstrap tuple, target record,
+    manifest/component preimages, code-manifest identity, build projection,
+    two-root stable comparison, and every statement that calls them stable.
+  - >-
+    Preserve exact current-host admission and rejection. Normal resolution of
+    literal uv must select only /opt/homebrew/bin/uv; lstat/readlink must prove
+    its current 26-byte raw target and one contained hop to the current regular
+    physical file; the exact final mode 0o555, size 41617552, SHA-256
+    4f0c0c002bb4702c1bd6792edc15f7ae3948b5f19509c8d73cd5c9a26298097f,
+    and version remain required; outer and both child actual maps retain the
+    logical UV value; direct physical/either-spelling/post-hoc-realpath launch
+    remains forbidden.
+  - >-
+    Define one root-independent stable uv launch authority using named tokens
+    and roles plus the exact symlink/relative-target/one-hop/containment/final
+    regular-executable policy and exact physical byte/version/mode/size
+    authority. Define the operational receipt fields that carry the actual
+    logical path, raw target, and physical path. Require a mechanical
+    host-spelling-only perturbation proof: after token normalization, changing
+    only operational host spellings with the same admitted relationship and
+    bytes leaves environment_digest, code_manifest_sha256, and build_id
+    unchanged. Unknown, missing, alternate, unsafe, or inconsistent actual
+    spellings still fail admission.
+  - >-
+    Version every stable schema/preimage changed by this correction. At minimum
+    advance the bootstrap tuple to w04-local-control-bootstrap-v4 and the
+    code/environment manifest to w04-code-environment-admission-v14. Retain
+    w04-outer-environment-bootstrap-v2 and w04-child-environment-input-v2 if and
+    only if their normalized schemas are byte-for-byte unchanged; otherwise
+    advance them consistently. No stale predecessor may remain except in an
+    explicit retired/forbidden statement.
+  - >-
+    Embed a closed, standalone field-authority protocol. Mechanically bind all
+    119 measured (record_kind,json_path) pairs from the accepted profile, with
+    exact counts competition 10, team 11, player 26, match 47, action 18,
+    event-taxonomy 4, and tag-taxonomy 3. Define the exact closed canonical JSON
+    decision document and row schemas, exact closed parsed-YAML registry and row
+    schemas, allowed decisions/transform parameters, ordering/duplicate/coverage
+    rules, fixed schema/version/artifact IDs, physical-versus-canonical digest
+    inputs, and every equality between decision rows and registry rows.
+  - >-
+    Define an exact machine-checkable contract inside the independent field
+    review Markdown, including the sole record block, fixed review ID, candidate
+    and registry IDs/digests, reviewer actor, reviewed_at, PASS/REWORK grammar,
+    closed findings, canonical record bytes, and physical review-file digest.
+    Define the exact closed canonical acceptance JSON, fixed acceptance ID,
+    decision/registry/review IDs and digests, accepting actor, accepted_at,
+    supersedes rule, PASS prerequisite, and fail-closed cross-equalities.
+  - >-
+    Make the field digest graph explicitly acyclic: canonical decision bytes are
+    hashed first; the registry binds that digest and the four frozen input
+    digests and is hashed as canonical parsed YAML; the review binds both
+    immutable candidates and its physical file is hashed; acceptance binds all
+    prior IDs/digests and is then canonically hashed. State exactly which digest
+    enters the 17-resource row, the downstream seven-field FIELD authority row,
+    and the field EvidenceDependency.
+  - >-
+    Define the exact w04_dependency_namespace UUIDv5 construction and field
+    feature_schema dependency preimage. Require dependency kind feature_schema,
+    digest equal the registry canonical digest, observed_at equal decided_at,
+    available_at equal accepted_at, and exact decided_at <= reviewed_at <=
+    accepted_at ordering with truthful UTC values not derived from metadata.
+    Define actor equality/distinctness and review-candidate immutability.
+  - >-
+    Name exact serial packets and disjoint ownership:
+    W04-FIELD-SEMANTIC-DECISION-01-R1 owns only the decision JSON, registry YAML,
+    contract test, and return; W04-FIELD-SEMANTIC-REVIEW-01-R1 owns only the
+    independent review and return; W04-FIELD-SEMANTIC-ACCEPT-01-R1 owns only the
+    acceptance JSON and return. The master owns semantic choices and acceptance;
+    the independent reviewer cannot edit candidates or self-approve. Bronze is
+    blocked until acceptance.
+  - >-
+    Apply the same standalone standard now, not in a future undocumented
+    revision, to possession, identity, and supported-feature
+    decision/registry-or-ruleset/review/acceptance routes: exact schemas,
+    artifact IDs, digest/canonicalization graphs, clocks, dependencies,
+    cross-equalities, packet IDs, path ownership, and rejection tests. Retain
+    their existing semantic policies and exact artifact paths.
+  - >-
+    Retain without regression R16's passing exact acyclic 25-key stable
+    projection and post-hash invocation, five accepted EvidenceDependency
+    fields, 16/8/10/25 envelopes, 20 component proofs, unique chronology,
+    source/descriptors/race/result-v2 closures, exact three argv and roles,
+    29/32/32 actual maps, L==I, 35 executables, three aliases, three denied .pth
+    classes, source-complete pyc/resource authority, source/rights/temporal/
+    identity/products, gate, two-root proof, and two-commit ledger. Future
+    scripts stay absent.
+  - >-
+    Change exactly the two absolute project-root R17 report paths, create no
+    parent-workspace path, and return a complete truthful handback. Do not
+    perform Git-mutating operations; describe read-only checks accurately.
+definition_of_done:
+  - Stable environment, code-manifest, and build identity contain no actual uv host path.
+  - Exact current-host uv admission remains constructive and fail-closed.
+  - The field route is implementable from R17 alone over exactly 119 profiled paths.
+  - All four semantic-authority routes have closed acyclic protocols and exact ownership.
+  - Every other passing R16/R10 closure remains intact and no implementation file is created.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R17.md');
+    assert p.is_file() and p.stat().st_size > 190000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - Correcting path classification requires weakening invariant 7 or changing visible argv, uv/Python dependency policy, architecture, project root, or local-only boundary.
+  - A closed semantic-authority protocol requires inventing provider meaning or changing source/data-rights authority.
+  - Exact current-host admission, normalized host-spelling invariance, or any passing R16/R10 closure cannot coexist.
+  - Work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

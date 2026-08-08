@@ -1,0 +1,114 @@
+schema_version: 1
+task_id: W04-IDENTITY-RULESET-REVIEW-01
+phase_id: W04
+revision: R1
+state: REWORK_REQUIRED
+objective: >-
+  Independently review the complete W04 identity-v1 decision, safe-YAML
+  ruleset, focused contract, and producer return against R20/R21. Report every
+  P0-P2 finding and issue PASS only with zero findings. Do not modify or accept
+  the candidate.
+depends_on:
+  - W04-IDENTITY-RULESET-DECISION-01-R1:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: independent_identity_ruleset_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-RULESET-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/verification/W04/wyscout-source-manifest-bridge-R1-master-verification.md
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - data/source/wyscout/v5/completion-manifest.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R1.md
+  - reports/verification/W04/wyscout-identity-ruleset-decision-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-IDENTITY-RULESET-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+review_authority:
+  review_id: w04-wyscout-identity-ruleset-independent-review-R1
+  review_schema_version: w04-authority-independent-review-v1
+  independent_actor_id: 2c3ccf67-518f-543c-b213-ea40aef2c162
+  candidate_id: w04-wyscout-identity-ruleset-v1
+  candidate_physical_sha256: 8027321bda566188019850f9f9031e684d2d81d8df7851ba3c71b1685ae4f547
+  candidate_sha256: 9c34783214d084ce8fde42be771850e8f9332fa9fb9a1529b011a8600e34e87c
+  decision_id: w04-wyscout-identity-ruleset-decisions-v1
+  decision_physical_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+  decision_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+requirements:
+  - >-
+    Read every listed input completely. Independently reconstruct strict
+    canonical decision JSON, safe-YAML parsing, physical and parsed canonical
+    digests, exact bound inputs, actors, clocks, and decision-to-ruleset
+    restatement without trusting producer helpers.
+  - >-
+    Prove the exact ordered COMPETITION, TEAM, PLAYER, MATCH rules and exact
+    seven-policy object. Challenge missing, negative, zero, boolean, string,
+    numeric-looking-string, duplicate, name-only, absent-master, cross-kind,
+    namespace, and UUIDv5 cases. Strings must never be coerced.
+  - >-
+    Challenge authority progression: absent, candidate, review PASS/REWORK, and
+    acceptance-after-PASS are the only valid ordered states. Review before
+    candidate, acceptance before review, self-review, digest/clock/actor drift,
+    malformed fences, and partial identity paths must fail closed.
+  - >-
+    The review Markdown must contain exactly one
+    w04-authority-review-v1 fence whose body is compact canonical sorted JSON
+    plus one LF with the exact 12 review keys required by the focused contract.
+    Use the fixed independent actor, a truthful fresh canonical UTC clock, exact
+    candidate/decision digests, recommendation, and findings. PASS requires an
+    empty findings array; REWORK requires at least one P0-P2 finding.
+  - >-
+    Use apply_patch only for the two exact allowed paths. Do not run Git,
+    delegate, modify the candidate/test/dependencies, create acceptance, access
+    provider/network data, or begin identity runtime, Bronze, Silver, Gold,
+    build, model, product, cloud, container, endpoint, hosted-CI, or deployment
+    work.
+definition_of_done:
+  - Complete independent review reports all P0-P2 findings.
+  - Candidate, upstream, test, and R21 bytes remain unchanged.
+  - Review record is canonical, exact, truthful, and independently authored.
+  - Focused checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+stop_conditions:
+  - Any candidate, upstream, test, or third output must change.
+  - Any fixed digest, semantic, actor, or ordered authority requirement differs.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

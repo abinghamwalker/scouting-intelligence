@@ -1,0 +1,84 @@
+schema_version: 1
+default_policy:
+  owner: master
+  concurrency: serial
+  reviewer_required: false
+master_only_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - .python-version
+  - AGENTS.md
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/ownership.yaml
+  - orchestration/checkpoints/**
+serial_paths:
+  - pyproject.toml
+  - uv.lock
+  - src/scouting/contracts/**
+  - migrations/**
+  - configs/features/**
+  - configs/models/**
+  - orchestration/**
+  - reports/phase-gates/**
+lanes:
+  contracts_platform:
+    paths:
+      - src/scouting/contracts/**
+      - src/scouting/storage/**
+      - services/**
+    reviewer_required_for:
+      - src/scouting/contracts/**
+      - migrations/**
+  data_identity:
+    paths:
+      - src/scouting/sources/**
+      - src/scouting/identity/**
+      - src/scouting/data_products/**
+  features_model:
+    paths:
+      - src/scouting/features/**
+      - src/scouting/roles/**
+      - src/scouting/modeling/**
+      - src/scouting/evaluation/**
+  web_workflow:
+    paths:
+      - apps/web/**
+      - src/scouting/web/**
+      - src/scouting/workflow/**
+      - src/scouting/observations/**
+  security_operations:
+    paths:
+      - src/scouting/operations/**
+      - src/scouting/audit/**
+      - tests/security/**
+      - tests/performance/**
+  independent_verifier:
+    paths:
+      - tests/**
+      - reports/reviews/**
+role_aliases:
+  contracts_platform_implementer: contracts_platform
+  storage_implementer: contracts_platform
+  database_implementer: contracts_platform
+  fixture_implementer: data_identity
+  governance_architecture_implementer: security_operations
+  vertical_journey_implementer: web_workflow
+  independent_verifier: independent_verifier
+parallel_rules:
+  maximum_subagents: 3
+  write_scopes_must_be_disjoint: true
+  shared_contracts_are_serial: true
+  migrations_are_serial: true
+  dependency_and_lock_files_are_serial: true
+  registry_aliases_are_serial: true
+  integration_files_are_serial: true
+high_risk_review:
+  - contracts
+  - temporal_eligibility
+  - identity_resolution
+  - authorisation
+  - migrations
+  - guarded_storage
+  - model_promotion

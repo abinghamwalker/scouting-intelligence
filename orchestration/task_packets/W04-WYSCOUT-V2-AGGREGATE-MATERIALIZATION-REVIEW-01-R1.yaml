@@ -1,0 +1,89 @@
+schema_version: 1
+task_id: W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Independently review the exact acyclic W04 implemented-schema-bundle v2 and
+  product-contract v2 aggregate implementation, materialized bytes, digest graph,
+  deterministic materializer and fail-closed mutation coverage.
+depends_on:
+  - W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1:COMPLETE
+assigned_role: independent_w04_v2_aggregate_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1.yaml
+  - reports/verification/W04/wyscout-v2-aggregate-materialization-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R8-master-acceptance.md
+  - src/scouting/contracts/wyscout_aggregates.py
+  - scripts/materialize_wyscout_v5_contracts.py
+  - tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-v2-aggregate-materialization-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  aggregate_implementation_sha256: 6cdbb9eaa7d18c5f07d42d6be33d91b014a34824610319f3e55cf5b383c07851
+  materializer_sha256: f42ce353382b08171c4495e36c0db00d2ea558b4ef8ca081821b13c3e18a4481
+  aggregate_tests_sha256: 6f44bea5569d95a21930f06031e0e78c7d789468d95b780c263f9be0506bc95e
+  producer_verification_sha256: 8b881b680816a320b56487d616c1464b0381d3da694d3fd7fc87298b98ac21c1
+  schema_bundle_v2_logical_sha256: ba5db90f2b130af450fba609520984f6e07c255be4fbddc3f933f94149ef63be
+  schema_bundle_v2_physical_sha256: 8426726dd9a21da81b37e34860d9b38949b7c15243eecbee5d7df85a788b0d45
+  product_contract_v2_logical_sha256: fe68e8f31b7dd6f6fb9e8eb3a025de3e78d8825eabeeeea72327481101489fc0
+  product_contract_v2_physical_sha256: 7034fa9d88b11eccc84ee37dfaa722b1a130a97a1a34cecafbe549bd6974e1af
+requirements:
+  - Verify every fixed binding before reviewing and never edit producer bytes.
+  - >-
+    Independently reconstruct all 23 root content digests, unique schema IDs,
+    exact root order and earlier-only dependency graph directly from accepted
+    implemented schema exports; reproduce the exact eight-key schema object and
+    its no-LF digest without treating the candidate config as authority.
+  - >-
+    Independently reconstruct the exact ten-key product contract only after the
+    schema digest, including exact completion/window authority, publication order,
+    both receipt contracts and the sole R4 complete-LayerManifest semantic
+    composition. Reproduce both canonical logical and one-LF physical hashes.
+  - >-
+    Audit deterministic write/check safety and independently attack missing,
+    reordered, additional, duplicate-key, placeholder, swapped/v1/self/forward/
+    cycle digest and terminal-byte cases. Return PASS only with P0/P1/P2=0/0/0;
+    otherwise return bounded REWORK without editing producer bytes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run ruff check src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run mypy src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py
+  - uv run python scripts/materialize_wyscout_v5_contracts.py --check
+  - uv run pytest -q tests/contracts/test_w04_wyscout_v2_aggregates.py tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent aggregate review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without editing producer bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

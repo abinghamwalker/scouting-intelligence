@@ -1,0 +1,145 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R6
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R5.yaml
+objective: >-
+  Close the final single-core P1 by consolidating ranking metric and bootstrap
+  calculations into one dependency-safe pure implementation called by general
+  evaluation, robustness production and owning validators.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-REVIEW-04-R5:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: high
+bounded_scope:
+  retained_without_reopening:
+    - accepted metric formulas, supported metrics and bootstrap method
+    - exact R3/R4 stress, control, authority, fixture, deficit and applicability closures
+    - exact three numeric-child rejection behavior
+    - one shared rank-comparison derivation
+  exact_open_class:
+    - duplicate live ranking metric and bootstrap calculation paths
+  convergence_rule: >-
+    This is a mechanical single-root consolidation. Create no new policy, architecture
+    authority, dependency or metric semantics. Representation adapters and contract
+    wrapping may remain separate; value, status, sufficient-statistic, resampling,
+    percentile and identity calculations must have one live source.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R5.yaml
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R5.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R5.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R5.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.md
+  - docs/architecture/evaluation-contract.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R6.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Add one dependency-safe pure calculation module under scouting.contracts that
+    imports no contract models and accepts only canonical primitive protocol/ranking
+    inputs. It must be the sole owner of precision, recall, NDCG, coverage, missing and
+    insufficient statuses, sufficient statistics, aggregate query mean, seeded
+    bootstrap samples, percentile indexes/bounds and their canonical input/resample
+    payload identities.
+  - >-
+    Refactor core.evaluate_ranking and core.bootstrap_interval to call that shared pure
+    calculation. Refactor evaluation.derive_ranking_metric_children to become only a
+    representation adapter/contract wrapper over the same calculation. Remove the full
+    formula bodies from both callers so no independently editable duplicate remains.
+  - >-
+    Canonicalize score representation identically before shared identity calculation.
+    Preserve accepted float identities and make a general integer-valued score input
+    and its robustness-normalized equivalent resolve to the same canonical identity,
+    or reject both at the same boundary. Require both paths to reject undeclared k and
+    undeclared metrics consistently.
+  - >-
+    Retain derive_rank_comparison as the sole comparison value path and remove unused
+    core comparison/input helpers that imply a second authority.
+  - >-
+    Add direct cross-path parity tests covering all four metrics, partial relevance on
+    and off, zero denominators, insufficient populations, missing/abstained labels where
+    representable, canonical ties, integer/float score representation, seed/resample
+    identity and interval bounds. Assert there is one formula call path, not just equal
+    fixture output.
+  - >-
+    Rebuild the original three exact substitutions and literally assert parent digests
+    fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb,
+    e67c82c8800e1e4c0efa360153cd918f36d21859079ef630b3fe3d2fab477815,
+    and 2e70e316301230b85db9bae9785c16f431f1cf3a251affd9ba3d792174741404
+    before asserting normal-constructor rejection.
+  - >-
+    Preserve current public fixture bytes and exact output identities unless the shared
+    canonical score boundary makes a mechanically required identity change; document
+    any such change exactly without changing formulas or evidence claims.
+deliverables:
+  - One dependency-safe pure metric/bootstrap calculation authority and thin callers.
+  - Exact cross-path boundary parity and original three-parent regressions.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R6.md.
+definition_of_done:
+  - One and only one live ranking metric/bootstrap calculation path exists.
+  - General and robustness surfaces share value, status, sufficient-statistic, identity, resample and interval behavior.
+  - All three original numeric-child parents are literally pinned and reject.
+  - Accepted public formula results and evidence boundaries remain unchanged.
+  - Focused W06 tests and static checks pass.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation_calculations.py src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation_calculations.py src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R6.md
+stop_conditions:
+  - Consolidation requires a metric/protocol/partition change, new dependency, protected output, external access, model tuning or W05 mutation.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - exact one-core call-path matrix
+  - exact boundary parity and three-parent outcomes
+  - exact fixture identities and SHA values
+  - exact focused commands/statuses/results
+  - remaining P0/P1 risk or none
+  - implementation-only/no-fabricated-expert boundary confirmation
+  - no Git/dependency/protected/external/tuning/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

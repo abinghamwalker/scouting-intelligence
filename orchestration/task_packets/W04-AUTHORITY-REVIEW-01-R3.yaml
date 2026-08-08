@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W04-AUTHORITY-REVIEW-01
+phase_id: W04
+revision: R3
+state: READY
+objective: >-
+  Independently review the master’s archive-scope correction: each published ZIP has
+  five admitted domestic members and two exact known scope-excluded tournament
+  members whose payloads must not be extracted or admitted, while every other member
+  still fails closed.
+depends_on:
+  - W04-AUTHORITY-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-AUTHORITY-REVIEW-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R2.yaml
+  - configs/sources/w04-provider.yaml
+  - docs/dataset-cards/w04-source.md
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - reports/phase-gates/W04/archive-directory-preflight.md
+  - tests/governance/test_w04_source_authority.py
+  - tests/security/test_w04_source_authority_boundary.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/authority-boundary-audit-R3.md
+  - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Retain every R1/R2 authority challenge.
+  - >-
+    Add independent tests proving exactly five admitted plus two known-excluded
+    members per archive, admitted/excluded disjointness, no extraction/admission
+    authority for exclusions, and rejection of any other member.
+  - R3 audit, mandatory return, and ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - The directory shape matches the recorded preflight without widening first-pass scope.
+  - Tournament members cannot enter admitted match/event lists.
+  - Unknown, duplicate, link, absolute, or parent-path entries remain denied.
+  - Complete producer plus independent authority suite passes.
+acceptance_checks:
+  - uv run pytest -q tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff format --check tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff check tests/security/test_w04_source_authority_boundary.py
+  - uv run mypy tests/security/test_w04_source_authority_boundary.py
+stop_conditions:
+  - The correction broadens admitted competition scope or weakens unknown-member denial.
+  - Review requires editing a forbidden authority or implementation path.
+  - A new P0-P2 boundary defect is reproduced.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

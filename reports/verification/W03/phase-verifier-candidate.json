@@ -1,0 +1,52 @@
+{
+  "allow_pending_checkpoint": true,
+  "checks": [
+    {
+      "detail": "state: 'CLOSED'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'VERIFIED'], got 'CLOSED'",
+      "id": "PHASE_GATE_READY",
+      "status": "PASS"
+    },
+    {
+      "detail": "W02:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W03-DEPS-01:ACCEPTED, W03-CONTRACTS-01:ACCEPTED, W03-GOVERNANCE-01:ACCEPTED, W03-DESIGN-REVIEW-00:ACCEPTED, W03-ARCHITECTURE-01:ACCEPTED, W03-STORAGE-01:ACCEPTED, W03-FIXTURES-01:ACCEPTED, W03-DATABASE-01:ACCEPTED, W03-VERTICAL-01:ACCEPTED, W03-BOUNDARY-REVIEW-01:ACCEPTED",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "PASS"
+    },
+    {
+      "detail": "reports/phase-gates/W03/acceptance-report.md, reports/phase-gates/W03/gate-report.json, reports/reviews/W03/master-review.md, reports/verification/W03/verification-report.md, reports/verification/W03/security-dependency-container-report.md, reports/verification/W03/protected-gate-attempt-R4.json, reports/reviews/W03/boundary-audit-R2.md, reports/verification/W03/phase-verifier-candidate.json, reports/verification/W03/clean-tree-report.md",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "G-W03:PASS, G1-foundation-contribution:PASS, complete-master-suite:PASS, protected-synthetic-gate:PASS, independent-boundary-review:PASS, local-security-dependency-containers:PASS, phase-state-and-evidence:PASS, checkpoint-clean-tree-procedure:PASS",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "PASS"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w03-start:8e40321fc6d87bbd8adac4ba3efc85eee41554c5, accepted=checkpoint/w03-accepted:PENDING_ALLOWED",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "phase_id": "W03",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "CLOSED",
+  "status": "PASS",
+  "validator": "verify_phase"
+}

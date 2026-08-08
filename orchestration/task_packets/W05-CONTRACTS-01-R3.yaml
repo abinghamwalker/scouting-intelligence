@@ -1,0 +1,136 @@
+schema_version: 1
+task_id: W05-CONTRACTS-01
+phase_id: W05
+revision: R3
+state: DISPATCHED
+objective: >-
+  Complete the convergence-narrowed additive W05 boundary by making query, score/tie,
+  candidate-specific state, explanation, taxonomy, numeric and exact W04 descriptor
+  identities executable and adversarially testable.
+depends_on:
+  - REVIEW-W05-CONTRACTS-REVIEW-01-R1:REWORK
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R2.yaml
+  - reports/reviews/W05/w05-m0-contracts-independent-review-R1.md
+  - reports/reviews/W05/w05-architecture-preflight-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - migrations/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R2.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    Reject negative zero in every canonical finite numeric contract, including VALUE,
+    ZERO, distance and contribution. ZERO requires canonical +0.0 and stays distinct
+    from missing, suppressed and unavailable.
+  - >-
+    Make FootballResponsibilityTaxonomy self-verifying with taxonomy_digest over one
+    canonical order: responsibilities by code, roles by code, each role's responsibility
+    codes sorted, deterministic mappings by source_label. Pin taxonomy_digest through
+    M0ArtifactManifest and PinnedM0ServingRequest. Same ID/version with changed content
+    must fail.
+  - >-
+    Replace the opaque resolved query with a self-verifying typed resolved-query
+    projection containing tenant/trace, brief ID/version, taxonomy ID/version/digest,
+    ordered responsibilities, weights, hard constraints, exemplars, optional query
+    player, cutoff, limit and exclusions. Its digest must be derived and cross-checked
+    with RetrievalRequest. M0RetrievalResult must also cross-check tenant, trace, brief
+    identity/version, cutoff and resemblance-only claim.
+  - >-
+    Add an explicit per-candidate scored projection with player, contiguous rank,
+    finite non-negative canonical distance, exact query and candidate FeatureValue
+    tuples, and exact contribution tuple. M0RetrievalResult must align it with candidates
+    and validate total order by ascending distance then canonical UUID bytes.
+  - >-
+    Replace global dimension_evidence with per-candidate six-dimension state evidence
+    aligned by player/rank. MEASURED and valid ZERO may contribute; MISSING, SUPPRESSED
+    and UNAVAILABLE may not. For W04_REAL_GOVERNED, only STYLE_RESEMBLANCE and
+    DATA_CONFIDENCE may be MEASURED/ZERO; ROLE_COMPATIBILITY, IMPACT, TRAJECTORY and
+    TRANSFER_RISK remain unavailable/suppressed and non-ranking.
+  - >-
+    Require every explanation to use exactly artifact feature_names in order and to
+    equal the scored candidate's query values, candidate values and contributions.
+    Candidate/rank/reason ordering remains deterministic. Family-specific contribution
+    maths and reason generation will be proven by later model/serving tests, but the
+    boundary must reject a re-signed mismatch.
+  - >-
+    Require exact family-specific ordered array semantic roles and shape relationships.
+    All artifacts bind INDEX_VECTORS and INDEX_PLAYER_IDS; player-ID arrays are uint8
+    with shape candidate_count x 16. Scaler/weighted/PCA families require their declared
+    centre/scale/weight/component/variance arrays; PCA component and index dimensions
+    agree; every feature axis equals len(feature_names). No PCA artifact containing only
+    a feature matrix may validate.
+  - >-
+    Rename and bind W04 feature_registry_canonical_digest to the accepted candidate
+    canonical digest `49065bcfe762caa7585082d897d845d82c9a9ef2f57a84a5312e55a12ffea10f`
+    and add a separate feature_registry_decision_digest equal to
+    `bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941`.
+    Mechanically derive and freeze the exact-four feature_descriptor_digest from the
+    accepted YAML's four supported rows under a documented canonical projection; test
+    the derivation and require feature-axis agreement.
+  - >-
+    Restore comprehensive taxonomy and contextual-membership tests from R1 and add
+    direct tests for all six reviewer findings: negative zero, UUID-inverted equal ties,
+    request/result drift, per-candidate states and ZERO, W04 role compatibility,
+    fabricated/incomplete explanations, PCA missing arrays, same-ID taxonomy swap and
+    W04 descriptor/matrix mismatch.
+deliverables:
+  - Convergence-complete additive W05 contracts and public exports.
+  - Direct adversarial tests for every R2 independent-review finding.
+  - Complete mandatory R3 return at the exact allowed path.
+definition_of_done:
+  - All six independent-review P1 probes fail closed for the intended reason.
+  - Existing W03/W04 contracts, authority files and serialized bytes remain unchanged.
+  - No loader/training/serving implementation or W06 evaluation surface is introduced.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+stop_conditions:
+  - Any need to modify accepted W03/W04 contracts, authorities, evidence or product bytes.
+  - Any materially different product behaviour, weakened evidence guarantee or unresolved product decision.
+  - Any new dependency, external access/service, deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

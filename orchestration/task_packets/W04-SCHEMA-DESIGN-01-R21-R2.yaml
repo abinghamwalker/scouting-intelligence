@@ -1,0 +1,116 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R21-R2
+state: DISPATCHED
+objective: >-
+  Correct only the six bounded master-review defects in the additive R21
+  design, retain every passing R1 closure, write a truthful R2 return, and
+  prepare the frozen candidate for fresh independent R14 review.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R21:MASTER_REWORK
+assigned_role: bounded_r21_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R1.yaml
+  - reports/verification/W04/wyscout-schema-design-R21-R1-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+required_corrections:
+  - >-
+    Replace the field-v2 array-order sentence with the immutable R20 profile
+    roster order. The exact 119 pair sequence remains
+    competition, team, player, match, action, event-taxonomy, tag-taxonomy with
+    each kind's declared profile order; no lexical record-kind/json-path sort.
+  - >-
+    Put the closed prior-authority keys in exact Unicode lexical order.
+    `review_recommendation` precedes `review_record_sha256`. Correct both v1
+    JSON examples and add a negative-test requirement for the wrong order.
+  - >-
+    Replace the Section 4 single chain with an unambiguous branch:
+    R20 -> R21 -> {product preimage, schema preimage}; both siblings converge
+    on field v2; then field v2 -> possession v2 -> feature authority. State
+    that topological presentation order is not a sibling dependency.
+  - >-
+    Define r21_design_sha256 only as SHA-256 of the complete frozen R21
+    Markdown physical bytes. Remove every physical/canonical description of
+    the Markdown digest. Retain canonical terminology only for materialized
+    JSON preimages and canonical JSON/YAML candidates.
+  - >-
+    Replace the combined final packet with three serial packets and exhaustive
+    disjoint paths:
+    W04-R21-CROSS-AUTHORITY-TEST-01-R1 owns the cross test and return;
+    W04-R21-CROSS-AUTHORITY-REVIEW-01-R1 owns a fixed independent review and
+    return; W04-R21-CROSS-AUTHORITY-GATE-01-R1 is master-only and owns the
+    verification report, machine gate JSON, and return. Update packet
+    cardinality/order, dependencies, wording, and positive/negative review
+    validation accordingly. The review artifact is control evidence, not a
+    runtime local resource, so the exact resource roster remains 30.
+  - >-
+    Enumerate the complete repository gate with every exact AGENTS.md command:
+    uv sync --locked --all-groups; ruff format/check; mypy; lint-imports;
+    pytest; bandit; install_local_git_guards.py --check;
+    verify_local_only.py; verify_phase.py --phase W04; git status --short; and
+    git remote. Retain all additive R21-specific checks.
+  - >-
+    Preserve every other passing R1 clause: R20 binding, v1 evidence, v2
+    supersession, strict subevent mapping/reason codes, descriptor-only
+    preimages, 15 exact feature rows, 30-resource roster, five dependencies,
+    no-product boundary, and all unaffected packet paths.
+definition_of_done:
+  - All six master defects are absent and mechanically testable.
+  - R21 remains bounded, additive, acyclic, and product-free.
+  - R2 return truthfully distinguishes producer R1 from bounded rework.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    s=Path('reports/reviews/W04/wyscout-schema-design-R21.md').read_text();
+    assert 'sorted by `(record_kind, json_path)`' not in s;
+    assert 'W04-R21-CROSS-AUTHORITY-TEST-01-R1' in s;
+    assert 'W04-R21-CROSS-AUTHORITY-REVIEW-01-R1' in s;
+    assert all(x in s for x in
+      ('uv run bandit -q -r scripts src',
+       'scripts/install_local_git_guards.py --check',
+       'scripts/verify_phase.py --phase W04',
+       'git status --short',
+       'git remote'));
+    block=s[s.index('Each v2 decision contains'):s.index('### 3.1')];
+    assert block.index('review_recommendation') <
+      block.index('review_record_sha256');
+    assert 'physical/canonical digest of this report' not in s"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - A correction needs a broader architecture, product, root, dependency,
+    rights, storage, network, cloud, container, endpoint, hosted CI, deployment,
+    or v1-evidence change.
+  - Any edit outside the two allowed paths is required.
+  - Any inventory or local-only check fails.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

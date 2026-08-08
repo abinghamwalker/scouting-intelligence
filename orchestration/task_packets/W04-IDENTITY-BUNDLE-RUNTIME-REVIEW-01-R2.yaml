@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01
+phase_id: W04
+revision: R2
+state: ACCEPTED
+objective: >-
+  Re-review the unchanged frozen identity candidate in an exclusive no-writer window,
+  with bytecode emission disabled for every helper and byte-identical complete
+  preflight/postflight pyc inventories.
+depends_on:
+  - W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1:REVIEW_CHAIN_INVALIDATED
+  - W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3:TERMINAL
+assigned_role: fresh_independent_w04_identity_bundle_r2_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R2.yaml
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-identity-bundle-runtime-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-identity-bundle-runtime-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/contracts/wyscout_identity.py
+  - src/scouting/identity/wyscout.py
+  - tests/contracts/test_w04_wyscout_identity_bundle.py
+  - tests/unit/test_wyscout_identity.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-identity-bundle-runtime-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  contracts_sha256: 8040279c825fc246900a07b257bab71b9ead3ff9850c4e7994501bd9d13d272f
+  runtime_sha256: a9bc386ec759252464e5d6b4b14b95082a3a4218a9a48cbea97ffbcbd11b95cd
+  contract_tests_sha256: 13ce12bb54ccd0880ab0865e3b33982bba1b0cfeb4fc59f070bde710e5dbc030
+  runtime_tests_sha256: 47e4f4aa0868e987fdc5961e6960b85456edcfa1a394b634664dff587225ae60
+  producer_return_sha256: 813b83bc5641f7a6322a529d3e513e284eca02302e3bfec5f6b2b20bac4e70b5
+  namespace_addendum_sha256: d28e808a91864156b479aa02647859aea8e08ad55b36e9b726192cd9413c84dd
+  queue_sha256: e868d4376f18e7e191c8735ab17814c277f2d0ef1b29dd735c01eb84319e0b51
+  bundle_sha256: 4127705ab1a66145576439e520351587d817c48a71a572bb2c0cefc291fd1e80
+  invalidated_r1_review_sha256: 4eed7733df7c9cc468385b4c4dff07d2cbad3f211bb38602219cec2b0075b9a3
+  invalidated_r1_return_sha256: 6bcfc58bae4f003dfbd90afb9ff62be0e2aff4c1a8cb83cee5e7070be0194a8c
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - Take and retain complete classified site and repository pyc inventories before any Python command.
+  - >-
+    Prefix every Python-bearing command with `PYTHONDONTWRITEBYTECODE=1`; use
+    `uv run --locked --no-sync` and `python -B` where applicable, including the
+    local-only verifier and all standalone source-recomputation helpers.
+  - Reproduce every semantic, source, exact-address, persistence, target and inventory-adjudication check from R1.
+  - Require byte-identical full site and repository pyc inventories at postflight; any mutation invalidates review and must be preserved.
+  - Recheck all candidate/artifact hashes, sizes and modes after postflight.
+  - Confirm no Git, provider/network, build/product/receipt/cloud/container/CI/remote/deployment action.
+definition_of_done:
+  - Exact unchanged candidate receives PASS with zero open P0-P2 and stable inventories, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q tests/contracts/test_w04_wyscout_identity_bundle.py tests/unit/test_wyscout_identity.py tests/contracts/test_w04_identity_ruleset_authority.py
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B scripts/verify_local_only.py
+deliverables:
+  - Independent R2 review and mandatory return with exact finding counts and pre/post inventory digests.
+stop_conditions:
+  - Any concurrent writer or inventory mutation.
+  - Candidate hash drift or need to edit implementation/tests/data/frozen authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

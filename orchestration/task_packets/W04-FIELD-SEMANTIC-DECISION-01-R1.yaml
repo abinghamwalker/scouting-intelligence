@@ -1,0 +1,172 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-DECISION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the accepted R20 field-semantic decision route only: freeze the
+  complete 119-row master decision, its exact parsed-YAML registry restatement,
+  the controlling contract test, and the packet return before any Bronze work.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R13:MASTER_ACCEPTED
+assigned_role: field_semantic_authority_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R13.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R13.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R13-master-verification.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - "!tests/contracts/test_wyscout_field_registry_authority.py"
+authority:
+  master_actor_id: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  master_actor_derivation: >-
+    UUIDv5(NAMESPACE_URL,
+    "urn:scouting-intelligence:actor:master-orchestrator:v1")
+  decision_id: w04-wyscout-field-semantic-decisions-v1
+  registry_id: w04-wyscout-field-registry-v1
+  source_id: wyscout-soccer-match-events-figshare-v5
+requirements:
+  - >-
+    Work only from the accepted R20 field route, fixed completion/profile/
+    taxonomy inputs, and project claim boundary. Do not use external knowledge,
+    web search, provider-native labels as runtime matching authority, or inspect
+    excluded payloads.
+  - >-
+    Parse the exact R20 normative roster and the measured source profile
+    independently. Produce exactly 119 unique rows in roster order with exact
+    10/11/26/47/18/4/3 counts. Every source_shape must be mechanically derived
+    from the fixed profile using positive rows and exact
+    array/boolean/integer/number/null/object/string order; do not hand-copy or
+    guess measured types/counts.
+  - >-
+    Make an explicit, conservative master semantic decision for every row under
+    the W04 proof claim. Use TRANSFORM only when the source support and exact
+    closed R20 transform semantics justify it. Use PRESERVE_UNMAPPED for
+    measured evidence that must remain visible but has no governed canonical
+    semantic. Use FORBIDDEN where projection would violate the claim, leak a
+    disallowed current/outcome/score/name-based assertion, or create an
+    unsupported semantic. Each rationale must be specific, truthful, NFC, and
+    1..2,000 characters.
+  - >-
+    Do not infer semantics from display labels, team/player names, current-team
+    fields, winner/score fields, or external football knowledge. IDs, time,
+    positions, tags, and taxonomy fields may be transformed only through the
+    exact R20 closed transform union and fixed source/taxonomy evidence. Do not
+    invent action UTC, exact terminal duration, elapsed minutes, rates, per-90,
+    outcomes, provider possessions, current-team claims, or role inference.
+  - >-
+    Enforce the R20 collision rule. A canonical_field is produced by at most one
+    input pair unless all producers are exact COMPOSE_OBJECT rows for the same
+    output_object with distinct members. No implicit object merge, overwrite,
+    alias, fallback, or label lookup is allowed.
+  - >-
+    Render the decision as strict canonical UTF-8 JSON with one terminal LF and
+    exactly the R20 top-level keys, four bound input digests, five exact policies,
+    strict master ActorId, truthful canonical UTC decided_at, and 119 decisions.
+    Obtain decided_at from the actual local UTC clock only after the semantic
+    choices are frozen; do not use file/Git/source/report metadata or backdate it.
+  - >-
+    Render the registry as one safe UTF-8 YAML document with exactly the R20
+    registry keys. Its fields array and policies/bound_inputs must equal the
+    decision byte-for-byte under canonical parsed representation, and
+    decision_sha256 must equal the canonical/physical decision digest. Do not
+    include review or acceptance bytes, aliases, anchors, merge keys, explicit
+    tags, duplicate/non-string keys, implicitly typed timestamps, or floats.
+  - >-
+    Implement the exact controlling contract test. It must safely parse both
+    artifacts without constructors, independently parse R20/profile authority,
+    reproduce all four fixed input digests and 119 source shapes, enforce strict
+    schemas/types/order/actors/clocks/digests/policies/transform union/collision
+    rules, and prove registry equality.
+  - >-
+    The test must cover every R20 field-route negative class: omitted, extra,
+    duplicate, or reordered roster row; wrong 10/11/26/47/18/4/3 count; shape
+    mismatch; fifth/changed input; unknown decision/transform/source_support;
+    cross-kind transform key; illegal null; unknown policy; noncanonical JSON or
+    YAML; YAML alias/tag/merge/duplicate/non-string/implicit timestamp/float;
+    invalid/noncanonical/non-UUID actor; digest mismatch; physical YAML digest
+    substitution; canonical-field collision; and any review, acceptance,
+    dependency, or Bronze claim before those separately owned artifacts exist.
+  - >-
+    Assert the exact field review and acceptance paths are absent and that this
+    packet creates no Bronze/product/runtime/provider output. The test may name
+    future authority IDs and schemas only as negative/blocked expectations; it
+    must not create or accept them.
+  - >-
+    Use only root uv. Every Python command must start with
+    PYTHONDONTWRITEBYTECODE=1 and run through
+    uv run --locked --no-sync python -B; use -S -B when installed packages are
+    unnecessary. Take a shell pyc preflight before Python and an identical
+    postflight after all checks. Any new/deleted/mutated pyc invalidates the run
+    and cannot be cleaned into success.
+  - >-
+    Change exactly the four owned paths. Do not sync, mutate .venv/pycs, run Git,
+    delegate, self-approve, access network/provider, create a parent-workspace
+    report, or begin possession, identity, feature, Bronze, Silver, Gold,
+    quality, runtime-entrypoint, cloud, container, endpoint, or deployment work.
+definition_of_done:
+  - Decision and registry contain exactly the complete 119-row accepted roster.
+  - Every semantic choice is explicit, conservative, source-supported, and closed.
+  - Canonical decision and parsed registry are digest-linked and exactly equal.
+  - The controlling contract test passes its complete positive/negative route.
+  - Review and acceptance artifacts remain absent; Bronze remains blocked.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    A field choice requires external/provider knowledge, excluded-payload access,
+    a new transform kind, an invented source type/count, or an unsupported
+    semantic claim.
+  - >-
+    Correct implementation requires changing R20, architecture, project root,
+    dependency/lock policy, provider/rights authority, storage, or local-only
+    boundary.
+  - A mandatory input is missing, changed, unreadable, or digest-inconsistent.
+  - Any preflight/postflight pyc or unexpected filesystem drift occurs.
+  - Work requires edits outside the four owned paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,47 @@
+schema_version: 1
+task_id: W03-ARCHITECTURE-01
+phase_id: W03
+revision: R1
+state: IMPLEMENTED
+objective: >-
+  Materialise the approved blueprint module-dependency direction as executable
+  import-linter contracts in the shared local verification suite.
+depends_on:
+  - W03-CONTRACTS-01:ACCEPTED
+assigned_role: master_integration
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - pyproject.toml
+allowed_paths:
+  - AGENTS.md
+  - pyproject.toml
+  - orchestration/task_packets/W03-ARCHITECTURE-01-R1.yaml
+  - orchestration/reviews/REVIEW-W03-ARCHITECTURE-01-R1.yaml
+  - reports/reviews/W03/returns/W03-ARCHITECTURE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - uv.lock
+  - migrations/**
+  - src/**
+  - services/**
+  - tests/**
+deliverables:
+  - Executable layer and forbidden-import contracts for every current W03 project module.
+  - The import-linter command in the repository-wide master verification suite.
+  - A locked-environment proof that all contracts are kept.
+definition_of_done:
+  - Contracts and audit remain dependency floors.
+  - Serving and workflow/policy cannot import provider sources.
+  - Current dependency direction passes with zero ignored imports.
+  - No dependency declaration or lock record changes.
+acceptance_checks:
+  - uv lock --check
+  - uv run lint-imports --no-cache
+stop_conditions:
+  - A dependency or lock change is required.
+  - An existing implementation import violates the approved blueprint direction.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only

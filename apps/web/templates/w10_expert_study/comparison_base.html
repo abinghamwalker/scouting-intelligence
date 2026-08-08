@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{% block title %}Historical Player Comparison{% endblock %}</title>
+  <link rel="stylesheet" href="/static/historical-player-comparison/study.css">
+  <script src="/static/historical-player-comparison/study.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Research form trial</p>
+      <h1>Historical Player Comparison</h1>
+      <p class="lede">Compare two players from a historical season using the football information shown.</p>
+    </div>
+    <span class="local-badge">Stored on this computer</span>
+  </header>
+  <nav aria-label="Page sections">
+    <a href="#research-boundary">About this form</a>
+    <a href="#study-content">Current comparison</a>
+    <a href="{{ review_anchor|default('#study-content') }}">Review and submit</a>
+  </nav>
+  <main id="main-content" tabindex="-1">
+    <section id="research-boundary" class="boundary-card" aria-labelledby="boundary-title">
+      <div>
+        <p class="section-kicker">Important</p>
+        <h2 id="boundary-title">Historical research, not recruitment advice</h2>
+      </div>
+      <p>
+        This form asks about historical playing-style comparisons. It does not assess current
+        ability, future performance, price, availability, squad fit, or whether a club should
+        recruit a player.
+      </p>
+    </section>
+    {% block body %}{% endblock %}
+  </main>
+  <footer>
+    <p>Your answers are stored locally under your participant code. The form does not show an expected answer.</p>
+  </footer>
+</body>
+</html>

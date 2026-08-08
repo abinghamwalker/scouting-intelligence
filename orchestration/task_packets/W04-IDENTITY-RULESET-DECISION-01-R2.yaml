@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W04-IDENTITY-RULESET-DECISION-01
+phase_id: W04
+revision: R2
+state: MASTER_REVIEW
+objective: >-
+  Correct only the three independently reproduced identity focused-contract
+  defects: far-future review/acceptance clocks, six-fraction canonical UTC
+  parsing, and live REWORK-state classification. Preserve all candidate and
+  upstream bytes and create no acceptance or product path.
+depends_on:
+  - W04-IDENTITY-RULESET-REVIEW-01-R1:REWORK
+assigned_role: identity_contract_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-RULESET-DECISION-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/archive/wyscout-identity-ruleset-independent-review-R1-rework-1a92a3a3.md
+  - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R1-rework-a0f637b4.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_identity_ruleset_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+fixed_bindings:
+  decision_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+  ruleset_physical_sha256: 8027321bda566188019850f9f9031e684d2d81d8df7851ba3c71b1685ae4f547
+  ruleset_canonical_sha256: 9c34783214d084ce8fde42be771850e8f9332fa9fb9a1529b011a8600e34e87c
+  failed_review_sha256: 1a92a3a38d050fb83cd5ee83e842d3f6919433ceeef17e36aa1a6db017aac5d9
+  failed_return_sha256: a0f637b4fe13c3c393b86f5d44fb59c85af001659201e21c83113cf395434c24
+requirements:
+  - >-
+    Extend canonical UTC parsing from exact seconds to the unchanged R20
+    grammar: seconds or exactly six fractional digits, real UTC values only,
+    byte-for-byte round-trip, no alternate fraction widths or offsets.
+  - >-
+    Reject reviewed_at and accepted_at later than the same truthful
+    current-time tolerance already enforced for decided_at. Preserve
+    decided_at <= reviewed_at <= accepted_at and all actor/digest separation.
+  - >-
+    Correct live-state expectation so a present valid REWORK review yields
+    REVIEW_REWORK, a PASS review yields REVIEW_PASS, an acceptance requires
+    PASS and yields ACCEPTED, and absent review remains CANDIDATE.
+  - >-
+    Add focused positive and negative tests that independently reproduce all
+    three findings, including a far-future review, far-future acceptance,
+    accepted six-fraction time, rejected other fractions, and live REWORK.
+  - >-
+    Preserve decision, ruleset, upstream, R21, failed review/return, and all
+    non-owned bytes. Do not create a fresh review or acceptance.
+definition_of_done:
+  - All three findings are directly regression-tested and fail closed.
+  - Candidate and preserved failed-evidence digests remain exact.
+  - Exact focused suite and static checks pass.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync mypy
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+stop_conditions:
+  - Any candidate, upstream, R21, or failed-evidence byte must change.
+  - Correctness requires an authority semantic or path change.
+  - >-
+    Correctness requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

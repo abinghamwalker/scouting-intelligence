@@ -1,0 +1,48 @@
+schema_version: 1
+task_id: W10-V2-MECHANICS-PILOT-08D
+phase_id: W10
+revision: R1
+state: READY
+objective: >-
+  Run a separate v2 evidence-sufficiency mechanics pilot with a query pack disjoint from future
+  formal evidence and retain an honest go/rework decision.
+depends_on:
+  - W10-V2-STUDY-CONSOLE-08C:ACCEPTED
+assigned_role: study_operator
+risk: high
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - reports/verification/W10/v2-evidence-capability-and-construct.md
+allowed_paths:
+  - data/working/w10/study/v2/pilot/**
+  - reports/verification/W10/v2-mechanics-pilot.md
+  - reports/reviews/W10/returns/W10-V2-MECHANICS-PILOT-08D-R1.md
+forbidden_paths:
+  - .git/**
+  - configs/**
+  - src/**
+  - services/**
+  - apps/**
+  - scripts/**
+  - tests/**
+  - data/working/w10/study/formal/**
+requirements:
+  - Use at least two eligible football-domain reviewers and pilot-only queries/candidates disjoint from the future formal pack.
+  - Collect task assessability, confidence, judgement basis and qualitative evidence gaps; never treat ratings as G-RW4 evidence.
+  - Require at least 80 percent assessable tasks, median confidence at least 3/5 and no reliance solely on minutes/name recognition.
+  - Stop and return to rework on any position-specific insufficiency, comprehension issue or provenance leak.
+deliverables:
+  - reports/verification/W10/v2-mechanics-pilot.md
+  - reports/reviews/W10/returns/W10-V2-MECHANICS-PILOT-08D-R1.md
+definition_of_done:
+  - The pilot yields an evidence-sufficiency GO or bounded REWORK decision without contaminating formal evidence.
+acceptance_checks:
+  - Participant/query separation and reported denominators reproduce locally.
+  - No pilot row can enter formal export or evaluation.
+stop_conditions:
+  - Eligible reviewers are unavailable or any reviewer cannot make a genuine football judgement from the supplied evidence.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

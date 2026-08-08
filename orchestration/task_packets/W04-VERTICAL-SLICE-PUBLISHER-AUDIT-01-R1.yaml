@@ -1,0 +1,55 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-PUBLISHER-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce executable/read-only evidence for the smallest exact R20 Parquet encoder,
+  semantic digest and sidecar-free staged immutable publisher needed by the bounded
+  vertical slice. Reconcile the frozen product path set with current storage code.
+  Do not implement or write product/control bytes.
+depends_on:
+  - W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1:BLOCKED_FINAL_PUBLICATION
+assigned_role: independent_product_publication_analyst
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-PUBLISHER-AUDIT-01-R1.yaml
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - src/scouting/storage/formats.py
+  - src/scouting/storage/guarded.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-PUBLISHER-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Compare every accepted R20 Parquet control with current serializer behavior using executable local probes where useful.
+  - Identify the exact semantic-digest framing and canonical row-order requirements for each bounded artifact.
+  - Identify a safe additive sidecar-free staged atomic writer design using guarded nofollow/immutable semantics without broad roots or cleanup-on-failure.
+  - Propose serial bounded implementation packets and exact path ownership; do not change architecture or soften R20/R21.
+deliverables:
+  - One concise PASS_TO_PACKET or BLOCKED_SCOPE report with executable evidence and exact minimal packet sequence.
+stop_conditions:
+  - Any implementation, Git, dependency, provider/network, product, cloud/container/CI/endpoint/remote/deployment action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

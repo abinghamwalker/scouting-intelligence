@@ -1,0 +1,114 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-REVIEW-04
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review whether the R1 robustness/null/missing-population/applicability
+  implementation actually performs each declared stress/control behavior and fails
+  closed on exact governed-population deficits.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-04-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R1.yaml
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R1.md
+  - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+  - reports/reviews/W06/evaluation-value-identity-independent-review-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - src/scouting/evaluation/__init__.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-robustness-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+master_counterexamples:
+  - >-
+    Split-half digest c1cbcf5b1968e11aa6473c9ca9a914b487c96a841fd7233d425ade298db3f177
+    returns COMPUTED with four queries but only one observation per query, no half
+    comparison and a full-population precision value.
+  - >-
+    Intersection-only source digest f0f0afb88df883815037246a21e3ae384eb461c0b7286c9e18100c627bd15cca
+    returns COMPUTED for two providers with zero shared candidates and no comparison.
+  - >-
+    Failure register digest 31f5ab91dafe4377b5ec94b837a2cb01634e4d0883405ed25d39ee90abb99056
+    accepts ten retained cases while claiming total_case_count=100, without binding the
+    omitted ninety cases or a source population.
+  - >-
+    Applicability digest ed497952ab334aeac02d2f0f7e513e78fa31137a458583353cdade96b5ca31e2
+    lets caller boolean mandatory_transfer_supported=true suppress the exact missing
+    transfer reason for a one-competition/team/provider/window inventory.
+  - >-
+    Specification digest 6599b30a7fb0334dc64c7001de9abc2a8722a1bcce86f91cb7557f74199bf42b
+    accepts agreement at k=999 without binding declared k or the protocol metric roster.
+  - >-
+    evaluate_control rejects valid ordered ranking (beta, alpha) solely because rank
+    order is not alphabetic; shuffled-label/pair controls shuffle candidate order rather
+    than governed labels or pair outcomes.
+review_questions:
+  - Does each computed split-half/window/minutes/walk-forward/leave-group/source test execute the declared population transformation and retain comparison evidence rather than merely score the unchanged full population?
+  - Are minima enforced per declared evaluated unit, with exact chronology and non-empty provider candidate intersection?
+  - Are every specification metric and k bound to the frozen protocol and accepted core capability?
+  - Do metadata/raw/coverage controls preserve meaningful rank order, and do shuffled-label/pair nulls actually permute the declared evidence while retaining query cardinality and seed identity?
+  - Is applicability derived from exact stress/control results rather than a caller assertion, with every mandatory unsupported population retained?
+  - Does the failure register cryptographically bind the full source population so false total counts or omitted high-severity cases reject?
+  - Do tests exercise every computed and unsupported branch with exact stable identities and preserve all accepted W06 metric/gate regressions?
+deliverables:
+  - One fresh report-only ACCEPT or REWORK verdict with P0/P1 severities and an exact stress/control/constructor matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.md.
+definition_of_done:
+  - Every master counterexample is independently reproduced as closed or open with exact severity and identity.
+  - Any new finding demonstrably changes a stress/control result, partition/population, null, failure register, applicability or gate input.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/evaluation-robustness-independent-review-R1.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and finding counts by severity
+  - exact master-counterexample outcomes and stress/control/constructor matrix
+  - exact commands, exit statuses and concise results
+  - remaining result, population, null, register, applicability and claim risks
+  - smallest bounded correction or none
+  - confirmation of no Git operations, dependency changes, protected expected-output access and edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

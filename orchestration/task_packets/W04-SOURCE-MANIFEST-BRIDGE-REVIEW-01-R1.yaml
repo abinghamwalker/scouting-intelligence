@@ -1,0 +1,82 @@
+schema_version: 1
+task_id: W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the frozen Wyscout source-manifest bridge, reproduce its
+  focused executable evidence against the real local source, and issue PASS or
+  bounded REWORK without editing producer or orchestration artifacts.
+depends_on:
+  - W04-SOURCE-MANIFEST-BRIDGE-01-R1:MASTER_REPRODUCED
+assigned_role: independent_source_manifest_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - orchestration/task_packets/W04-SOURCE-MANIFEST-BRIDGE-01-R1.yaml
+  - reports/reviews/W04/returns/W04-SOURCE-MANIFEST-BRIDGE-01-R1.md
+  - src/scouting/sources/wyscout_manifest.py
+  - tests/unit/test_wyscout_source_manifest.py
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-source-manifest-bridge-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+fixed_bindings:
+  bridge_physical_sha256: ef16a489a13dffab7cf2b609f81d2a229a012ec5b92ba4debee0f628b35e721c
+  bridge_test_physical_sha256: c7c71cf5abc9b996b7c93ed9b7005b1469f5614ba9d2653a74dc135310e038d1
+  producer_return_physical_sha256: eb3e7e8cfee728c0fdcaa6747079f48f998d033a56cac21a98425b4ce6368dc9
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  source_manifest_physical_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  source_manifest_size_bytes: 4199
+  trace_id: 2c441714-d968-5495-8339-c85ecaf5f596
+requirements:
+  - Independently inspect every producer-owned byte and verify all fixed bindings before testing.
+  - >-
+    Reproduce exact validation of the completion manifest and all 18 R20
+    source-evidence rows, including path, size, SHA-256, and row count.
+  - >-
+    Reproduce canonical SourceSnapshotManifest parsing, exact UUIDv5 identities,
+    rights, clocks, six coverage dimensions, mode 0600, link count one, and
+    byte-idempotent materialization.
+  - >-
+    Verify mutation, path, symlink, conflict, tenant, temporal, rights, coverage,
+    and no-network/no-product cases are executable and fail closed.
+  - >-
+    Write a standalone review with explicit recommendation PASS or REWORK and a
+    complete return. Do not rely on producer conclusions.
+definition_of_done:
+  - Every fixed binding and real-source assertion independently reproduces.
+  - The exact focused suite passes with the immutable manifest present.
+  - The review has zero findings for PASS or concrete P0-P2 findings for REWORK.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_manifest.py tests/unit/test_wyscout_source_manifest.py
+  - uv run ruff check src/scouting/sources/wyscout_manifest.py tests/unit/test_wyscout_source_manifest.py
+  - uv run mypy src/scouting/sources/wyscout_manifest.py
+  - uv run pytest -q tests/unit/test_wyscout_source_manifest.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python -m scouting.sources.wyscout_manifest --source-root data/source/wyscout/v5 --manifest-root data/manifests --tenant-id 65a43912-d412-5ff9-a364-7f84d1ad6c5d
+stop_conditions:
+  - Any fixed digest, source row, contract value, identity, clock, right, or path differs.
+  - Review correctness requires an edit outside the two allowed evidence paths.
+  - Any architecture, dependency, network, remote, cloud, container, CI, endpoint, or deployment work is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

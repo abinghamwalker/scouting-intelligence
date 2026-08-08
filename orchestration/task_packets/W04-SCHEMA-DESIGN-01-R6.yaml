@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R6
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 schema/rebuild design by correcting only the
+  seven P1 defects independently returned against R5, while retaining every prior
+  closure and the approved architecture, rights, dependency, migration and
+  local-only boundaries.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R4:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R5.yaml
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R4.md
+  - configs/environments/local-only.yaml
+  - .gitignore
+  - src/scouting/contracts/evidence.py
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R6.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Move all generated identity bundle, queue and normalized-correction families
+    under exact data/working/wyscout/v5/identity subtrees. Update every schema,
+    guard category, reader, manifest reference, test and owner in the design; do not
+    introduce or propose a new local root or ignore rule.
+  - >-
+    Replace the unavailable lock-wheel-archive premise with an offline algorithm
+    that matches the actual uv extracted-cache and installed-distribution state.
+    Distinguish lock-declared artifact metadata from locally verified bytes; never
+    claim the original wheel ZIP hash was reproduced when its archive is absent.
+    Bind the exact uv cache symlink/extracted-tree mapping, installed RECORD and
+    files, interpreter/libpython/stdlib, and enumerate exact INSTALLER, REQUESTED
+    and other allowed generated metadata rules. No download, dependency or network
+    packet may be added.
+  - >-
+    Give the supported-feature registry an exact master decision, independent
+    review and master acceptance lifecycle before Gold, with truthful clocks and
+    digests. Add the accepted registry as the exact feature_schema temporal
+    dependency; update cardinality, ordering, watermark, proof, resources, build
+    identity, cutoff-negative tests and packet owners.
+  - >-
+    Define an exact W04 classification method representation for every resolved,
+    review-required, rejected and superseded state and both resolved/rejected
+    reviewed corrections. Preserve the existing IdentityEvidence contract and
+    project only valid resolved rows; bind methods into the accepted identity
+    ruleset and tests.
+  - >-
+    Define two explicit reviewed identity correction routes: disposition of an
+    existing queue item and direct supersession of a current resolved row that has
+    no queue item. Make route-specific fields, queue transition, crosswalk row,
+    supersession edge, clocks, bundle regeneration and tests exact without
+    inventing queue history.
+  - >-
+    Enumerate exact non-overlapping generated paths and deterministic relative-path
+    formulas for Bronze raw preservation, rejected/quarantined records and fields,
+    every Silver product, Gold partitions, temporal receipts and layer manifests.
+    Assign one serializer per path family, constrain the rebuild owner to invocation,
+    define atomic completion and manifest references, and require two-root path and
+    no-overlap tests.
+  - >-
+    Reconcile the ledger with the controlling workflow: full gate first; acceptance
+    integration commit and annotated accepted tag next; then registry/checkpoint-SHA
+    and final clean-tree evidence in one separate local ledger commit. Define exact
+    artifact contents without self-referential hashes, and retain the registry's
+    approved W04 commit message/tag.
+  - >-
+    Retain every closed R5/R4/R3/source/temporal finding, the exact 18-row manifest,
+    strict source coverage, field/possession authorities, identity clocks, neutral
+    Gold grain, minutes/per-90 suppression, coverage equations, data health,
+    transformed card, independent reviews and G-W04 evidence.
+definition_of_done:
+  - All seven R5 review defects close with exact schemas, paths, clocks, owners and tests.
+  - Every prior accepted closure remains intact.
+  - The graph is standalone and ownership-complete for W04.1-W04.7/P2.1-P2.9/G-W04.
+  - No implementation-time semantic, path, cache, correction or ledger decision remains.
+  - No architecture, rights, dependency, migration, provider, network or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R6.md');
+    assert p.is_file() and p.stat().st_size > 18000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any correction requires a new local root, ignore policy, dependency, migration, provider access or network acquisition.
+  - Any prior temporal, identity, source, rights, manifest, coverage or gate closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

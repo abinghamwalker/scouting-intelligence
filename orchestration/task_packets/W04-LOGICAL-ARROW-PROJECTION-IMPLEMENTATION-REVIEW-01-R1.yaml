@@ -1,0 +1,132 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Freshly and independently review the final R2 descriptor-led serializer
+  candidate, including the preserved semantic preimage, strict inverse, build
+  fail-closed boundary and corrected rejected-sentinel test evidence.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_logical_arrow_projection_implementation_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1.yaml
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-acceptance-v1.json
+  - reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-design-R1.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.yaml
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.yaml
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.md
+  - reports/verification/W04/wyscout-logical-arrow-projection-implementation-R2-master-verification.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R4.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-acceptance.md
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  authority_decision_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  authority_review_sha256: b864fcf19a72f8680fdc125b1ac92e7674d5edbc853adba45f7b8284efe76f52
+  authority_acceptance_sha256: 647ce58093485717a50037eeb6e46d09c2dfad88a8f60bdef7bce8d35f8d31c3
+  authority_master_acceptance_sha256: 2918b19595297ecfcd029e1f04c2b6be23bcbfcc9b2c79e298222fd389435d86
+  implementation_design_sha256: 75cc8ff80cbb3c125a7164499b36c9cf1bad200ea1e8dcf096c019ad1c9adead
+  implementation_r1_packet_sha256: b36793b729561521203ddb507161326340e2a14e73cc5616a59ae2eb18c6b6e5
+  implementation_r2_packet_sha256: 4cf5c45c460fa275de88b608303e3b601267a6ad8465c2e47eb8bab35e78cf04
+  implementation_r1_return_sha256: 197bb99e4fe6a6328a709f4af946166429e97aa8fed5858df2b6b954806e8372
+  implementation_r2_return_sha256: 4f8cde34645c8cc5c9ab19cf05a1c9a3c5b50290615df352e551bda5b8caa934
+  master_verification_sha256: 0c7c0a6bbeea40537be5248ece2c8e9f8248156d0adb7b6956f6345e4daceca7
+  formats_sha256: d1827127ce36a67dc49993f5cdb4cd18a5ab5bc62f3b753808529f66dba9f2c9
+  formats_test_sha256: b5fe5aa5831755abe83cd8fd812538dbfbb091190a42430fb09c9141d7e33cce
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  build_contract_test_sha256: f39e34daac144369444e1701003efdec0c1a97f83ba5fb0beecaf844c21e4692
+  accepted_encoder_review_sha256: eb5928d0bc06be4ecbe8317d9d3387e2db5d6d8631d08ac3dacbc45583c5ad9d
+  accepted_encoder_master_acceptance_sha256: 1cfcd5bde3128a7736c75360460e61f73cc9910772d80d5e0b062abb606ce519
+  accepted_build_master_acceptance_sha256: 26026181020650779bd7319c0672abf5dc5e78313fd38a33aff385bcb65c3449
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - Read and inspect every line of both implementation modules and both tests.
+  - >-
+    Independently prove exact descriptor runtime typing and invariants, recursive
+    metadata absence, descriptor-only schema construction and complete table/
+    generated-schema equality without fixture/row/empty-sequence inference.
+  - >-
+    Independently reproduce all seven CanonicalJsonValue variants, present tagged
+    null versus optional outer null, invalid UTF-8, nested duplicate keys,
+    constants/float tokens, whitespace/key-order/escape/NFC/surrogate drift and
+    strict typed/canonical byte-equality failures before any write.
+  - >-
+    Attack positional tuple name/order/position/type/nullability/arity drift and
+    homogeneous list child/list-kind/fixed-size/cardinality drift, including empty
+    and nonempty values sharing one descriptor schema.
+  - >-
+    Verify encoder and semantic-hash public signatures cannot accept caller
+    schema, schema role, callback, Boolean, digest or equivalent-looking object.
+    Verify every malformed family calls `pq.write_table` zero times.
+  - >-
+    Independently reconstruct the sole semantic preimage and exact identity
+    physical/semantic golden vectors. Search source and tests for any second
+    semantic domain, projection digest/preimage, unavailable-schema formula or
+    placeholder accepted digest.
+  - >-
+    Audit the build adaptation: caller Arrow table/schema/descriptor authority is
+    unrepresentable; logical Gold readback remains exact; closure fails with
+    GoldSchemaAuthorityUnavailableError; the fixed H1 claim is explicitly
+    rejected and cannot authorize any product.
+  - >-
+    Confirm no root descriptor, root schema, schema bundle, product byte, feature,
+    population, dependency, provider access, publication, cloud/container/CI/
+    deployment or Git-remote state was created.
+  - >-
+    Return PASS only with zero P0/P1/P2 findings. Otherwise write REWORK with exact
+    reproduction. Do not repair or approve your own findings.
+definition_of_done:
+  - Fresh independent implementation review with executable adversarial evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent implementation review and reviewer return only.
+stop_conditions:
+  - Fixed hash drift.
+  - Need to edit implementation, tests, authority, schema/product/data or dependencies.
+  - Need for Git, provider/network or external action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

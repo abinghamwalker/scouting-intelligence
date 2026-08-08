@@ -1,0 +1,70 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R12
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - id: R12-P1-01
+    severity: P1
+    status: master_reproduced
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R20
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R12.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R12.md
+  - reports/reviews/W04/wyscout-schema-design-R19.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R12-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      read complete independent R12 review and return
+    result: PASS_1182_REVIEW_LINES_93_RETURN_LINES
+  - command: >-
+      enumerate every installed ../../../bin RECORD row, verify exact bytes,
+      owner, size, digest, mode, link count, template body, and shebang alias
+    result: FAIL_35_ROWS_30_PYTHON_4_PYTHON3_1_RUFF
+  - command: >-
+      compare R19 Class-E template, canonical-alias rule, positive census, stable
+      normalization, and rejection clauses with current installed wrapper bytes
+    result: FAIL_EXACT_FOUR_PYTHON3_ROWS_EXPLICITLY_FORBIDDEN
+  - command: >-
+      complete shell site/repository pyc inventory before sync/helpers and after
+    result: PASS_1086_SITE_58_REPOSITORY_METADATA_AND_CONTENT_IDENTICAL
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read the complete 1,182-line independent review and 93-line
+    return. The reviewer changed exactly its two assigned report paths and its
+    mandatory shell postflight reproduced every preflight inventory digest.
+  - >-
+    The master independently reproduced all 35 executable rows: 30 wrappers use
+    the exact python alias, four Class-E wrappers use the exact python3 alias,
+    and Ruff is the sole Class-W binary. Each affected wrapper has a singular
+    RECORD owner, correct bytes after the first line, mode 0755, link count one,
+    and matching installed size and digest.
+  - >-
+    R19 explicitly rejects python3 in Class E, so the current read-only/no-sync
+    admission cannot succeed. This is an executable canonical-preimage defect,
+    not an environment defect to repair.
+  - >-
+    R20 is bounded to exact per-row alias authority and its stable schema
+    consequences. It requires no architecture, project-root, dependency,
+    provider, rights, storage, network, Git, or local-only policy change.
+  - >-
+    No field implementation or provider acquisition may begin until R20 passes
+    master review, a fresh independent merits review, and master reproduction.

@@ -1,0 +1,116 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R9
+state: DISPATCHED
+objective: >-
+  Freshly and independently adjudicate the R9 earliest startup-object/importer
+  binding and complete built-in/frozen shape closure while retaining the R8
+  exact roster, metadata-only PYC behavior and disclosed operational-PYC evidence,
+  without producer edits or real-root publication.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R9:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r9_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R9.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  review_packet_preimage_task_packet_sha256: d09461cc3c48191f977282c6aaf23c0ea983ea49c917054bc8390925b96634c7
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  producer_return_sha256: b814babcd6465e537d4d545b794ba2cc2b5037a60e18e08a0d00867527110ff5
+  r8_review_sha256: 0f4a023fc55c7800f91e9e1f7247059c747d42dd69108e86266ba4e34b7f645c
+  r8_reviewer_return_sha256: a99d9a24b59b46d3132cc6ef3f15a291246ffa469307b5c4a0e88bd87a43d650
+  disclosed_operational_pyc_sha256: b1c8fbd8e5de10d6251995b9dc0fbbcb7457ba0bdaffd669e6e58c86d280b52e
+  producer_shell_pyc_helper_sha256: 2702b38453c95e428e9289cfc0bd6a9d0f1a748aeb33f1bad1e1c7033eaf4a6d
+requirements:
+  - Verify every fixed binding first and keep all producer, PYC, source and real-root bytes read-only.
+  - >-
+    Independently trace direct-execution bytecode/source order. Prove the exact
+    23-name roster, ordered name/object-reference pairs, exact BuiltinImporter
+    and FrozenImporter objects, and immutable normalized built-in/frozen shape
+    tuples are captured before the first helper definition and before any later
+    launcher body can mutate sys.modules. Prove a direct import skips the branch
+    and preserves the closed side-effect contract.
+  - >-
+    In the full first-user verifier, independently reconstruct and challenge the
+    exact live-pair object-identity comparison, exact importer-object comparison,
+    and every per-row __package__, spec parent and normalized
+    submodule_search_locations comparison alongside all retained R8 registration,
+    is_frozen, name, origin, loader, file, cache, location, source-backed encoding,
+    __main__, order and distinctness predicates.
+  - >-
+    Reproduce direct exact-uv attacks for a fully shaped distinct replacement at
+    an already registered built-in name and, independently, a registered frozen
+    name. Mutate built-in and frozen package, parent and search-location shapes
+    one field at a time; replace both resident importer authorities; and attack
+    add/remove/reorder/alias/duplicate-object cases. Require first-user rejection
+    before guard installation, child launch, UUID sampling or real-root output.
+  - >-
+    Retain and independently re-prove the R8 launcher's structural and operational
+    metadata-only PYC collector, exact admission-child row equality, unconditional
+    PYC/PYO denial and exact-uv present-PYC control-flow case. Python must perform
+    no PYC open/read/pread/hash/header/magic access; complete byte/header/hash
+    authority remains exclusively in fresh shell pre/post inventories.
+  - >-
+    Confirm every retained encoding parent/owner/leaf/source, tuple, environment,
+    argv, FD, prefix, chronology, child-result and product predicate; the exact
+    admission child; and the frozen disclosed PYC. Run the exact 268-test final-
+    hash gate and all static/security/local-only checks with a fresh complete
+    shell PYC pre/post inventory. PASS only with P0/P1/P2 exactly 0/0/0;
+    otherwise return bounded REWORK without producer, PYC or real-root edits.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent R9 startup-binding/PYC merits review and mandatory return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer, PYC or real-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

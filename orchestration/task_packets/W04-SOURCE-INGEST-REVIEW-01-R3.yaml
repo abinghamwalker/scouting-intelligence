@@ -1,0 +1,72 @@
+schema_version: 1
+task_id: W04-SOURCE-INGEST-REVIEW-01
+phase_id: W04
+revision: R3
+state: READY
+objective: >-
+  Independently verify the bounded expiry-domain correction and complete the full
+  redirect, archive, completion, replay, temporal, rights, and local-only matrix
+  deferred by the R2 stop condition.
+depends_on:
+  - W04-SOURCE-INGEST-01-R3:IMPLEMENTED
+  - W04-SOURCE-INGEST-REVIEW-01-R2:REWORK
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-INGEST-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-ingest-review-R2.md
+  - src/scouting/sources/wyscout.py
+  - scripts/acquire_wyscout_v5.py
+  - tests/unit/test_wyscout_source.py
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - reports/reviews/W04/wyscout-ingest-review-R3.md
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Retain all R2 independent regressions, including the oversized-expiry case.
+  - >-
+    Complete independent challenges for exact literal-slash acceptance and every
+    material status, hop, origin, scheme, host, port, userinfo, path, query,
+    algorithm, date, scope, expiry, signed-header, signature, response status,
+    length, hash, retry, cleanup, and import-time-network boundary.
+  - >-
+    Complete independent ZIP equality, duplicate, traversal, link, encryption,
+    expansion, excluded-payload non-read/non-persistence, completion-last, exact
+    no-network replay, durable-byte reverification, malformed/conflicting manifest,
+    temporal, rights, and local-only challenges.
+  - R3 audit and mandatory return with an ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - Every required independent challenge passes.
+  - Every invalid redirect is rejected before body read with a domain exception and cleanup.
+  - No excluded archive payload is opened or persisted.
+  - Replay validates every durable byte and performs no network call.
+  - No real provider, real payload, protected fixture, data root, or container path is accessed.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source.py tests/security/test_w04_wyscout_ingest_review.py
+  - uv run ruff format --check tests/security/test_w04_wyscout_ingest_review.py
+  - uv run ruff check tests/security/test_w04_wyscout_ingest_review.py
+  - uv run mypy tests/security/test_w04_wyscout_ingest_review.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 acquisition, redirect, rights, archive, completion, replay, temporal, or local-only defect is reproduced.
+  - Review needs a producer/config/dependency/data/container edit or real provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

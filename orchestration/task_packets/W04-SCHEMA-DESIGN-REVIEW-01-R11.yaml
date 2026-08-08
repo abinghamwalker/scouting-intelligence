@@ -1,0 +1,118 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R11
+state: DISPATCHED
+objective: >-
+  Independently review the complete standalone R18 schema and deterministic
+  rebuild design, reproducing every corrected semantic-authority and retained
+  launch/build closure, and issue PASS only if no P0-P2 defect remains.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R18:MASTER_ACCEPTED
+assigned_role: independent_data_architecture_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R18.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R18.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R18.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R18.yaml
+  - reports/verification/W04/wyscout-schema-design-R18-master-verification.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R17.yaml
+  - reports/verification/W04/wyscout-schema-design-R17-master-verification.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R11.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R11.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+review_requirements:
+  - >-
+    Read all 4,260 R18 lines and independently evaluate the document as the sole
+    implementation authority. Do not rely on the producer's or master's verdict.
+    Report every P0, P1, and P2 defect; recommendation PASS requires none.
+  - >-
+    Parse the exact ordered 119-pair field roster and independently compare it
+    with the accepted profile's measured JSON and CSV field tables. Reproduce
+    the exact 10/11/26/47/18/4/3 counts and inspect the field decision, registry,
+    review, acceptance, digest, clock, dependency, equality, rejection, and
+    packet-ownership graph.
+  - >-
+    Reproduce src/scouting/contracts/primitives.py ActorId behavior through the
+    locked uv environment. Confirm every actor in all four semantic routes is a
+    strict UUID ActorId with canonical lowercase wire spelling; arbitrary ASCII
+    actors fail; acceptance actor equality and independent-reviewer
+    distinctness are closed.
+  - >-
+    Parse the exact possession predicate schema. Confirm every row, including
+    UNMAPPED, has all 12 required fields; all six decision combinations are
+    fully closed; row actor equality, taxonomy byte equality, null rules,
+    attachment/control semantics, and negative tests are sufficient and
+    non-conflicting with R4/R5 retained authority.
+  - >-
+    Confirm the field decision packet owns exactly
+    tests/contracts/test_wyscout_field_registry_authority.py and the rejected
+    alternate is absent. Confirm all field/review/acceptance and later
+    possession/identity/feature packet paths are disjoint and exact.
+  - >-
+    Independently inspect the complete source, rights, temporal, identity,
+    football-product, coverage, quarantine, serializer, environment,
+    packaging, executable, alias, bytecode, resource, result-frame, path,
+    ownership, gate, two-root, and two-commit closure. A contradiction,
+    ambiguity, incomplete schema, circular preimage, unverifiable exact host
+    claim, self-approval, or dependency/clock leak is a defect.
+  - >-
+    Reproduce the root-independent stable uv authority and exact operational
+    current-host admission, 29/32/32 actual environment maps, v4/v2/v2/v14
+    versions, 16/8/10/25/25/20 schema cardinalities, 24-key
+    invocation/projection intersection, and H1/H2 equality through build_id.
+    Confirm actual host spellings cannot enter stable identity.
+  - >-
+    Confirm R18 is design-only: no future launcher/admission/rebuild script,
+    implementation/config/data/provider/network/Git/cloud/container/deployment
+    action or parent-workspace report path exists.
+  - >-
+    The independent report must state review scope, complete-read evidence,
+    exact checks/results, findings with severity, recommendation PASS or REWORK,
+    and residual risks. The return must truthfully list only the two owned paths.
+definition_of_done:
+  - R18 has received a full independent P0-P2 review as a standalone authority.
+  - Every master acceptance claim has been independently reproduced or rejected.
+  - PASS is issued only with zero P0-P2 findings; otherwise REWORK is explicit.
+  - Only the independent review and return paths changed.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R11.md');
+    s=p.read_text(); assert p.is_file() and p.stat().st_size > 30000;
+    assert 'recommendation' in s.lower()"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - A finding requires changing the approved architecture, project root,
+    dependency policy, provider/rights authority, or local-only boundary.
+  - A mandatory input is missing or unreadable.
+  - Review requires edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

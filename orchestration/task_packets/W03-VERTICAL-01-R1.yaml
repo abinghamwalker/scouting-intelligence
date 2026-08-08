@@ -1,0 +1,134 @@
+schema_version: 1
+task_id: W03-VERTICAL-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Implement the authenticated, deny-by-default, locally instrumented synthetic
+  role-brief-to-audit vertical journey without introducing real data or a model.
+depends_on:
+  - W03-CONTRACTS-01:ACCEPTED
+  - W03-GOVERNANCE-01:ACCEPTED
+  - W03-STORAGE-01:ACCEPTED
+  - W03-FIXTURES-01:ACCEPTED
+  - W03-DATABASE-01:ACCEPTED
+assigned_role: vertical_journey_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-VERTICAL-01-R1.yaml
+  - docs/architecture/product-claim.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/w03-synthetic-spine.md
+  - docs/architecture/workflow-state-machines.md
+  - configs/policies/authorization.yaml
+  - configs/policies/data-rights.yaml
+  - configs/environments/w03-local-review.yaml
+  - src/scouting/contracts/__init__.py
+  - src/scouting/sources/synthetic.py
+  - src/scouting/storage/postgres.py
+  - tests/fixtures/synthetic/domain.json
+  - tests/fixtures/synthetic/expected_retrieval.json
+allowed_paths:
+  - src/scouting/policy/__init__.py
+  - src/scouting/policy/authentication.py
+  - src/scouting/policy/authorization.py
+  - src/scouting/policy/eligibility.py
+  - src/scouting/serving/__init__.py
+  - src/scouting/serving/synthetic.py
+  - src/scouting/workflow/__init__.py
+  - src/scouting/workflow/service.py
+  - src/scouting/audit/__init__.py
+  - src/scouting/audit/writer.py
+  - src/scouting/operations/__init__.py
+  - src/scouting/operations/telemetry.py
+  - src/scouting/web/__init__.py
+  - src/scouting/web/app.py
+  - services/api/__init__.py
+  - services/api/main.py
+  - services/worker/__init__.py
+  - services/worker/main.py
+  - apps/web/templates/w03_journey.html
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/integration/test_w03_local_telemetry.py
+  - tests/security/test_application_authorization.py
+  - reports/reviews/W03/returns/W03-VERTICAL-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+  - tests/fixtures/synthetic/protected/**
+  - scripts/**
+deliverables:
+  - >-
+    Local synthetic session authentication with injected test accounts/tokens,
+    no committed credential, constant-time token validation, and redacted logs.
+  - >-
+    Executable deny-by-default role/action/tenant/object authorisation loaded from
+    the frozen policy, including unknown-action and cross-tenant denials.
+  - >-
+    One deterministic serving interface that admits only strict-before,
+    rights-valid, unambiguous evidence and returns the contract-valid expected
+    explanation/result without claiming model quality.
+  - >-
+    Transactional workflow composition for role brief creation, retrieval,
+    analyst-owned shortlist entry, and append-only audit events; material writes
+    fail closed if audit persistence fails.
+  - >-
+    One central application-transaction boundary that enters the non-owner
+    scouting_app role and sets scouting.tenant_id transaction-locally before any
+    domain query or write; no workflow code may use an owner connection directly.
+  - >-
+    FastAPI app factory, health/readiness endpoints, local HTML/JSON journey,
+    and worker entrypoint, all loopback/local-root oriented and free of provider
+    reads or model arithmetic in presentation code.
+  - >-
+    Request IDs plus local structured logs, traces, and metrics with no hosted
+    exporter or confidential payload logging.
+  - Positive E2E journey and negative authZ/tenant/future-data/telemetry tests.
+definition_of_done:
+  - A test analyst authenticates and completes role brief → retrieval/explanation → shortlist entry → append-only audit through one API request flow.
+  - Unknown session, role, action, missing context, cross-tenant access, and unauthorised confidential evidence/export fail closed without object disclosure.
+  - Facts observed or available at/after the frozen cutoff never enter the result.
+  - Every database-backed application path proves current_user=scouting_app and a transaction-local tenant before domain access.
+  - Missing model/index evidence is labelled unavailable and never silently substituted.
+  - The response carries request, actor, tenant, brief, data, policy, lineage, cutoff, retrieval-run, model, and index identifiers required by the contracts.
+  - Health/readiness and telemetry remain local; no listener is bound during tests.
+  - The development fixture only is used; protected expected output is not read.
+  - Runtime implementation does not open expected_retrieval.json; that file is test assertion data only.
+  - All acceptance checks pass through uv.
+  - The mandatory return is complete and confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/e2e/test_w03_vertical_journey.py tests/integration/test_w03_local_telemetry.py tests/security/test_application_authorization.py
+  - >-
+    uv run ruff format --check src/scouting/policy src/scouting/serving
+    src/scouting/workflow src/scouting/audit src/scouting/operations src/scouting/web
+    services/api services/worker tests/e2e/test_w03_vertical_journey.py
+    tests/integration/test_w03_local_telemetry.py
+    tests/security/test_application_authorization.py
+  - >-
+    uv run ruff check src/scouting/policy src/scouting/serving src/scouting/workflow
+    src/scouting/audit src/scouting/operations src/scouting/web services/api
+    services/worker tests/e2e/test_w03_vertical_journey.py
+    tests/integration/test_w03_local_telemetry.py
+    tests/security/test_application_authorization.py
+  - >-
+    uv run mypy src/scouting/policy src/scouting/serving src/scouting/workflow
+    src/scouting/audit src/scouting/operations src/scouting/web services/api services/worker
+  - >-
+    uv run bandit -q -r src/scouting/policy src/scouting/serving src/scouting/workflow
+    src/scouting/audit src/scouting/operations src/scouting/web services/api services/worker
+stop_conditions:
+  - A protected expected output has been accessed or its isolation cannot be maintained.
+  - A contract, fixture, storage, migration, database, dependency, or policy change is required.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, external service, credential, public bind, real datum, model training, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,48 @@
+schema_version: 1
+task_id: W03-DEPS-01
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Add only the direct Python dependencies required for W03 PostgreSQL migrations,
+  pgvector readiness, local telemetry, API tests, secret checks, and licence evidence.
+depends_on:
+  - W02:CLOSED
+assigned_role: master_dependency_integrator
+risk: high
+read_first:
+  - AGENTS.md
+  - pyproject.toml
+  - orchestration/task_packets/W03-DEPS-01-R1.yaml
+allowed_paths:
+  - pyproject.toml
+  - uv.lock
+  - reports/reviews/W03/returns/W03-DEPS-01-R1.md
+  - orchestration/reviews/REVIEW-W03-DEPS-01-R1.yaml
+forbidden_paths:
+  - .git/**
+  - src/**
+  - tests/**
+  - migrations/**
+  - compose.yaml
+deliverables:
+  - Direct runtime declarations for Alembic, SQLAlchemy, Psycopg, pgvector, and the OpenTelemetry SDK.
+  - Direct test declaration for HTTPX.
+  - Direct security declarations for detect-secrets and pip-licenses.
+  - A current shared uv.lock produced only through uv.
+definition_of_done:
+  - No Git or direct-URL dependency is introduced.
+  - Python remains constrained to 3.12 and all eight dependency groups remain present.
+  - uv lock and locked all-group sync succeed.
+  - The local-only verifier passes.
+acceptance_checks:
+  - uv lock --check
+  - uv sync --locked --all-groups
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Resolution requires changing the Python boundary, group policy, project root, or local-only boundary.
+  - Any dependency requires a Git or direct URL source.
+  - A path outside allowed_paths must change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only

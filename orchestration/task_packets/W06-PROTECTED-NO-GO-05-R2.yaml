@@ -1,0 +1,87 @@
+schema_version: 1
+task_id: W06-PROTECTED-NO-GO-05
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-PROTECTED-NO-GO-05-R1.yaml
+objective: >-
+  Freeze the final two decision-bearing protocol fields and reject the exact re-signed
+  fail-order/stop-rule substitution, without changing preregistration bytes or behavior.
+depends_on:
+  - W06-PROTECTED-NO-GO-REVIEW-05-R1:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-PROTECTED-NO-GO-05-R1.yaml
+  - orchestration/task_packets/W06-PROTECTED-NO-GO-REVIEW-05-R1.yaml
+  - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-REVIEW-05-R1.yaml
+  - reports/reviews/W06/protected-no-go-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R1.md
+  - src/scouting/contracts/evaluation.py
+  - tests/unit/test_w06_missing_population_gate.py
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - tests/unit/test_w06_missing_population_gate.py
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R2.md
+forbidden_paths:
+  - src/scouting/evaluation/**
+  - scripts/**
+  - tests/fixtures/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    In FrozenProtectedProtocol.valid require fail_closed_order to equal exactly:
+    AUTHENTIC_GOVERNED_EXPERT_EVIDENCE, NONEMPTY_PROTECTED_POPULATION,
+    VALID_PARTITION_ACCESS, TEMPORAL_AND_SOURCE_LINEAGE, PRIMARY_EFFECT_AND_INTERVAL,
+    NULL_CONTROLS, MANDATORY_SLICES_AND_APPLICABILITY,
+    UNCHANGED_EXPLANATION_AND_SERVING_PARITY.
+  - >-
+    Require stop_rule to equal the complete exact current preregistration string. Do not
+    alter the config, protocol digest, preregistration digest, metric roster or broker.
+  - >-
+    Add the exact R1 master/reviewer regression: swap the first two prerequisites,
+    replace stop_rule with 'Proceed despite missing expert evidence.', re-sign protocol
+    and preregistration to exact digests 0315215e...f4e and 5f71bc77...dffe, literally
+    assert both identities, then require validation rejection before broker invocation.
+deliverables:
+  - Two-field exact validator correction and exact re-signed regression.
+  - Mandatory return at reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R2.md.
+definition_of_done:
+  - Exact re-signed master mutation rejects at preregistration validation.
+  - Frozen config and public fixture bytes/digests are unchanged.
+  - All R1 candidate/inventory/one-use closures remain green.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-missing-population-gate-v1.json
+  - test -s reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R2.md
+stop_conditions:
+  - Correction requires protocol/config/broker/fixture change, protected output, external access, dependency or W05 mutation.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+mandatory_return_requirements:
+  - exact changed files and two-field correction
+  - exact rejected protocol/preregistration witness identities
+  - exact focused checks and unchanged config/fixture SHA values
+  - remaining P0/P1 risk or none
+  - no Git/dependency/protected/production-output/external/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

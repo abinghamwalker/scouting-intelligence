@@ -1,0 +1,53 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT_FOR_INDEPENDENT_REVIEW
+next_packet: W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R1-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete artifact readback and independent structural reconstruction
+    result: PASS_10_9_5_17_36
+  - command: decision/candidate/test physical and canonical digests
+    result: PASS_3198178F_6C739F67_54C2DCCA_1E19D739
+  - command: exact possession-v1 predicate and artifact comparison
+    result: PASS_36_EQUAL_ALL_V1_HASHES_EXACT
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+      tests/contracts/test_w04_possession_semantic_v2_authority.py
+      tests/contracts/test_w04_possession_semantic_authority.py
+      tests/contracts/test_w04_field_semantic_v2_authority.py
+    result: PASS_321_TESTS
+  - command: focused ruff format and lint
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: retained bytecode/cache baseline comparison
+    result: PASS_1145_FILES_150_DIRECTORIES
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    Producer work is internally reproducible and bounded, but independent
+    review must explicitly challenge the distinction between exact selector
+    admission and R20 same-period possession resolution.
+  - >-
+    No review, acceptance, feature, cross-authority, or product authority is
+    implied by this producer decision.

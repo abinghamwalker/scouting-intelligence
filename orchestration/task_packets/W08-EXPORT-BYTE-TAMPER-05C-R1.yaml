@@ -1,0 +1,95 @@
+schema_version: 1
+task_id: W08-EXPORT-BYTE-TAMPER-05C
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct independent-review P1 by making byte-tampered evidence packs independently
+  fail closed for inventory and revocation as well as read and idempotent create.
+depends_on:
+  - W08-AUDIT-RECEIPT-BINDING-05B:MASTER_ACCEPTED
+  - W08-WEB-EVIDENCE-ORIGIN-04N:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+invariant: >-
+  With a valid database and audit chain, any missing, unreadable, malformed or
+  digest-mismatched immutable pack makes inventory, read, idempotent create and revoke
+  fail generically with exact database/audit/revocation/file baselines unchanged.
+read_first:
+  - AGENTS.md
+  - reports/reviews/W08/w08-independent-security-review-R1.md
+  - orchestration/task_packets/W08-WEB-EXPORT-SECURITY-04J-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-SECURITY-04J-R1.md
+  - reports/reviews/W08/returns/W08-AUDIT-RECEIPT-BINDING-05B-R1.md
+  - reports/reviews/W08/returns/W08-WEB-EVIDENCE-ORIGIN-04N-R1.md
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-EXPORT-BYTE-TAMPER-05C-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Add one exporter-owned public verification boundary for persisted pack metadata;
+    it must use guarded storage, verify checksum, canonical JSON classification and
+    fixed claim/model/applicability fields, and normalize read/UTF-8/JSON failures to
+    EvidenceExportIntegrityError without leaking bytes.
+  - Verify every policy-visible inventory row before rendering and verify the exact
+    selected pack before appending a revocation/audit event.
+  - Split byte-tamper and audit-ledger-corruption HTTP cases into isolated fresh apps.
+    Byte tamper alone must deny inventory/read/create/revoke; ledger corruption alone
+    must deny the same matrix. Every response and exact state baseline is asserted.
+  - Add core exporter witnesses for missing/unreadable/malformed/digest-mismatched
+    bytes, revoke atomicity, removal of injection and single successful retry.
+definition_of_done:
+  - The exact R1 P1 exploit fails closed independently of ledger corruption and all
+    export/auth/audit/browser-adjacent focused regression tests pass.
+focused_checks:
+  - uv run ruff format --check src/scouting/operations/evidence_export.py src/scouting/web/w08.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/operations/evidence_export.py src/scouting/web/w08.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/operations/evidence_export.py src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/security/test_w08_auth_audit.py
+  - uv run bandit -q src/scouting/operations/evidence_export.py src/scouting/web/w08.py
+stop_conditions:
+  - A contract/schema/migration/policy/dependency, audit implementation, template,
+    protected output, external service/network, container, Node/npm, destructive
+    action or Git command is required.
+  - Passing would conflate byte tamper with ledger corruption, hide/clobber bytes or
+    permit a revocation/audit append over an unverified pack.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - exporter/inventory/revoke verification map
+  - isolated byte versus ledger tamper matrices and exact baselines
+  - exact commands/exits/test counts
+  - failure-removal/retry outcome
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-evidence/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

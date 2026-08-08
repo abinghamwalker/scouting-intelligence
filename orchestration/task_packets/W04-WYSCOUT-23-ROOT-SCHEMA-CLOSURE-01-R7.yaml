@@ -1,0 +1,103 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R7
+state: REWORK
+objective: >-
+  Correct only the unaccepted R6 runtime-predicate metadata so the 56 reachable
+  owner/validator bindings reproduce the frozen R5 oracle ledger byte-for-byte,
+  while preserving the accepted EXACT_DECIMAL128_WITH_EXPONENT projection, all
+  runtime validators, the 23-root logical closure, and the 29-row matrix.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R6:REWORK
+assigned_role: bounded_w04_23_root_schema_r7_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.yaml
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R6.md
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/storage/**
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+fixed_bindings:
+  r6_schema_sha256: bbef5823bf1635d08362a3ee0a0876e2ac1ec04c2c502d4e67c61a4350ee7a71
+  r6_test_sha256: dd8d66a1831ff7dfbd4a90c745607572a8c00358af4770d85e3e7ca115f3e500
+  r5_acceptance_oracle_sha256: a3f15f92a14ff342efd0f5b2848b60eab4898ea79eb69c7fd6f09e6946077efa
+  r6_independent_review_sha256: 24eca58d7e178e7bebb839563560ba870e49e48470acbed9d659a6cfd88e3541
+  r6_reviewer_return_sha256: d9e8b53346711d10651a3bb6acdc9cacf354de7ef84e2ef78695ba1a95971334
+requirements:
+  - Verify all fixed bindings before editing.
+  - >-
+    Preserve runtime model behavior and validators. For each of the exact 56
+    reachable effective owner/validator bindings, emit the exact operation P01-P56,
+    exact ordered direct-owner operands, exact ordered C1-C11/L: constant-reference
+    list, and exact declared-owner/effective-owner binding from the frozen oracle.
+  - >-
+    Add a closed, canonical mapping from C1-C11 references to the already frozen
+    material corpus (or an equivalently strict resolver within the existing
+    definitions authority). Every C reference must resolve; every L: item is an
+    exact literal descriptor; unknown, reordered, duplicated, missing, or unused
+    references must fail. Do not replace material constants with labels lacking a
+    resolvable binding.
+  - >-
+    The independent test oracle must contain the exact 56 JSONL rows between the
+    R5 oracle markers, reproduce row count 56 and SHA-256
+    c36ad1932ff075c6a4f35f2ea0cbd69496f4914ae401a1560ed03eb938a1ad8d,
+    and compare the candidate ledger exactly after deterministic normalization.
+    It must not derive expected operation/operand/constants values from candidate
+    implementation tables.
+  - >-
+    Retain the AST direct-field coverage check as a subset assertion against the
+    oracle operands, including inherited declared owners. Preserve E1-E8, all 23
+    roots and digests derived by the accepted canonical algorithm, 12 descriptor
+    roots, 11 JSON-only roots, exact Decimal struct mappings, coverage UTF8 mappings,
+    and all 29 matrix rows without logical change.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_schema.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact frozen 56-binding predicate ledger and strict constant resolver.
+  - Preserved R6 schema/Decimal/matrix closure with regenerated derived digests.
+  - Mandatory R7 producer return with hashes, oracle-ledger proof, and test results.
+stop_conditions:
+  - Any need to change a logical model/root/field/feature/population/intended output, accepted source/data-rights authority, digest meaning/formula, dependency, or local-only/product boundary.
+  - Any provider/network, external service, cloud, container, CI, deployment, publication, cost or destructive action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

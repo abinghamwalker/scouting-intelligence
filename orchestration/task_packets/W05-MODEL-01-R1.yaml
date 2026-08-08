@@ -1,0 +1,181 @@
+schema_version: 1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement all approved transparent M0 families behind one typed interface with
+  deterministic fitting/retrieval, safe content-addressed artifacts, exact reload and
+  a declared synthetic-development baseline that clears both controls.
+depends_on:
+  - REVIEW-W05-ROLES-01-R2:ACCEPT
+assigned_role: m0_baseline_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-ROLES-01-R1.yaml
+  - orchestration/task_packets/W05-ROLES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-ROLES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-ROLES-REVIEW-01-R2.yaml
+  - reports/reviews/W05/returns/W05-ROLES-01-R2.md
+  - reports/reviews/W05/w05-role-taxonomy-independent-review-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - docs/architecture/w03-synthetic-spine.md
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/models/w05-m0-baselines-v1.json
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/artifact.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/roles/**
+  - data/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+requirements:
+  - >-
+    Implement exactly the M0ModelFamily surface already accepted: metadata control,
+    raw Euclidean control, robust-scaled cosine, weighted cosine, PCA and simple
+    role-aware restriction. Expose one typed fit/load/query interface and one canonical
+    distance-row type. Do not add learned ranking, metric learning, clustering,
+    transfer-success, price/value, outcome prediction or W06 evaluation code.
+  - >-
+    The metadata control may use only the fixture's declared synthetic position code,
+    age and elapsed minutes; it fails unavailable if the evidence class or row lacks
+    those inputs. The raw control uses raw six-feature Euclidean distance. Robust
+    cosine uses training-population median/IQR with deterministic zero-IQR handling.
+    Weighted cosine uses the same robust transform and fixed positive config weights.
+    PCA uses the robust transform and fixed component count. Role-aware restriction
+    uses the weighted-cosine distance unchanged, then applies only a declared minimum
+    contextual role-probability/overlap restriction from the taxonomy-bound candidate
+    manifest. Exemplar similarity may be an optional declared query vector signal but
+    never replaces responsibility taxonomy or makes eligibility query-specific and
+    unfalsifiable.
+  - >-
+    Use only the already locked NumPy/scikit-learn stack and standard library. Every
+    fit is deterministic under the fixed seed, exact sorted fitting population,
+    candidate population, feature order, taxonomy/config/lineage identities and
+    canonical configuration digest. Reject duplicate IDs, incomplete/absent numeric
+    feature states, W04/synthetic substitution, post-cutoff lineage, configuration
+    drift and any population order/digest mismatch.
+  - >-
+    Model fitting/writing APIs must accept the normally validated RoleTaxonomy or its
+    FootballResponsibilityTaxonomy contract object, revalidate it through the public
+    contract, and derive taxonomy ID/version/digest internally. They must not accept
+    caller-supplied raw taxonomy identity strings that can override that object. The
+    runtime artifact loader must require the accepted validated taxonomy object and
+    exact loaded feature registry/config identity as external expected authorities
+    before admitting a manifest. A fully re-signed artifact with an arbitrary taxonomy
+    digest or claim-substituted taxonomy must fail even if all candidate-carried hashes
+    are recomputed.
+  - >-
+    Put all pure runtime loading and scoring needed by both development and later
+    serving in scouting.m0. Put fitting and artifact writing only in scouting.modeling.
+    Runtime code must expose no fit/write/mutation method and import no provider source.
+    There must be exactly one scoring implementation; the model development checks
+    call the same runtime scorer that serving will later call.
+  - >-
+    Serialize arrays as deterministic, non-executable NPZ with allow_pickle=false,
+    exact canonical filenames/order, fixed ZIP metadata or an equivalently reproducible
+    container, float64 little-endian C-contiguous numeric arrays and uint8 UUID-byte
+    rows. Serialize manifest/config/candidate universe as strict canonical JSON.
+    Candidate universe JSON binds ordered UUIDs, synthetic metadata, contextual role
+    memberships, feature cutoff and dependency lineage and must equal the manifest
+    count/digest. The loader rejects object arrays, pickle, duplicate/extra/missing
+    entries, unsafe names, dtype/endianness/order/shape/byte/digest drift, manifest or
+    taxonomy/schema/config/population substitution and artifact-root escape.
+  - >-
+    Materialize every declared family to a bounded temporary directory in tests and
+    the selected baseline to runs/w05/m0-baseline-v1 using exactly arrays.npz,
+    manifest.json, configuration.json and candidate-universe.json. Repeated clean builds from the
+    same inputs must produce byte-identical NPZ, manifest, configuration and candidate
+    universe digests. Exact reload must reproduce arrays bit-for-bit and rankings,
+    distances, contribution vectors and tie order exactly. A loaded artifact is
+    immutable/read-only.
+  - >-
+    Canonicalize PCA after fitting: order by explained variance descending then
+    canonical component bytes for ties; orient each component so the lowest feature
+    index among maximum-absolute pivots is non-negative; transform/index columns follow
+    the same order/sign. Direct tests cover sign-flipped components, tied variance,
+    repeated fitting and exact reload.
+  - >-
+    Define a self-verifying synthetic-development query fixture over the accepted
+    complete synthetic rows. It declares constructed relevance only through the
+    fixture's constructed_development_peer_group and states development_only=true,
+    protected=false, recruitment_outcome=false, external_expert_label=false and
+    production_claim=false. Do not create train/test, protected, holdout, confidence
+    interval or robustness claims owned by W06.
+  - >-
+    Run one transparent leave-one-query-out synthetic development check with self
+    excluded and a fixed k no larger than three. Report exact per-family mean
+    constructed peer-group precision@k, deterministic ranking digests and selected
+    baseline identity. The selected role-aware/weighted baseline must be strictly
+    better than both metadata and raw-Euclidean controls on this deliberately
+    constructed fixture. This is a G-W05 development readiness fact only, never model
+    validation, recruitment effectiveness or transfer evidence.
+  - >-
+    Tests cover each family, fixed feature order, exact fitting/scaler population,
+    zero-IQR and zero-norm behavior, filters/restrictions, deterministic UUID ties,
+    PCA canonicalization, safe reload, all manifest/array/taxonomy/schema/config/
+    candidate substitutions, two-build byte identity and strict development-control
+    improvement. Include the accepted role-review arbitrary raw taxonomy-digest attack
+    and prove only the validated taxonomy object can source artifact pins. Do not add a
+    second scoring path in tests.
+deliverables:
+  - Canonical M0 configuration and synthetic development query fixture.
+  - Pure shared runtime scorer/loader and separate deterministic trainer/writer.
+  - Reloadable selected local baseline under the exact allowed run path.
+  - Focused adversarial model/artifact tests and complete mandatory return with exact identities/digests/development scores.
+definition_of_done:
+  - All six M0 families fit/reload/retrieve deterministically behind one interface.
+  - Selected synthetic baseline is strictly better than both declared controls.
+  - Artifact substitution fails closed and no production/W06 claim is made.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to change accepted contracts, feature registry/taxonomy/fixtures or W03/W04 authority/evidence bytes.
+  - Selected baseline cannot strictly clear both controls without changing constructed feature/role/query labels.
+  - Any learned ranking/outcome/value/W06 behavior, provider/external access or evidence-claim expansion is required.
+  - Any new dependency, service, deployment/publication, destructive action or secret is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

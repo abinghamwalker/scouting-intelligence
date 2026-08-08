@@ -1,0 +1,76 @@
+schema_version: 1
+task_id: W03-GOVERNANCE-01
+phase_id: W03
+revision: R2
+state: READY
+supersedes: orchestration/task_packets/W03-GOVERNANCE-01-R1.yaml
+objective: Correct only the two governance-control defects recorded by the master.
+depends_on:
+  - REVIEW-W03-GOVERNANCE-01-R1:REWORK
+assigned_role: governance_architecture_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-GOVERNANCE-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-GOVERNANCE-01-R1.yaml
+  - reports/reviews/W03/design-packet-review.md
+  - docs/architecture/product-claim.md
+  - docs/architecture/evaluation-contract.md
+  - configs/policies/authorization.yaml
+  - configs/policies/data-rights.yaml
+  - configs/environments/w03-local-review.yaml
+allowed_paths:
+  - docs/architecture/workflow-state-machines.md
+  - scripts/validate_w03_governance.py
+  - tests/governance/test_w03_policies.py
+  - reports/reviews/W03/returns/W03-GOVERNANCE-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - services/**
+  - apps/**
+  - docs/architecture/product-claim.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/threat-model.md
+  - docs/architecture/w03-synthetic-spine.md
+  - docs/adr/**
+  - configs/**
+defects:
+  - code: WORKFLOW_STATE_MACHINES_UNDEFINED
+    required_fix: >-
+      Define role-brief and shortlist owners, version/state transitions,
+      approvals, rejection reasons, visibility, retention, and audit semantics;
+      mark full collaborative runtime implementation as W08 work.
+  - code: GOVERNANCE_YAML_ONLY_PARSE_CHECKED
+    required_fix: >-
+      Implement a read-only semantic validator and focused tests for the frozen
+      YAML controls without changing the accepted YAML.
+deliverables:
+  - Normative W03 workflow state-machine boundary with explicit deferred W08 scope.
+  - Read-only governance semantic validator with actionable failures.
+  - Tests proving required deny-by-default, role, rights, loopback, and local-only semantics.
+  - Complete R2 mandatory return.
+definition_of_done:
+  - Both state machines define ownership, legal transitions, approvals, rejection reasons, visibility, retention, versioning, and material audit actions.
+  - The validator rejects missing roles, permissive defaults, export permission, non-loopback service binds, or remote/cloud enablement.
+  - Validator execution changes no policy file and makes no network call.
+  - All acceptance checks pass through uv.
+  - The mandatory return confirms no Git operation.
+acceptance_checks:
+  - uv run python scripts/validate_w03_governance.py
+  - uv run pytest -q tests/governance/test_w03_policies.py
+  - uv run ruff format --check scripts/validate_w03_governance.py tests/governance/test_w03_policies.py
+  - uv run ruff check scripts/validate_w03_governance.py tests/governance/test_w03_policies.py
+  - uv run mypy scripts/validate_w03_governance.py
+  - uv run bandit -q scripts/validate_w03_governance.py
+stop_conditions:
+  - A correction requires changing an accepted policy or a path outside allowed_paths.
+  - A Git command, external service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

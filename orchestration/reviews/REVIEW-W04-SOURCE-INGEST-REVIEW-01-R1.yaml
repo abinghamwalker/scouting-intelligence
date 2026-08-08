@@ -1,0 +1,41 @@
+schema_version: 1
+review_id: REVIEW-W04-SOURCE-INGEST-REVIEW-01-R1
+task_id: W04-SOURCE-INGEST-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS_WITH_EXPECTED_FAILURE
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: W04-INGEST-REDIRECT-01
+    severity: P1
+    status: returned_for_rework
+    detail: >-
+      R1 rejected the canonical redirect authority and could not follow the one exact
+      signed Figshare delivery hop required by the real endpoint.
+  - id: W04-INGEST-CONFIG-FREEZE-01
+    severity: P1
+    status: returned_for_rework
+    detail: >-
+      Eight reviewed identity, licence, evidence, attribution, and change-notice
+      fields could be changed while the R1 parser still loaded.
+decision: REWORK
+next_packet: W04-SOURCE-INGEST-01-R2
+reviewer: master
+evidence:
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - reports/reviews/W04/wyscout-ingest-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R1.md
+  - reports/phase-gates/W04/download-redirect-preflight.md
+checks:
+  - command: >-
+      uv run pytest -q tests/unit/test_wyscout_source.py
+      tests/security/test_w04_wyscout_ingest_review.py
+    result: EXPECTED_FAIL_4_failed_4_passed_21_errors
+  - command: uv run ruff check tests/security/test_w04_wyscout_ingest_review.py
+    result: PASS
+  - command: uv run mypy tests/security/test_w04_wyscout_ingest_review.py
+    result: PASS
+

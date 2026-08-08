@@ -1,0 +1,111 @@
+schema_version: 1
+review_id: REVIEW-W05-MODEL-01-R5
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R5
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS_AS_REPORTED_BUT_INADEQUATE
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+retained_parity:
+  frozen_fixture_bytes: EXACT_R3_MATCH_REPORTED
+  numeric_arrays: EXACT_R3_MATCH_REPORTED
+  six_scores: EXACT_R3_MATCH_REPRODUCED_BY_65_TEST_COMMAND
+  geometry_or_selection_change: NONE
+master_reproduction:
+  focused_quality: PASS
+  focused_tests: 65_PASSED
+  import_contracts: PASS
+  local_only: PASS
+  git_diff_check: PASS
+  forged_typed_configuration: ADMITTED
+  forged_value: role_aware_minimum_overlap_0.0
+  retained_configuration_digest: 5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a
+  forged_typed_registry: ADMITTED
+  forged_feature_name: forged_explanation_feature
+  retained_registry_digest: c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644
+  retained_schema_hash: 1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f
+defects:
+  - severity: P1
+    blocker_tests: [1, 3, 4, 6]
+    evidence: >-
+      A normally constructed dataclasses.replace copy of the accepted
+      M0Configuration retained the accepted configuration_digest while changing
+      role_aware_minimum_overlap from 0.75 to 0.0. After writing that object's
+      canonical_mapping to a copied selected artifact, load_m0_artifact admitted it
+      and returned a runtime configured with threshold 0.0. The manifest continued
+      to declare the accepted configuration digest. This can change role eligibility,
+      admitted candidates, rankings, reasons and result bytes.
+    required_fix: >-
+      Every fit/load/check public boundary must normally revalidate every field of an
+      M0Configuration instance against its recomputed canonical digest and exact
+      accepted source-pinned values. Class identity alone is not an authority seal.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      A manually constructed FeatureRegistry retained the accepted registry digest,
+      family digest and schema hash while changing the first synthetic feature name.
+      After updating only the copied universe feature_names/digest and self-validating
+      manifest fields, load_m0_artifact admitted the artifact and returned the forged
+      explanation label. No source registry or numeric array changed.
+    required_fix: >-
+      Normally revalidate the complete registry object from its canonical semantic
+      projection, including nested definitions and all self/accepted digests, at every
+      model boundary. Also compare every behavior/evidence-bearing manifest registry
+      and descriptor field to the accepted family-specific authority.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      The dedicated model file contains five tests. It does not directly substantiate
+      the R5 packet's required typed-object forgery closure, exact full ranking digest
+      values, all-six two-build bytes, PCA tied-eigenspace canonicalization, zero-IQR,
+      zero-norm, UUID total ties, comprehensive ZIP/array interpretation attacks,
+      fitting ancestor symlinks or fully re-signed registry/taxonomy/schema/population/
+      lineage/manifest attacks. The accepted predecessor suites account for 60 of the
+      reported 65 tests.
+    required_fix: >-
+      Add bounded production-API adversarial tests for every behavior-bearing trust
+      boundary. Retain the frozen fixture, arrays and scores; do not add a second
+      scorer or tune the selected baseline.
+independent_review:
+  packet: orchestration/task_packets/W05-MODEL-REVIEW-01-R1.yaml
+  state: COMPLETED_REWORK
+  report: reports/reviews/W05/w05-m0-model-independent-review-R1.md
+  return: reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R1.md
+  p0: 0
+  reproduced_p1:
+    - typed_authority_substitution
+    - tied_subspace_pca_noncanonicality
+    - noncanonical_or_duplicate_manifest_admission
+    - fitting_ancestor_symlink_write
+  retained_positive_evidence: >-
+    Fresh all-six two-root builds reproduced exact four-file bytes, rankings,
+    distances, contributions, payload digests and six scores.
+convergence_audit:
+  trigger: >-
+    R4 and R5 were two further bounded source/runtime rework attempts after the R2
+    convergence audit.
+  product_blockers: >-
+    The four independent P1 classes directly satisfy blocker tests 1-6 and can alter
+    authority, rankings/explanations, physical manifest bytes or write boundaries.
+  non_blocking_deferred: >-
+    List collection acceptance, redundant query/exclusion overlap and equivalent
+    strict-input hardening are P2 because no scoring change reproduced. They are not
+    part of R6 and do not reopen W10.
+  simplification: >-
+    R6 changes no artifact/config/fixture/contract/registry/taxonomy byte and permits
+    only normal authority revalidation, tied-subspace canonicalization, exact manifest
+    parsing, pre-write ancestor checks and direct regression tests.
+  decision: ONE_FINAL_BOUNDED_R6_REWORK
+bounded_rework:
+  fixture_bytes: FREEZE_NO_EDIT
+  array_payload_digests: PRESERVE_ALL_SIX_R5_VALUES
+  exact_scores: PRESERVE_R3_R5_VALUES
+  selection_or_tuning: FORBIDDEN
+  correction_scope: SOURCE_PIN_REVALIDATION_CANONICAL_PCA_SAFE_WRITER_AND_TESTS_ONLY
+decision: REWORK
+next_packet: orchestration/task_packets/W05-MODEL-01-R6.yaml
+reviewer: master

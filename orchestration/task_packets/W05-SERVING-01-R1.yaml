@@ -1,0 +1,155 @@
+schema_version: 1
+task_id: W05-SERVING-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement one read-only deterministic M0 retrieval/explanation serving core used
+  identically by batch and request entry points, with truthful evidence states,
+  separate data confidence and stable result bytes.
+depends_on:
+  - REVIEW-W05-MODEL-01-R6:ACCEPT
+  - W05-MODEL-REVIEW-01-R2:PASS
+assigned_role: m0_serving_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R6.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R6.md
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - docs/architecture/w03-synthetic-spine.md
+  - docs/architecture/threat-model.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/serving/m0.py
+  - src/scouting/serving/__init__.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - reports/reviews/W05/returns/W05-SERVING-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/m0/**
+  - src/scouting/modeling/**
+  - src/scouting/sources/**
+  - src/scouting/web/**
+  - src/scouting/workflow/**
+  - tests/contracts/**
+  - tests/unit/**
+requirements:
+  - >-
+    Implement one M0ServingCore and make request and batch entry points thin calls to
+    exactly that core. Both use the same scouting.m0 artifact loader, feature order and
+    schema hash, scorer, role restrictions, filters, confidence logic, reason-code
+    generation, explanations, distance/UUID tie order and M0RetrievalResult digest.
+    No copied/reimplemented scaling, PCA, cosine, Euclidean or contribution maths.
+  - >-
+    Serving imports no scouting.modeling, scouting.features or scouting.sources module;
+    exposes no fit/write/update method; reads only the exact registered local artifact
+    bundle through the shared loader; never reads provider/Gold/feature fixtures; never
+    writes or mutates artifacts/config/aliases; and rejects unregistered, escaped,
+    substituted or incomplete artifact roots before retrieval.
+  - >-
+    Validate PinnedM0ServingRequest and its independently pinned resolved query against
+    the exact loaded manifest/config/taxonomy/fitting/candidate/lineage identities.
+    Resolve the query vector deterministically from query_player_id, or from the exact
+    canonical mean of sorted admitted exemplar IDs when no query player is supplied.
+    Reject no-query-signal, unknown, excluded, post-cutoff or incomplete query rows.
+    Exemplar similarity is an additional explicit signal and never replaces the
+    taxonomy/responsibility restrictions.
+  - >-
+    Apply only declared hard-constraint fields/operators supported by the immutable
+    candidate universe (synthetic position code, age and elapsed minutes), exact
+    exclusions and simple role-aware restriction. Reject unknown constraints/operators
+    or unavailable evidence; never silently ignore a filter. Candidate filtering order
+    must not affect distance order or result bytes.
+  - >-
+    Derive deterministic retrieval run/result IDs from request and manifest identity,
+    not randomness or wall clock. Use only the request's replayable time and artifact
+    temporal evidence to construct generated/valid times. Require every dependency's
+    observed_at and available_at to be strictly before feature_cutoff_ts and bind exact
+    source/feature/taxonomy/model/index lineage. Batch and request invocation of the
+    same pinned request must return byte-identical canonical JSON and result_digest.
+  - >-
+    Return the approved six dimensions per candidate in canonical order plus separate
+    DataConfidenceEvidence. STYLE_RESEMBLANCE is a documented monotonic view of the
+    exact distance and explicitly not a probability or calibrated match percentage.
+    ROLE_COMPATIBILITY may be MEASURED/ZERO only for taxonomy-bound synthetic role-aware
+    evidence. IMPACT, TRAJECTORY and TRANSFER_RISK stay unavailable/suppressed and
+    non-ranking. W04_REAL_GOVERNED also keeps ROLE_COMPATIBILITY unavailable/suppressed;
+    only style and data confidence may be measured/zero. Data confidence comes only
+    from explicit coverage/completeness/applicability, is separate and never changes
+    rank.
+  - >-
+    Preserve claim_boundary=resemblance_only on request, result and every candidate.
+    Do not expose any blended overall score, overall match, match percentage,
+    probability of success/value/transfer or recommendation claim. Tests inspect the
+    complete JSON for forbidden fields/phrasing and prove unsupported dimensions use
+    state plus zero sentinel rather than a false measured value.
+  - >-
+    Produce scored candidates and explanations directly from the shared scorer output.
+    Explanation inputs exactly follow artifact feature order and exact query/candidate
+    FeatureValues/contributions. Reason codes are a closed deterministic serving enum,
+    emitted in one canonical order and derived only from family, filtering, role,
+    feature state and contribution facts. Repeated invocation and candidate-input
+    permutation return the same explanations, reasons, ranks and digest.
+  - >-
+    Tests use the materialized W05 baseline, hash every artifact file before/after,
+    block provider/fit/write calls, spy that both entry points invoke the same core and
+    shared loader/scorer, prove batch/request identity, stable reload, total ties,
+    filters/exclusions/role restriction, query/exemplar modes, confidence separation,
+    W04 state boundary, temporal/lineage substitution and fail-closed model/schema/
+    taxonomy/config/manifest substitution.
+deliverables:
+  - One read-only shared M0 serving core with identical request/batch entry points.
+  - Deterministic evidence-card, confidence, reason and explanation construction.
+  - Focused integration/e2e parity and mutation tests.
+  - Complete mandatory return with exact shared-core version and result digest examples.
+definition_of_done:
+  - Batch and request result JSON/digest are exactly identical for the same request.
+  - Serving cannot fit, write, read providers or execute a second scoring implementation.
+  - Every visible state/claim/explanation is supported by the pinned artifact evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/serving/m0.py src/scouting/serving/__init__.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run ruff check src/scouting/serving/m0.py src/scouting/serving/__init__.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run mypy src/scouting/serving/m0.py src/scouting/serving/__init__.py
+  - uv run pytest -q tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py tests/unit/test_w05_m0_models.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any need to change accepted contracts, registry, taxonomy, model/runtime/artifact or W03/W04 evidence bytes.
+  - Any second scoring path, provider/Gold read, fit/write/mutation, unsupported blended score or claim weakening is required.
+  - Any new dependency, external access/service, deployment/publication, destructive action or secret is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

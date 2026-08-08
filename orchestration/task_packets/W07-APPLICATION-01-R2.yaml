@@ -1,0 +1,142 @@
+schema_version: 1
+task_id: W07-APPLICATION-01
+phase_id: W07
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct the four reproduced W07 application P1 classes and prove the complete
+  three-click evidence journey through a genuine local browser without changing the
+  accepted scorer, artifacts, contracts, dependencies or evidence boundary.
+depends_on:
+  - REVIEW-W07-APPLICATION-01-R1:REWORK
+assigned_role: local_evidence_application_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W07-APPLICATION-01-R1.yaml
+  - orchestration/reviews/REVIEW-W07-APPLICATION-01-R1.yaml
+  - reports/reviews/W07/returns/W07-APPLICATION-01-R1.md
+  - reports/phase-gates/W06/gate-report.json
+  - reports/verification/W06/limitations.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/phase-gates/W04/data-health.json
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - src/scouting/serving/m0.py
+  - src/scouting/web/w07.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/integration/test_w07_local_evidence_app.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/web/w07.py
+  - src/scouting/web/__init__.py
+  - services/api/w07_main.py
+  - apps/web/templates/w07/**
+  - apps/web/static/w07/**
+  - tests/integration/test_w07_local_evidence_app.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+  - reports/reviews/W07/returns/W07-APPLICATION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/evaluation/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - src/scouting/contracts/**
+  - src/scouting/evaluation/**
+  - src/scouting/features/**
+  - src/scouting/m0/**
+  - src/scouting/modeling/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/w06/**
+frozen_authority:
+  feature_registry_digest: c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644
+  exact_four_w04_schema: cf8847f2b1f70ebf293ce90e48817e80a4e47b78316079bd88e8c2a80bc08127
+  synthetic_feature_schema: 1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f
+  taxonomy_digest: 59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097
+  configuration_digest: 5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a
+  artifact_uuid: 9a0d43c6-d177-51be-8280-3bf02bedbc99
+  manifest_digest: 2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9
+  accepted_result_digest: 9d08d8f0ddaba47a3461754d53d727709ea7a10276b438c18c9953b17ad3020e
+  accepted_lineage_hash: c291a1b99937100b9934537dc92d4628cd130684cc84388f8aebe109708e7491
+requirements:
+  - >-
+    Preserve the W03 exports in scouting.web.__init__ and add create_w07_app once.
+    Make request construction fully typed and pass format, lint and mypy.
+  - >-
+    Mount only the repository-local W07 static directory. Apply a restrictive local
+    content security policy and render a consistent base document with lang, viewport,
+    skip link, header/nav/main/footer, one h1, visible focus and no external asset.
+  - >-
+    Implement landing, search/filter, individual player evidence, retrieval, genuine
+    two-player comparison, evidence centre and explicit loading, empty, unavailable,
+    error and NO_GO pages. The landing-to-search-to-player-to-retrieval journey must be
+    at most three link/button activations; NO_GO must be visible on landing and results.
+  - >-
+    Every evidence-result page must display local source, model ID/version, artifact and
+    manifest digest, feature registry/schema identity, taxonomy ID/version/digest,
+    configuration digest, data/model window, cutoff, confidence, LIMITED applicability,
+    limitations and lineage. Search/player views are synthetic-development evidence;
+    W04 is shown separately as descriptive real-data evidence.
+  - >-
+    Retrieval and comparison must call only serve_m0_request/serve_m0_batch over
+    M0ServingCore. Expose ranks/distances as resemblance geometry, reason codes,
+    evidence dimension states, and each feature's query/candidate value/contribution in
+    accessible tables. Never implement scoring arithmetic or present a blended percent.
+  - >-
+    Present W04 exact descriptive values action_count=2,
+    coordinate_known_action_count=2, match_count=1 and
+    resolved_possession_action_count=2, while elapsed minutes, rates and per-90 remain
+    SUPPRESSED. Present W06 NO_GO / MISSING_EXPERT_RELEVANCE_EVIDENCE prominently and
+    retain the resemblance_only, synthetic-development-only, LIMITED boundary.
+  - >-
+    Integration tests must spy the accepted public serving calls, prove request/batch
+    byte parity, exact accepted result/lineage/manifest/registry/taxonomy/configuration
+    digests, artifact-file immutability, complete result metadata, all explicit states,
+    CSP/local-assets, prohibited claim/score-label absence and W04 exact values.
+  - >-
+    E2E tests must use playwright.sync_api (not TestClient) against a real loopback
+    uvicorn application. Cover Chromium desktop and mobile viewports, click-count path,
+    keyboard Tab/Enter and visible focus, landmarks/headings/labels/tables, horizontal
+    overflow, every explicit state, NO_GO, and interception proving zero external HTTP
+    requests. Do not install a browser or dependency; use the existing environment.
+deliverables:
+  - Corrected complete W07 application and local assets.
+  - Complete focused TestClient and genuine Playwright acceptance evidence.
+  - Mandatory R2 return with exact commands, results, browser details and scope confirmation.
+definition_of_done:
+  - All four R1 P1 findings are closed with direct tests.
+  - All packet acceptance checks pass.
+  - No protected fixture/output is opened or inferred.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+  - uv run ruff check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py
+  - uv run mypy src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py
+  - uv run pytest -q tests/integration/test_w07_local_evidence_app.py tests/e2e/test_w07_local_evidence_playwright.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run lint-imports
+stop_conditions:
+  - Any need to open/reconstruct protected outputs or run the W06 protected gate.
+  - Any need to change accepted scorer/contracts/artifacts/authorities or add scoring arithmetic.
+  - Any new dependency/browser install, Node toolchain, external request/service, deployment, secret, destructive action or Git operation is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

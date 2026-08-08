@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block body %}
+<p class="eyebrow">Local shortlist</p>
+<h1>{{ shortlist.title }}</h1>
+<p>This is a synthetic workflow record, not a recommendation.</p>
+
+{% if guided_study %}
+  <section class="next-action">
+    <p class="eyebrow">Your next action</p>
+    {% if 'analyst' in principal.roles and not entries %}
+      <h2>T3 · Add one synthetic candidate</h2><p>Use the supplied replay candidate and a short synthetic rationale.</p>
+    {% elif 'analyst' in principal.roles and entries %}
+      <h2>T3 · Open the candidate and assign it to Scout</h2><a class="button-link" href="/w08/entries/{{ entries[0].shortlist_entry_id }}">Open current candidate</a>
+    {% elif 'scout' in principal.roles and entries %}
+      <h2>T3 · Open your candidate and record the observation</h2><a class="button-link" href="/w08/entries/{{ entries[0].shortlist_entry_id }}">Open scout review</a>
+    {% elif can_export and entries %}
+      <h2>T5 · Create the verified local evidence pack</h2><p>The export control is below.</p>
+    {% else %}
+      <h2>Return to the pilot journey</h2><a class="button-link" href="/w08/guide">Open journey guide</a>
+    {% endif %}
+  </section>
+{% endif %}
+
+{% if 'analyst' in principal.roles %}
+  <section><h2>{% if guided_study %}Add candidate{% else %}Add immutable longlist entry{% endif %}</h2><form method="post" action="/w08/shortlists/{{ shortlist.shortlist_id }}/entries"><input type="hidden" name="csrf" value="{{ csrf }}"><label>{% if guided_study %}Synthetic replay candidate{% else %}Exact replay candidate{% endif %} <select name="candidate_selection">{% for option in candidate_options %}<option value="{{ option.link_id }}:{{ option.player_id }}">{% if guided_study %}Candidate {{ option.rank }} from the verified replay{% else %}Synthetic resemblance candidate {{ option.rank }} — {{ option.player_id }} (link {{ option.link_id }}){% endif %}</option>{% endfor %}</select></label><label>Synthetic rationale <input name="rationale" {% if guided_study %}value="Pilot review of the verified replay candidate"{% endif %} required></label><button>{% if guided_study %}Add candidate{% else %}Add longlist entry{% endif %}</button></form></section>
+{% endif %}
+
+{% if can_export and links %}
+  <section><h2>Create evidence pack</h2><p>Use this during T5 after the workflow decisions are complete.</p><form method="post" action="/w08/exports"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="role_brief_id" value="{{ shortlist.role_brief_id }}"><input type="hidden" name="role_brief_version" value="{{ shortlist.role_brief_version }}"><input type="hidden" name="shortlist_id" value="{{ shortlist.shortlist_id }}"><input type="hidden" name="retrieval_link_id" value="{{ links[0].retrieval_link_id }}"><button>Create verified local pack</button></form></section>
+{% endif %}
+
+<section><h2>Candidates</h2><table><caption>Current candidate revisions</caption><thead><tr><th scope="col">Candidate</th><th scope="col">State</th><th scope="col">Revision</th><th scope="col">Assignment</th><th scope="col">Action</th></tr></thead><tbody>{% for row in entries %}<tr><th scope="row">Synthetic candidate</th><td>{{ row.state|title }}</td><td>{{ row.revision }}</td><td>{% if row.assigned_scout_id %}Scout assigned{% else %}Unassigned{% endif %}</td><td><a href="/w08/entries/{{ row.shortlist_entry_id }}">Open</a></td></tr>{% else %}<tr><td colspan="5">No candidates yet.</td></tr>{% endfor %}</tbody></table></section>
+{% endblock %}

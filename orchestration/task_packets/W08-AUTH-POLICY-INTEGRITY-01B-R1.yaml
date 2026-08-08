@@ -1,0 +1,78 @@
+schema_version: 1
+task_id: W08-AUTH-POLICY-INTEGRITY-01B
+phase_id: W08
+revision: R1
+state: MASTER_ACCEPTED_PENDING_INDEPENDENT_REVIEW
+objective: >-
+  Prove that runtime visibility semantics and account creation remain exactly bound to
+  the retained deny-by-default policy under positive, negative and caught-failure paths.
+depends_on:
+  - W08-AUTH-AUDIT-01-R1:MASTER_REPRODUCED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-AUTH-AUDIT-01-R1.yaml
+  - reports/reviews/W08/returns/W08-AUTH-AUDIT-01-R1.md
+  - configs/policies/w08-authorization.yaml
+  - docs/architecture/threat-model.md
+  - docs/architecture/workflow-state-machines.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - tests/security/test_w08_auth_audit.py
+allowed_paths:
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - tests/security/test_w08_auth_audit.py
+  - reports/reviews/W08/returns/W08-AUTH-POLICY-INTEGRITY-01B-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Bind policy ID/schema/status/default, exact role grants, global denies, admin_not_granted and visibility rules; any field drift must fail closed before authorisation.
+  - Implement retained TEAM semantics: a same-tenant principal with the explicit action grant may access TEAM visibility, while actions containing `assigned` still require owner/assignment and OWNER_ONLY always requires owner/assignment.
+  - Retain tenant denial, unknown action/role denial, no implicit admin recruitment/export grant and generic denial responses.
+  - Make multi-row local account/credential/role creation atomic in a nested savepoint so a caught role/constraint failure leaves no account or credential.
+  - Preserve scrypt unknown-account work, opaque HMAC sessions, CSRF, expiry, revocation and rotation/fixation behavior.
+  - Add positive TEAM-read witnesses for explicitly granted analyst/scout/approver roles and negative ungranted/assigned/owner-only/cross-tenant witnesses.
+definition_of_done:
+  - Policy drift, TEAM semantics and caught account-creation failure tests pass with the complete prior auth/audit suite.
+  - The mandatory return is complete; no security-certification or representative-user claim is made.
+focused_checks:
+  - Exact policy binding and TEAM versus OWNER_ONLY/assigned action decisions.
+  - Atomic account creation plus prior session and audit-tamper regression.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/policy/r1.py src/scouting/audit/ledger.py tests/security/test_w08_auth_audit.py
+  - uv run ruff check src/scouting/policy/r1.py src/scouting/audit/ledger.py tests/security/test_w08_auth_audit.py
+  - uv run mypy src/scouting/policy/r1.py src/scouting/audit/ledger.py
+  - uv run pytest -q tests/security/test_w08_auth_audit.py tests/security/test_application_authorization.py tests/security/test_database_boundaries.py
+stop_conditions:
+  - The retained policy cannot be implemented without changing the policy file, contract or migration.
+  - A dependency/external identity/service, protected-output access, destructive action or forbidden-path edit is required.
+  - A correction would weaken deny-by-default, owner-only/assignment constraints, session security or audit integrity.
+mandatory_return:
+  - task ID and exact policy/atomicity invariant
+  - exact changed-file list
+  - adversarial proof and key choices
+  - exact commands, exit statuses and concise results
+  - residual risks and follow-ups
+  - confirmations of no Git, dependency/lock, external/protected or out-of-allowlist action
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

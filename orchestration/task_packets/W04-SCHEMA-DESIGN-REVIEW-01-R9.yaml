@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R9
+state: DISPATCHED
+objective: >-
+  Independently challenge the complete standalone R15 W04 schema and
+  deterministic rebuild design, reproduce every material current-environment
+  claim, and accept it for implementation only when every P0-P2 concern is
+  closed.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R15:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R8:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R15.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R15.yaml
+  - reports/verification/W04/wyscout-schema-design-R15-master-verification.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R14.yaml
+  - reports/verification/W04/wyscout-schema-design-R14-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R14.md
+  - reports/reviews/W04/wyscout-schema-design-R15.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R8-master-verification.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R9.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R9.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_challenges:
+  - >-
+    Read and challenge the complete R15 standalone design. Verify that it
+    truthfully retains the passing R13/R14 and returned independent R8 closures
+    without treating a master-returned revision as accepted.
+  - >-
+    Mechanically compare the exact stable pre-build projection with the
+    post-hash rebuild invocation. Require 25 unique keys in each, exactly 24
+    byte-identical stable values, projection-only schema_version, invocation-only
+    build_id, one projection hash, deterministic child reconstruction, no
+    completed-instance self-dependency, no placeholder/fixed point, and no
+    operational value in stable identity.
+  - >-
+    Reproduce the accepted EvidenceDependency model and challenge every
+    dependency row, kind/cardinality, canonical sort, UUID/digest/clock,
+    strict-before rule, watermark, and lineage hash. Reject all report-local
+    aliases or an implicit adapter.
+  - >-
+    Reproduce the exact locked/no-sync no-site launch behavior and challenge the
+    acyclic outer and child environment maps, 16/8/10/25 envelopes, all three
+    ordered argv and roles, inherited source/result descriptors, bounded result
+    frames, prefix chronology, TOCTOU residual, sole manifest/build authority,
+    and continued independent L==I admission.
+  - >-
+    Recheck the Packaging bootstrap, three denied .pth classes, editable
+    metadata, 35-row executable census with 33/1/1 classes and 21 owners, all
+    three interpreter aliases, source-complete pyc authority, exact optional
+    site-six and three repository inert-orphan predicates, 17 resources, and
+    stable/operational split across two empty roots.
+  - >-
+    Recheck source/rights, record-kind envelope authority, field/possession/
+    identity/feature decisions, exact product keys and serializers, separate
+    six-dimensional source and Gold coverage, strict temporal evidence, unknown
+    quarantine, atomic publication, sole writers, health/card/rebuild reviews,
+    full gate, and two-local-commit ledger. Report every P0-P2 defect; do not
+    waive, silently repair, or self-approve one.
+definition_of_done:
+  - The complete 3,234-line R15 artifact is independently read and challenged.
+  - Material current-environment and exact-schema claims are reproduced read-only.
+  - Every P0-P2 defect is either absent or returned as a precise REWORK finding.
+  - The review and return are the only changed paths.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R9.md');
+    assert p.is_file() and p.stat().st_size > 15000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - Any P0-P2 source, rights, temporal, identity, product, environment, path, resource, gate, ledger, or local-only defect remains.
+  - Review would require candidate edits, code, config, data, dependency, provider, network, architecture, storage-root, cleanup, or Git mutation.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

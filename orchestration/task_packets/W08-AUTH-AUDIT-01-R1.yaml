@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W08-AUTH-AUDIT-01
+phase_id: W08
+revision: R1
+state: MASTER_ACCEPTED
+objective: >-
+  Implement local R1 identities, password-backed expiring/revocable sessions,
+  deny-by-default object authorisation, and hash-chained append-only audit receipts.
+depends_on:
+  - W07:CLOSED
+  - checkpoint/w08-start
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/threat-model.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/audit.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/authentication.py
+  - src/scouting/policy/authorization.py
+  - src/scouting/audit/writer.py
+allowed_paths:
+  - src/scouting/policy/r1.py
+  - src/scouting/policy/__init__.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/audit/__init__.py
+  - tests/security/test_w08_auth_audit.py
+  - reports/reviews/W08/returns/W08-AUTH-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/workflow/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Four local roles with no implicit admin recruitment authority.
+  - Password verification using the Python standard library with no stored plaintext credential.
+  - Opaque session tokens stored only as keyed digests, expiry, revocation, rotation/fixation defence and CSRF verification.
+  - Deny-by-default tenant, owner, assignment, visibility and action decisions with generic denial responses.
+  - Transactional hash-chained audit receipts with complete chain verification and database tamper rejection.
+  - Positive and adversarial tests for unknown roles/actions, cross-object access, privilege escalation, expiry, revocation, fixation, private/team visibility and audit tampering.
+definition_of_done:
+  - Focused tests prove all deliverables and contain no real-user or security-certification claim.
+  - The mandatory return is complete and identifies synthetic automated evidence explicitly.
+focused_checks:
+  - Local session expiry, revocation, rotation/fixation, CSRF and unknown-account scrypt tests.
+  - Positive and negative object-policy tests plus receipt-chain tamper tests.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/policy/r1.py src/scouting/audit/ledger.py tests/security/test_w08_auth_audit.py
+  - uv run ruff check src/scouting/policy/r1.py src/scouting/audit/ledger.py tests/security/test_w08_auth_audit.py
+  - uv run mypy src/scouting/policy/r1.py src/scouting/audit/ledger.py
+  - uv run pytest -q tests/security/test_w08_auth_audit.py tests/security/test_application_authorization.py tests/security/test_database_boundaries.py
+stop_conditions:
+  - Required work falls outside allowed_paths.
+  - A dependency, external identity provider, network service, plaintext tracked credential, destructive action or protected-output access is required.
+  - A finding would weaken deny-by-default, audit atomicity or confidentiality.
+mandatory_return:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - behaviour and security choices
+  - exact commands, exit statuses and concise results
+  - evidence paths and identifiers
+  - residual risks and follow-ups
+  - confirmations of no Git operations, no dependency or lock change, and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

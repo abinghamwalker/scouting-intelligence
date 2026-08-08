@@ -1,0 +1,96 @@
+schema_version: 1
+task_id: W03-BOUNDARY-REVIEW-01
+phase_id: W03
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently audit the completed W03 contract, temporal, guarded-storage,
+  migration/RLS, authorisation, serving, audit, and local-boundary artifacts.
+depends_on:
+  - W03-CONTRACTS-01:ACCEPTED
+  - W03-GOVERNANCE-01:ACCEPTED
+  - W03-STORAGE-01:ACCEPTED
+  - W03-FIXTURES-01:ACCEPTED
+  - W03-DATABASE-01:ACCEPTED
+  - W03-VERTICAL-01:ACCEPTED
+  - W03-ARCHITECTURE-01:ACCEPTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W03-BOUNDARY-REVIEW-01-R1.yaml
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/threat-model.md
+  - reports/reviews/W03/design-packet-review.md
+  - orchestration/reviews/REVIEW-W03-CONTRACTS-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-GOVERNANCE-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-STORAGE-01-R1.yaml
+  - orchestration/reviews/REVIEW-W03-FIXTURES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-DATABASE-01-R1.yaml
+  - orchestration/reviews/REVIEW-W03-VERTICAL-01-R5.yaml
+  - orchestration/reviews/REVIEW-W03-ARCHITECTURE-01-R1.yaml
+allowed_paths:
+  - tests/security/test_w03_boundary_audit.py
+  - reports/reviews/W03/boundary-audit.md
+  - reports/reviews/W03/returns/W03-BOUNDARY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - services/**
+  - apps/**
+  - scripts/**
+  - tests/fixtures/**
+  - tests/contracts/**
+  - tests/unit/**
+  - tests/integration/**
+  - tests/e2e/**
+  - tests/security/test_database_boundaries.py
+  - tests/security/test_application_authorization.py
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - >-
+    An independent executable audit of strict cutoff equality, lineage binding,
+    ambiguous identity exclusion, guarded-root escape/symlink rejection,
+    non-owner RLS denial, audit immutability, app deny-by-default, confidential
+    response minimisation, missing-model fail-closed behaviour, and local-only
+    telemetry/runtime boundaries.
+  - >-
+    An independent rerun and readback of the import-linter layer and forbidden
+    provider-source contracts.
+  - >-
+    Requirement-to-evidence report mapping W03.1–W03.6 and G-W03/G1, with every
+    reviewed artifact identified and any defect ranked P0–P2.
+  - ACCEPT or REWORK recommendation; no implementation edits and no self-approval.
+  - Complete mandatory return.
+definition_of_done:
+  - The review occurs after all W03 implementation returns and master reviews exist.
+  - It independently exercises finished boundaries rather than trusting producer assertions.
+  - It does not access the protected fixture or expected result; the master alone brokers that gate.
+  - Every non-pass has concrete reproduction evidence and a bounded required correction.
+  - All acceptance checks pass through uv.
+  - The mandatory return confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/security/test_w03_boundary_audit.py
+  - uv run ruff format --check tests/security/test_w03_boundary_audit.py
+  - uv run ruff check tests/security/test_w03_boundary_audit.py
+  - uv run lint-imports --no-cache
+  - >-
+    uv run python -c "from pathlib import Path;
+    text=Path('reports/reviews/W03/boundary-audit.md').read_text();
+    assert all(term in text for term in
+    ['W03.1', 'W03.2', 'W03.3', 'W03.4', 'W03.5', 'W03.6', 'G-W03', 'G1'])"
+stop_conditions:
+  - An implementation artifact or required master review is missing.
+  - The protected fixture has been accessed or its isolation cannot be maintained.
+  - Any requested work requires an implementation edit or path outside allowed_paths.
+  - A Git command, external service, credential, public bind, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

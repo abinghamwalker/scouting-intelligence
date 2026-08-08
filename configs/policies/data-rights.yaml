@@ -1,0 +1,145 @@
+schema_version: 1
+policy_id: w03-synthetic-data-rights-v1
+status: accepted_control_boundary
+default: deny
+
+authorised_classification:
+  id: w03_synthetic_generated
+  origin: generated
+  location: local_project_roots_only
+  personal_data: false
+  real_person_or_club_data: false
+  provider_data: false
+  confidential_user_data: false
+  exportable: false
+  externally_shareable: false
+  evidence_use: test_only
+  licence_evidence_asserted: false
+
+admission:
+  all_required:
+    - classification_is_w03_synthetic_generated
+    - generated_by_reviewed_fixture_builder
+    - no_real_person_or_club_facts
+    - no_personal_or_sensitive_data
+    - immutable_manifest_and_content_hash_present
+    - temporal_availability_fields_present
+    - path_is_inside_guarded_project_root
+    - intended_use_is_local_test_evidence
+  on_missing_or_unknown_classification: reject
+  on_failed_requirement: quarantine_and_deny_use
+  inherit_strictest_upstream_rights: true
+
+permitted_uses:
+  - strict_contract_tests
+  - temporal_replay_tests
+  - identity_ambiguity_tests
+  - authorization_negative_tests
+  - guarded_storage_tests
+  - local_role_brief_to_audit_journey
+  - local_non_exported_review
+
+prohibited_uses:
+  - real_data_ingestion
+  - open_data_ingestion
+  - licensed_provider_data_ingestion
+  - personal_data_processing
+  - model_performance_claim
+  - expert_relevance_claim
+  - pilot_or_user_research_claim
+  - external_export
+  - external_sharing
+  - external_model_call
+  - public_demo
+  - cloud_or_remote_storage
+  - production_recruitment_decision
+
+prohibited_uses_scope: w03_synthetic_generated_classification
+
+derivations:
+  allowed: true
+  conditions:
+    - remains_w03_synthetic_generated
+    - remains_local
+    - remains_non_personal
+    - remains_non_exported
+    - source_manifest_lineage_retained
+  promotion_to_less_restrictive_class: forbidden
+
+export:
+  allowed: false
+  local_evidence_pack_allowed: false
+  network_transfer_allowed: false
+  removable_media_transfer_allowed: false
+
+retention:
+  location: guarded_project_local_paths
+  duration: not_set_by_w03
+  silent_mutation: forbidden
+  deletion_or_retention_change_requires_future_approved_policy: true
+
+future_data:
+  real_or_open_data_status: not_authorised
+  provider_selected: false
+  provider_licence_reviewed: false
+  pilot_host_data_authorised: false
+  required_before_admission:
+    - bounded_source_packet
+    - source_and_provider_identity
+    - licence_and_use_class
+    - allowed_derivations
+    - retention_rules
+    - export_restrictions
+    - coverage_and_availability_evidence
+    - master_review
+
+evidence_status:
+  synthetic_classification_is_normative: true
+  real_data_rights_evidence_present: true
+  licence_evidence_present: true
+  pilot_data_evidence_present: false
+
+w04_authorised_classification:
+  id: wyscout_figshare_v5_cc_by_4
+  status: authorised_frozen_poc_source
+  source_config: configs/sources/w04-provider.yaml
+  origin: public_research_dataset
+  provider: Wyscout
+  publisher: figshare
+  exact_version: 10.6084/m9.figshare.c.4415000.v5
+  licence: CC-BY-4.0
+  personal_data: false
+  local_retention: allowed
+  raw_reproduction: allowed
+  transformation: allowed
+  model_training_and_evaluation: allowed
+  local_internal_display: allowed
+  attribution_required: true
+  project_raw_export: forbidden
+  external_sharing: forbidden_by_local_project_boundary
+  cloud_or_remote_storage: forbidden_by_local_project_boundary
+  public_demo: forbidden_by_local_project_boundary
+  current_or_prospective_scouting_claim: forbidden
+  derivatives_inherit:
+    - source_manifest_id
+    - licence
+    - attribution
+    - change_notice
+    - frozen_historical_claim_boundary
+
+w04_admission:
+  all_required:
+    - exact_collection_version_and_doi
+    - expected_file_name_size_and_md5
+    - exact_one_hop_figshare_storage_redirect
+    - computed_sha256
+    - guarded_local_source_root
+    - immutable_completion_manifest
+    - five_approved_domestic_competitions_only
+    - source_availability_set_to_collection_release
+    - attribution_and_change_notice_retained
+  on_unknown_object_or_archive_member: quarantine_and_deny_use
+  on_missing_or_mismatched_digest: quarantine_and_deny_use
+  on_missing_temporal_evidence: research_only_and_deny_historical_replay
+  raw_export: deny
+  network_transfer_after_bounded_acquisition: deny

@@ -1,0 +1,45 @@
+schema_version: 1
+review_id: REVIEW-W05-FEATURES-01-R1
+task_id: W05-FEATURES-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Fully re-signed registry and fixture replacements, family-ID cross-wires and
+      descriptor or synthetic-claim substitutions pass because only candidate-carried
+      self-digests are checked and no accepted W05 identity is independently pinned.
+    required_fix: >-
+      Pin the exact accepted root, family, schema and fixture IDs, versions and digests
+      at the public load boundary and test fully re-signed nested substitutions.
+  - severity: P1
+    blocker_tests: [1, 2, 6]
+    evidence: >-
+      The W04 materializer trusts caller-supplied accepted state, arbitrary four counts
+      and an internally re-hashed dependency list without an accepted W04 Gold product,
+      manifest, row or dependency identity pin.
+    required_fix: >-
+      Bind the exact retained W04 research-only Gold build, manifest, product, row,
+      feature values, clocks and complete five-dependency lineage without reading or
+      changing W04 product bytes.
+  - severity: P1
+    blocker_tests: [4, 6]
+    evidence: >-
+      The canonical W04 bridge sets and code requires production_evidence=true and
+      protected_evaluation=true despite the accepted research-only dataset card and W06
+      ownership of protected evaluation.
+    required_fix: >-
+      Set both claim flags false, retain an explicit research-only resemblance claim and
+      test that neither evidence family claims production, protected evaluation,
+      validation or expert endorsement.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-FEATURES-01-R2.yaml
+reviewer: master

@@ -1,0 +1,32 @@
+schema_version: 1
+review_id: REVIEW-W04-SECURITY-AUTHORITY-FIXTURE-01-R1
+task_id: W04-SECURITY-AUTHORITY-FIXTURE-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT_FOR_INDEPENDENT_REVIEW
+next_packet: W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1
+reviewer: master
+evidence:
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-01-R1.md
+  - reports/verification/W04/security-authority-fixture-R1-master-verification.md
+checks:
+  - command: exact fixture readback and protected-file digest reconstruction
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+      tests/security/test_w04_source_authority_boundary.py
+    result: PASS_81_TESTS
+  - command: focused ruff format and lint
+    result: PASS
+  - command: git diff --check
+    result: PASS
+decision_notes:
+  - Fixture-only correction is ready for fresh independent security review.
+  - No runtime, config, authority, network, or product permission is implied.

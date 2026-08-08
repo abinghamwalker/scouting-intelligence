@@ -1,0 +1,93 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only the master-found R1 build-test defect: remove the novel
+  `w04-gold-schema-authority-unavailable` semantic digest derivation without
+  changing the accepted serializer candidate or runtime build behavior.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1:MASTER_REWORK_SECOND_SEMANTIC_TEST_PATH
+assigned_role: w04_logical_arrow_projection_implementation_reworker
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.yaml
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.yaml
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-acceptance-v1.json
+  - reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/unit/**
+  - tests/contracts/test_w04_logical_arrow_projection_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+fixed_bindings:
+  implementation_r1_packet_sha256: b36793b729561521203ddb507161326340e2a14e73cc5616a59ae2eb18c6b6e5
+  implementation_r1_return_sha256: 197bb99e4fe6a6328a709f4af946166429e97aa8fed5858df2b6b954806e8372
+  formats_candidate_sha256: d1827127ce36a67dc49993f5cdb4cd18a5ab5bc62f3b753808529f66dba9f2c9
+  formats_test_candidate_sha256: b5fe5aa5831755abe83cd8fd812538dbfbb091190a42430fb09c9141d7e33cce
+  build_contract_candidate_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  build_test_r1_sha256: ae2edd8c96794cf39cca2159b2a769858036ee5db9674cdefee07396c0a10693
+  authority_decision_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  authority_acceptance_sha256: 647ce58093485717a50037eeb6e46d09c2dfad88a8f60bdef7bce8d35f8d31c3
+rework_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - >-
+    Remove the test-only `hashlib.sha256(b"w04-gold-schema-authority-unavailable\\x00" + ... )`
+    calculation and every equivalent novel semantic domain, preimage or formula.
+  - >-
+    The unavailable Gold test fixture may carry only an explicitly rejected,
+    fixed caller-claim sentinel already represented by the test's existing digest
+    constants. It must be named and asserted as non-authoritative and must never
+    be described as reproduced or coherent Gold semantics.
+  - >-
+    Add a focused assertion that the sentinel cannot pass receipt closure and
+    always terminates with GoldSchemaAuthorityUnavailableError. Do not add any
+    projection descriptor, schema/table field, placeholder authority, accepted
+    digest, encoder call, semantic derivation or product byte.
+  - >-
+    Preserve byte-identically the R1 formats module, formats tests, runtime build
+    contract and R1 return. Do not change runtime behavior or any authority byte.
+definition_of_done:
+  - The sole master finding is removed and both R1 suites remain green.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected build test and additive R2 return only.
+stop_conditions:
+  - Need to change runtime/source/authority/descriptor semantics or any file beyond ownership.
+  - Any fixed binding drifts.
+  - Need for Git, dependency, provider/network or external action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,24 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-VALUE-IDENTITY-03-R1
+task_id: W06-EVAL-VALUE-IDENTITY-03
+phase_id: W06
+revision: R1
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    evidence: >-
+      A normal RankComparisonResult with spearman=1.0, no reason and the entire set-metric
+      quartet absent validates at digest
+      54cb89310bf9d6feaa7d15cc608f6262adc947f762ddb23d49cfbffe21322231.
+    required_fix: >-
+      Require all top-k set metrics whenever Spearman is computed while preserving the
+      valid Spearman-unavailable plus set-metrics-present shape.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+reviewer: master

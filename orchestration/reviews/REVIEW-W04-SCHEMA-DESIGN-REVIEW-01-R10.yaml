@@ -1,0 +1,65 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R10
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-STABLE-UV-HOST-PATH-01
+    severity: P1
+    status: master_reproduced
+  - id: W04-DESIGN-FIELD-AUTHORITY-STANDALONE-01
+    severity: P1
+    status: master_reproduced
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R17
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R10.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R10.md
+  - reports/reviews/W04/wyscout-schema-design-R16.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R10-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      read complete independent R10 review and return
+    result: PASS_776_REVIEW_LINES_132_RETURN_LINES
+  - command: >-
+      search R16 invariant, stable bootstrap, target record, manifest, component,
+      projection-exclusion, and two-root text for absolute uv host paths
+    result: FAIL_TWO_ABSOLUTE_UV_PATHS_EXPLICITLY_STABLE_AND_TRANSITIVE_TO_BUILD_ID
+  - command: >-
+      search R16 for exact closed field decision, registry, review, acceptance,
+      ID, digest, clock, dependency, and packet contracts
+    result: FAIL_STANDALONE_CONTRACT_MARKERS_ABSENT
+  - command: >-
+      parse the accepted source profile's measured JSON and CSV field tables
+    result: PASS_119_PATHS_10_11_26_47_18_4_3
+  - command: >-
+      reproduce R10 report and return exact size assertions
+    result: PASS_33579_REVIEW_BYTES_6888_RETURN_BYTES
+  - command: uv run --locked --no-sync python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read the complete 776-line independent review and 132-line
+    return. The reviewer changed exactly its two assigned report paths and
+    performed no Git, provider, network, implementation, config, or data action.
+  - >-
+    The current-host logical uv correction itself passes. The bounded R17 route
+    retains its exact operational launch checks while removing actual host
+    spellings from stable identity and supplying closed semantic-authority
+    protocols in the standalone replacement.
+  - >-
+    No architecture, dependency, provider, rights, storage, network, project
+    root, Git, or local-only policy change is required. No implementation packet
+    may start until corrected master and independent acceptance.

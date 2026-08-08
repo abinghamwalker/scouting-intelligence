@@ -1,0 +1,81 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R13
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: FAIL
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-BOOTSTRAP-ENVIRONMENT-DIGEST-CYCLE-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-CHILD-LAUNCH-INPUT-CONTRACT-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-DESIGN-REBUILD-PREFIX-ORDER-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-PRODUCER-OUTSIDE-PATH-ATTESTATION-01
+    severity: P2
+    status: returned_for_rework
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R14
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R13.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R13.md
+  - reports/verification/W04/wyscout-schema-design-R13-master-verification.md
+  - reports/verification/W04/wyscout-schema-design-R12-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R13.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      PYTHONPYCACHEPREFIX=<fresh-empty-prefix>
+      PYTHONDONTWRITEBYTECODE=1
+      uv run --locked --no-sync python -S -B -v -c
+      "import sys; print(sys.version)"
+    result: PASS_THREE_ENCODING_SOURCES_LOADED_PREFIX_REMAINS_EMPTY
+  - command: >-
+      W04_LAUNCHER_SOURCE_FD=9
+      uv run --locked --no-sync python -S -B -c
+      "verify inherited descriptor fstat offset inheritable and FD_CLOEXEC"
+    result: PASS_FD_9_SIZE_9874_OFFSET_0_INHERITABLE_TRUE_CLOEXEC_FALSE
+  - command: >-
+      inspect w04-local-control-bootstrap-v2 and fixed_environment_digest
+    result: FAIL_BOOTSTRAP_TUPLE_VALUE_CONTAINS_ITS_OWN_ENVIRONMENT_DIGEST
+  - command: >-
+      inspect exact child environment and rebuild invocation handoff
+    result: FAIL_NO_CLOSED_CHILD_INPUT_OR_BUILD_INVOCATION_TRANSPORT
+  - command: >-
+      inspect launcher steps against manifest and build-ID publication order
+    result: FAIL_REBUILD_PREFIX_CREATED_BEFORE_BUILD_ID_EXISTS
+  - command: >-
+      uv run --locked --no-sync python -c
+      "parse all orchestration YAML and assert registry task IDs are unique"
+    result: PASS_127_ORCHESTRATION_YAML_23_TASKS_ZERO_DUPLICATES
+  - command: uv run --locked --no-sync python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    R13 truthfully closes the three R12 findings: the outer role loads the
+    measured encoding sources under a distinct empty prefix, inherited
+    descriptors are feasible through the exact uv transport, and both result
+    objects are exhaustive typed schemas.
+  - >-
+    Independent review remains blocked because R13 removed R12's explicit
+    exclusion of W04_BOOTSTRAP_TUPLE_B64 from fixed_environment_digest,
+    never closes the child control/build invocation inputs, and contradicts
+    its own build-ID ordering when it creates the rebuild prefix.
+  - >-
+    The producer also created and then removed a mistaken parent-workspace
+    report file while claiming no path outside the two allowed report paths
+    changed. The master verified the remaining parent directories were empty
+    and removed only those confirmed agent-created empty directories.

@@ -1,0 +1,391 @@
+{% extends "base.html" %}
+{% block title %}W10 v2 evidence assessment{% endblock %}
+{% macro state(metric, view) -%}
+  {% if metric.availability.value in ('observed_value','observed_zero') %}
+    {% if view == 'raw' %}
+      {{ metric.raw_value }}
+      {% if metric.unit.value == 'share' %} share{% else %} per 90 governed minutes{% endif %}
+    {% else %}
+      {{ metric.within_position_percentile }} percentile
+    {% endif %}
+  {% else %}
+    <strong>{{ metric.availability.value|replace('_',' ')|title }}</strong>
+    <span class="muted"> — {{ metric.limitation }}</span>
+  {% endif %}
+{%- endmacro %}
+{% macro profile_metric(metric) -%}
+<li
+  class="profile-row"
+  data-metric-id="{{ metric.metric_id }}"
+  data-raw-value="{{ metric.raw_value if metric.raw_value is not none else '' }}"
+  data-percentile="{{ metric.within_position_percentile if metric.within_position_percentile is not none else '' }}"
+>
+  <span class="profile-label">{{ metric.label }}</span>
+  {% if metric.availability.value in ('observed_value','observed_zero') %}
+    <span class="profile-value raw-value">
+      {{ '%.2f'|format(metric.raw_value) }}{% if metric.unit.value == 'share' %} share{% else %} per 90{% endif %}
+    </span>
+    <span class="profile-value percentile-value" hidden>
+      {{ '%.2f'|format(metric.within_position_percentile) }} percentile
+    </span>
+    <span class="profile-track" aria-hidden="true">
+      <span class="profile-fill" style="width: {{ metric.within_position_percentile }}%"></span>
+    </span>
+  {% else %}
+    <span class="profile-value">{{ metric.availability.value|replace('_',' ')|title }}</span>
+  {% endif %}
+</li>
+{%- endmacro %}
+{% macro panel(player, side) -%}
+<section class="player-card evidence-panel" aria-labelledby="{{ side }}-name">
+  <p class="card-label">{{ side|title }}</p>
+  <h3 id="{{ side }}-name">{{ player.context.display_name }}</h3>
+  <p>
+    {{ player.context.season_label }} · {{ player.context.competition_name }} ·
+    {{ player.context.team_names|join(', ') }} · {{ player.context.position_code }}
+  </p>
+  <aside class="warning">
+    <strong>Evidence quantity:</strong>
+    {{ player.context.quantity.governed_minutes }} governed minutes
+    ({{ player.context.quantity.minute_state|replace('_',' ') }}).
+    Per-90 values can overstate rates because minutes are conservative lower bounds.
+  </aside>
+  <figure class="profile-visual" aria-labelledby="{{ side }}-profile-title">
+    <figcaption id="{{ side }}-profile-title">
+      <strong>Compact W09-input profile</strong>
+      <span class="muted">
+        These 16 bars reconstruct the governed within-position percentiles, never a better/worse
+        score. Displayed values follow the raw/percentile preference; exact values remain in the
+        table. Required independent descriptors follow in their open evidence sections.
+      </span>
+    </figcaption>
+    <ul class="profile-list">
+      {% for metric in player.w09_inputs.metrics %}
+        {{ profile_metric(metric) }}
+      {% endfor %}
+    </ul>
+  </figure>
+  <h4>
+    Frozen W09 model inputs
+    <span class="muted">(transparency only; used by the scorer)</span>
+  </h4>
+  <table>
+    <caption class="sr-only">{{ side }} W09 model inputs</caption>
+    <thead>
+      <tr>
+        <th>Metric</th>
+        <th class="raw-value">Raw per 90</th>
+        <th class="percentile-value" hidden>Within-position percentile</th>
+        <th>Definition / coverage</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for metric in player.w09_inputs.metrics %}
+      <tr>
+        <th scope="row">{{ metric.label }}</th>
+        <td class="raw-value">{{ state(metric,'raw') }}</td>
+        <td class="percentile-value" hidden>{{ state(metric,'percentile') }}</td>
+        <td>{{ metric.definition }}; {{ metric.coverage.definition }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <h4>
+    Independent descriptors
+    <span class="muted">(not used by W09 ranking)</span>
+  </h4>
+  {% for family in player.independent_descriptors %}
+  <details{% if family.mandatory_for_selected_rubric %} open{% endif %}>
+    <summary>
+      {% if family.mandatory_for_selected_rubric %}Required{% else %}Supplementary{% endif %}:
+      {{ family.label }} — {{ family.availability.value|replace('_',' ') }}
+    </summary>
+    <p>
+      {{ family.definition }}
+      {% if family.mandatory_for_selected_rubric %}
+        This family is required for this assessment.
+      {% else %}
+        This supplementary family is collapsed by default and is not required for this
+        position-specific assessment.
+      {% endif %}
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th class="raw-value">Raw value</th>
+          <th class="percentile-value" hidden>Within-position percentile</th>
+          <th>Opportunity / coverage</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for metric in family.metrics %}
+        <tr>
+          <th scope="row">{{ metric.label }}</th>
+          <td class="raw-value">{{ state(metric,'raw') }}</td>
+          <td class="percentile-value" hidden>{{ state(metric,'percentile') }}</td>
+          <td>
+            {{ metric.raw_opportunity_denominator if metric.raw_opportunity_denominator is not none else 'Not available' }};
+            {{ metric.coverage.definition }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </details>
+  {% endfor %}
+  <details>
+    <summary>Unsupported inferences — do not infer these from this evidence</summary>
+    <ul>
+      {% for item in player.unsupported_inferences %}
+      <li>{{ item.label }}: not captured.</li>
+      {% endfor %}
+    </ul>
+  </details>
+</section>
+{%- endmacro %}
+{% block body %}
+{% if error_message %}
+<div id="v2-error" class="status-card error" role="alert" tabindex="-1">
+  {{ error_message }}
+</div>
+{% endif %}
+{% if snapshot.complete %}
+<section id="study-content" tabindex="-1" class="panel completion">
+  <h2>V2 pilot submitted</h2>
+  <p>Your response set is immutable. This mechanics-pilot record is not formal evidence.</p>
+  <form method="post" action="/w10/v2/detach">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button class="button" type="submit">Finish and prepare next participant</button>
+  </form>
+</section>
+{% elif task %}
+<section id="study-content" tabindex="-1" class="panel" aria-labelledby="assessment-title">
+  <div class="section-heading">
+    <div>
+      <p class="section-kicker">Mechanics pilot only</p>
+      <h2 id="assessment-title">
+        Historical role/style comparison {{ task[2] }} of {{ task[3] }}
+      </h2>
+    </div>
+    <strong>{{ snapshot.judgements|length }} / {{ task[3] }}</strong>
+  </div>
+  <p class="prompt">
+    Is this candidate a credible historical role/style comparison to the exemplar, given the
+    football evidence presented? Player identities and governed football evidence are visible;
+    retrieval provenance remains hidden. No panel is closer, recommended, or better.
+  </p>
+  <fieldset>
+    <legend>Display preference</legend>
+    <label class="choice">
+      <input id="evidence-view" type="checkbox">
+      <span>Show within-position percentiles instead of raw values</span>
+    </label>
+  </fieldset>
+  <div class="comparison-grid">
+    {{ panel(task[1].exemplar,'exemplar') }}
+    {{ panel(task[1].candidate,'candidate') }}
+  </div>
+  <details class="panel">
+    <summary>Shared evidence glossary — applies equally to both panels</summary>
+    <p>
+      Every row below has identical meaning for exemplar and candidate; only governed evidence
+      values and coverage may differ.
+    </p>
+    {% for item in task[1].exemplar.glossary %}
+    <section class="glossary-entry">
+      <h3>{{ item.label }}</h3>
+      <p>{{ item.definition }}</p>
+      <dl>
+        <dt>Evidence purpose</dt>
+        <dd>
+          {{ item.purpose.value|replace('_',' ')|title }}
+          {% if item.used_by_w09_ranking %}
+            ; used by the frozen W09 scorer
+          {% else %}
+            ; not used by W09 ranking
+          {% endif %}
+        </dd>
+        <dt>Denominator</dt>
+        <dd>{{ item.denominator_definition }}</dd>
+        <dt>Coverage</dt>
+        <dd>{{ item.coverage_definition }}</dd>
+        <dt>Interpretation boundary</dt>
+        <dd>{{ item.direction_notice }}</dd>
+        <dt>Known limitation</dt>
+        <dd>{{ item.limitation }}</dd>
+      </dl>
+    </section>
+    {% endfor %}
+  </details>
+  <form method="post" action="/w10/v2/judgements" class="form-grid judgement-form">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="command_id" value="{{ command_id }}">
+    <input type="hidden" name="expected_revision" value="{{ snapshot.revision }}">
+    <input type="hidden" name="presentation_token" value="{{ task[0] }}">
+    <fieldset class="full">
+      <legend>Evidence sufficiency</legend>
+      <label class="choice">
+        <input type="radio" name="evidence_sufficiency" value="sufficient" required>
+        <span>Sufficient</span>
+      </label>
+      <label class="choice">
+        <input type="radio" name="evidence_sufficiency" value="insufficient">
+        <span>Insufficient</span>
+      </label>
+    </fieldset>
+    <fieldset class="full">
+      <legend>Assessment basis</legend>
+      {% for value,label in [('supplied_evidence','Exactly supplied evidence'),('prior_professional_knowledge','Prior professional knowledge'),('both','Both'),('unable_to_assess','Unable to assess')] %}
+      <label class="choice">
+        <input type="radio" name="assessment_basis" value="{{ value }}" required>
+        <span>{{ label }}</span>
+      </label>
+      {% endfor %}
+    </fieldset>
+    <fieldset class="full">
+      <legend>Response</legend>
+      {% for value,label in [('rated','Rated'),('abstain','Abstain'),('unable_to_assess','Unable to assess')] %}
+      <label class="choice">
+        <input type="radio" name="state" value="{{ value }}" required>
+        <span>{{ label }}</span>
+      </label>
+      {% endfor %}
+    </fieldset>
+    <label class="rating-field">
+      Relevance (0–4)
+      <select name="relevance_rating">
+        <option value="">Select</option>
+        <option value="0">0 — not credible from this evidence</option>
+        <option value="1">1 — weak credibility</option>
+        <option value="2">2 — mixed credibility</option>
+        <option value="3">3 — credible comparison</option>
+        <option value="4">4 — strongly credible comparison</option>
+      </select>
+    </label>
+    <label class="rating-field">
+      Confidence (1–5)
+      <select name="confidence">
+        <option value="">Select</option>
+        <option value="1">1 — very low confidence</option>
+        <option value="2">2 — low confidence</option>
+        <option value="3">3 — moderate confidence</option>
+        <option value="4">4 — high confidence</option>
+        <option value="5">5 — very high confidence</option>
+      </select>
+    </label>
+    <label>
+      Independent families cited (required for supplied/both)
+      <select class="citation-control" name="citations">
+        <option value="">None</option>
+        {% for family in task[1].exemplar.independent_descriptors if family.mandatory_for_selected_rubric %}
+        <option value="{{ family.label }}">{{ family.label }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Gap category (required if insufficient)
+      <select class="gap-control" name="evidence_gap">
+        <option value="">None</option>
+        {% for x in ['sparse_opportunities','missing_descriptor','coverage_limitation','context_ambiguity','other'] %}
+        <option value="{{ x }}">{{ x|replace('_',' ')|title }}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="full">
+      Qualitative note (required if insufficient)
+      <textarea class="gap-note" name="explanation" maxlength="1000"></textarea>
+    </label>
+    <p class="form-status full" aria-live="polite"></p>
+    <button class="button primary" type="submit">Save response</button>
+  </form>
+</section>
+{% else %}
+<section id="study-content" tabindex="-1" class="panel">
+  <h2>Review and correct before immutable submission</h2>
+  <p>Each correction is appended to the local revision history; it never overwrites the original response.</p>
+  {% for token, judgement, ordinal, families in review_tasks %}
+  <details class="review-card">
+    <summary>
+      Assessment {{ ordinal }} — {{ judgement.state.value|replace('_',' ')|title }}
+    </summary>
+    <form method="post" action="/w10/v2/corrections" class="form-grid judgement-form">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <input type="hidden" name="command_id" value="{{ command_id }}">
+      <input type="hidden" name="expected_revision" value="{{ snapshot.revision }}">
+      <input type="hidden" name="presentation_token" value="{{ token }}">
+      <fieldset class="full">
+        <legend>Correct response state</legend>
+        <label class="choice">
+          <input type="radio" name="state" value="rated"{% if judgement.state.value == 'rated' %} checked{% endif %}>
+          <span>Rated</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="state" value="abstain"{% if judgement.state.value == 'abstain' %} checked{% endif %}>
+          <span>Abstain</span>
+        </label>
+        <label class="choice">
+          <input type="radio" name="state" value="unable_to_assess"{% if judgement.state.value == 'unable_to_assess' %} checked{% endif %}>
+          <span>Unable</span>
+        </label>
+      </fieldset>
+      <label>
+        Evidence sufficiency
+        <select name="evidence_sufficiency">
+          <option value="sufficient"{% if judgement.evidence_sufficiency.value == 'sufficient' %} selected{% endif %}>Sufficient</option>
+          <option value="insufficient"{% if judgement.evidence_sufficiency.value == 'insufficient' %} selected{% endif %}>Insufficient</option>
+        </select>
+      </label>
+      <label>
+        Assessment basis
+        <select name="assessment_basis">
+          {% for value in ['supplied_evidence','prior_professional_knowledge','both','unable_to_assess'] %}
+          <option value="{{ value }}"{% if judgement.assessment_basis.value == value %} selected{% endif %}>{{ value|replace('_',' ')|title }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="rating-field">
+        Relevance
+        <input type="number" min="0" max="4" name="relevance_rating" value="{{ judgement.relevance_rating if judgement.relevance_rating is not none else '' }}">
+      </label>
+      <label class="rating-field">
+        Confidence
+        <input type="number" min="1" max="5" name="confidence" value="{{ judgement.confidence if judgement.confidence is not none else '' }}">
+      </label>
+      <label>
+        Independent citation
+        <select class="citation-control" name="citations">
+          <option value="">None</option>
+          {% for value, label, selected in families %}
+          <option value="{{ value }}"{% if selected %} selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>
+        Gap
+        <select class="gap-control" name="evidence_gap">
+          <option value="">None</option>
+          {% for value in ['sparse_opportunities','missing_descriptor','coverage_limitation','context_ambiguity','other'] %}
+          <option value="{{ value }}"{% if judgement.evidence_gap and judgement.evidence_gap.value == value %} selected{% endif %}>{{ value|replace('_',' ')|title }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label class="full">
+        Qualitative note
+        <textarea class="gap-note" name="explanation">{{ judgement.explanation or '' }}</textarea>
+      </label>
+      <p class="form-status full" aria-live="polite"></p>
+      <button class="button" type="submit">Save append-only correction</button>
+    </form>
+  </details>
+  {% endfor %}
+  <p>When correct, submission is immutable.</p>
+  <form method="post" action="/w10/v2/submit">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <input type="hidden" name="command_id" value="{{ command_id }}">
+    <input type="hidden" name="expected_revision" value="{{ snapshot.revision }}">
+    <button class="button danger">Submit mechanics-pilot responses</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

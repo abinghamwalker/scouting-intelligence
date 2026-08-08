@@ -1,0 +1,71 @@
+schema_version: 1
+task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01
+phase_id: W04
+revision: R1
+state: PLANNED
+objective: >-
+  Independently review the immutable code-manifest, exact outer launch evidence,
+  two real run families and raw-to-Gold closure without editing any producer byte.
+depends_on:
+  - W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1:COMPLETE
+assigned_role: fresh_independent_w04_real_root_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+  - reports/verification/W04/wyscout-real-root-invocation-R1-master-acceptance.md
+  - data/manifests/wyscout/v5
+  - runs/w04/wyscout-rebuild
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-real-root-invocation-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+requirements:
+  - Keep every implementation, product, manifest, receipt, prefix and master report read-only.
+  - >-
+    Independently reconstruct the complete code/environment manifest, v2 aggregate
+    bindings, 25-key projection/build ID/inverse, all seven product schemas/rows,
+    three manifest parent chains, temporal closure, both receipt families and exact
+    two-run equality directly from named bytes.
+  - >-
+    Audit the outer/control/admission/rebuild process evidence, closed maps, current
+    host uv proof, retained descriptors, PYC inventories, three empty prefixes,
+    diagnostics/frame/EOF/status, sole writers, no network/provider access and
+    no-follow real-root inventory. Run an additional isolated deterministic rebuild
+    without writing real roots and compare all stable bytes/digests.
+  - PASS only with P0/P1/P2 exactly 0/0/0; otherwise bounded REWORK with exact evidence and no producer edits.
+acceptance_checks:
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent real-root/code-manifest/rebuild review and mandatory return.
+stop_conditions:
+  - None for bounded findings; return REWORK without producer or real-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,89 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-01
+phase_id: W04
+revision: R4
+state: ACCEPTED
+objective: >-
+  Correct only R3's metadata-presence gap by requiring metadata to be absent (`None`),
+  never merely false, at every recursively validated Arrow schema/field boundary.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3:REWORK
+assigned_role: bounded_w04_parquet_r4_encoder_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R4.yaml
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R3.yaml
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/scouting/contracts/**
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+fixed_bindings:
+  r3_formats_sha256: 76c46de2b54b4d69a9f7bef89b7976e00f9d384cddded50206de0f7fc3723edc
+  r3_focused_test_sha256: 38241e232f886c85d350a7fcd01d45ed4675abfc4ee69f012a807a9e0d80b54b
+  r3_producer_return_sha256: ae16eafc67808fa1062c8bcd7a0110f657d29cd11bac6bbab84bfb7f28425645
+  r3_review_sha256: 2755d1cd6c1b77ca6aeee035bcf3b9f75a5b4d3dcabfa590ad25753d40f8fabd
+  r3_reviewer_return_sha256: 23149c1ab90a9ae64d8510d15b4c3c19356f57ee297880c5f87f3ad970bcd60a
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+requirements:
+  - Verify every fixed binding before editing and stop on drift.
+  - >-
+    Require `metadata is None` at the top-level `pa.Schema`, every top-level field,
+    every struct child field and every list/large-list/fixed-size-list value field at
+    every recursive depth. Explicit empty `{}` and every non-empty map must fail
+    before hashing or encoding through both encoder and public helper paths.
+  - >-
+    Add differential `None` versus `{}` tests at all four boundaries. The schema test
+    must demonstrate that the physically distinct explicit-empty stored-schema form
+    is rejected and cannot emit either a semantic digest or Parquet bytes.
+  - >-
+    Preserve all R1 row/key congruence, R2 non-empty recursive metadata closure, R3
+    exact explicit-schema helper validation, generic serializer behavior and exact
+    writer/framing/row-group controls.
+  - Preserve both fixed physical and semantic vectors exactly.
+  - Do not change public API shape, dependencies, data, authority or product scope.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact bounded R4 implementation, differential tests and mandatory return with new hashes and preserved vectors.
+stop_conditions:
+  - Any need to change R20/R21, dependencies, generic serializer API, product/data/authority or architecture.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

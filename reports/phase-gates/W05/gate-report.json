@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "phase_id": "W05",
+  "gate_id": "G-W05-TERMINAL",
+  "status": "PASS",
+  "decision": "VERIFIED",
+  "date": "2026-08-03",
+  "claim_boundary": "resemblance_only synthetic-development baseline readiness; not protected validation, recruitment-outcome, transfer-success, price/value or production evidence",
+  "checks": [
+    {
+      "id": "locked-offline-environment",
+      "status": "PASS",
+      "detail": "83 packages resolved; 82 audited"
+    },
+    {
+      "id": "repository-format",
+      "status": "PASS",
+      "detail": "802 files"
+    },
+    {
+      "id": "repository-lint",
+      "status": "PASS"
+    },
+    {
+      "id": "source-typing",
+      "status": "PASS",
+      "detail": "75 source files"
+    },
+    {
+      "id": "import-boundaries",
+      "status": "PASS",
+      "detail": "3 kept; 0 broken"
+    },
+    {
+      "id": "complete-repository-tests",
+      "status": "PASS",
+      "passed": 2695,
+      "failed": 0,
+      "warnings": 1,
+      "duration_seconds": "1928.46",
+      "detail": "PYTHONDONTWRITEBYTECODE=1; accepted W04 authority bytes unchanged"
+    },
+    {
+      "id": "cache-sensitive-w04-runtime-controls",
+      "status": "PASS",
+      "passed": 4,
+      "failed": 0,
+      "duration_seconds": "65.17",
+      "detail": "Generated W05 PYC files were recoverably quarantined; host-state hardening remains W10"
+    },
+    {
+      "id": "security-scan",
+      "status": "PASS",
+      "detail": "Bandit repository scan; zero runtime asserts remain in the W05 feature registry"
+    },
+    {
+      "id": "local-git-guard",
+      "status": "PASS"
+    },
+    {
+      "id": "local-only-controls",
+      "status": "PASS",
+      "passed": 25,
+      "failed": 0
+    },
+    {
+      "id": "training-serving-parity",
+      "status": "PASS",
+      "detail": "75 focused tests; two-root all-six bytes, direct/single/batch/fresh-core results and PCA orientation exact"
+    },
+    {
+      "id": "w05-phase-verifier",
+      "status": "PASS",
+      "detail": "candidate report retained before integration checkpoint"
+    },
+    {
+      "id": "git-diff-check",
+      "status": "PASS"
+    },
+    {
+      "id": "main-branch-zero-remotes",
+      "status": "PASS"
+    }
+  ],
+  "feature_identity": {
+    "registry_id": "w05-m0-feature-registry-v1",
+    "registry_digest": "c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644",
+    "w04_exact_four_schema_hash": "cf8847f2b1f70ebf293ce90e48817e80a4e47b78316079bd88e8c2a80bc08127",
+    "synthetic_development_schema_hash": "1f713272907731b5c8b486275333976934b58ad4c7e622b192d26e2db39e642f",
+    "w04_minutes_rates_per90": "SUPPRESSED_NO_ACCEPTED_ELAPSED_MINUTES_DENOMINATOR"
+  },
+  "role_identity": {
+    "taxonomy_id": "w05-football-responsibility-taxonomy-v1",
+    "taxonomy_version": "v1",
+    "taxonomy_digest": "59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097",
+    "external_expert_validation": "NOT_PERFORMED"
+  },
+  "model_identity": {
+    "configuration_digest": "5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a",
+    "families": [
+      "metadata_control",
+      "raw_euclidean_control",
+      "robust_scaled_cosine",
+      "weighted_cosine",
+      "pca",
+      "role_aware_restriction"
+    ],
+    "selected_family": "role_aware_restriction",
+    "selected_artifact_id": "9a0d43c6-d177-51be-8280-3bf02bedbc99",
+    "selected_manifest_digest": "2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9",
+    "fitting_population_digest": "60c5a45f5bec8bed911f708cadaed4532759bcfc883b28e91d5d19195301a086",
+    "query_population_digest": "1726816886fdd2ab7fefcf6ec661a24f944770bda5853d1ede5f6b9b7e766e5c",
+    "deterministic_seed": 20260803
+  },
+  "serving_identity": {
+    "core_version": "m0-shared-core-v1",
+    "result_digest": "9d08d8f0ddaba47a3461754d53d727709ea7a10276b438c18c9953b17ad3020e",
+    "lineage_hash": "c291a1b99937100b9934537dc92d4628cd130684cc84388f8aebe109708e7491",
+    "evidence_card_dimensions": 6,
+    "data_confidence_separate": true,
+    "unsupported_blended_match_percentage": false
+  },
+  "development_comparison": {
+    "metric": "precision_at_3",
+    "population": "fixed constructed synthetic development fixtures",
+    "metadata_control": 0.1111111111111111,
+    "raw_euclidean_control": 0.3333333333333333,
+    "robust_scaled_cosine": 1.0,
+    "weighted_cosine": 1.0,
+    "pca": 1.0,
+    "role_aware_restriction": 1.0,
+    "selected_clears_declared_controls": true
+  },
+  "evidence": {
+    "acceptance_report": "reports/phase-gates/W05/acceptance-report.md",
+    "master_review": "reports/reviews/W05/master-review.md",
+    "verification_report": "reports/verification/W05/verification-report.md",
+    "model_baseline": "reports/verification/W05/model-baseline-evidence.md",
+    "training_serving_parity": "reports/verification/W05/training-serving-parity-report.md",
+    "limitations": "reports/verification/W05/limitations.md",
+    "phase_verifier_candidate": "reports/verification/W05/phase-verifier-candidate.json"
+  },
+  "blockers": [],
+  "checkpoint_ready": true,
+  "w06_started": false
+}

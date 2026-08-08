@@ -1,0 +1,59 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R14
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - code: R14_EVIDENCE_R2_RETURN_LINE_COUNT
+    severity: P2
+    summary: >-
+      The immutable R2 producer return is 6,675 bytes and 141 lines at SHA-256
+      82b4fa67311c30dc66693e9465f1a466c22d0a726437bbe345e852b1cff6ac10,
+      while the predecessor R2 master review and verification falsely claim
+      complete readback of 132 lines. The candidate design merits have no
+      P0-P2 defect, but the dependent acceptance evidence is not exact.
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R21-R3
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R2.yaml
+  - reports/verification/W04/wyscout-schema-design-R21-R2-master-verification.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R14-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete R14 review and return readback
+    result: PASS_740_REVIEW_LINES_108_RETURN_LINES
+  - command: independent immutable R2-return reconstruction
+    result: PASS_6675_BYTES_141_LINES_SHA_82B4FA
+  - command: independent R14 findings reconstruction
+    result: PASS_P0_0_P1_0_P2_1_REWORK
+  - command: reviewer preflight/postflight byte comparison
+    result: PASS_IDENTICAL_1145_PYCS_150_CACHE_DIRS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read every R14 review and return line, reproduced the sole P2,
+    and agrees that the R21 design text itself has no P0-P2 merits defect.
+  - >-
+    The defective R2 master review and verification remain immutable historical
+    evidence. This record and its verification are accurate successor evidence;
+    they do not rewrite the predecessor or authorize implementation.
+  - >-
+    Because R14 is now immutable REWORK evidence, it cannot also be the active
+    passing review fixed by R21. A bounded R3 design update must preserve R14,
+    designate fresh R15 as the active independent review and resource, retain
+    cardinality 30, and make no architecture or product change.

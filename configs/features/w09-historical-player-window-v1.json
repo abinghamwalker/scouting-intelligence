@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "registry_id": "w09-historical-player-window-v1",
+  "registry_version": "w09-historical-player-window-v1",
+  "grain": "canonical_player_by_competition_by_season_2017_18_window",
+  "window_start_utc": "2017-07-01T00:00:00Z",
+  "window_end_utc": "2018-07-01T00:00:00Z",
+  "feature_cutoff_ts": "2026-08-05T00:00:00Z",
+  "eligibility_policy": {
+    "version": "w09-eligibility-v1",
+    "minimum_minutes": 450.0,
+    "played_minute_states": [
+      "exact",
+      "conservative_lower_bound"
+    ],
+    "exact_total_requires_every_played_stint_exact": true,
+    "all_unusable_is_unusable": true,
+    "action_presence_used_for_minutes": false,
+    "current_team_id_used_for_membership": false
+  },
+  "numerator_semantics": "Count every retained coordinate-independent canonical action satisfying the exact predicate in an appearance-established player/competition/season grain.",
+  "denominator_semantics": "Governed usable minutes summed from canonical played appearances only; every value is count * 90 / minutes.",
+  "provider_capability_mapping": {
+    "provider_neutral_concepts": [
+      "action.event_id",
+      "action.sub_event_id",
+      "action.tag_ids",
+      "appearance.minutes",
+      "appearance.minute_state"
+    ],
+    "wyscout_figshare_v5": "canonical Wyscout event, sub-event and tag identifiers"
+  },
+  "limitations": [
+    "Historical 2017/18 event resemblance only; no current-market coverage.",
+    "Per-90 event counts do not establish football relevance or recruitment usefulness.",
+    "Conservative-lower-bound exposure can understate the true denominator.",
+    "Coordinate-independent features retain actions with absent or invalid coordinates; coordinate coverage counts only valid coordinate evidence."
+  ],
+  "features": [
+    {
+      "name": "passes_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 8}
+    },
+    {
+      "name": "accurate_passes_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 8, "required_tag_id": 1801}
+    },
+    {
+      "name": "crosses_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 8, "sub_event_id": 80}
+    },
+    {
+      "name": "smart_passes_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 8, "sub_event_id": 86}
+    },
+    {
+      "name": "shots_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 10}
+    },
+    {
+      "name": "shots_on_target_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 10, "required_tag_id": 1801}
+    },
+    {
+      "name": "goals_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {
+        "required_tag_id": 101,
+        "excluded_tag_id": 102,
+        "excluded_event_id": 9
+      }
+    },
+    {
+      "name": "key_passes_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"required_tag_id": 302}
+    },
+    {
+      "name": "assists_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"required_tag_id": 301}
+    },
+    {
+      "name": "duels_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 1}
+    },
+    {
+      "name": "duels_won_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 1, "required_tag_id": 703}
+    },
+    {
+      "name": "interceptions_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"required_tag_id": 1401}
+    },
+    {
+      "name": "clearances_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"sub_event_id": 71}
+    },
+    {
+      "name": "accelerations_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"sub_event_id": 70}
+    },
+    {
+      "name": "fouls_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"event_id": 2}
+    },
+    {
+      "name": "touches_per90",
+      "unit": "count_per_90_governed_minutes",
+      "predicate": {"sub_event_id": 72}
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block body %}
+  <section class="hero">
+    <div>
+      <p class="eyebrow">W08 · Moderated local workflow study</p>
+      <h1>Pilot the flow, then run the five sessions.</h1>
+      <p class="lede">Smoke-test the full journey in a clearly separated pilot workspace, then prepare each gate participant, launch their synthetic workspace, follow T1–T7 and collect the receipt.</p>
+    </div>
+    <aside class="gate-card" aria-label="Representative-user gate progress">
+      <div class="gate-number"><strong>{{ passed_participants }}</strong><span>/ 5</span></div>
+      <p>participants with T1–T7 marked PASS</p>
+      <div class="progress-track" aria-hidden="true"><span style="width: {{ passed_participants * 20 }}%"></span></div>
+      <small>Independent review is still required after all five captures.</small>
+    </aside>
+  </section>
+
+  {% if active %}
+    <section class="notice notice-active" aria-labelledby="active-runtime">
+      <div>
+        <p class="eyebrow">Active runtime</p>
+        <h2 id="active-runtime">{{ active.participant_code }} is ready</h2>
+        <p>The participant application is running at <code>127.0.0.1:{{ active.port }}</code>.</p>
+      </div>
+      <a class="button button-primary" href="/participants/{{ active.participant_code }}">Open session controls</a>
+    </section>
+  {% endif %}
+
+  <section class="pilot-lab" aria-labelledby="pilot-mode">
+    <div class="pilot-intro">
+      <p class="eyebrow">Recommended first</p>
+      <h2 id="pilot-mode">Pilot mode</h2>
+      <p>Use one internal operator or one representative user to check the complete experience end to end. After master review, a successful pilot can unlock continued technical development while remaining separate from representative acceptance.</p>
+      <div class="pilot-rule"><strong>G-W08A · {{ pilot_gate.status }} · {{ submitted_pilots }} submitted (1 required)</strong><span>A submitted capture still needs master reproduction and independent review. Only the retained PASS decision unlocks bounded W09 work; it never increments or replaces the five-user G-W08B/G4 cohort.</span></div>
+    </div>
+    <div class="pilot-grid">
+      {% for participant in pilot_participants %}
+        <article class="participant-card tone-{{ participant.tone }}">
+          <div class="card-topline"><span class="participant-index">P{{ "%02d"|format(loop.index) }}</span><span class="status-chip">{{ participant.label }}</span></div>
+          <h3>{{ participant.code }}</h3>
+          <p>{{ participant.passed }} of 7 smoke-test tasks checked</p>
+          <div class="task-dots" aria-label="{{ participant.passed }} of 7 pilot tasks checked">{% for item in range(7) %}<span class="{% if item < participant.passed %}done{% endif %}"></span>{% endfor %}</div>
+          <a class="button button-secondary" href="/participants/{{ participant.code }}">{% if participant.ready %}Continue pilot{% else %}Start pilot{% endif %}</a>
+        </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="section-heading">
+    <div><p class="eyebrow">Gate cohort</p><h2>Five representative-user workspaces</h2></div>
+    <p>Start with qualification and consent. Only one participant runtime runs at a time.</p>
+  </section>
+  <div class="participant-grid">
+    {% for participant in participants %}
+      <article class="participant-card tone-{{ participant.tone }}">
+        <div class="card-topline">
+          <span class="participant-index">{{ "%02d"|format(loop.index) }}</span>
+          <span class="status-chip">{{ participant.label }}</span>
+        </div>
+        <h3>{{ participant.code }}</h3>
+        <p>{{ participant.passed }} of 7 tasks passed</p>
+        <div class="task-dots" aria-label="{{ participant.passed }} of 7 tasks passed">
+          {% for item in range(7) %}<span class="{% if item < participant.passed %}done{% endif %}"></span>{% endfor %}
+        </div>
+        <a class="button button-secondary" href="/participants/{{ participant.code }}">
+          {% if participant.consented %}Continue session{% else %}Prepare participant{% endif %}
+        </a>
+      </article>
+    {% endfor %}
+  </div>
+
+  <section class="principles">
+    <article><span>01</span><h3>Genuine people</h3><p>Developers, automated personas and moderator demonstrations never count as participant results.</p></article>
+    <article><span>02</span><h3>Synthetic records</h3><p>No real-player judgement, employer-confidential information, names, passwords, audio or video enters a capture.</p></article>
+    <article><span>03</span><h3>Truthful outcomes</h3><p>FAIL and ASSISTED remain evidence. The console never upgrades, replaces or erases a result to manufacture 5/5.</p></article>
+  </section>
+{% endblock %}

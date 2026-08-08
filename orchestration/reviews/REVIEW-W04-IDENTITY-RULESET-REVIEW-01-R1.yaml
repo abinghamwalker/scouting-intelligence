@@ -1,0 +1,34 @@
+schema_version: 1
+review_id: REVIEW-W04-IDENTITY-RULESET-REVIEW-01-R1
+task_id: W04-IDENTITY-RULESET-REVIEW-01
+reviewed_commit_base: 82a9f05b0db176dd55cbd4fa6b4388ec2b0a1906
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS_EXPECTED_REWORK
+integration_checks: FAIL_AS_EXPECTED
+artifact_lineage: PASS
+security_temporal_review: REWORK
+defects:
+  - id: IDENTITY_CLOCK_FUTURE_ACCEPTED
+    severity: P1
+    disposition: RETURN_FOR_BOUNDED_REWORK
+  - id: IDENTITY_LIVE_REWORK_MISCLASSIFIED
+    severity: P1
+    disposition: RETURN_FOR_BOUNDED_REWORK
+  - id: IDENTITY_CLOCK_FRACTIONAL_UTC_REJECTED
+    severity: P2
+    disposition: RETURN_FOR_BOUNDED_REWORK
+decision: REWORK
+next_packet: W04-IDENTITY-RULESET-DECISION-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/archive/wyscout-identity-ruleset-independent-review-R1-rework-1a92a3a3.md
+  - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R1-rework-a0f637b4.md
+  - reports/verification/W04/wyscout-identity-ruleset-review-R1-master-verification.md
+checks:
+  - command: focused identity and R21 composability suite
+    result: EXPECTED_FAIL_136_PASS_1_FAIL
+  - command: far-future review and acceptance reproduction
+    result: DEFECT_REPRODUCED_ACCEPTED
+  - command: six-fraction UTC reproduction
+    result: DEFECT_REPRODUCED_VALUE_ERROR

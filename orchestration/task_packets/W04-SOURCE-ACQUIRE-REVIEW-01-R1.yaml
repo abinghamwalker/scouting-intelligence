@@ -1,0 +1,61 @@
+schema_version: 1
+task_id: W04-SOURCE-ACQUIRE-REVIEW-01
+phase_id: W04
+revision: R1
+state: VERIFIED
+objective: >-
+  Independently verify the completed real Wyscout acquisition from durable local
+  evidence without opening a network connection or changing provider data.
+depends_on:
+  - W04-SOURCE-ACQUIRE-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-ACQUIRE-01-R1.yaml
+  - configs/sources/w04-provider.yaml
+  - data/source/wyscout/v5/completion-manifest.json
+  - src/scouting/sources/wyscout.py
+  - reports/verification/W04/wyscout-real-acquisition-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_read_paths:
+  - data/source/wyscout/v5/**
+allowed_paths:
+  - tests/security/test_w04_real_acquisition_review.py
+  - reports/reviews/W04/wyscout-real-acquisition-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-ACQUIRE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+deliverables:
+  - >-
+    Independent durable-byte verification of every object and admitted archive
+    member against canonical completion/config evidence.
+  - Independent proof that excluded member payloads are absent and signed URLs are not durable.
+  - Independent exact replay under an opener that fails on any network call.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - Every config/completion count, size, MD5, SHA-256, path, rights, and temporal claim reconciles.
+  - Every admitted member is present and every excluded payload is absent.
+  - Replay reads durable evidence only and returns the identical manifest digest.
+  - No real network call, provider write, data mutation, or protected fixture access occurs.
+acceptance_checks:
+  - uv run pytest -q tests/security/test_w04_real_acquisition_review.py
+  - uv run ruff format --check tests/security/test_w04_real_acquisition_review.py
+  - uv run ruff check tests/security/test_w04_real_acquisition_review.py
+  - uv run mypy tests/security/test_w04_real_acquisition_review.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 digest, archive, lineage, temporal, rights, replay, or local-only defect is reproduced.
+  - Review requires network access, producer/data mutation, or a boundary change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

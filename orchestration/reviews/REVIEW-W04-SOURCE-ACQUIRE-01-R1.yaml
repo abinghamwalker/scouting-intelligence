@@ -1,0 +1,31 @@
+schema_version: 1
+review_id: REVIEW-W04-SOURCE-ACQUIRE-01-R1
+task_id: W04-SOURCE-ACQUIRE-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: N/A_MASTER_OWNED
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SOURCE-PROFILE-01-R1
+reviewer: master
+evidence:
+  - data/source/wyscout/v5/completion-manifest.json
+  - reports/verification/W04/wyscout-real-acquisition-R1.md
+  - tests/security/test_w04_real_acquisition_review.py
+  - reports/reviews/W04/wyscout-real-acquisition-review-R1.md
+checks:
+  - command: uv run python scripts/acquire_wyscout_v5.py
+    result: PASS_MANIFEST_CREATED_SHA256_69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1
+  - command: uv run python scripts/acquire_wyscout_v5.py
+    result: PASS_NETWORK_RESTRICTED_EXACT_REPLAY_MANIFEST_NOT_CREATED
+  - command: uv run pytest -q tests/security/test_w04_real_acquisition_review.py
+    result: PASS_1_TEST_EXECUTED_NO_SKIP
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git remote
+    result: empty
+

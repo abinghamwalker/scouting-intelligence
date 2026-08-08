@@ -1,0 +1,53 @@
+schema_version: 1
+review_id: REVIEW-W07-APPLICATION-01-R1
+task_id: W07-APPLICATION-01
+phase_id: W07
+revision: R1
+reviewer: master
+decision: REWORK
+findings:
+  - priority: P1
+    id: W07-R1-STATIC-ASSET-AND-STATE-GAP
+    evidence: >-
+      The landing template links /static/w07/app.css but the app mounts no static
+      route. Search/player pages and explicit loading, empty, unavailable and error
+      state routes are absent.
+    required_correction: >-
+      Serve the local CSS from a bounded local mount and implement every required
+      state plus search and player evidence surfaces.
+  - priority: P1
+    id: W07-R1-NOT-PLAYWRIGHT
+    evidence: >-
+      tests/e2e/test_w07_local_evidence_playwright.py imports TestClient only and does
+      not launch or drive a browser, set desktop/mobile viewports, use keyboard focus,
+      inspect overflow, or intercept external requests.
+    required_correction: >-
+      Add genuine Python Playwright browser journeys against a real loopback app.
+  - priority: P1
+    id: W07-R1-EVIDENCE-INCOMPLETE
+    evidence: >-
+      Retrieval lacks feature registry/configuration/result/manifest identity display,
+      limitations, reason codes, feature/dimension contributions, contrastive detail,
+      exact W04 count values, source/window detail and parity proof. Comparison merely
+      repeats the retrieval template.
+    required_correction: >-
+      Expose all required identities/evidence in accessible tables and prove exact
+      request/batch output and accepted digests without a second scorer.
+  - priority: P1
+    id: W07-R1-QUALITY-GATE-FAILURES
+    evidence: >-
+      Master focused reproduction: ruff check reported five errors and mypy reported
+      ten errors. src/scouting/web/__init__.py duplicated imports and w07 request
+      construction was not type-safe.
+    required_correction: >-
+      Pass every packet format/lint/type/test/import check.
+master_reproduction:
+  locked_sync: PASS
+  focused_tests: 8_passed
+  ruff_format: PASS
+  ruff_check: FAIL
+  mypy: FAIL
+  lint_imports: PASS
+p0_findings: 0
+p1_findings: 4
+self_approval: forbidden

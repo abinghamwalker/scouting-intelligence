@@ -1,0 +1,18 @@
+schema_version: 1
+review_id: REVIEW-W07-DOMAIN-02-R2
+task_id: W07-DOMAIN-02
+phase_id: W07
+revision: R2
+reviewer: master
+decision: REWORK_SPLIT
+findings:
+  - priority: P1
+    id: DOMAIN-R2-TESTS-DO-NOT-PROVE-CLAIMS
+    evidence: The eight tests contain no serving spy, digest assertion, batch/single byte comparison, artifact hash, catalogue count/filter value, selected-row binding or invalid-identity non-invocation assertion.
+  - priority: P1
+    id: DOMAIN-R2-CONTEXT-STILL-INCOMPLETE
+    evidence: Authority omits registry digest, populations, window/cutoff, confidence/applicability/limitations and lineage; retrieval does not pass result_rows/query_id; labels are unstable when filtering.
+split_invariant: A test-only packet must encode every G-W07 semantic/browser predicate independently of production implementation.
+p0_findings: 0
+p1_findings: 2
+revision_limit_reached: true

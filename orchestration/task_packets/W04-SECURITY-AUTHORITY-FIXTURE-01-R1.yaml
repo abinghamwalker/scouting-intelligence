@@ -1,0 +1,83 @@
+schema_version: 1
+task_id: W04-SECURITY-AUTHORITY-FIXTURE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Correct only the stale independent source-authority security fixture so its
+  expected redirect authority includes the already-approved
+  credential_separator_encoding contract, then prove the focused security
+  suite passes without changing runtime or authority behavior.
+depends_on:
+  - W04-SOURCE-INGEST-REVIEW-01-R3:MASTER_ACCEPTED
+assigned_role: bounded_security_fixture_producer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SECURITY-AUTHORITY-FIXTURE-01-R1.yaml
+  - configs/sources/w04-provider.yaml
+  - src/scouting/sources/wyscout.py
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R3.md
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R3.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/security/test_w04_source_authority_boundary.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+requirements:
+  - >-
+    Add exactly `credential_separator_encoding: literal_slash` to the stale
+    `REDIRECT_AUTHORITY` expected fixture in
+    tests/security/test_w04_source_authority_boundary.py.
+  - >-
+    Do not weaken assertions, change runtime parsing, alter approved config, or
+    broaden redirect/network authority.
+  - >-
+    Run the complete focused security file plus focused Ruff format/lint and
+    the local-only verifier using root uv with --locked --no-sync and bytecode
+    disabled.
+  - >-
+    Use apply_patch only for the two exact allowed paths. Do not run Git,
+    delegate, self-approve, access the network, or begin any R21 authority,
+    identity, Bronze, Silver, Gold, product, cloud, container, endpoint, hosted
+    CI, or deployment work.
+definition_of_done:
+  - The expected fixture exactly matches the approved redirect authority.
+  - The complete focused security file passes.
+  - Runtime/config/authority bytes remain unchanged.
+  - Ruff/local-only checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/security/test_w04_source_authority_boundary.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/security/test_w04_source_authority_boundary.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/security/test_w04_source_authority_boundary.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - The focused failure is not exclusively the stale expected fixture.
+  - Runtime, config, authority, dependency, architecture, or product changes are required.
+  - Any required check fails after the exact fixture correction.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

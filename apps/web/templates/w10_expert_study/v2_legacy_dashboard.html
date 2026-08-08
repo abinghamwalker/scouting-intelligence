@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}W10 v2 mechanics pilot{% endblock %}
+{% block body %}
+{% if error_message %}<div class="status-card error" role="alert">{{ error_message }}</div>{% endif %}
+<section id="study-content" tabindex="-1" class="panel" aria-labelledby="v2-start"><p class="section-kicker">Mechanics pilot only · not formal evidence</p><h2 id="v2-start">Start a pseudonymous v2 pilot session</h2>
+<p>This pilot tests whether supplied historical football evidence is usable. There is no formal-study route, approval, or recommendation here.</p>
+<form method="post" action="/w10/v2/sessions" class="form-grid"><input type="hidden" name="csrf" value="{{ csrf }}">
+<label>Participant pseudonym <input name="participant_code" pattern="[A-Z0-9][A-Z0-9-]{5,31}" maxlength="32" required></label>
+<label>Years of relevant football experience <input name="years_experience" type="number" min="2" max="80" required></label>
+<fieldset class="full"><legend>Relevant football experience</legend><div class="choice-grid">{% for value, label in experience_choices %}<label class="check"><input name="experience_{{ value }}" value="true" type="checkbox"><span>{{ label }}</span></label>{% endfor %}</div></fieldset>
+<label class="check full"><input name="assessed_players_within_window" value="true" type="checkbox"><span>I have assessed players professionally within the last five years.</span></label><label class="check full"><input name="conflict_declared" value="true" type="checkbox"><span>I have a present or recent conflict involving a displayed player or club.</span></label><label class="full">Conflict note (required if declared)<textarea name="conflict_note" maxlength="500"></textarea></label>
+<fieldset class="full"><legend>Consent — every item is required</legend><div class="check-stack">
+{% for item, label in [('voluntary_participation','My participation is voluntary.'),('local_pseudonymous_storage','I understand pseudonymous responses stay in local storage.'),('withdrawal_before_submission_understood','I may stop before final submission.'),('immutable_after_submission_understood','I understand final submission is immutable.'),('research_limitations_understood','I understand this is historical role/style evidence, not recruitment advice.')] %}<label class="check"><input type="checkbox" name="{{ item }}" value="true" required><span>{{ label }}</span></label>{% endfor %}
+</div></fieldset><button class="button primary" type="submit">Start v2 mechanics pilot</button></form></section>
+{% endblock %}

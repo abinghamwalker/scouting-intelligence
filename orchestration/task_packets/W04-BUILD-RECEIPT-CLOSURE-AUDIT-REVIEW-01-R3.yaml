@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01
+phase_id: W04
+revision: R3
+state: DISPATCHED_FRESH_REVIEW
+objective: >-
+  Independently challenge the exact R3 Gold-manifest-derived receipt-population
+  closure and the complete incorporated R2 authorization surface before user dispatch.
+depends_on:
+  - W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R3:USER_CLARIFICATION_REQUIRED
+assigned_role: fresh_independent_w04_build_receipt_r3_population_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R3.yaml
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r3_audit_sha256: 0cf86df75af1276b3703083d3137de9ef345e2125a08a4e819617bbfd6100435
+  r3_return_sha256: 14bb7cc5cdd9c146707d5ccdceb700170a5f5f761c3387f66b0304d548fddba0
+  r2_audit_sha256: 77cf8dcb79d202b960553dfd6da631af039e5ec0a382a0e7c30be770045d0491
+  r2_review_sha256: b67e4f95e97567b60d93bab58e94bad877931b2259f219709b199d7325634658
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Prove the exact R20 Gold five-key summary guard-selects one manifest without
+    directory discovery and that complete physical digest/size/schema/build/layer/
+    source/index/authority/lineage checks precede population derivation.
+  - >-
+    Verify the manifest's exact implemented fields can derive every and only ordered
+    Gold product path, plus the complete same-build Gold-to-Silver-to-Bronze parent
+    chain, without inventing a run ID or an absent schema field.
+  - >-
+    Execute empty, missing, additional, duplicate, reordered, stale, cross-layer,
+    cross-build/run/Gold and wrong-product attacks. Require exact one-item path
+    sequence/set equality before `COMPLETE`, then full product and boundary readback.
+  - >-
+    Check product path/physical/size/semantic/row-count/parent/lineage/temporal proof
+    and boundary path/hash/size/schema/build/run/Gold/clock equalities are all bound
+    to the same accepted manifest population and cannot be caller-substituted.
+  - >-
+    Re-review incorporated R2 window/snapshot/cutoff, five-key UUID, completion index,
+    23-root schema roster, acyclic v2 aggregates, exact receipt keys and unchanged
+    25-key one-hash projection. Confirm R3 adds no cycle or unauthorized product rule.
+  - >-
+    Return PASS_TO_USER_QUESTION only if R3 Section 8 is exact and sufficient with no
+    accepted-byte-only route. Otherwise bounded REWORK with executable evidence.
+  - Confirm no implementation/data/authority/product/receipt/Git/provider/network/cloud/container/CI/remote/deployment action.
+definition_of_done:
+  - Independent verdict with P0/P1/P2 counts and exact user decision surface.
+stop_conditions:
+  - Any implementation, data/authority byte, architecture/dependency/local-only change or external action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

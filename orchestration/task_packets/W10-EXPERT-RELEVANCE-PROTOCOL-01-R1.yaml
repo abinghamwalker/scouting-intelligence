@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W10-EXPERT-RELEVANCE-PROTOCOL-01
+phase_id: W10
+revision: R1
+state: IMPLEMENTED_AWAITING_HUMAN_APPROVAL
+objective: >-
+  Freeze the draft G-RW4 expert-relevance protocol, W09-bound query pack,
+  participant-safe presentation, contracts, and evidence-honest no-study status before any
+  protected human response is accepted.
+depends_on:
+  - W09:checkpoint/w09-unicode-correction-accepted
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/phase-gates/W09/acceptance-report.md
+  - reports/verification/W09/unicode-correction.md
+  - reports/reviews/W10/returns/W10-EVALUATION-REUSE-SURVEY-00A-R1.md
+  - reports/reviews/W10/returns/W10-STUDY-CONSOLE-SURVEY-00C-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - orchestration/task_packets/W10-EXPERT-RELEVANCE-PROTOCOL-01-R1.yaml
+  - reports/reviews/W10/returns/W10-EXPERT-RELEVANCE-PROTOCOL-01-R1.md
+  - src/scouting/contracts/expert_relevance.py
+  - src/scouting/contracts/__init__.py
+  - scripts/build_w10_expert_protocol.py
+  - configs/evaluation/w10-expert-relevance-protocol-v1.json
+  - configs/evaluation/w10-frozen-query-pack-v1.json
+  - configs/evaluation/w10-expert-study-presentation-v1.json
+  - tests/contracts/test_w10_expert_relevance_contracts.py
+  - reports/verification/W10/preflight.md
+  - reports/verification/W10/expert-relevance-protocol.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - data/**
+  - runs/**
+  - services/**
+  - apps/**
+  - migrations/**
+requirements:
+  - Bind all frozen queries to exact accepted W09 request/result identities and product pins.
+  - Separate evaluator-only provenance from the participant-safe presentation bytes.
+  - Freeze all participant, denominator, metric, threshold, blinding, repeat, control, privacy,
+    negative-result and protected-label rules before formal evidence.
+  - Mutating any decision-bearing field changes the applicable semantic digest.
+  - Preserve an explicit human approval boundary and never fabricate approval, participants,
+    judgements, or a formal gate result.
+deliverables:
+  - orchestration/task_packets/W10-EXPERT-RELEVANCE-PROTOCOL-01-R1.yaml
+  - reports/reviews/W10/returns/W10-EXPERT-RELEVANCE-PROTOCOL-01-R1.md
+  - src/scouting/contracts/expert_relevance.py
+  - src/scouting/contracts/__init__.py
+  - scripts/build_w10_expert_protocol.py
+  - configs/evaluation/w10-expert-relevance-protocol-v1.json
+  - configs/evaluation/w10-frozen-query-pack-v1.json
+  - configs/evaluation/w10-expert-study-presentation-v1.json
+  - tests/contracts/test_w10_expert_relevance_contracts.py
+  - reports/verification/W10/preflight.md
+  - reports/verification/W10/expert-relevance-protocol.md
+definition_of_done:
+  - Frozen files reproduce byte-for-byte from the builder and exact contracts reject authority,
+    result, repeat-anchor, session-attestation, and digest substitution.
+  - Current status remains INSUFFICIENT_EVIDENCE because formal human approval is absent.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w10_expert_relevance_contracts.py
+  - uv run ruff format --check src/scouting/contracts/expert_relevance.py scripts/build_w10_expert_protocol.py tests/contracts/test_w10_expert_relevance_contracts.py
+  - uv run ruff check src/scouting/contracts/expert_relevance.py scripts/build_w10_expert_protocol.py tests/contracts/test_w10_expert_relevance_contracts.py
+  - uv run mypy src/scouting/contracts/expert_relevance.py scripts/build_w10_expert_protocol.py
+stop_conditions:
+  - Any need for real approval, real participant evidence, changed W09 ranking authority,
+    provider/network access, dependency changes, or threshold selection after protected results.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: master_only
+self_approval: forbidden

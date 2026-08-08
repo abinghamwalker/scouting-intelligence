@@ -1,0 +1,103 @@
+schema_version: 1
+task_id: W08-BROWSER-A11Y-04B
+phase_id: W08
+revision: R2
+state: PLANNED
+objective: >-
+  Freshly reproduce, inspect and adopt or boundedly correct the R1 real-browser and
+  accessibility implementation after R1 was rejected for one prohibited read-only Git
+  command.
+depends_on:
+  - W08-BROWSER-A11Y-04B:R1_PROCESS_NONCONFORMING
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  The retained browser evidence must be independently reproduced without any Git
+  command, must exercise only 127.0.0.1, and must remain synthetic automation rather
+  than representative-user evidence.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-BROWSER-A11Y-04B-R1.yaml
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R1.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/verification/W07/browser-accessibility-report.md
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/landing.html
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/entry.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - apps/web/templates/w08/error.html
+  - apps/web/static/w08/app.css
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/**
+  - apps/web/static/w08/**
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - services/**
+  - scripts/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Inspect every R1 changed presentation/test file directly without invoking Git and
+    record whether it is adopted unchanged or boundedly corrected.
+  - >-
+    Freshly reproduce the complete Chromium role journey: brief, approval, exact
+    retrieval link, shortlist, assignment, observation/disagreement/amendment,
+    conflict/reload, hold/reject/reconsider with next-action ownership, invalid export
+    failure/retry, export/read/revoke/audit, expiry/re-authentication and sign-out denial.
+  - Freshly reproduce keyboard skip/focus and semantic label/landmark/table evidence
+    plus 1440, 390 and 320 pixel no-overflow witnesses.
+  - Freshly reproduce that every captured browser request targets 127.0.0.1 and that
+    all workflow/persona wording is synthetic and evidence honest.
+  - Retain a complete R2 return explicitly confirming no Git command of any kind was
+    run; do not use Git even for read-only inspection or changed-path enumeration.
+definition_of_done:
+  - Fresh R2 focused checks pass and the producer records adoption/corrections,
+    browser/accessibility evidence, residuals and exact scope without any Git command.
+focused_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+stop_conditions:
+  - Any shared contract, policy, migration, dependency, service, protected output,
+    network/external service, Node/npm, container, destructive action or Git command
+    would be required.
+  - Passing would weaken authentication, authorisation, audit/recovery,
+    accessibility or evidence-honesty assertions.
+mandatory_return:
+  - task ID, R2 revision and invariant
+  - exact directly inspected and changed files without Git enumeration
+  - R1 adoption or bounded correction decision
+  - exact commands, exits and test counts
+  - full journey, viewport, keyboard, semantics and loopback-request evidence
+  - residual risks/follow-ups
+  - explicit no-Git-command confirmation
+  - no dependency/lock, protected-output, participant-evidence or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

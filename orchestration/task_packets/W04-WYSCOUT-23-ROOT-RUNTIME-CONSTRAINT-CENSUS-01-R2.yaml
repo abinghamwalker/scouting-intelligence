@@ -1,0 +1,94 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only the R1 projection-path census error: a present value whose declared
+  logical type is CanonicalJsonValue or any concrete CanonicalJsonValue arm is one
+  complete tagged UTF-8 scalar, not a recursively decomposed Arrow object/union.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R1:MASTER_REWORK_PROJECTION_PATH
+assigned_role: w04_23_root_runtime_constraint_census_reworker
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R2.yaml
+  - reports/reviews/W04/wyscout-23-root-runtime-constraint-census-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-design-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-runtime-constraint-census-R2.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/wyscout-23-root-runtime-constraint-census-R1.md
+  - src/**
+  - tests/**
+fixed_bindings:
+  r1_packet_sha256: d0025c2086a52722a4dcdabee7f6b192930df0c6e5dd97b8e14c5896e4451519
+  r1_report_sha256: 6c8a5fd11d908727371a87b8f90032add5a3e80de1dba16daa785e805f149455
+  r1_return_sha256: 545ac57ac471b8375dd1e01fc7a1150439c48fcf6c05ac6d6cc5d1181bbd6d9b
+  projection_authority_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  formats_sha256: 309ee2821913022c3ce82b713a53e74dd4ac3190af0047a621ba4ab2cd0f7209
+  format_test_sha256: 0d6acf199d230257656f91c0c191c3bbef5dfb23c5cf49e6f731da4d57c8f317
+correction_requirements:
+  - Verify all fixed hashes before analysis and stop on drift.
+  - >-
+    Preserve the R1 report bytes as failed/superseded evidence. Reissue the complete
+    census as R2, changing only statements affected by the projection error and
+    explicitly recording that R2 supersedes R1 for projection paths.
+  - >-
+    `BronzeKnownRecord.raw_record` and `BronzeRejectedRecord.raw_record` are direct
+    present CanonicalJsonObject arm values and each projects as one complete
+    non-null CANONICAL_JSON_VALUE_UTF8 scalar. Their `kind`, member tuple and all
+    nested variants live inside the tagged logical JSON text; they are not Arrow
+    struct/list children.
+  - >-
+    `BronzeRejectedRecord.raw_kind.value` and
+    `BronzeRejectedField.original_value` are direct CanonicalJsonValue union values
+    and each projects as one complete tagged UTF-8 scalar. Present tagged null is
+    non-null text. Any outer optionality remains separately authoritative.
+  - >-
+    CanonicalJsonValue's seven-arm support closure remains a logical definition
+    needed for strict inverse validation; it does not become recursive Arrow
+    schema. Nested object/array/member content remains entirely within the one
+    scalar at that field boundary.
+  - >-
+    Recheck the complete projection-sensitive table for any other concrete-arm or
+    union occurrence and correct it consistently. Do not change the logical field,
+    model, accepted projection, root, dependency, semantics or physical rule.
+definition_of_done:
+  - R2 complete census is identical in authority intent except for exact corrected tagged-scalar projection paths.
+acceptance_checks:
+  - shasum -a 256 of all fixed inputs and both R2 outputs
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected complete R2 census report.
+  - R2 return using the repository template.
+stop_conditions:
+  - Need to alter any frozen model/authority, inspect the producer candidate, edit outside ownership, use Git/network/provider, or write schema/product/aggregate bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

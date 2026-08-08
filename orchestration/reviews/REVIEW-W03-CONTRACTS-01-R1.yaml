@@ -1,0 +1,47 @@
+schema_version: 1
+review_id: REVIEW-W03-CONTRACTS-01-R1
+task_id: W03-CONTRACTS-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    code: RETRIEVAL_LINEAGE_NOT_BOUND_TO_TEMPORAL_PROOF
+    evidence: src/scouting/contracts/retrieval.py:151
+    affected_definition_of_done: >-
+      Temporal evidence rejects dependencies unavailable at the declared cutoff.
+    required_fix: >-
+      Add a retrieval-run identifier and reject every result whose candidate
+      dependency lineage differs from the result temporal-evidence lineage.
+  - severity: P1
+    code: AUDIT_MUTATION_DIGESTS_OPTIONAL
+    evidence: src/scouting/contracts/audit.py:54
+    affected_definition_of_done: >-
+      Material audit events retain before/after state evidence appropriate to
+      the action.
+    required_fix: >-
+      Require after_digest for CREATE, both digests for UPDATE/OVERRIDE, and
+      before_digest for DELETE; reject incoherent extra sides where applicable.
+  - severity: P1
+    code: ROLE_BRIEF_APPROVAL_TIME_UNPROVABLE
+    evidence: src/scouting/contracts/workflow.py:63
+    affected_definition_of_done: >-
+      Role briefs carry the mandatory created/approved version timestamps.
+    required_fix: >-
+      Add created_at and approved_at and enforce status/timestamp coherence and
+      non-decreasing UTC time.
+  - severity: P2
+    code: IDENTITY_VALID_INTERVAL_ABSENT
+    evidence: src/scouting/contracts/evidence.py:148
+    affected_definition_of_done: >-
+      Versioned crosswalk evidence retains its valid interval and supersession.
+    required_fix: >-
+      Add valid_from and optional valid_to with ordered-interval validation while
+      preserving the existing supersession field.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-CONTRACTS-01-R2.yaml
+reviewer: master

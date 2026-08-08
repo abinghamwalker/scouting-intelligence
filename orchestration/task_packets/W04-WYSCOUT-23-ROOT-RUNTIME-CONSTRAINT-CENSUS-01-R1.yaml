@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce a report-only, implementation-independent census of the exact runtime
+  field, support-type and validator obligations that the frozen 23-root schema
+  closure must represent. Do not inspect, edit or approve the schema producer.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01-R1:COMPLETE
+assigned_role: w04_23_root_runtime_constraint_census_auditor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R1.yaml
+  - reports/reviews/W04/wyscout-23-root-schema-readiness-audit-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-runtime-constraint-census-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r2_build_receipt_sha256: 77cf8dcb79d202b960553dfd6da631af039e5ec0a382a0e7c30be770045d0491
+  r4_build_receipt_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  readiness_audit_sha256: f9961082a27b949da6b9c1647b50f9ce18b6862c66fb8c104826c4b20ca746a0
+  projection_authority_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+audit_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Enumerate exactly the 23 root models in frozen order, exact serialized field
+    order, field annotation/type/nullability/requiredness/default state, transitive
+    named support models/enums/unions and list/fixed-tuple shapes.
+  - >-
+    Inspect the actual field/model validator bodies and adjacent accepted tests.
+    For every validator, record the minimum declarative predicate obligations with
+    exact operands/constants/classes of rejected substitution. Do not accept a
+    validator name, code hash or prose label as a complete representation.
+  - >-
+    Enumerate which of the twelve Parquet roots contain CanonicalJsonValue,
+    heterogeneous tuples, homogeneous sequences, nested structs, decimals and UTC
+    timestamps, and the required accepted logical-to-Arrow mapping at each path.
+  - >-
+    Identify high-risk omission points the eventual independent producer review
+    must attack, especially one-lineup-row semantics, rejected-field traversal,
+    completeness/index bindings, identity reproduction, temporal cutoff,
+    possession ordering, layer-manifest closure and receipt/result bindings.
+  - >-
+    Do not read a concurrently appearing wyscout_schema.py or its tests/return; this
+    is an implementation-independent oracle, not a candidate review or authority.
+definition_of_done:
+  - Exact report-only census exists and contains no candidate verdict or schema bytes/digests.
+acceptance_checks:
+  - shasum -a 256 of every fixed input and both output reports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Constraint census report.
+  - Return using the repository template.
+stop_conditions:
+  - Fixed binding drift.
+  - Need to choose/change a root, field, semantics, projection, dependency or architecture boundary.
+  - Need to inspect the producer candidate, edit outside ownership, use Git/network/provider, or write product/aggregate/runtime data.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

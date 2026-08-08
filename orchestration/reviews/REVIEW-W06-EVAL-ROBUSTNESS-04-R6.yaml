@@ -1,0 +1,23 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-ROBUSTNESS-04-R6
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R6
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    evidence: >-
+      The one-core implementation is present and focused checks pass, but no test file
+      contains or asserts the three mandated original parent identities fa8bea37...,
+      e67c82c8..., and 2e70e316.... The existing mutation test constructs different
+      split-comparison and interval-only substitutions, so exact recurrence coverage is
+      absent despite the return claiming it is retained.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R6.yaml
+reviewer: master

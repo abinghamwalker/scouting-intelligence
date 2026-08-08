@@ -1,0 +1,108 @@
+schema_version: 1
+task_id: W06-PREFLIGHT-01
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform one bounded local readiness inventory for W06, classify authentic governed
+  human-expert evidence and executable evaluation populations without reading protected
+  expected outputs, and propose the smallest path-bounded W06 task graph.
+depends_on:
+  - W05:CLOSED
+assigned_role: evaluation_readiness_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - reports/phase-gates/W05/acceptance-report.md
+  - reports/phase-gates/W05/gate-report.json
+  - reports/reviews/W05/master-review.md
+  - reports/verification/W05/verification-report.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/verification/W05/clean-tree-report.md
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/readiness/W06/evaluation-readiness.md
+  - reports/reviews/W06/returns/W06-PREFLIGHT-01-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/domain.json
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - src/**
+  - tests/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - scripts/**
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/ownership.yaml
+  - orchestration/templates/**
+  - orchestration/task_packets/**
+  - orchestration/reviews/**
+  - reports/phase-gates/**
+  - pyproject.toml
+  - uv.lock
+  - .git/**
+deliverables:
+  - >-
+    One readiness report inventorying any locally retained human reviewer judgements,
+    their identity or pseudonymous key, rubric, timing, provenance, rights and partition
+    evidence; if none is valid, state MISSING_EXPERT_RELEVANCE_EVIDENCE explicitly.
+  - >-
+    Exact inventories of available competitions, teams, providers, time windows,
+    candidate and query populations, accepted W05 identities, partition feasibility,
+    executable tests, unsupported tests and claim gaps.
+  - >-
+    A conservative path-disjoint initial task graph for contracts, metrics,
+    robustness/nulls, protocol freeze, protected broker and closure evidence, with all
+    shared/protected/integration surfaces serial.
+  - A complete mandatory return at reports/reviews/W06/returns/W06-PREFLIGHT-01-R1.md.
+definition_of_done:
+  - The inventory is derived only from local retained bytes and cites exact paths.
+  - Codex agents are never described as human football experts.
+  - W03 protected synthetic fixtures are not relabelled as W06 relevance evidence.
+  - The W04 one-match exact-four boundary and W05 synthetic-development-only boundary are explicit.
+  - Unsupported transfer/stability populations are named, not simulated or duplicated.
+  - The report proposes no threshold, metric or gate choice as accepted authority.
+  - No second authority or architecture document is created.
+acceptance_checks:
+  - uv run python scripts/verify_local_only.py
+  - >-
+    uv run python -c "from pathlib import Path; p=Path('reports/readiness/W06/evaluation-readiness.md');
+    t=p.read_text(); assert 'MISSING_EXPERT_RELEVANCE_EVIDENCE' in t or
+    'VALID_GOVERNED_HUMAN_EXPERT_EVIDENCE' in t"
+stop_conditions:
+  - Authentic reviewer evidence is found but its rights or permitted W06 use cannot be proved locally.
+  - A required inventory needs external/provider access, credentials, a new dependency or protected expected-output access.
+  - User-owned or unexpected work overlaps either allowed path.
+  - Required work falls outside allowed_paths.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - behaviour and key evidence-classification choices
+  - exact commands, exit statuses and concise results
+  - exact evidence paths and identifiers
+  - residual leakage, schema, rights, scope and claim risks
+  - concrete follow-ups or none
+  - confirmation of no Git operations, no dependency or lock changes and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

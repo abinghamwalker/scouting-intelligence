@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Historical player research workbench</title>
+  <link rel="stylesheet" href="/static/w09/workbench.css">
+  {% if available %}<script src="/static/w09/workbench.js" defer></script>{% endif %}
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to research workspace</a>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Scouting Intelligence · W09</p>
+      <h1>Historical player research workbench</h1>
+      <p class="lede">A governed, reproducible workspace for inspecting resemblance within retained 2017/18 evidence.</p>
+    </div>
+    <span class="local-badge">Local only</span>
+  </header>
+  <nav aria-label="Workbench sections">
+    <a href="#dataset">Dataset</a>
+    <a href="#query">Query</a>
+    <a href="#results">Results</a>
+    <a href="#compare">Compare</a>
+    <a href="#experiment">Experiment</a>
+  </nav>
+
+  <main id="main-content" tabindex="-1"{% if available %} data-bootstrap="{{ bootstrap_json }}"{% endif %}>
+    <section class="boundary-card" aria-labelledby="claim-title">
+      <div>
+        <p class="section-kicker">Claim boundary</p>
+        <h2 id="claim-title">Historical resemblance research only</h2>
+      </div>
+      <p>{{ historical_boundary }}</p>
+    </section>
+
+    {% if not available %}
+    <section class="panel unavailable-state" aria-labelledby="unavailable-title">
+      <p class="section-kicker">Unavailable</p>
+      <h2 id="unavailable-title">The governed research population is not ready to serve</h2>
+      <p>{{ unavailable_reason }}</p>
+      <p>No synthetic, stale, newest-found, or legacy W07/W08 population has been substituted. Place exactly one accepted feature matrix and its compatible index at the governed local paths, then restart this local entrypoint.</p>
+    </section>
+    {% else %}
+    <div id="workbench-status" class="status-card" role="status" aria-live="polite" data-state="loading">
+      <span class="status-dot" aria-hidden="true"></span>
+      <span id="status-message">Loading governed dataset authority…</span>
+    </div>
+
+    <section id="dataset" class="panel" aria-labelledby="dataset-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">1 · Authority</p>
+          <h2 id="dataset-title">Governed dataset</h2>
+        </div>
+        <span id="dataset-state" class="pill">Verifying</span>
+      </div>
+      <div id="dataset-summary" class="metric-grid" aria-live="polite"></div>
+      <details>
+        <summary>Versions, rights and limitations</summary>
+        <div id="dataset-details" class="details-body"></div>
+      </details>
+    </section>
+
+    <section id="query" class="panel" aria-labelledby="query-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">2 · Define</p>
+          <h2 id="query-title">Exemplar or weighted profile</h2>
+        </div>
+        <span class="pill muted">Exact pins retained</span>
+      </div>
+
+      <fieldset class="mode-switch">
+        <legend>Query mode</legend>
+        <label><input type="radio" name="query-mode" value="exemplar" checked> Real-player exemplar</label>
+        <label><input type="radio" name="query-mode" value="weighted_profile"> Weighted profile</label>
+      </fieldset>
+
+      <div id="exemplar-panel" class="query-mode-panel">
+        <form id="player-search-form" class="search-grid">
+          <div class="field span-two">
+            <label for="player-search">Search eligible historical players</label>
+            <input id="player-search" name="name" type="search" maxlength="100" autocomplete="off" placeholder="Enter a player name">
+          </div>
+          <div class="field">
+            <label for="search-position">Position</label>
+            <select id="search-position" name="position">
+              <option value="">Any position</option>
+              <option value="GK">Goalkeeper</option>
+              <option value="DF">Defender</option>
+              <option value="MD">Midfielder</option>
+              <option value="FW">Forward</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="search-competition">Competition</label>
+            <select id="search-competition" name="competition_id">
+              <option value="">Any competition</option>
+            </select>
+          </div>
+          <button class="button secondary align-end" type="submit">Search players</button>
+        </form>
+        <p id="selected-exemplar" class="selection-note">Choose one governed player row below.</p>
+        <div id="player-search-results" class="search-results" aria-live="polite"></div>
+        <div id="player-search-pagination" class="pagination" aria-label="Player search pages">
+          <button id="search-previous" class="button secondary" type="button" disabled>Previous</button>
+          <span id="search-page-state">No search page loaded</span>
+          <button id="search-next" class="button secondary" type="button" disabled>Next</button>
+        </div>
+      </div>
+
+      <div id="profile-panel" class="query-mode-panel" hidden>
+        <p>Set a raw target and non-negative influence for each provider-neutral feature. At least one weight must be positive.</p>
+        <div id="profile-fields" class="feature-input-grid"></div>
+      </div>
+
+      <div class="query-mode-panel">
+        <h3>Explicit feature weights</h3>
+        <p>Weights apply to both query modes. Zero disables a feature; at least one feature must remain active.</p>
+        <div id="weight-fields" class="feature-input-grid"></div>
+      </div>
+
+      <details id="methodology-details">
+        <summary>How raw values, scaling and distances work</summary>
+        <div class="details-body">
+          <h3>Raw numerator rates and governed minutes</h3>
+          <p>Raw feature values are retained event numerator counts per 90 governed minutes; they are not percentages. Accurate Passes Per90, Shots On Target Per90 and Duels Won Per90 remain numerator rates, not pass-completion, shot-accuracy or duel-win percentages.</p>
+          <p>For this retained historical authority, governed-minute denominators are conservative lower bounds, so any per-90 rate may be overstated.</p>
+          <p>Goals Per90 excludes recorded event-9 save-attempt actions. The retained fields do not support an outcome or goalkeeper-quality interpretation of those excluded actions.</p>
+
+          <h3>Frozen global scaling</h3>
+          <p>The pinned index fits one scaler over every eligible matrix row: <code>scaled = (raw − global median) / global IQR</code>. A zero global IQR uses a unit scale of 1. Position, target-competition/season and minimum-minute filters do not refit the scaler.</p>
+
+          <h3>One selected target population</h3>
+          <p>A full-population query scores every row admitted by the explicit filters in one selected target competition and season before applying the result limit. The exemplar may come from another competition. This surface does not combine all leagues into one candidate pool.</p>
+
+          <h3>Weighted Euclidean</h3>
+          <p>Each feature contribution is <code>weight × scaled contrast²</code>. Contributions are non-negative, and distance is the square root of their sum.</p>
+
+          <h3>Weighted cosine</h3>
+          <p>Each signed contribution is the negative product of the weighted normalised query and candidate components. Distance is 1 plus the sum of those signed contributions.</p>
+
+          <h3>Interpretation boundary</h3>
+          <p>Lower distance means closer only under the same method, features, weights and authority pins. Distances, per-feature contributions and weights are not percentages, probabilities or calibrated match scores.</p>
+        </div>
+      </details>
+
+      <form id="query-form" class="query-controls">
+        <div class="field">
+          <label for="competition">Competition</label>
+          <select id="competition" required></select>
+        </div>
+        <div class="field">
+          <label for="season">Season</label>
+          <select id="season" required></select>
+        </div>
+        <div class="field">
+          <label for="method">Retrieval method</label>
+          <select id="method">
+            <option value="weighted_euclidean">Robust-scaled weighted distance</option>
+            <option value="weighted_cosine">Robust-scaled weighted cosine</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filter-position">Eligibility position filter</label>
+          <select id="filter-position">
+            <option value="">Any position</option>
+            <option value="GK">Goalkeeper</option>
+            <option value="DF">Defender</option>
+            <option value="MD">Midfielder</option>
+            <option value="FW">Forward</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="minimum-minutes">Minimum evidenced minutes</label>
+          <input id="minimum-minutes" type="number" min="0" step="any" inputmode="decimal" placeholder="No extra threshold">
+        </div>
+        <div class="field compact-field">
+          <label for="result-limit">Results</label>
+          <input id="result-limit" type="number" min="2" max="100" step="1" value="10" required>
+        </div>
+        <button id="run-query" class="button primary align-end" type="submit">Run full-population query</button>
+      </form>
+    </section>
+
+    <section id="results" class="panel" aria-labelledby="results-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">3 · Inspect</p>
+          <h2 id="results-title">Ranked historical players</h2>
+        </div>
+        <span id="result-digest" class="digest-chip">No result yet</span>
+      </div>
+      <div id="population-accounting" class="metric-grid compact"></div>
+      <p id="method-interpretation" class="selection-note" aria-live="polite">Run a query to see the selected method's contribution arithmetic.</p>
+      <div id="result-warnings" class="warning-list"></div>
+      <div id="candidate-results" class="candidate-list">
+        <div class="empty-card">Run a governed exemplar or weighted-profile query to inspect ranked evidence.</div>
+      </div>
+    </section>
+
+    <section id="compare" class="panel" aria-labelledby="compare-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">4 · Contrast</p>
+          <h2 id="compare-title">Candidate comparison</h2>
+        </div>
+        <button id="compare-selected" class="button secondary" type="button" disabled>Compare 2–5 selected</button>
+      </div>
+      <div id="comparison-results" class="comparison-grid">
+        <div class="empty-card">Select two to five ranked players to compare their exact matrix evidence.</div>
+      </div>
+    </section>
+
+    <section id="experiment" class="panel" aria-labelledby="experiment-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">5 · Reproduce</p>
+          <h2 id="experiment-title">Save and replay experiment</h2>
+        </div>
+        <span class="pill muted">Automatic provenance</span>
+      </div>
+      <form id="save-form" class="save-grid">
+        <div class="field">
+          <label for="experiment-name">Experiment name</label>
+          <input id="experiment-name" maxlength="512" value="Historical resemblance experiment" required>
+        </div>
+        <div class="field span-two">
+          <label for="experiment-note">Research note <span class="optional">optional</span></label>
+          <textarea id="experiment-note" maxlength="512" rows="2" placeholder="Record the question being explored"></textarea>
+        </div>
+        <div class="field">
+          <label for="report-format">Deterministic report</label>
+          <select id="report-format">
+            <option value="json">Canonical JSON</option>
+            <option value="html">Self-contained HTML</option>
+          </select>
+        </div>
+        <button id="save-experiment" class="button primary align-end" type="submit" disabled>Save exact experiment</button>
+      </form>
+      <div id="saved-experiment" class="saved-experiment" aria-live="polite"></div>
+      <div id="replay-state" class="replay-state" aria-live="polite"></div>
+      <details>
+        <summary>Previously saved local experiments</summary>
+        <div id="experiment-list" class="details-body">Loading local experiment state…</div>
+      </details>
+    </section>
+    <noscript><p class="panel unavailable-state">JavaScript is required for this local same-origin research workspace.</p></noscript>
+    {% endif %}
+  </main>
+
+  <footer>
+    <p>Provider-neutral research surface · retained Wyscout 2017/18 evidence · G-RW4 expert relevance validation absent.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "phase_id": "W08",
+  "gate_id": "G-W08A",
+  "status": "PENDING",
+  "decision": "PILOT_EVIDENCE_REQUIRED",
+  "recorded_at_utc": "2026-08-05T00:00:00Z",
+  "lifecycle_state": "MASTER_REVIEW",
+  "purpose": "development_progression_only",
+  "authorized_scope": "bounded_local_w09_challenger_experimentation",
+  "pilot_capture_present": 0,
+  "reviewed": false,
+  "criteria": {
+    "required_complete_pilot_captures": 1,
+    "all_T1_to_T7_passed": false,
+    "workflow_and_receipts_reproduced": false,
+    "claim_boundary_interpretation_correct": false,
+    "p0_findings": [],
+    "p1_findings": [],
+    "independent_review_verdict": "NOT_REVIEWED"
+  },
+  "unlocks_after_pass": [
+    "bounded local W09 challenger experimentation while W08 remains MASTER_REVIEW"
+  ],
+  "does_not_unlock": [
+    "W08 VERIFIED, CHECKPOINTED or CLOSED",
+    "checkpoint/w08-accepted",
+    "representative-user acceptance or G-W08B/G4",
+    "W10 shadow pilot",
+    "external deployment, publication or production-readiness claims"
+  ],
+  "claim_boundary": "resemblance_only synthetic_development_only LIMITED applicability; no recommendation evidence",
+  "protected_outputs_opened": false,
+  "w06_decision": "NO_GO",
+  "w06_sole_reason": "MISSING_EXPERT_RELEVANCE_EVIDENCE"
+}

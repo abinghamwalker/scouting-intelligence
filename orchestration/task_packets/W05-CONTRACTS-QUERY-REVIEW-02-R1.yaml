@@ -1,0 +1,69 @@
+schema_version: 1
+task_id: W05-CONTRACTS-QUERY-REVIEW-02
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently adversarially review the split W05 resolved-query and scored-candidate
+  contract surface, without editing candidate source or tests.
+depends_on:
+  - W05-CONTRACTS-QUERY-02-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R3.yaml
+  - orchestration/task_packets/W05-CONTRACTS-QUERY-02-R1.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R1.md
+  - reports/reviews/W05/w05-m0-contracts-independent-review-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - tests/contracts/test_foundation_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-query-ranking-contracts-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-REVIEW-02-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Is the resolved query self-verifying and complete for tenant, trace, brief ID/version, taxonomy ID/version/digest, ordered responsibilities/weights/constraints/exemplars/query player, cutoff, limit and exclusions?
+  - Does PinnedM0ServingRequest cross-check every overlapping RetrievalRequest field and exact resemblance-only claim, including substitutions under recomputed digests?
+  - Do scored candidates bind finite canonical non-negative distance, exact ordered query/candidate FeatureValues and contributions with artifact feature-axis length?
+  - Is total order executable and exactly ascending distance then canonical UUID bytes, including equal ties presented in inverse UUID order?
+  - Does M0RetrievalResult reject tenant, trace, brief ID/version, cutoff, request/result/candidate claim, limit or exclusion drift even after recomputing result_digest?
+  - Did the producer avoid candidate-specific state/W04 descriptor/array/explanation truth work reserved to the serial follow-on packet?
+deliverables:
+  - Independent verdict with P0/P1/P2 findings and exact code/test evidence.
+  - Direct adversarial probe outcomes for same-ID query substitution, all request/result identity drift, negative zero and inverse UUID equal ties.
+  - Smallest bounded correction if and only if a reproducible W05 blocker remains.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - Every finding is classified under the six W05 blocker tests.
+  - No source, test, config, orchestration, dependency, Git or accepted W04 byte changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A required source is missing or accepted authority conflicts materially.
+  - Any external access, provider use, dependency, destructive action or out-of-scope write is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

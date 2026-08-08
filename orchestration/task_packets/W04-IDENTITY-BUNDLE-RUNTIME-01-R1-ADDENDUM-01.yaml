@@ -1,0 +1,38 @@
+schema_version: 1
+addendum_id: W04-IDENTITY-BUNDLE-RUNTIME-01-R1-ADDENDUM-01
+task_id: W04-IDENTITY-BUNDLE-RUNTIME-01
+phase_id: W04
+revision: R1
+state: MASTER_FROZEN_ADDITIVE_SERIALIZATION_BINDING
+reason: >-
+  R20 fixes the crosswalk-row UUIDv5 formula and v2 trace token but names without
+  deriving identity_crosswalk_namespace. Freeze that sole byte-level namespace before
+  immutable identity materialization. This changes no R20/R21 byte or identity policy.
+depends_on:
+  - W04-IDENTITY-BUNDLE-RUNTIME-01-R1:PRE_MATERIALIZATION_STOP
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.yaml
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1-ADDENDUM-01.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+frozen_binding:
+  namespace_name: urn:scouting-intelligence:w04:wyscout:identity-crosswalk:v2
+  namespace_algorithm: UUIDV5_NAMESPACE_URL
+  derivation: >-
+    IDENTITY_CROSSWALK_NAMESPACE = UUIDv5(NAMESPACE_URL,
+    "urn:scouting-intelligence:w04:wyscout:identity-crosswalk:v2")
+  crosswalk_row_preimage: >-
+    lower_tenant_uuid + ":" + entity_kind + ":" +
+    canonical_source_identity_json_text + ":" + canonical_decimal_version + ":" +
+    lower_evidence_sha256
+  source_identity_json: SORTED_KEYS_COMPACT_NFC_STRICT_NO_FLOAT_NO_NEWLINE
+  trace_derivation: UUIDv5(crosswalk_row_id, "w04-identity-crosswalk-trace-v2")
+requirements:
+  - Use exactly the frozen namespace and existing R20 preimage; admit no alternate namespace, separator, case, encoding or newline.
+  - Add fixed-vector and adversarial alternate-namespace/preimage tests before materialization.
+  - Fresh independent review must bind and reproduce this addendum alongside the original packet.
+stop_conditions:
+  - Any other unnamed namespace, token or preimage is discovered before materialization.
+  - Any need to change R20/R21 bytes, identity semantics, dependencies, architecture or local-only boundary.
+git_operations: forbidden_for_subagent
+self_approval: forbidden

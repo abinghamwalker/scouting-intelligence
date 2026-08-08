@@ -1,0 +1,52 @@
+bound_inputs:
+  completion_manifest_sha256: 69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  field_registry_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  field_registry_id: w04-wyscout-field-registry-v2
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+decision_id: w04-wyscout-identity-ruleset-decisions-v1
+decision_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+entity_rules:
+- canonical_namespace_name: urn:scouting-intelligence:source:wyscout-soccer-match-events-figshare-v5:competition
+  entity_kind: COMPETITION
+  identity_source_path: competition_source_id
+  malformed_policy: REVIEW_REQUIRED
+  missing_policy: REVIEW_REQUIRED
+  nonzero_absent_master_policy: REVIEW_REQUIRED
+  source_id_type: STRICT_DECIMAL_INTEGER
+  zero_policy: REVIEW_REQUIRED
+- canonical_namespace_name: urn:scouting-intelligence:source:wyscout-soccer-match-events-figshare-v5:team
+  entity_kind: TEAM
+  identity_source_path: team_source_id
+  malformed_policy: REVIEW_REQUIRED
+  missing_policy: REVIEW_REQUIRED
+  nonzero_absent_master_policy: REVIEW_REQUIRED
+  source_id_type: STRICT_DECIMAL_INTEGER
+  zero_policy: REVIEW_REQUIRED
+- canonical_namespace_name: urn:scouting-intelligence:source:wyscout-soccer-match-events-figshare-v5:player
+  entity_kind: PLAYER
+  identity_source_path: player_source_id
+  malformed_policy: REVIEW_REQUIRED
+  missing_policy: REVIEW_REQUIRED
+  nonzero_absent_master_policy: REVIEW_REQUIRED
+  source_id_type: STRICT_DECIMAL_INTEGER
+  zero_policy: REJECT
+- canonical_namespace_name: urn:scouting-intelligence:source:wyscout-soccer-match-events-figshare-v5:match
+  entity_kind: MATCH
+  identity_source_path: match_source_id
+  malformed_policy: REVIEW_REQUIRED
+  missing_policy: REVIEW_REQUIRED
+  nonzero_absent_master_policy: REVIEW_REQUIRED
+  source_id_type: STRICT_DECIMAL_INTEGER
+  zero_policy: REVIEW_REQUIRED
+policies:
+  canonical_id_algorithm: UUIDV5_SOURCE_KIND_AND_CANONICAL_DECIMAL_ID
+  cross_kind_collision_policy: FAIL
+  duplicate_source_key_policy: REVIEW_REQUIRED
+  name_only_matching: FORBIDDEN
+  review_queue_policy: EXACT_UNRESOLVED_NONZERO_REFERENCES
+  source_key_resolution: DETERMINISTIC_WHEN_UNIQUE_VALID_MASTER_ROW
+  version_policy: CONSECUTIVE_FROM_ONE
+ruleset_id: w04-wyscout-identity-ruleset-v1
+ruleset_schema_version: w04-identity-ruleset-v1

@@ -1,0 +1,110 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R7
+state: DISPATCHED
+objective: >-
+  Correct only W04-RUNTIME-R6-P1-01: close the first-user-code encoding
+  bootstrap gap by proving the exact pre-guard file-backed-module census and
+  reading the three admitted encoding sources through retained no-follow stdlib
+  parent descriptors with exact owner and stable identity, without changing any
+  accepted child, tuple, environment, product, digest meaning, or real root.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R6:REWORK
+assigned_role: w04_runtime_control_r7_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R6.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R6.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R6.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R7.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R6.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/rebuild_wyscout_v5.py
+  - src/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/security/**
+fixed_bindings:
+  r6_admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  r6_launcher_sha256: ecfb3b1714b7a6caf607d9ae4393b3130e04045c717f5965207a804356b580f7
+  r6_runtime_tests_sha256: ad6027133eccb451fd9ab9d7135e60ccab50335d7acfdd25b008565bba323116
+  r6_producer_return_sha256: 092421174a1c19bc9ccb4ca2fbc5bb610d2c237c318940b516ddbf92aa7edc54
+  r6_review_sha256: 6ba86ce454aee332b66bde6db0a1141511a33404054910996e521745ea8200bf
+  r6_reviewer_return_sha256: e108c50c5d6fee74476ad83f39e9d8c17ddca0dc1ae8a795b965d019d44b62cf
+requirements:
+  - Verify every fixed binding before editing and keep the admission child byte-identical.
+  - >-
+    In the inline built-in/frozen first-user verifier, construct one retained
+    descriptor chain to the independently admitted Python 3.12.12 stdlib root
+    and its encodings child using descriptor-relative O_DIRECTORY/O_NOFOLLOW
+    opens. Validate exact real-directory kind, safe admitted mode and exact
+    current admitted owner, retain identities, and never fall back to an absolute
+    or Path reopen for an encoding source.
+  - >-
+    Open each of the exact three source leaves only relative to the retained
+    encodings parent. Require owner, mode 0644, link count one, size, complete
+    bytes, SHA-256 and EOF, and require byte-for-byte stable parent and leaf
+    fstat snapshots before/after all reads. Reject intermediate links, parent or
+    leaf replacement, owner drift, escape, identity drift, or an extra entry.
+    Keep device/inode/clock observations operational and do not add them to stable
+    tuple or build/digest meaning.
+  - >-
+    Before installing the audit guard, enumerate sys.modules with only resident
+    built-in/frozen capabilities and require the exact three absolute file-backed
+    rows encodings, encodings.aliases and encodings.utf_8, each with the accepted
+    origin/file spelling. Reject any fourth file-backed module, path alias,
+    missing row, duplicate module object, or non-built-in/non-frozen remainder.
+  - >-
+    Add positive and adversarial exact-launch evidence for retained parent and
+    leaf identity, intermediate encodings-parent link/replacement, source-owner
+    drift where the platform permits it, and a fourth pre-guard file-backed
+    module. Preserve all R6 source-byte/cache/tuple/env/argv/FD/prefix/chronology
+    attacks and explicitly prove the admitted source owner and exact census.
+  - >-
+    Do not change the complete v4 tuple fields, closed environment algorithm,
+    admission/rebuild behavior, logical contracts, products, dependency/lock
+    state or any real-root byte. Freeze only after the complete exact final-hash
+    gate and identical shell pre/post PYC inventories.
+acceptance_checks:
+  - uv run ruff format --check scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R7 pre-guard parent/owner/census correction, adversarial tests and mandatory producer return.
+stop_conditions:
+  - None for bounded implementation defects; continue rework without real-root publication or Git.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

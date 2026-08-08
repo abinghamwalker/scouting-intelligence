@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01
+phase_id: W04
+revision: R1
+state: REWORK
+objective: >-
+  Independently review the exact additive W04 Parquet encoder and semantic digest for
+  deterministic R20 physical controls, unambiguous semantic binding, strict schema/
+  key/row behavior and preservation of generic serializer APIs. Review only.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-01-R1:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_parquet_byte_security_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-PUBLISHER-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  formats_sha256: 2737a4b67eef492b4a5809d302c726470670c0ef2c14a2a7f5fae7d11453c49a
+  focused_test_sha256: 271925b89532080dc302abd4d75ee6a78e1382ae67f619bcc26a58c8ac796d05
+  producer_return_sha256: 5bd75fafe20ae09f01b03563706e20b8cfcf675352afe840ec3d2e4240cc330c
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+  serializer_version: w04-wyscout-parquet-v1
+  semantic_version: w04-wyscout-parquet-semantic-v1
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Independently reproduce exact Parquet settings, stored schema, statistics,
+    timestamp rejection, the three row-group boundaries and both fixed vectors.
+  - >-
+    Reconstruct the semantic preimage independently and test ambiguous concatenation,
+    schema/row/parent mutation, noncanonical JSON, duplicate keys/rows, unsafe paths,
+    parent ordering and uint64 framing failures.
+  - >-
+    Confirm exact schema, primary-key and row-order checks cannot be bypassed through
+    Boolean/string type confusion, Arrow metadata, nullability, inference or coercion.
+  - >-
+    Execute a non-key value-divergence probe: keep primary keys equal while making the
+    Arrow row differ from its supplied canonical contract row. Determine whether the
+    accepted R20 boundary makes a later mandatory exact correspondence check, or
+    whether this encoder can produce physical bytes paired with a false semantic
+    digest. Return P1 REWORK if no fail-closed binding exists.
+  - Confirm generic serializer behavior is unchanged and no product/control/provider/network/Git/cloud/container/CI/remote/deployment action occurred.
+definition_of_done:
+  - Exact candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review with PASS or REWORK and exact P0/P1/P2 counts.
+  - Mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

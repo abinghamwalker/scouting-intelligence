@@ -1,0 +1,153 @@
+schema_version: 1
+task_id: W06-EVAL-CORE-01
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-CORE-01-R1.yaml
+objective: >-
+  Correct only the independently reproduced W06 evaluation-core P0/P1 defects by
+  relationally binding protected gate objects and implementing mathematically valid,
+  protocol-bound metrics, intervals and public-fixture adversarial coverage.
+depends_on:
+  - REVIEW-W06-EVAL-CORE-01-R1:REWORK
+  - W06-EVAL-CORE-REVIEW-01-R1:ACCEPTED
+assigned_role: evaluation_core_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-CORE-01-R1.yaml
+  - orchestration/task_packets/W06-EVAL-CORE-01-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R1.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R1.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+defects:
+  - severity: P0
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R1.md#W06-EC-R1-01
+    affected_definition_of_done: ACCEPT_CLAIM cannot be constructed from unrelated or ineligible objects.
+    required_fix: >-
+      Add an actual canonical nested decision envelope or equivalently strong validated
+      relation: identical protocol/bundle/access/run identities; valid protected
+      membership; exact frozen candidate identity; query cutoff not after decision
+      cutoff; one unique access consumption/run identity; non-empty required results;
+      and governed-human evidence for claim eligibility. IMPLEMENTATION_FIXTURE must be
+      structurally ineligible for CALIBRATION, PROTECTED_TEST, PROSPECTIVE and
+      ACCEPT_CLAIM. Opaque unrelated digest strings are insufficient.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R1.md#W06-EC-R1-02
+    affected_definition_of_done: All nested evidence identities and substitutions fail closed.
+    required_fix: >-
+      Introduce a self-verifying canonical aggregate digest over protocol, rubric,
+      exact reviewer roster, query/candidate universe identities, exclusive memberships,
+      relevance, unordered pair preferences, hard negatives and adjudications. Require
+      canonical ordering/semantic uniqueness; exact roster/rubric binding for every row;
+      candidate membership; valid disagreement references and eligible adjudicator.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R1.md#W06-EC-R1-03
+    affected_definition_of_done: Precision/Recall/NDCG denominators and ties are protocol-bound.
+    required_fix: >-
+      Make RankingRow carry the frozen candidate universe, an explicit mutually exclusive
+      per-item RELEVANT/PARTIAL/IRRELEVANT/UNJUDGED/ABSTAIN label state and deterministic
+      tie groups/score-order policy. Evaluate with an EvaluationProtocol, enforce k in
+      declared_k, reject out-of-universe/overlapping states, freeze partial gain and its
+      Precision/Recall treatment, and return explicit unavailable results whenever the
+      frozen missingness policy does not admit a denominator. Never default absent labels
+      to irrelevant or zero.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R1.md#W06-EC-R1-04
+    affected_definition_of_done: Comparison, preference and agreement metrics are valid and complete.
+    required_fix: >-
+      Declare and implement same-complete-universe or reranked-intersection Spearman with
+      deterministic tie behavior and [-1,1] range; explicit overlap count/rate and
+      Jaccard; replacement churn in [0,1]; pair-preference accuracy over canonical
+      unordered eligible non-abstaining pairs; and a declared inter-rater agreement
+      statistic with missing/abstention/insufficiency behavior.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R1.md#W06-EC-R1-05
+    affected_definition_of_done: Bootstrap, result, interval and run identities are deterministic and relationally bound.
+    required_fix: >-
+      Add protocol fields for resampling unit, seed, count, confidence, percentile method,
+      primary/secondary metric roster and missingness policy. Bind input/resample/result
+      digests to canonical query IDs, per-query statuses/values, metric, k and every
+      setting. Validate metric enum/range/formula; require exact interval method/link,
+      lower <= point <= upper, no unavailable bounds; enforce canonical unique non-empty
+      metric/interval/slice/failure run rosters.
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - configs/evaluation/**
+  - data/evaluation/**
+  - runs/w06/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/readiness/**
+  - docs/**
+  - scripts/**
+  - orchestration/**
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/features/**
+  - src/scouting/modeling/**
+  - src/scouting/m0/**
+  - src/scouting/serving/**
+  - tests/fixtures/w05/**
+  - runs/w05/**
+  - pyproject.toml
+  - uv.lock
+  - .git/**
+deliverables:
+  - Corrected strictly relational evaluation/protected-decision contracts closing every P0/P1 attack.
+  - Corrected protocol-bound metric, rank-comparison, pair/agreement and bootstrap implementation.
+  - Public fixture loaded by tests and expanded adversarial coverage for every reproduced P0/P1 counterexample.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-EVAL-CORE-01-R2.md.
+definition_of_done:
+  - Every P0/P1 constructor and metric counterexample in the R1 independent report now rejects or returns the exact declared unavailable result.
+  - ACCEPT_CLAIM cannot validate from fixture authority, missing governed reviewers, non-protected/reused access, empty/unavailable results, or mismatched identities.
+  - Missing/unjudged/abstained evidence never becomes irrelevant/zero and all metric values/ranges/formulas are exact.
+  - Declared k, universe, tie, partial-gain, correlation, agreement, bootstrap and interval policies are mechanically enforced.
+  - Canonical nested digests and collection order reproduce identically under input reordering while semantic substitution changes identity or rejects.
+  - Public fixture tests assert its implementation-only authority and exact bytes/digest without creating expert/protected evidence.
+  - No protected result/protocol threshold is tuned or executed and accepted W03/W04/W05 bytes remain unmodified.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run ruff check src/scouting/contracts/evaluation.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run lint-imports
+stop_conditions:
+  - Correction requires a new dependency, protected expected-output access, external/provider access or a credential.
+  - Correction requires inventing an expert, protected population/result, threshold or claim.
+  - Correction requires an edit outside allowed_paths or accepted W03/W04/W05 bytes.
+  - Unexpected user-owned work overlaps an allowed path.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - exact correction mapped to W06-EC-R1-01 through W06-EC-R1-05
+  - exact commands, exit statuses and concise results
+  - exact public fixture, metric, interval, bundle/run/gate digest identities
+  - residual leakage, schema, interval, applicability and claim risks
+  - concrete follow-ups or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

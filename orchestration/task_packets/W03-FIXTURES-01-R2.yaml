@@ -1,0 +1,62 @@
+schema_version: 1
+task_id: W03-FIXTURES-01
+phase_id: W03
+revision: R2
+state: READY
+supersedes: orchestration/task_packets/W03-FIXTURES-01-R1.yaml
+objective: Correct only the observed-at strict-cutoff defect recorded by the master.
+depends_on:
+  - REVIEW-W03-FIXTURES-01-R1:REWORK
+assigned_role: fixture_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-FIXTURES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-FIXTURES-01-R1.yaml
+  - docs/architecture/evaluation-contract.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/sources/synthetic.py
+  - tests/unit/test_synthetic_fixture.py
+allowed_paths:
+  - src/scouting/sources/synthetic.py
+  - tests/unit/test_synthetic_fixture.py
+  - reports/reviews/W03/returns/W03-FIXTURES-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/**
+  - src/scouting/serving/**
+  - tests/fixtures/**
+  - services/**
+  - apps/**
+defects:
+  - code: OBSERVATION_AT_CUTOFF_ADMITTED
+    required_fix: >-
+      Treat observed_at >= decision_cutoff_ts as a fail-closed rejection, with
+      a stable reason distinct from post-cutoff availability.
+deliverables:
+  - Corrected loader with explicit observation-cutoff rejection.
+  - Focused equality and after-cutoff negative tests.
+  - Complete R2 mandatory return.
+definition_of_done:
+  - A fact observed exactly at the cutoff is never admitted even if available_at is earlier.
+  - A fact observed after the cutoff is never admitted.
+  - Existing development and protected fixture digests remain unchanged.
+  - All original and new fixture checks pass through uv.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_synthetic_fixture.py
+  - uv run ruff format --check src/scouting/sources tests/unit/test_synthetic_fixture.py
+  - uv run ruff check src/scouting/sources tests/unit/test_synthetic_fixture.py
+  - uv run mypy src/scouting/sources
+  - uv run bandit -q -r src/scouting/sources
+stop_conditions:
+  - A fixture, contract, policy, dependency, or path outside allowed_paths must change.
+  - A Git command, external service, credential, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

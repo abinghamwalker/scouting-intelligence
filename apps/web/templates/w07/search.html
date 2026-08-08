@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_authority.html" import no_go_banner, authority_panel %}
+{% block content %}
+  {{ no_go_banner(no_go) }}
+  <header class="page-intro"><p class="eyebrow">Accepted 18-candidate catalogue</p><h1>Search synthetic-development candidates</h1><p>Filter the accepted local catalogue. Search results are evidence records, not player recommendations.</p></header>
+  <form class="search-form" method="get" action="/w07/search" role="search">
+    <div><label for="q">Candidate label or identifier</label><input id="q" name="q" type="search" value="{{ q|default('') }}" maxlength="120" autocomplete="off"></div>
+    <div><label for="position">Position</label><select id="position" name="position"><option value="">All positions</option>{% for option in positions|default([]) %}<option value="{{ option }}" {% if option == position|default('') %}selected{% endif %}>{{ option }}</option>{% endfor %}</select></div>
+    <button type="submit">Apply filters</button>
+  </form>
+  {% set catalogue = players|default(candidates|default([])) %}
+  {% if catalogue %}
+  <div class="table-wrap" tabindex="0" aria-label="Scrollable candidate evidence table">
+    <table><caption>Accepted synthetic-development candidate evidence</caption><thead><tr><th scope="col">Candidate</th><th scope="col">Position</th><th scope="col">Age</th><th scope="col">Feature cutoff</th><th scope="col">Evidence</th></tr></thead><tbody>
+    {% for player in catalogue %}{% set row = player.row|default(player) %}{% set feature = row.feature_row|default(row) %}<tr><th scope="row"><a href="/w07/player/{{ player.player_id|default(feature.player_id|default(player.id|default(player.uuid))) }}">{{ player.label|default(player.name|default('Synthetic candidate ' ~ loop.index)) }}</a></th><td>{{ feature.synthetic_position_code|default(player.position|default('UNAVAILABLE')) }}</td><td>{{ feature.synthetic_age_years|default(player.age|default('UNAVAILABLE')) }}</td><td>{{ feature.feature_cutoff_ts|default(player.feature_cutoff_ts|default(player.cutoff|default('UNAVAILABLE'))) }}</td><td>Synthetic-development only</td></tr>{% endfor %}
+    </tbody></table>
+  </div>
+  {% else %}<section class="state-card empty-state" aria-labelledby="empty-heading"><h2 id="empty-heading">No accepted candidates match these filters</h2><p>No substitute, inferred, or external record has been used. Adjust the local catalogue filters to continue.</p></section>{% endif %}
+  {{ authority_panel(authority|default({})) }}
+{% endblock %}

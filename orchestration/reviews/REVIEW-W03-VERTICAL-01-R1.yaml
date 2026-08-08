@@ -1,0 +1,53 @@
+schema_version: 1
+review_id: REVIEW-W03-VERTICAL-01-R1
+task_id: W03-VERTICAL-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - severity: P0
+    code: PROTECTED_GATE_INPUT_REJECTED
+    evidence: src/scouting/serving/synthetic.py:113
+    affected_definition_of_done: >-
+      The master must be able to broker the protected synthetic input through
+      the preregistered implementation without exposing its expected output.
+    required_fix: >-
+      Support an explicitly requested development or protected_test partition
+      through the same domain-only serving boundary; default to development and
+      keep every runtime expected-output path forbidden.
+  - severity: P1
+    code: UNGUARDED_DOMAIN_READ
+    evidence: src/scouting/serving/synthetic.py:116
+    affected_definition_of_done: >-
+      Outside-root reads and escaped symlinks are forbidden by the frozen W03
+      environment and threat model.
+    required_fix: >-
+      Require an explicit approved fixture root, resolve the domain path beneath
+      it, and reject absolute/outside-root/traversal/escaped-symlink reads before
+      opening the file.
+  - severity: P1
+    code: DENIED_CONFIDENTIAL_ACTION_NOT_AUDITED
+    evidence: src/scouting/web/app.py:162
+    affected_definition_of_done: >-
+      Unauthorised confidential reads/exports must deny without disclosure and
+      retain an append-only material-action attempt.
+    required_fix: >-
+      Add a content-free denial path that writes an attributable READ/EXPORT
+      attempt in the principal tenant transaction without reading or exporting
+      the target, and test the retained audit record.
+  - severity: P1
+    code: FAIL_CLOSED_APPLICATION_PATHS_UNDERTESTED
+    evidence: tests/e2e/test_w03_vertical_journey.py
+    affected_definition_of_done: >-
+      Negative session, cross-tenant, future-data, model/index-unavailable, and
+      listener-free worker paths must be executable at the application boundary.
+    required_fix: >-
+      Add focused API/service/worker tests, including exact-cutoff exclusion and
+      a labelled unavailable result with no silent artifact substitution.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-VERTICAL-01-R2.yaml
+reviewer: master

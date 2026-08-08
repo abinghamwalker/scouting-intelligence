@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/w08/app.css">
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to main content</a>
+    <header>
+      <div class="masthead">
+        <a class="product" href="/w08"><span class="product-mark">R1</span><span><strong>Scouting workflow</strong><small>Local evidence workspace</small></span></a>
+        <span class="local-status"><i></i> Loopback only</span>
+      </div>
+      <p class="boundary">{{ boundary }}</p>
+      {% if guided_study and principal is defined %}
+        <section class="pilot-navigator" aria-label="Guided pilot navigation">
+          <div class="pilot-navigator-copy">
+            <span class="pilot-kicker">Guided pilot</span>
+            <strong>Working as {{ principal.roles|join(', ')|title }}</strong>
+            <small>Switch roles here—no passwords or tab hunting.</small>
+          </div>
+          <div class="pilot-actions">
+            <a class="pilot-link" href="/w08/guide">Journey guide</a>
+            {% for role, label, description in guided_roles %}
+              <form method="post" action="/w08/guide/switch-role" class="role-switch-form">
+                <input type="hidden" name="guide_csrf" value="{{ guided_switch_token }}">
+                <input type="hidden" name="role" value="{{ role }}">
+                <input type="hidden" name="return_to" value="/w08/guide">
+                <button class="role-switch {% if role in principal.roles %}is-current{% endif %}" type="submit" title="{{ description }}">{{ label }}</button>
+              </form>
+            {% endfor %}
+            <a class="pilot-link pilot-link-console" href="{{ study_console_url }}#tasks">Record results</a>
+          </div>
+        </section>
+      {% endif %}
+      <nav aria-label="Primary">
+        {% if guided_study %}<a href="/w08/guide">Pilot journey</a>{% endif %}
+        <a href="/w08">Home</a>
+        <a href="/w08/queue">Work queue</a>
+        {% if principal is defined and ('analyst' in principal.roles or 'approver' in principal.roles) %}<a href="/w08/exports">Local evidence packs</a>{% endif %}
+        {% if principal is defined and 'admin' in principal.roles %}<a href="/w08/audit">Audit</a>{% endif %}
+      </nav>
+    </header>
+    <main id="main" tabindex="-1">{% block body %}{% endblock %}</main>
+    <footer><strong>Local R1 workflow</strong><span>Synthetic automated tests are not representative-user evidence.</span></footer>
+  </body>
+</html>

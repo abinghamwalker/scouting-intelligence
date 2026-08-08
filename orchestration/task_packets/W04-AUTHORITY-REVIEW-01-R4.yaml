@@ -1,0 +1,69 @@
+schema_version: 1
+task_id: W04-AUTHORITY-REVIEW-01
+phase_id: W04
+revision: R4
+state: READY
+objective: >-
+  Independently review the bounded one-hop Figshare delivery redirect authority,
+  proving it enables only the exact observed transport shape and does not broaden
+  source, cloud-storage, external-transfer, or post-acquisition authority.
+depends_on:
+  - W04-AUTHORITY-REVIEW-01-R3:ACCEPTED
+  - W04-SOURCE-AUTHORITY-01:REDIRECT_AUTHORITY_CORRECTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-AUTHORITY-REVIEW-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R3.yaml
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - docs/dataset-cards/w04-source.md
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - reports/phase-gates/W04/download-redirect-preflight.md
+  - tests/governance/test_w04_source_authority.py
+  - tests/security/test_w04_source_authority_boundary.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/authority-boundary-audit-R4.md
+  - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R4.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Retain every R1-R3 authority challenge.
+  - >-
+    Add independent authority tests for exactly one 302, the reviewed destination
+    scheme/host/path template, exact query keys and signature semantics, and the
+    60-second expiry ceiling.
+  - >-
+    Prove the declaration does not permit cloud storage, credentials, a second hop,
+    a new source object, post-acquisition transfer, or any external/public service.
+  - R4 audit, mandatory return, and ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - The authority is narrow enough for a source adapter to fail closed.
+  - Local-only verification and the complete producer/independent authority suite pass.
+  - No provider/network/archive/protected-data access occurs in reviewer work.
+acceptance_checks:
+  - uv run pytest -q tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff format --check tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff check tests/security/test_w04_source_authority_boundary.py
+  - uv run mypy tests/security/test_w04_source_authority_boundary.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - The authority permits an ambiguous destination or broader external transfer.
+  - Review requires editing a forbidden producer/authority path.
+  - A P0-P2 local-only, rights, or redirect-authority defect is reproduced.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

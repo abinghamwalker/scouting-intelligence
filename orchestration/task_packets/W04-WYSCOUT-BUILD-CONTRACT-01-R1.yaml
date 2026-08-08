@@ -1,0 +1,125 @@
+schema_version: 1
+task_id: W04-WYSCOUT-BUILD-CONTRACT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the strict standalone W04 build-contract module for the exact accepted
+  five-key window, bounded season helper, five authority rows, unchanged 25-key
+  one-hash build projection/inverse, receipts and eight R4 result envelopes.
+depends_on:
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01:ACCEPTED
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01:ACCEPTED
+  - W04-SEASON-LINEUP-COMPLETE-REPOSITORY-GATE-R1:PASS
+assigned_role: bounded_w04_wyscout_build_contract_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R1.yaml
+  - reports/verification/W04/wyscout-season-lineup-complete-repository-gate-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_identity.py
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+fixed_bindings:
+  complete_repository_gate_sha256: 22b0b73078d4d2f0cc7e5eed3920a5401fd3d0e02d9ee3c66d9c7af02f76f469
+  build_authority_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  build_authority_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  season_lineup_decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  season_lineup_acceptance_sha256: 6cbf2cd2aea87489854eee208ee4cbb3f7d3dc2c603d32aa306515418863c27e
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  wyscout_data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+requirements:
+  - Verify every fixed hash and stop on drift before editing.
+  - >-
+    Keep the new contracts module standalone: standard library plus Pydantic only;
+    it must import no other scouting module and perform no filesystem/network write.
+  - >-
+    Implement the exact canonical five-key window object in R20 order and strict
+    half-open/cutoff/snapshot/valid-from rules. Reproduce window identity UUID
+    a0af8d56-e41d-5467-b46e-82887c4861e0 from the frozen namespace/name/preimage.
+  - >-
+    Implement one bounded strict season UUID helper that admits only non-Boolean
+    integer 181150 for this W04 product and returns
+    4696aa1f-b512-5d18-af79-33cf031455cf through the documented UUIDv5 chain.
+    Reject every other type/value; do not add a generic season identity kind.
+  - >-
+    Model the exact ordered five accepted authority references: field-v2,
+    possession-v2, four-feature registry, identity-v1 and the new season/lineup
+    acceptance. The fifth reference may appear only inside the existing
+    authority_rows projection member.
+  - >-
+    Implement the exact R20 25-key pre-build projection, canonical JSON UTF-8 NFC
+    without BOM/whitespace/terminal LF, one SHA-256 build ID, strict inverse from
+    the post-hash 25-key invocation by removing only build_id and restoring only
+    schema_version. Reject a 26th key, second hash, reordered/duplicate rows,
+    Boolean integers, noncanonical clocks/UUIDs/digests and any substituted input.
+  - >-
+    Implement the exact closed nine-key rebuild-invocation receipt and 15-key
+    temporal-boundary receipt with started_at <= checked_at <= completed_at,
+    strict readback/lineage/build/run/product/manifest bindings and no optional
+    placeholder/null route forbidden by R4.
+  - >-
+    Implement strict closed models for exactly the eight R4 result roles:
+    ENTRYPOINT_SOURCE_RESULT, COMPONENT_PROOF_RESULT, PRE_BUILD_ADMISSION_RESULT,
+    REBUILD_RECEIPT_SUMMARY, LAYER_MANIFEST_SUMMARY, FINAL_RECHECK_RESULT,
+    POST_BUILD_ID_REBUILD_RESULT and CHILD_RESULT_ENVELOPE. Preserve R20/R4 field,
+    state, dependency and failure semantics; no ninth model/role.
+  - >-
+    Add exhaustive closed tests for key/order/type equality, canonical bytes,
+    UUID/digest reconstruction, one-hash inverse roundtrip, fifth-authority-only
+    integration, clock inequalities, receipt/result substitutions and malformed
+    or expanded inputs. Tests create no real product, aggregate or run byte.
+  - Add no schema aggregate/materializer, product writer, dependency or public export.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Strict build-contract module, exhaustive tests and mandatory return.
+stop_conditions:
+  - Any R20/R21/R4/binding/key/order/formula must change.
+  - A sixth authority, 26th key, generic season kind, second hash or product byte is required.
+  - Any dependency, Git, provider/network or external-infrastructure action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

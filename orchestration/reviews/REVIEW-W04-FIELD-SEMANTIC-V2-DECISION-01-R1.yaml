@@ -1,0 +1,51 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-V2-DECISION-01-R1
+task_id: W04-FIELD-SEMANTIC-V2-DECISION-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: FAIL
+implementation_readback: NOT_REACHED
+subagent_tests_reproduced: NOT_REACHED
+integration_checks: NOT_REACHED
+artifact_lineage: FAIL_PATH_RESOLUTION
+security_temporal_review: PASS_STOPPED_FAIL_CLOSED
+defects:
+  - id: R1-P1-01
+    severity: P1
+    summary: >-
+      Two draft artifacts were written under the parent workspace because
+      relative apply_patch paths resolved against the task cwd, outside the
+      packet's project-root allowed_paths.
+    required_correction: >-
+      Use absolute project-root paths for every patch target, recreate all four
+      required outputs inside scouting-intelligence, and complete the full
+      packet verification and return without any outside-root write.
+decision: REWORK
+next_packet: W04-FIELD-SEMANTIC-V2-DECISION-01-R2
+reviewer: master
+evidence:
+  - reports/verification/W04/wyscout-field-semantic-v2-decision-R1-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-DECISION-01-R1.yaml
+checks:
+  - command: exact parent-workspace file census
+    result: FAIL_TWO_UNAUTHORISED_PATHS
+  - command: exact accidental artifact physical hashes
+    result: PASS_RECORDED_9C2E75DE_4943F5BE
+  - command: intended four project-root output paths
+    result: PASS_ALL_ABSENT_AT_STOP
+  - command: subagent stop behavior
+    result: PASS_FAIL_CLOSED_NO_GIT_NO_DOWNSTREAM
+  - command: exact-file quarantine and empty-directory-chain removal
+    result: PASS_PARENT_WORKSPACE_RESTORED
+decision_notes:
+  - >-
+    R1 is not accepted. It produced no project-root deliverable, return, test,
+    or terminal inventory because the producer correctly stopped at the first
+    outside-scope write.
+  - >-
+    The master moved only the two known accidental files into a retained
+    /private/tmp quarantine and removed only their empty, same-mtime directory
+    chain. No unrelated user-owned file or directory was present or changed.
+  - >-
+    R2 is a path-resolution correction only. The R21 contract, architecture,
+    project root, dependencies, local-only boundary, and product block do not
+    change.

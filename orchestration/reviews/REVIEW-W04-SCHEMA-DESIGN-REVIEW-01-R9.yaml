@@ -1,0 +1,65 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R9
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - id: W04-DESIGN-UV-ENVIRONMENT-SPELLING-01
+    severity: P1
+    status: master_reproduced
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R16
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R9.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R9.md
+  - reports/reviews/W04/wyscout-schema-design-R15.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R9-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      read complete independent R9 review and return
+    result: PASS_726_REVIEW_LINES_131_RETURN_LINES
+  - command: >-
+      env -i <minimal closed uv input map>
+      uv run --locked --no-sync python -S -B -c
+      "print UV, depth, PATH, and VIRTUAL_ENV"
+    result: FAIL_R15_EXPECTATION_ACTUAL_UV_OPT_HOMEBREW_BIN_UV
+  - command: >-
+      uv run --locked --no-sync python -S -B -c
+      "launch visible argv[0]=uv with physical executable target and print child map"
+    result: PASS_CONTROL_ACTUAL_UV_PHYSICAL_CELLAR_PATH
+  - command: >-
+      inspect logical uv lstat/raw link and physical target mode, size, digest,
+      and version
+    result: PASS_LOGICAL_LINK_TO_ADMITTED_UV_0_9_21_PHYSICAL_BYTES
+  - command: >-
+      reproduce R9 report and return packet size assertions
+    result: PASS_30087_REVIEW_BYTES_6828_RETURN_BYTES
+  - command: >-
+      uv run --locked --no-sync python -c
+      "parse all orchestration YAML and assert registry task IDs are unique"
+    result: PASS_135_ORCHESTRATION_YAML_23_TASKS_ZERO_DUPLICATES
+  - command: uv run --locked --no-sync python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read the complete 726-line independent review and 131-line return,
+    then reproduced the sole P1. Normal resolution of literal uv through the
+    exact PATH overwrites an input physical UV value with /opt/homebrew/bin/uv.
+  - >-
+    The bounded R16 route will truthfully admit the logical launch symlink as the
+    actual UV environment value, bind its exact raw link to the already admitted
+    physical uv bytes, and reject direct-physical or alternate resolution. No
+    architecture, dependency, provider, rights, storage, network, root, Git, or
+    local-only policy change is required.

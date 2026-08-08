@@ -1,0 +1,37 @@
+schema_version: 1
+task_id: WXX-LANE-NN
+phase_id: WXX
+revision: R2
+state: READY
+supersedes: orchestration/task_packets/WXX-LANE-NN-R1.yaml
+objective: Correct only the recorded bounded defect.
+depends_on:
+  - REVIEW-WXX-LANE-NN-R1:REWORK
+assigned_role: named_specialist
+risk: low
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/WXX-LANE-NN-R2.yaml
+  - orchestration/reviews/REVIEW-WXX-LANE-NN-R1.yaml
+defects:
+  - severity: P1
+    evidence: path:line or failing command
+    affected_definition_of_done: Exact acceptance condition.
+    required_fix: Bounded correction.
+allowed_paths:
+  - exact/correction/path
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+deliverables:
+  - Exact corrected artifact or behaviour.
+definition_of_done:
+  - Recorded defect is corrected without expanding scope.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_named_scope.py
+stop_conditions:
+  - The correction requires any path not listed in allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

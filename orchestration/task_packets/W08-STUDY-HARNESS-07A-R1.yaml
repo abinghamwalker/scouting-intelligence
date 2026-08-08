@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W08-STUDY-HARNESS-07A
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Make the local moderated-study launcher and evidence-receipt workflow reproducible,
+  including a genuine expired-session scenario without creating participant results.
+depends_on:
+  - W08-BROWSER-A11Y-04B:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: medium
+invariant: >-
+  The harness may prepare local synthetic accounts, expire an existing local session
+  and calculate mechanical checksums, but it must never fabricate participation,
+  task outcomes, consent, judgements or gate evidence.
+read_first:
+  - AGENTS.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/verification/W08/moderated-study-capture-template.yaml
+  - reports/verification/W08/moderated-study-summary-template.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/storage/embedded.py
+  - src/scouting/web/w08.py
+  - scripts/run_w08_study.py
+  - scripts/install_local_git_guards.py
+  - tests/security/test_w08_auth_audit.py
+allowed_paths:
+  - scripts/run_w08_study.py
+  - tests/integration/test_w08_study_harness.py
+  - reports/reviews/W08/returns/W08-STUDY-HARNESS-07A-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - apps/**
+  - services/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+  - reports/verification/W08/moderated-study-capture-template.yaml
+  - reports/verification/W08/moderated-study-summary-template.yaml
+deliverables:
+  - Explicit serve command that refuses non-empty/reused study roots, binds only 127.0.0.1, accepts a bounded unprivileged port and prints ephemeral credentials with no access log.
+  - Explicit expire-session command for a named synthetic actor in one existing study root; it updates only that actor's current unrevoked local session expiry and returns a non-sensitive count, never a token/password.
+  - Explicit receipt command, required after the server stops, that emits canonical SHA-256 evidence for the SQLite database and a deterministic manifest of local evidence-pack files without opening protected outputs or recording credentials/participant outcomes.
+  - Fail-closed path/root validation, generic absent/ambiguous actor/session errors and no external/network destination.
+  - Focused tests for fresh-root refusal, exact loopback Uvicorn configuration, session expiry/denial, wrong-actor/root denial and stable receipt checksums; no test starts a public listener.
+definition_of_done:
+  - A moderator can execute T6's expired-session witness and fill the two mechanical receipt fields in the capture template using retained commands.
+  - The harness creates no participant capture/summary record and cannot change any gate state.
+focused_checks:
+  - Fresh/reused root and bounded port validation.
+  - Exact one-actor active-session expiry followed by authentication denial.
+  - Stable database/export-manifest receipts with no credential material.
+acceptance_checks:
+  - uv run ruff format --check scripts/run_w08_study.py tests/integration/test_w08_study_harness.py
+  - uv run ruff check scripts/run_w08_study.py tests/integration/test_w08_study_harness.py
+  - uv run mypy scripts/run_w08_study.py
+  - uv run pytest -q tests/integration/test_w08_study_harness.py tests/security/test_w08_auth_audit.py
+  - uv run bandit -q scripts/run_w08_study.py
+stop_conditions:
+  - A shared service, schema, dependency or external/public endpoint is required.
+  - Node/npm, container, protected-output access, destructive broad action, Git operation or participant/result fabrication would be required.
+  - Session expiry cannot be scoped to one exact existing actor/session or receipts would expose sensitive material.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - exact serve/expire/receipt command contracts
+  - exact commands, exit statuses and test counts
+  - expiry and receipt evidence
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or participant-evidence mutation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

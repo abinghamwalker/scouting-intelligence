@@ -1,0 +1,111 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R15
+state: DISPATCHED
+objective: >-
+  Retain every passing R14 closure while making build identity acyclic, aligning
+  the rebuild dependency rows exactly to EvidenceDependency, and correcting the
+  R13 acceptance lineage.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R14:REWORK
+  - W04-SCHEMA-DESIGN-REVIEW-01-R8:REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R14.yaml
+  - reports/verification/W04/wyscout-schema-design-R14-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R14.yaml
+  - reports/reviews/W04/wyscout-schema-design-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R14.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R13.yaml
+  - reports/verification/W04/wyscout-schema-design-R13-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R15.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R15.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Remove the build-ID/rebuild-invocation digest cycle. Define one exact closed
+    stable pre-build projection with a versioned algorithm. It contains every
+    stable semantic value required by Section 9 but excludes the computed
+    build_id, run_id, actual prefix/receipt/layer paths containing those values,
+    descriptor numbers, nonces, actual transport hashes, and every other
+    operational field. Calculate build_id once from that projection after code
+    manifest readback. Only then construct w04-rebuild-invocation-v1 and insert
+    the computed build_id and operational run-bound values.
+  - >-
+    Define exact recomputation semantics: the rebuild child reconstructs the
+    same stable pre-build projection from accepted immutable inputs and the
+    runtime invocation, excludes only the explicitly post-hash computed or
+    operational fields, recalculates one SHA-256, and requires equality with
+    every enclosing/result/path build_id. The schema contract and projection
+    algorithm may enter stable authority; the completed invocation instance
+    containing build_id must not be an input to its own digest. Forbid
+    placeholders, recursion, fixed-point search, or a second build algorithm.
+  - >-
+    Replace every rebuild dependency-row alias with the exact accepted
+    EvidenceDependency object: keys kind, dependency_id, digest, observed_at,
+    and available_at, with the accepted types and no other key. Preserve exactly
+    five rows, their Section 5 kinds/cardinality, UUID/digest/clock values,
+    canonical enum-rank/dependency-id/digest/clock sort, strict-before cutoff
+    checks, watermark, and lineage hash. dependency_kind, manifest_id, and
+    manifest_sha256 are forbidden aliases.
+  - >-
+    Correct artifact lineage everywhere. R13 received a master REWORK decision;
+    R14 closed its returned defects but did not retroactively accept R13. Say
+    that R15 retains the passing/master-reproduced R13 and R14 closures and the
+    returned independent R8 findings without calling R13 or R14 accepted.
+  - >-
+    Retain R14's exact acyclic outer and child environment algorithms, reproduced
+    uv input-to-Python transformation, 16/8/10 input envelopes and 25-key rebuild
+    invocation, unique manifest/readback/build-ID/rebuild-prefix chronology,
+    R13 source-prefix/descriptors/race/result-v2 closures, exact three child/
+    outer argv, 58/19 census and all four optional orphan predicates, 35
+    executables, three aliases, three denied .pth classes, 17 resources, and
+    every prior source, rights, temporal, identity, product, path, gate,
+    ownership, two-root, and ledger contract. Future scripts remain absent.
+  - >-
+    Change exactly the two absolute project-root R15 report paths, create no
+    parent-workspace path, and return a complete truthful handback. Do not
+    perform Git-mutating operations; read-only checks inside the mandated
+    verifier must be described accurately.
+definition_of_done:
+  - Build identity has one explicit acyclic pre-build projection and post-hash invocation insertion.
+  - Rebuild dependency rows exactly match EvidenceDependency and Section 5 lineage.
+  - Lineage truthfully records R13 and R14 as master-returned revisions.
+  - Every passing R14 and earlier closure remains intact and no implementation file is created.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R15.md');
+    assert p.is_file() and p.stat().st_size > 26000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - Making build identity acyclic requires omitting a stable semantic input or changing the approved product/dependency contract.
+  - Exact EvidenceDependency alignment requires changing the accepted shared contract.
+  - Any passing R14 closure would regress or work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

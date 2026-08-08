@@ -1,0 +1,60 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-ACCEPT-01-R2
+task_id: W04-POSSESSION-SEMANTIC-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SUPPORTED-FEATURE-DECISION-01-R1
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-ACCEPT-01-R2.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/verification/W04/wyscout-possession-semantic-acceptance-R2-master-verification.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-ACCEPT-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.yaml
+  - reports/verification/W04/wyscout-possession-semantic-acceptance-R1-master-verification.md
+checks:
+  - command: independent canonical acceptance reconstruction
+    result: PASS_1000_BYTES_15_KEYS_ALL_DIGEST_EDGES
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest
+      -q tests/contracts/test_w04_possession_semantic_authority.py
+    result: PASS_112_ACTUAL_ACCEPTED_STATE
+  - command: >-
+      uv run --locked --no-sync ruff format --check
+      tests/contracts/test_w04_possession_semantic_authority.py
+    result: PASS
+  - command: >-
+      uv run --locked --no-sync ruff check
+      tests/contracts/test_w04_possession_semantic_authority.py
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: complete R2 shell pyc inventory before and after master suite
+    result: PASS_IDENTICAL_1086_SITE_59_REPOSITORY
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master formally accepts the Wyscout possession-semantic authority. The
+    R2 acceptance is canonical, binds the unchanged independently reviewed
+    candidate, preserves actor separation, and truthfully orders all clocks.
+  - >-
+    R1 failed closed solely on acceptance key order and was explicitly recorded
+    as REWORK. R2 resampled the acceptance clock and corrected the byte order
+    without changing any frozen authority edge.
+  - >-
+    This acceptance lifts only the possession-authority prerequisite. It does
+    not by itself authorize possession construction, a dependency row, Bronze,
+    or product/runtime work; remaining R20 authorities still gate those steps.

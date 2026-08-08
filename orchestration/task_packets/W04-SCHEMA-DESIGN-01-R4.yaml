@@ -1,0 +1,92 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Produce a standalone R4 W04 schema/rebuild design that retains the five accepted
+  R3 closures and corrects the four P1 and two P2 defects independently returned
+  against R3, without changing architecture, rights, dependencies, migrations, or
+  the local-only boundary.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R2:REWORK
+  - W04-SOURCE-PROFILE-01-R2:ACCEPTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-R3.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R2.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - docs/architecture/evaluation-contract.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/sources/wyscout.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R4.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Replace arbitrary code_checkpoint text with a content-addressed, post-integration,
+    master-admitted code manifest: exact canonical schema, covered paths/import closure,
+    lock digest, dirty/untracked/executable handling, non-circular digest, serial freeze
+    point, and rebuild-time byte verification before build_id.
+  - >-
+    Define a complete clock-free W04 semantic temporal-proof contract and exact
+    validators, then define a truthful boundary adapter that supplies generated_at_ts
+    only when creating the existing TemporalEvidence/RetrievalResult outside semantic
+    product bytes.
+  - >-
+    Map source, identity, field-registry, taxonomy, match, and action lineage to exact
+    existing DependencyKind values or row-level lineage; define deterministic UUIDs,
+    truthful observed/available clocks, canonical ordering, and hashing without
+    silently changing the accepted base contract.
+  - >-
+    Name exact local semantic inputs and an accountable master-plus-independent-review
+    acceptance route for reviewed field and project-defined possession decisions.
+    Bind source/decision digests and availability. Unknowns remain UNMAPPED; no runtime
+    label guessing or provider-native possession claim is allowed.
+  - >-
+    Use exactly 18 strict SourceFileDigest rows everywhere: completion plus seven
+    objects plus ten admitted members.
+  - >-
+    Populate strict CoverageDimension/DataCoverage field names, types, ordering,
+    counts, float values, and tuple serialization exactly, distinct from richer Gold
+    coverage.
+  - >-
+    Replace the packet table with an ownership-complete serial graph: separate
+    independent authority reviews, exact shared integration/export paths, sole
+    Bronze/Silver/Gold manifest writers, post-integration code admission, one empty-root
+    rebuild entry point, and independent final review. Keep only genuinely path-disjoint
+    work parallel.
+definition_of_done:
+  - All six R3 review defects are explicitly and implementably closed.
+  - The five findings accepted at R3 remain closed.
+  - The standalone design needs no guessed source semantics or implementation-time path owner.
+  - No architecture, rights, dependency, migration, provider, or local-only change is proposed.
+acceptance_checks:
+  - uv run python -c "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-R4.md'); assert p.is_file() and p.stat().st_size > 12000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A truthful semantic authority, temporal adapter, or code-admission design cannot be completed locally.
+  - A source-rights, architecture, dependency, migration, provider, or local-only change is required.
+  - Required correction needs network/provider/data mutation or edits outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

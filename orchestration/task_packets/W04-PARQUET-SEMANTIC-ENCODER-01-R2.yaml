@@ -1,0 +1,100 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-01
+phase_id: W04
+revision: R2
+state: SUPERSEDED_BY_R3
+objective: >-
+  Correct only the R1 false semantic binding by proving exact typed correspondence
+  between every explicit Arrow row and its canonical checked contract row, including
+  primary keys, while preserving valid vectors, R20 physical controls and generic APIs.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1:REWORK
+assigned_role: w04_exact_parquet_encoder_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R2.yaml
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R1-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/data_products/**
+  - src/scouting/storage/guarded.py
+fixed_bindings:
+  r1_formats_sha256: 2737a4b67eef492b4a5809d302c726470670c0ef2c14a2a7f5fae7d11453c49a
+  r1_test_sha256: 271925b89532080dc302abd4d75ee6a78e1382ae67f619bcc26a58c8ac796d05
+  r1_review_sha256: 0e787e84d88a3d9a8b1616b026943b11eb560ed9f4839e12b0e404a1db96baa3
+  r1_review_return_sha256: 478c351452f9c9af446680958042db4342ed418522a8432567a53691823b62a0
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+requirements:
+  - Verify all fixed hashes before editing and stop on drift.
+  - >-
+    Derive a canonical contract-JSON object from each Arrow row under its explicit
+    field type and require its canonical bytes to equal the supplied contract row
+    bytes exactly before hashing or encoding. Key-only comparison is insufficient.
+  - >-
+    The closed projection supports only null plus exact Arrow Boolean, signed/unsigned
+    integer, finite float, UTF-8 string, decimal, timestamp[us, tz=UTC], list/large-
+    list/fixed-size-list and struct values recursively. Decimal projects to its exact
+    fixed-point string. UTC timestamp projects to RFC3339 with `Z`, preserving present
+    microseconds and omitting a zero fractional part. Reject naive/non-UTC timestamps,
+    binary, date/time/duration, dictionary, map, union, extension and all other types.
+  - >-
+    Require contract-row object keys to equal Arrow schema field names exactly. Require
+    every primary-key field to exist in the Arrow schema. Derive each key from the
+    projected Arrow row and compare it with the caller key using exact type identity
+    plus value equality; Boolean/integer and string/integer confusion must fail.
+  - >-
+    Add adversarial regressions for unchanged-key/non-key divergence, Arrow-key
+    divergence, string-vs-integer keys, Boolean-vs-integer keys, absent Arrow key,
+    missing/extra contract field, non-UTC/naive timestamps, decimal/list/struct
+    correspondence and an unsupported Arrow type.
+  - Preserve both valid fixed vectors, all R20 physical settings, semantic framing and generic serializer bytes/behavior.
+definition_of_done:
+  - R1 P1 is closed with exact full-row correspondence and no new P0-P2 finding.
+  - Existing plus new focused tests and legacy guarded-storage suite pass.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Exact row correspondence cannot be implemented additively without a new dependency, product contract change or valid-vector change.
+  - Any product/control write, Git, provider/network, cloud/container/CI/endpoint/remote/deployment action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

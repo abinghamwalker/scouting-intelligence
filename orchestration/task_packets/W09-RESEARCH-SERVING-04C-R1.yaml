@@ -1,0 +1,77 @@
+task_id: W09-RESEARCH-SERVING-04C
+revision: R1
+objective: >-
+  Implement the strict in-process W09 research service over one fully verified
+  feature matrix and exhaustive versioned index, producing deterministic rankings,
+  explanations and comparisons without any stale or synthetic fallback.
+depends_on:
+  - W09-RESEARCH-CONTRACTS-02A
+  - W09-SHARED-SCORER-03A
+  - W09-FULL-FEATURE-MATRIX-02C
+  - W09-RETRIEVAL-INDEX-03B
+read_first:
+  - scouting-ml-agent-implementation-workflow.html
+  - scouting-ml-production-blueprint.html
+  - scouting-intelligence/AGENTS.md
+  - scouting-intelligence/docs/architecture/research-workbench-pivot.md
+  - scouting-intelligence/docs/architecture/product-claim.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+  - scouting-intelligence/src/scouting/contracts/research.py
+  - scouting-intelligence/src/scouting/contracts/numerics.py
+  - scouting-intelligence/src/scouting/m0/scoring.py
+  - scouting-intelligence/src/scouting/modeling/research.py
+  - scouting-intelligence/orchestration/task_packets/W09-RETRIEVAL-INDEX-03B-R1.yaml
+allowed_paths:
+  - scouting-intelligence/src/scouting/serving/research.py
+  - scouting-intelligence/tests/unit/test_w09_research_serving.py
+  - scouting-intelligence/tests/integration/test_w09_research_serving_integration.py
+  - scouting-intelligence/reports/reviews/W09/returns/W09-RESEARCH-SERVING-04C-R1.md
+deliverables:
+  - >-
+    One immutable ResearchServingService constructed only from an exact
+    LoadedFeatureMatrix, LoadedResearchIndex and explicit ResearchVersionPins.
+    Revalidate their manifests, candidate identities/order, feature order, row
+    values, counts, scaler/index arrays and every submitted pin before serving.
+  - >-
+    Execute exemplar and weighted-profile ResearchQueryRequest modes. Active
+    feature names must be an ordered subset of the declared index registry;
+    profile values are raw-domain values robust-scaled with the loaded scaler;
+    exemplar values come only from the exact pinned matrix grain.
+  - >-
+    Apply the mandatory competition filter, then mutually exclusive position,
+    minimum-minutes, explicit-player and exemplar-self exclusions with exact
+    RetrievalPopulationCounts. Score the entire remaining population before limit
+    through scouting.m0.scoring.score_vector_rows and the submitted method/weights.
+  - >-
+    Emit deterministic ResearchQueryResult identity/digest/order and complete
+    FeatureContribution operands for Euclidean and cosine. Contributions must
+    reconcile under accepted strict contracts; include visible limitations,
+    missingness (no imputation), lower-bound minute warnings and absent-G-RW4 claim
+    limits.
+  - >-
+    Produce strict ResearchComparison for 2-5 selected result grains using the
+    exact full FeatureMatrixRow evidence in submitted grain order. Reject any stale
+    result/query/pin/digest/non-candidate request; never reload or substitute current
+    state.
+  - >-
+    Tests for full-score-before-limit tie ordering, both methods/modes, filter
+    accounting, active subsets, cosine zero/subnormal behaviour, stale/tampered
+    pins, missing/unknown features, duplicate/mismatched rows, deterministic replay
+    semantics and no imports/calls into W03/W05/W07/W08 or provider sources.
+checks:
+  - uv run ruff format --check src/scouting/serving/research.py tests/unit/test_w09_research_serving.py tests/integration/test_w09_research_serving_integration.py
+  - uv run ruff check src/scouting/serving/research.py tests/unit/test_w09_research_serving.py tests/integration/test_w09_research_serving_integration.py
+  - uv run mypy src/scouting/serving/research.py
+  - uv run pytest -q tests/unit/test_w09_research_serving.py tests/integration/test_w09_research_serving_integration.py tests/unit/test_w09_scoring_kernel.py
+  - uv run bandit -q -r src/scouting/serving/research.py
+stop_conditions:
+  - The current retrieval-index return changes its public loaded-artifact contract incompatibly; coordinate with the master rather than editing modeling.
+  - Accepted contracts cannot represent a scorer-valid result or exact comparison.
+  - Serving would need raw provider files, synthetic product rows, an external service, an imputation rule or a dependency change.
+prohibitions:
+  - No Git operations.
+  - No dependency, lockfile, shared-contract, scorer, modeling, storage, web, canonical, feature, report-rendering or orchestration-control edits.
+  - No provider-source or W03/W05/W07/W08 runtime/fixture imports in production code.
+  - No API/web route implementation and no production artifact generation.
+approval: master_only

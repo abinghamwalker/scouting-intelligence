@@ -1,0 +1,150 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-V2-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent review of the complete R21 field-v2 decision,
+  candidate, and focused suite, and materialize the canonical review authority
+  only when no P0-P2 finding remains.
+depends_on:
+  - W04-FIELD-SEMANTIC-V2-DECISION-01-R2:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_field_semantic_v2_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/verification/W04/wyscout-schema-design-R21-master-verification.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - reports/reviews/W04/wyscout-r21-control-preimage-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-DECISION-01-R2.md
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-DECISION-01-R2.yaml
+  - reports/verification/W04/wyscout-field-semantic-v2-decision-R2-master-verification.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/**
+  - "!reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md"
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.md"
+authority:
+  review_id: w04-wyscout-field-semantic-independent-review-v2-R1
+  review_schema_version: w04-authority-independent-review-v1
+  reviewer_actor_id: 03a65770-02f6-5eb0-9bd2-e2ebb44b62bd
+  candidate_id: w04-wyscout-field-registry-v2
+  candidate_physical_sha256: 15023556072f90b1e956277f255dc4a1df0bea78a5dcbb14b4863346ff9b5193
+  candidate_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  decision_id: w04-wyscout-field-semantic-decisions-v2
+  decision_physical_sha256: cd4d51c0d7c365b73b0c23997716eb7755797889dca1fc545772263dc9924736
+  decision_canonical_sha256: cd4d51c0d7c365b73b0c23997716eb7755797889dca1fc545772263dc9924736
+preflight_postflight:
+  - >-
+    Before reading the candidate or invoking Python, retain a shell-only
+    inventory of every repository/site pyc and __pycache__ directory with
+    path, size, mode, link, mtime, first bytes, and full SHA.
+  - >-
+    Set PYTHONDONTWRITEBYTECODE=1 before every Python/test command; use
+    `uv run --locked --no-sync`, with helper Python `-B` or `-S -B`. Do not
+    sync, install, clean, repair, or purge.
+  - >-
+    Repeat the identical inventory after the final report/return edit and
+    checks. Any difference invalidates review and must be reported unchanged.
+review_requirements:
+  - >-
+    Read every input in full, including the one-line decision, all 1,365
+    candidate lines, all 2,149 focused-test lines, complete producer/master
+    evidence, immutable v1 route, R20/R21, source profile, and both taxonomies.
+  - >-
+    Independently reconstruct strict canonical decision/YAML parsing, physical
+    and canonical hashes, ten bound inputs, seventeen-key prior authority,
+    exact 119-row source-profile order, per-kind counts, and the 118/1
+    v1-to-v2 semantic difference. Do not adopt producer constants as proof.
+  - >-
+    Independently reconstruct the 36 frozen integer taxonomy pairs and
+    challenge accepted/unknown pairs, missing canonical event, bool-as-int,
+    every string case, null, decimal/exponent number, array, object, raw typed
+    preservation, all seven reason codes, and the 7,821 string evidence count.
+  - >-
+    Audit future review/acceptance progression, independent actor, clock order,
+    exact digest edges, PASS/findings consistency, v1 supersession, physical
+    versus canonical separation, and continued product block. Challenge the
+    test with additional positive and negative in-memory mutations.
+  - >-
+    Verify every v1 byte is unchanged, both accidental parent-workspace chains
+    remain absent, every future acceptance/possession/feature/cross-authority/
+    product path is absent, all 25 local-only checks pass, and no broader work
+    occurred.
+  - >-
+    Write a thorough review narrative. It must contain exactly one
+    `w04-authority-review-v1` fenced block whose body is one strict canonical
+    JSON record plus LF. Use the fixed review ID/schema/candidate/decision
+    digests, fixed independent reviewer actor, and a truthful canonical UTC
+    `reviewed_at` not before the decision.
+  - >-
+    PASS requires findings `[]` and zero P0/P1/P2 defects. REWORK requires at
+    least one exact P0-P2 finding. State recommendation, commands, independent
+    evidence, inventory equality, residual risks, and no self-acceptance.
+definition_of_done:
+  - Complete independent merits and test-quality review is retained.
+  - The canonical review record is progression-valid and independently authored.
+  - PASS has zero P0-P2 findings; otherwise REWORK is explicit.
+  - Preflight and terminal inventories are byte-identical.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    p=Path('reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md');
+    s=p.read_text(); assert p.is_file() and p.stat().st_size > 12000;
+    assert s.count('```w04-authority-review-v1') == 1;
+    assert 'recommendation' in s.lower();
+    assert 'P0' in s and 'P1' in s and 'P2' in s"
+stop_conditions:
+  - Any mandatory input/hash differs or v1 evidence changed.
+  - Any inventory drift, unexpected write, or future/product path exists.
+  - A P0-P2 finding remains or the review record cannot validate.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+  - Review needs a third output path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,57 @@
+task_id: W09-UPLIFT-DELIVERY-DOCS-01
+objective: >-
+  Deliver the Package A W09 dataset card, model card, operator runbook and README quick start,
+  without touching methodology, runtime code, artifacts, evaluation authority or Git state.
+read_first:
+  - AGENTS.md
+  - docs/reviews/uplift-options.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/w10-expert-relevance-validation.md
+  - docs/dataset-cards/w09-historical-player-window-v1.md
+  - configs/features/w09-historical-player-window-v1.json
+  - configs/models/w09-historical-retrieval-v1.json
+  - configs/evaluation/w09-semantic-uplift-evaluation-v1.json
+  - services/api/w09_main.py
+  - README.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - docs/dataset-cards/w09-historical-player-window-v1.md
+  - docs/model-cards/w09-historical-retrieval-v1.md
+  - docs/runbooks/w09-research-workbench.md
+  - README.md
+forbidden_paths:
+  - configs
+  - src
+  - apps
+  - scripts
+  - tests
+  - data
+  - runs
+  - reports
+  - orchestration
+deliverables:
+  - Expand the existing file into a dataset-only card covering source/rights, retained population,
+    eligibility, governed-minute limitations, feature/denominator semantics, coverage/bias,
+    synthetic-data prohibition, lineage/update policy and the corrected event-9 exclusion.
+  - Add a W09 retrieval model card covering intended use, global median/IQR scaling,
+    Euclidean/cosine formulas, exhaustive selected-target scoring, explanations, evaluation limits,
+    goalkeeper limitations, W06 NO_GO, W10 REWORK and all prohibited claims.
+  - Add a concise local operator runbook with setup, launch/stop, walkthrough, exact interpretation,
+    local writes, experiment compatibility and fail-closed troubleshooting.
+  - Add README W09 quick-start links without changing W10 state wording.
+  - Leave an explicit master-owned placeholder for post-cascade live matrix/index/evaluation IDs;
+    do not copy obsolete identities from historical verification reports.
+acceptance_commands:
+  - rg -n "conservative lower bound|median|IQR|not.*percentage|INCOMPATIBLE_PINS|W10.*REWORK" docs/dataset-cards/w09-historical-player-window-v1.md docs/model-cards/w09-historical-retrieval-v1.md docs/runbooks/w09-research-workbench.md README.md
+  - rg -n "event 9|save-attempt|save attempt|selected target competition|127.0.0.1" docs/dataset-cards/w09-historical-player-window-v1.md docs/model-cards/w09-historical-retrieval-v1.md docs/runbooks/w09-research-workbench.md README.md
+stop_conditions:
+  - Stop if authoritative post-cascade pins are required; leave the documented placeholder for master integration.
+  - Stop if the work would require a dependency, network access, runtime change, artifact rebuild,
+    W10 threshold/state change or any file outside allowed_paths.
+  - Any command expected to exceed 60 seconds must use command-scoped caffeinate -dimsu.
+constraints:
+  - No Git operations.
+  - No further delegation.
+  - No network/provider/credential access.
+  - Do not claim improved football relevance or recruitment usefulness.
+  - Return using orchestration/templates/subagent_return.md exactly.

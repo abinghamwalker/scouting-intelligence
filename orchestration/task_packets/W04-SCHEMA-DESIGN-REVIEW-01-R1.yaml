@@ -1,0 +1,65 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Independently review the corrected W04 Wyscout canonical schema/rebuild design for
+  implementability, authority fidelity, temporal leakage, identity determinism,
+  reconciliation, physical-path consistency, and Gold grain before implementation.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R2:IMPLEMENTED
+  - W04-CONTRACT-TEMPORAL-REVIEW-01-R1:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R2.md
+  - configs/sources/w04-provider.yaml
+  - docs/dataset-cards/w04-source.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/sources/wyscout.py
+  - src/scouting/storage/guarded.py
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+deliverables:
+  - Complete design readback against both controlling HTML specifications.
+  - Ranked P0-P3 findings with precise sections and bounded correction advice.
+  - ACCEPT-or-REWORK recommendation to the master and mandatory return.
+definition_of_done:
+  - Five admitted plus two unopened exclusions per archive is preserved.
+  - Generic/Wyscout clock semantics and strict cutoff rules do not conflict.
+  - Event/match clock derivation does not fabricate an exact occurrence instant.
+  - Source-adapter durable paths and proposed downstream paths are compatible.
+  - Bronze/identity/Silver/Gold grains, keys, nullability, and lineage reconcile.
+  - Two-root rebuild can be implemented without wall-clock or filesystem nondeterminism.
+  - No code/config/test/data/provider/network/Git changes or accesses occur.
+acceptance_checks:
+  - uv run python -c "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R1.md'); assert p.is_file() and p.stat().st_size > 4000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 design defect is reproduced.
+  - Review needs source data/provider access or a forbidden edit.
+  - The controlling documents require an architecture change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

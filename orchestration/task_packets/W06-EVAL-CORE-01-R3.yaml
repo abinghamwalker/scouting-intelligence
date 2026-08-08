@@ -1,0 +1,160 @@
+schema_version: 1
+task_id: W06-EVAL-CORE-01
+phase_id: W06
+revision: R3
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-CORE-01-R2.yaml
+objective: >-
+  Perform the second bounded rework by closing the exact surviving R2 protected-decision,
+  canonical aggregate, metric arithmetic, comparison identity and interval/run defects
+  with a small relational contract surface and exhaustive focused regressions.
+depends_on:
+  - REVIEW-W06-EVAL-CORE-01-R2:REWORK
+  - W06-EVAL-CORE-REVIEW-01-R2:ACCEPTED
+assigned_role: evaluation_core_corrective_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-CORE-01-R3.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R2.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R1.md
+  - reports/reviews/W06/evaluation-core-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+defects:
+  - severity: P0
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R2.md#P0--W06-EC-R1-01-remains-open-protected-access-run-protocol-and-gate-identity-are-not-relationally-bound
+    affected_definition_of_done: Protected claim construction is relationally fail-closed.
+    required_fix: >-
+      Replace opaque claim assembly with actual nested validated relations. Access must
+      bind protocol_digest, bundle_digest, exact candidate_manifest_digest, partition,
+      one_use=true and consumed_by_run_id. EvaluationRun must embed the actual protocol
+      and access record, carry the same bundle/candidate identities and partition, and
+      require a canonical non-empty result roster (an explicit unavailable result is
+      allowed for a negative run). GateDecision must embed the actual run and bundle for
+      ACCEPT_CLAIM/NARROW_APPLICABILITY, require identical identities and PROTECTED_TEST,
+      and for ACCEPT_CLAIM require governed-human eligible evidence plus every primary
+      result/interval computed. NO_GO may retain no run for a missing population. Bundle
+      must reject query.feature_cutoff_ts later than protocol.decision_cutoff_ts.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R2.md#P1--W06-EC-R1-02-remains-open-aggregate-row-identity-and-canonical-content-are-incomplete
+    affected_definition_of_done: Evidence aggregate has one canonical semantic identity.
+    required_fix: >-
+      Recompute candidate_universe_digest from canonical candidate_ids. Introduce or
+      embed a strict rubric authority and bind protocol.rubric_digest. Add reviewer
+      authority class. Require canonical order and uniqueness by both ID and semantic
+      key for relevance, unordered pair preference, hard negative and adjudication.
+      Every preference/evidence must bind rostered reviewer/rubric; adjudication must
+      reference an actual same-query/same-candidate/same-rubric disagreement and a
+      rostered governed adjudicator. Bundle digest must be invariant to rejected reorder
+      because only canonical order is admitted.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R2.md#P1--W06-EC-R1-03-remains-open-partial-label-arithmetic-and-ranking-order-are-not-safe
+    affected_definition_of_done: Metric inputs and partial/missing/tie policies are exact.
+    required_fix: >-
+      Reject non-finite/negative-zero RankedItem scores in __post_init__. Use partial gain
+      in Precision/Recall numerator only when partial_counts_for_precision_recall=true;
+      otherwise partial is zero for P/R while retaining declared NDCG gain. Return
+      explicit unavailable on zero eligible denominator. Replace inert missingness enum
+      with one exact executable policy or mechanically distinguish every retained value.
+      Freeze canonical score-desc/candidate-ID tie policy in protocol and enforce it.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R2.md#P1--W06-EC-R1-04-remains-open-low-intersection-comparison-and-relational-pairagreement-identity-are-incomplete
+    affected_definition_of_done: Set/correlation/pair/agreement outputs are valid and traceable.
+    required_fix: >-
+      Compute overlap count/rate, Jaccard, bounded churn and disagreements before any
+      Spearman insufficiency return; only rho becomes unavailable for fewer than two
+      shared candidates. Pair metric must consume canonical unique pair IDs/candidates,
+      predicted member, governed preference/reviewer identity and abstention. Agreement
+      must consume canonical unique query/candidate/reviewer-labelled rows and implement
+      a protocol-declared method (exact percent agreement is acceptable if named), with
+      explicit exclusions/insufficiency and result identity.
+  - severity: P1
+    evidence: reports/reviews/W06/evaluation-core-independent-review-R2.md#P1--W06-EC-R1-05-remains-open-result-interval-run-and-bootstrap-contracts-do-not-enforce-arithmetic-or-protocol-links
+    affected_definition_of_done: Persisted metric/interval/run values prove their formula and protocol.
+    required_fix: >-
+      Make MetricResult.metric a MetricName and use finite numeric sufficient statistics
+      supporting fractional gains. Enforce protocol metric/k membership at run validation,
+      exact value=numerator/denominator and metric range (unit metrics [0,1], correlation
+      [-1,1]). BootstrapInterval must carry point_value, resample_digest and typed method,
+      require protocol seed/count/confidence/method, lower<=point<=upper, and no bounds for
+      unavailable status. Run must link every interval to a present result, enforce
+      canonical unique ordering and reject unsupported resampling_unit/metric capability.
+      Gate must verify required primary roster/intervals from its nested run.
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R3.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - configs/evaluation/**
+  - data/evaluation/**
+  - runs/w06/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/readiness/**
+  - docs/**
+  - scripts/**
+  - orchestration/**
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/features/**
+  - src/scouting/modeling/**
+  - src/scouting/m0/**
+  - src/scouting/serving/**
+  - tests/fixtures/w05/**
+  - runs/w05/**
+  - pyproject.toml
+  - uv.lock
+  - .git/**
+deliverables:
+  - One simplified relational contract implementation closing the exact P0 and four P1 survivors.
+  - Corrected protocol-bound metric/comparison/pair/agreement/bootstrap core.
+  - Focused regression matrix with at least one rejecting/exact-value test per retained R2 counterexample and executable fixture digest/path coverage.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-EVAL-CORE-01-R3.md.
+definition_of_done:
+  - The exact R2 P0 constructor chain cannot construct ACCEPT_CLAIM at any step.
+  - Every R2 P1 counterexample rejects or returns the exact corrected bounded result.
+  - No caller boolean or unrelated digest can assert protected use/consumption/claim eligibility.
+  - Public fixture is implementation-only, content-addressed and executed through the metric path.
+  - Focused tests cover all five material defect families, not only happy paths.
+  - Static/import checks pass without dependency or accepted-baseline changes.
+  - No protected execution/result, external evidence, threshold tuning or W07 work occurs.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run ruff check src/scouting/contracts/evaluation.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run lint-imports
+stop_conditions:
+  - Correction requires a new dependency, protected expected-output access, external/provider access or a credential.
+  - Correction requires inventing expert evidence, a protected population/result, threshold or positive claim.
+  - Correction requires an edit outside allowed_paths or accepted W03/W04/W05 bytes.
+  - Unexpected user-owned work overlaps an allowed path.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - exact correction mapped to all five R2 open rows
+  - exact commands, exit statuses and concise results
+  - exact fixture, protocol, bundle, result, interval, run and gate digest identities from public tests only
+  - residual leakage, schema, interval, applicability and claim risks
+  - concrete follow-ups or none
+  - confirmation of no Git operations, dependency changes, protected expected-output access or edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

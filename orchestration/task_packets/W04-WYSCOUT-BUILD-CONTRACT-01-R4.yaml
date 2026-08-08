@@ -1,0 +1,117 @@
+schema_version: 1
+task_id: W04-WYSCOUT-BUILD-CONTRACT-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Apply only the bounded fail-closed receipt-composition correction required by
+  the R3 conformance review: retain the build/window/receipt/result contracts and
+  content validations, but make complete receipt-closure acceptance unavailable
+  until the already-planned accepted canonical schema authority exists.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1:REWORK
+  - W04-WYSCOUT-SCHEMA-COMPOSITION-BOUNDARY-AUDIT-01-R1:COMPOSITION_WITHIN_APPROVED_CHAIN
+assigned_role: w04_wyscout_build_contract_bounded_r4_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R4.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R3.yaml
+  - reports/reviews/W04/wyscout-build-contract-conformance-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1.md
+  - reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-COMPOSITION-BOUNDARY-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/wyscout-build-contract-conformance-review-R1.md
+  - reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_wyscout_data_contracts.py
+fixed_bindings:
+  r3_packet_sha256: cefa3360dd9466c797abbaf2187e9c8c23edc5fe5a5b03d2b61e7593f6934048
+  r3_contract_sha256: ea0a5f4cd474a081d97b529e3ecf87f0e3852dccef0041f712544420c85d55fd
+  r3_test_sha256: c153c7a41120a88128301b18f6ee50f1721d0c65431eed1cc8136b5761d9d040
+  r3_return_sha256: dd50227ed1c9ab6fa8f21603a015a1d12a7a15f73da0fccadb6467a9ea38fb54
+  conformance_review_sha256: 82cc1b09111b9236d51578a25ab525f81c2dd79cdd9014ff042b222b06d26592
+  conformance_return_sha256: e25d5802c55b33f64f720ff461f31a93c861b869dc9385eb62d888b7463ba4ef
+  boundary_audit_sha256: e1d3597b5331705d030a25be7ffc7fd390a5c0fe4b7c84000a25ec744b30517b
+  boundary_return_sha256: df20a183a608b0b9ac84d5791298f473de4e7d15405fb98401a9a7ffd5662623
+implementation_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - >-
+    Preserve every R3 build/window/projection/invocation/receipt/result model,
+    exact key roster, hash/inverse rule, manifest validation, Gold typed-content
+    validation, one-match/four-feature/season/lineup binding, parent closure,
+    boundary equality and cross-clock check unless the final fail-closed seam
+    mechanically requires a test expectation change.
+  - >-
+    Introduce one dedicated non-serialized exception state for unavailable accepted
+    Gold schema authority. `validate_receipt_closure` must never return successful
+    completion in R4. After its retained validations, it must raise that exact
+    exception because the 23-root accepted schema authority is not yet available.
+    No caller value may suppress, replace or satisfy this state.
+  - >-
+    Do not hard-code, infer, copy, hash or otherwise define a Gold Arrow schema in
+    this module. Do not add a schema callback, Boolean, descriptor, digest or
+    authority argument. Do not add a new root, projection field or dependency.
+  - >-
+    Retain executable rejection of the two R1 defects. Invalid locally-shaped
+    manifests must still be rejected by accepted LayerManifest validation, and no
+    claim-only product/semantic/proof digest parameters may reappear.
+  - >-
+    Add explicit tests proving the baseline exact-content path and each supported
+    coherent schema variation (top-level nullability, top-level field order and
+    nested integer width) all terminate in the dedicated unavailable-authority
+    state, never return success, and cannot be changed by consistently re-derived
+    product/manifest/boundary/receipt values.
+  - >-
+    Preserve all prior failed-review evidence and every authority byte. Write no
+    product, manifest, receipt, aggregate, data or run artifact.
+definition_of_done:
+  - R4 producer return reports exact changed hashes and passing focused checks.
+  - No successful receipt-closure path exists before the later schema authority.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Bounded R4 module/test correction.
+  - Producer return using the repository template.
+stop_conditions:
+  - Fixed hash drift.
+  - Need to define or consume exact schema authority before its planned gate.
+  - Need to edit outside allowed paths.
+  - Need for architecture/root/projection/population/feature/dependency/product,
+    Git, provider/network or external-infrastructure change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

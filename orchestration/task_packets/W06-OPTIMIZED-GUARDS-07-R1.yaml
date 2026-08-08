@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W06-OPTIMIZED-GUARDS-07
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Replace every Bandit-reported W06 runtime assert with an explicit fail-closed guard
+  that survives optimized Python, and annotate only the three deterministic,
+  non-security PRNG uses, without changing formulas, seeds, digests, protocol or gate.
+depends_on:
+  - W06-CARDS-REVIEW-06:ACCEPTED
+  - W06-TERMINAL-SECURITY-SCAN:B101_FAILURE
+assigned_role: implementation_engineer
+risk: high
+read_first:
+  - AGENTS.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - reports/reviews/W06/evaluation-robustness-independent-review-R6.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-07-R1.md
+forbidden_paths:
+  - configs/**
+  - tests/fixtures/**
+  - reports/evaluation/**
+  - reports/verification/**
+  - reports/phase-gates/**
+  - reports/readiness/**
+  - orchestration/**
+  - data/**
+  - runs/**
+  - docs/**
+  - scripts/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+required_changes:
+  - Replace the seven reported runtime asserts with explicit ValueError or TypeError guards carrying stable, specific messages; no assert may remain in the three production files.
+  - Preserve the preceding logical predicates and all calculation/serialization behavior; guards may only make optimized mode equal normal mode.
+  - Add scoped `# nosec B311` annotations only to the two deterministic shuffled-null Random constructions and the deterministic bootstrap Random construction, because these are statistical reproducibility PRNGs and never security/credential randomness.
+  - Add only the smallest focused optimized-mode regression needed to prove invalid inputs still reject; do not add digest-witness or architecture authority.
+deliverables:
+  - Explicit optimized-mode guards, scoped statistical-PRNG annotations and focused regression.
+  - Mandatory return at reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-07-R1.md.
+definition_of_done:
+  - Bandit reports no issue in the three W06 production files.
+  - Focused W06 contracts/metrics/robustness/gate tests pass under normal mode.
+  - A focused optimized-Python witness proves the corrected invalid-input path rejects.
+  - Frozen config, public fixture and retained protected-output bytes remain unchanged.
+acceptance_checks:
+  - uv run --no-sync ruff format --check src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py tests/contracts/test_w06_evaluation_contracts.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py tests/contracts/test_w06_evaluation_contracts.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py
+  - uv run --no-sync bandit -q -r src/scouting/contracts/evaluation.py src/scouting/contracts/evaluation_calculations.py src/scouting/evaluation/robustness.py
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py tests/unit/test_w06_missing_population_gate.py
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json tests/fixtures/w06/public-missing-population-gate-v1.json reports/evaluation/W06/protected-access-outcome.json reports/evaluation/W06/protected-gate-decision.json reports/evaluation/W06/protected-execution-receipt.json
+stop_conditions:
+  - Correction requires a formula, seed, digest, protocol, fixture, preregistration, protected output, gate or claim change.
+  - Work requires external/provider access, dependency/lock change, Git operation or any write outside allowed_paths.
+mandatory_return_requirements:
+  - exact changed files and every assert-to-guard mapping
+  - exact B311 annotation rationale and locations
+  - optimized-mode witness and focused check results
+  - unchanged config/fixture/protected-output hashes
+  - remaining P0/P1 risk or none
+  - no Git/dependency/protected/external/orchestration/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

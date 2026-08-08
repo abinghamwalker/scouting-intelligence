@@ -1,0 +1,33 @@
+task_id: W09-RESEARCH-CONTRACTS-02A-REVIEW
+revision: R5
+owner: subagent
+objective: >-
+  Independently verify the R4 scale-invariant normalization and controlled strict-result
+  fixes, rerun every former attack, and issue a final shared-boundary recommendation.
+read_first:
+  - AGENTS.md
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R4.md
+  - src/scouting/contracts/numerics.py
+  - src/scouting/contracts/research.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/m0/scoring.py
+  - src/scouting/m0/core.py
+  - tests/contracts/test_w09_research_contracts.py
+  - tests/unit/test_w09_scoring_kernel.py
+allowed_paths:
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+deliverables:
+  - Independent executable disposition of the R4 P1/P2 and all former attacks.
+  - Extreme finite/subnormal/zero/opposed/weighted probes with score/explanation reconciliation.
+  - Fresh P1/P2 search, W05 parity and claim-boundary conclusions, explicit ACCEPT/REWORK.
+checks:
+  - uv run ruff check src/scouting/contracts/numerics.py src/scouting/contracts/research.py src/scouting/contracts/__init__.py tests/contracts/test_w09_research_contracts.py src/scouting/m0/scoring.py src/scouting/m0/core.py tests/unit/test_w09_scoring_kernel.py
+  - uv run mypy src/scouting/contracts/numerics.py src/scouting/contracts/research.py src/scouting/m0/scoring.py src/scouting/m0/core.py
+  - uv run pytest -q tests/contracts/test_w09_research_contracts.py tests/unit/test_w09_scoring_kernel.py tests/unit/test_w05_m0_models.py tests/integration/test_w05_m0_serving.py
+  - test -s reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+stop_conditions:
+  - Any need for implementation, test, orchestration, dependency, or Git changes.
+constraints:
+  - Report-only; no Git, dependencies, implementation, test or orchestration edits.
+  - Reconstruct attacks independently; do not accept from committed tests alone.
+  - Use apply_patch for the one allowed report.

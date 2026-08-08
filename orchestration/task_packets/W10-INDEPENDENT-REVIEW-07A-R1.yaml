@@ -1,0 +1,75 @@
+schema_version: 1
+task_id: W10-INDEPENDENT-REVIEW-07A
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent adversarial review of the complete W10 engineering candidate,
+  recording every P0-P3 finding and verifying the human evidence boundary without self-approval.
+depends_on:
+  - W10-EXPERT-STUDY-CONSOLE-02A:R1
+  - W10-RELEVANCE-EVALUATION-04A:R1
+  - W10-RUNTIME-HOST-STATE-HARDENING-05A:R1
+assigned_role: independent_w10_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-relevance-validation.md
+  - orchestration/task_packets/W10-INDEPENDENT-REVIEW-07A-R1.yaml
+  - reports/verification/W10/preflight.md
+  - reports/verification/W10/expert-relevance-protocol.md
+  - reports/reviews/W10/returns/W10-EXPERT-STUDY-CONSOLE-02A-R1.md
+  - reports/reviews/W10/returns/W10-RELEVANCE-EVALUATION-04A-R1.md
+  - reports/reviews/W10/returns/W10-RUNTIME-HOST-STATE-HARDENING-05A-R1.md
+  - src/scouting/contracts/expert_relevance.py
+  - configs/evaluation/w10-expert-relevance-protocol-v1.json
+  - configs/evaluation/w10-frozen-query-pack-v1.json
+  - configs/evaluation/w10-expert-study-presentation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W10/independent-review.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - docs/**
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - services/**
+  - apps/**
+  - migrations/**
+  - scripts/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W10/returns/**
+requirements:
+  - Review study validity, frozen-query/control design, protocol/query/result authority and mutation identity.
+  - Review eligibility, consent, pseudonymity, participant privacy, pilot/formal separation and no-fabrication boundaries.
+  - Review participant-view leakage across routes, HTML, JSON, assets, errors, accessibility text and app-process dependencies.
+  - Recompute representative metric, interval, agreement, repeat, subgroup and tri-state fixtures independently from implementation expectations.
+  - Review exact denominators, missingness/abstention handling, stale authority rejection, one-use access, concurrency, idempotency, immutable negative results and deterministic replay/reports.
+  - Review W09 authority preservation and prove formal labels cannot reach training, ranking or serving mutation paths.
+  - Review runtime host-state portability and every retained W04 protected source/executable/product/process/PYC zero-read witness.
+  - Review local-only storage, browser usability/accessibility and every prohibited recruitment/current-player/outcome claim.
+  - Inspect the working candidate rather than trusting producer returns; run focused tests and source searches.
+  - Give each finding P0, P1, P2 or P3 with exact path/line evidence and a bounded fix, or state explicitly that no findings exist.
+  - Confirm no real formal study ran and G-RW4 remains awaiting approval/INSUFFICIENT_EVIDENCE if that is the observed truth.
+deliverables:
+  - reports/reviews/W10/independent-review.md
+definition_of_done:
+  - A fresh reviewer provides an evidence-backed ACCEPT, REWORK or BLOCKED recommendation and all P0-P3 findings are explicit.
+acceptance_checks:
+  - test -s reports/reviews/W10/independent-review.md
+  - rg -n "Recommendation|P0|P1|P2|P3|G-RW4|formal" reports/reviews/W10/independent-review.md
+stop_conditions:
+  - Any need to edit implementation/evidence authority, use Git, create formal evidence, change dependencies, access a network/provider, or write outside the one allowed review path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,78 @@
+schema_version: 1
+task_id: W10-FORMAL-EXPERT-STUDY-02B
+phase_id: W10
+revision: R1
+state: SUPERSEDED_BEFORE_DISPATCH
+superseded_by:
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - W10-FORMAL-EXPERT-STUDY-02B-R2
+objective: >-
+  After separate human protocol approval, conduct the local formal G-RW4 study with authentic
+  eligible football-domain experts and retain the preregistered tri-state result without changing
+  frozen authority or learning from protected labels.
+supersession_reason: >-
+  The 2026-08-06 mechanics pilot proved that v1 showed evidence quantity but no substantive
+  playing evidence, so it could not support a valid role/style judgement. The user withdrew v1
+  before any formal session or response. R1 must never be dispatched; an R2 packet may be authored
+  only after every presentation-v2 addendum gate passes and the exact v2 authority is approved.
+depends_on:
+  - W10-EXPERT-RELEVANCE-PROTOCOL-01:ACCEPTED_ENGINEERING
+  - W10-EXPERT-STUDY-CONSOLE-02A:ACCEPTED
+  - HUMAN_PROTOCOL_APPROVAL:REQUIRED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-relevance-validation.md
+  - orchestration/task_packets/W10-FORMAL-EXPERT-STUDY-02B-R1.yaml
+  - reports/verification/W10/expert-relevance-protocol.md
+  - reports/verification/W10/expert-relevance-study.md
+  - reports/verification/W10/relevance-evaluation.md
+  - reports/verification/W10/user-approval-and-participation.md
+  - configs/evaluation/w10-expert-relevance-protocol-v1.json
+  - configs/evaluation/w10-expert-study-presentation-v1.json
+allowed_paths:
+  - data/working/w10/formal/**
+  - data/working/w10/formal-evaluation-authority/**
+  - runs/w10/**
+  - reports/reviews/W10/returns/W10-FORMAL-EXPERT-STUDY-02B-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - src/**
+  - services/**
+  - apps/**
+  - scripts/**
+  - tests/**
+  - docs/**
+  - orchestration/**
+requirements:
+  - Do nothing until the user has reviewed the local decision page and created the exact immutable ProtocolApproval through the production W10 console.
+  - Use only authentic eligible football-domain experts who voluntarily complete the frozen eligibility, conflict and consent flow; never fabricate, simulate, proxy or infer a response.
+  - Keep the formal service loopback-only and keep all participant-level evidence local and protected.
+  - Do not expose candidate origin, rank, score, control identity, repeat linkage, expected result or aggregate outcome to a participant.
+  - Do not change protocol, query pack, presentation, thresholds, schedule, W09 authority or evaluator after approval or after any formal response.
+  - Require at least five complete eligible submissions and retain missingness, abstention, correction history and immutable completion receipts exactly as collected.
+  - Export the canonical protected envelope once and invoke the authority-global one-use evaluator once; retain PASS, FAIL or INSUFFICIENT_EVIDENCE without replay or tuning.
+  - Never use W10 labels for feature construction, ranking, serving, model selection, threshold selection or a recruitment/current-market/outcome claim.
+deliverables:
+  - Protected local formal submissions and receipts under the ignored W10 working roots.
+  - One-use aggregate formal run, result, report and receipt under the ignored W10 run root.
+  - reports/reviews/W10/returns/W10-FORMAL-EXPERT-STUDY-02B-R1.md
+definition_of_done:
+  - The exact approved authority has an authentic retained formal tri-state result, or the return truthfully records why formal evidence remains insufficient.
+acceptance_checks:
+  - The formal return binds exact approval, protocol, query, presentation, protected-input and result digests without disclosing participant rows.
+  - Independent review confirms the retained result, one-use boundary, claim boundary and absence of label feedback into W09.
+stop_conditions:
+  - Human approval is absent, ambiguous or digest-incompatible.
+  - Fewer than five authentic eligible experts are available.
+  - Any participant asks to withdraw before immutable submission.
+  - Any need arises to change frozen authority, expose protected evidence, replay evaluation, access a provider/network, deploy externally, or begin W11.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block body %}
+  <section class="guide-hero">
+    <div>
+      <p class="eyebrow">G-W08A development pilot</p>
+      <h1>Follow one journey from brief to evidence.</h1>
+      <p>Complete these tasks in order. The role bar above changes your synthetic role instantly; “Record result” returns to the matching Study Console card.</p>
+    </div>
+    <aside><strong>Current role</strong><span>{{ principal.roles|join(', ')|title }}</span><small>Change it at any time using the role bar.</small></aside>
+  </section>
+
+  <div class="journey-list">
+    <article class="journey-card journey-now">
+      <span class="journey-number">T1</span>
+      <div><p class="eyebrow">Analyst</p><h2>Create and submit the brief</h2><p>Open the work queue, create one synthetic role brief, open it and submit it for approval.</p><div class="journey-actions"><a class="button-link" href="/w08/queue">Open work queue</a><a href="{{ study_console_url }}#task-T1">Record T1 result</a></div></div>
+    </article>
+    <article class="journey-card">
+      <span class="journey-number">T2</span>
+      <div><p class="eyebrow">Approver → Analyst</p><h2>Approve and create the replay link</h2><p>Switch to Approver, open the submitted brief and approve it. Switch back to Analyst and create its replayable retrieval link.</p><div class="journey-actions"><a class="button-link" href="/w08/queue">Find the brief</a><a href="{{ study_console_url }}#task-T2">Record T2 result</a></div></div>
+    </article>
+    <article class="journey-card">
+      <span class="journey-number">T3</span>
+      <div><p class="eyebrow">Analyst → Scout</p><h2>Create the shortlist and scout review</h2><p>As Analyst, create a shortlist and add one synthetic candidate. Assign it to Scout, then switch role and append the structured observation and amendment.</p><div class="journey-actions"><a class="button-link" href="/w08/queue">Open work queue</a><a href="{{ study_console_url }}#task-T3">Record T3 result</a></div></div>
+    </article>
+    <article class="journey-card">
+      <span class="journey-number">T4</span>
+      <div><p class="eyebrow">Approver</p><h2>Exercise meeting decisions</h2><p>Open the candidate and record hold, rejection and reconsideration using controlled reasons. Confirm each revision remains visible.</p><div class="journey-actions"><a class="button-link" href="/w08/queue">Open candidate queue</a><a href="{{ study_console_url }}#task-T4">Record T4 result</a></div></div>
+    </article>
+    <article class="journey-card">
+      <span class="journey-number">T5</span>
+      <div><p class="eyebrow">Authorised role → Admin</p><h2>Create and inspect the evidence pack</h2><p>Create the local pack from the shortlist, inspect its limitation and checksum, then switch to Admin and confirm the protected export is denied.</p><div class="journey-actions"><a class="button-link" href="/w08/queue">Find the shortlist</a><a href="{{ study_console_url }}#task-T5">Record T5 result</a></div></div>
+    </article>
+    <article class="journey-card">
+      <span class="journey-number">T6</span>
+      <div><p class="eyebrow">Current role + Study Console</p><h2>Recover safely</h2><p>Use the Study Console’s expiry control, then verify sign-in recovery, a stale-write conflict and a failed export leave no partial record.</p><div class="journey-actions"><a class="button-link" href="{{ study_console_url }}#task-T6">Open T6 controls</a><a href="{{ study_console_url }}#task-T6">Record T6 result</a></div></div>
+    </article>
+    <article class="journey-card">
+      <span class="journey-number">T7</span>
+      <div><p class="eyebrow">Any authorised role</p><h2>Keyboard, mobile and interpretation</h2><p>Repeat an action by keyboard, inspect the narrow layout and explain that this proves workflow mechanics—not model quality or a recommendation.</p><div class="journey-actions"><a class="button-link" href="/w08/queue">Open work queue</a><a href="{{ study_console_url }}#task-T7">Record T7 result</a></div></div>
+    </article>
+  </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+schema_version: 1
+review_id: REVIEW-W04-SOURCE-PROFILE-01-R2
+task_id: W04-SOURCE-PROFILE-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+closed_defects:
+  - W04-PROFILE-COMPLETION-BRIDGE-01
+  - W04-PROFILE-PARTITION-COVERAGE-01
+  - W04-PROFILE-EVENT-IDENTITY-01
+  - W04-PROFILE-TEMPORAL-MINUTES-01
+  - W04-PROFILE-COORDINATE-DOMAIN-01
+  - W04-PROFILE-OUTPUT-PATH-01
+decision: ACCEPT
+next_packet: W04-SOURCE-PROFILE-REVIEW-01-R2
+reviewer: master
+evidence:
+  - scripts/profile_wyscout_v5.py
+  - tests/unit/test_wyscout_profile.py
+  - tests/security/test_w04_wyscout_profile_review.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - reports/reviews/W04/returns/W04-SOURCE-PROFILE-01-R2.md
+  - reports/verification/W04/wyscout-source-profile-R2-master-verification.md
+checks:
+  - command: >-
+      uv run pytest -q tests/unit/test_wyscout_profile.py
+      tests/security/test_w04_wyscout_profile_review.py
+    result: PASS_10_TESTS_BEFORE_REVIEW_EXTENSION
+  - command: uv run python scripts/profile_wyscout_v5.py --check
+    result: PASS_EXACT_REPORT_BYTES
+  - command: uv run ruff format --check scripts/profile_wyscout_v5.py tests/unit/test_wyscout_profile.py
+    result: PASS
+  - command: uv run ruff check scripts/profile_wyscout_v5.py tests/unit/test_wyscout_profile.py
+    result: PASS
+  - command: uv run mypy scripts/profile_wyscout_v5.py
+    result: PASS
+  - command: uv run bandit -q scripts/profile_wyscout_v5.py
+    result: PASS_NO_FINDINGS
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+

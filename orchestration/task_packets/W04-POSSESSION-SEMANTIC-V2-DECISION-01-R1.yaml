@@ -1,0 +1,152 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize only the accepted R21 possession-v2 decision and candidate,
+  progression-safe focused contract tests, and return. Copy all 36 accepted v1
+  predicates byte-semantically and add only the closed CROSS_AUTHORITY selector
+  and explicit eligibility state; do not construct possessions or products.
+depends_on:
+  - W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1:MASTER_ACCEPTED
+assigned_role: possession_semantic_v2_authority_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - reports/verification/W04/wyscout-field-semantic-v2-acceptance-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+frozen_inputs:
+  field_registry_id: w04-wyscout-field-registry-v2
+  field_registry_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  event_taxonomy_source_sha256: ce7bafb341b36ab4c6093bf1c09c967e9cea10d4223724a1fc679086e5d16842
+  tag_taxonomy_source_sha256: e0bc1bd8ff6ea5339586fdfc3e8e9b285a4a18f1ae2f5868ccc9ec9cecc8a922
+  prior_decision_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  prior_candidate_physical_sha256: e456377183d6e7f3742a64dcbbd2972eeb6cc70ef55184d40c2dbb822e15a78d
+  prior_acceptance_sha256: f6b2efcb746907886ab97876bf253115a804786e31cae34b25a1eb3771346112
+authority:
+  master_actor_id: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision_id: w04-wyscout-possession-semantic-decisions-v2
+  decision_schema_version: w04-possession-semantic-decision-v2
+  taxonomy_id: w04-wyscout-possession-taxonomy-v2
+  taxonomy_schema_version: w04-possession-taxonomy-v2
+  review_id: w04-wyscout-possession-semantic-independent-review-v2-R1
+  acceptance_id: w04-wyscout-possession-semantic-acceptance-v2
+  supersedes_acceptance_id: w04-wyscout-possession-semantic-acceptance-v1
+  source_id: wyscout-soccer-match-events-figshare-v5
+requirements:
+  - >-
+    Work only from accepted R21 and the exact accepted field-v2 and possession-v1
+    authorities. Do not use web/external football knowledge, provider-native
+    possession claims, raw/name/label matching, or coerced selector values.
+  - >-
+    The decision bound_inputs object has exactly the five frozen keys above.
+    The exact Section 3.2 possession-v1 acceptance record is carried separately
+    as prior_authority; no v1 field input, design/preimage digest, or other
+    binding may be added.
+  - >-
+    Copy all 36 v1 predicate rows, their exact order, actors, choices,
+    attachments, tag sets, and rationales byte-semantically. Do not widen,
+    guess, relabel, or rewrite any predicate.
+  - >-
+    Implement the closed CROSS_AUTHORITY contract in the authority and tests.
+    It may consume only action_event_taxonomy_id,
+    action_subevent_taxonomy_id, action_team_source_id, and action_tag_ids.
+    Missing/mistyped selectors, booleans, missing exact pairs, missing required
+    tags, present forbidden tags, and missing required canonical team all yield
+    UNMAPPED. Raw fields, rejected evidence, names, labels, and coercion are
+    forbidden.
+  - >-
+    The explicit output state is exactly ELIGIBLE_RESOLVED or
+    INELIGIBLE_UNMAPPED. Strings such as "10" remain unmapped and must never
+    match integer 10. A missing/mistyped action_tag_ids array is UNMAPPED; no
+    empty default is synthesized.
+  - >-
+    Render strict canonical decision JSON with one LF and safe canonical YAML
+    whose parsed five inputs, policies, predicates, prior_authority, and source
+    equal the decision exactly; bind the decision physical bytes.
+  - >-
+    Build a progression-safe v2 contract that validates decision, candidate,
+    exact v1 immutability, selector positive/negative cases, future exact review
+    and acceptance when present, and blocks all later authority/product paths
+    until valid progression. It must remain green after later review and
+    acceptance artifacts appear.
+  - >-
+    Before Python, take a fresh shell-only complete pyc/__pycache__ inventory.
+    Use only root uv with --locked --no-sync, set PYTHONDONTWRITEBYTECODE=1,
+    invoke helper Python with -B, and reproduce the inventory byte-for-byte
+    after the return. Do not sync, install, clean, or repair.
+  - >-
+    Use apply_patch with only the four exact absolute allowed paths. Change no
+    fifth path. Do not run Git, delegate, self-approve, edit dependencies,
+    access provider/network data, or begin review, acceptance, feature,
+    cross-authority, Bronze, Silver, Gold, build, model, product, cloud,
+    container, endpoint, hosted CI, or deployment work.
+definition_of_done:
+  - Exact v1 prior authority and all 36 predicate rows are preserved.
+  - Decision/candidate are canonical, equal, closed, and digest-linked.
+  - Strict canonical-only selector and explicit eligibility state pass the full
+    progression-safe positive and negative contract.
+  - Exactly four owned paths changed and terminal inventory equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen input, prior-authority byte, predicate, check, or inventory differs.
+  - A semantic choice requires external knowledge, a widened predicate,
+    label/name/raw matching, coercion, or an unsupported provider claim.
+  - Any output resolves outside the exact project root or a fifth path is needed.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

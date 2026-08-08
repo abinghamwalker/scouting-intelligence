@@ -1,0 +1,61 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-CORE-01-R3
+task_id: W06-EVAL-CORE-01
+phase_id: W06
+revision: R3
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+convergence_audit: >-
+  This is the second material rework attempt. The surviving defects are split into two
+  serial corrections: protected gate/population lineage first, then metric value and
+  result identity. No further broad evaluation-core rewrite is authorized.
+defects:
+  - severity: P0
+    evidence: >-
+      ACCEPT_CLAIM validates with mixed FIT/PROTECTED_TEST memberships and no evaluated
+      query roster, and with bundle.protocol substituted from gate/run.protocol;
+      NARROW_APPLICABILITY validates without relevance and with only UNSUPPORTED output.
+    required_fix: >-
+      Bind protocol, protected evaluated-query population, access, run, results,
+      intervals and governed evidence as one relation and fail positive decisions closed.
+  - severity: P1
+    evidence: >-
+      NO_GO rejects a complete linked negative evaluation while allowing orphan bundle
+      or run shapes.
+    required_fix: >-
+      Permit exactly neither object for an explicit missing population or both objects
+      for a fully validated retained negative evaluation; reject exactly one object.
+  - severity: P1
+    evidence: >-
+      Fully judged zero-positive rankings lose defined Precision@k and missing pair
+      predictions are counted as incorrect observations.
+    required_fix: >-
+      Separate precision and recall availability and make prediction missingness explicit.
+  - severity: P1
+    evidence: >-
+      Pair/comparison/agreement identities collide or are non-canonical, rank comparison
+      has no persisted identity, and duplicate slice/failure rows validate.
+    required_fix: >-
+      Add population-bound canonical typed identities and semantic uniqueness checks.
+  - severity: P1
+    evidence: >-
+      Negative sufficient statistics, out-of-unit bounds and an unachievable primary
+      metric/bootstrap configuration validate.
+    required_fix: >-
+      Enforce arithmetic ranges and protocol capability at construction.
+  - severity: P2
+    evidence: >-
+      Focused regressions omit the surviving counterexamples and the literal Ruff check
+      fails on contracts/__init__.py import order.
+    required_fix: >-
+      Add exact adversarial regressions and sort exports in the second split.
+decision: REWORK
+next_packets:
+  - orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R1.yaml
+  - W06-EVAL-VALUE-IDENTITY-03:UNDISPATCHED_UNTIL_GATE_BINDING_ACCEPTED
+reviewer: master

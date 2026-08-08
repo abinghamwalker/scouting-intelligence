@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-ACCEPT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Formally accept the independently reviewed frozen Wyscout possession-semantic
+  authority by writing only the exact canonical acceptance and its evidence
+  return, then prove the progression-safe contract with acceptance present.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-REVIEW-01-R1:MASTER_ACCEPTED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-DECISION-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-possession-semantic-decision-R1-master-verification.md
+  - reports/verification/W04/wyscout-possession-semantic-independent-review-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - configs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - "!reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json"
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.md"
+frozen_authority:
+  acceptance_id: w04-wyscout-possession-semantic-acceptance-v1
+  decision_id: w04-wyscout-possession-semantic-decisions-v1
+  decision_physical_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  decision_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  candidate_id: w04-wyscout-possession-taxonomy-v1
+  candidate_physical_sha256: e456377183d6e7f3742a64dcbbd2972eeb6cc70ef55184d40c2dbb822e15a78d
+  candidate_sha256: 6a598da111bdf4be71b59d5646d56560c0024ffd7532d95e1553aa6fcaf4fdfa
+  review_id: w04-wyscout-possession-semantic-independent-review-R1
+  review_physical_sha256: 1f70cc4b1a9d988d85daf573219c6316791709f7341f9abd802b7ceb1d28ccd4
+  review_record_sha256: 40aa258984714f33d91c502df1d50eefd4e076a7617c0ac6659c9679937d0962
+  review_recommendation: PASS
+authority:
+  accepted_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  reviewer: 03a65770-02f6-5eb0-9bd2-e2ebb44b62bd
+requirements:
+  - >-
+    Reproduce every frozen decision, candidate, review physical, and review
+    record digest from local bytes before accepting. Confirm the review is the
+    exact valid PASS/zero-findings record, actors are separated, and clocks can
+    be truthfully ordered.
+  - >-
+    Write one strict canonical JSON acceptance with exactly the 15 R20 keys,
+    route-fixed IDs and schema, all frozen digests, review_recommendation PASS,
+    accepted_by equal to the decision actor, a newly sampled truthful accepted_at
+    after reviewed_at, and supersedes_acceptance_id null.
+  - >-
+    After the acceptance exists, rerun the focused contract so actual ACCEPTED
+    progression is exercised. Run both focused Ruff checks and the local-only
+    verifier. Confirm candidate/review bytes remain unchanged.
+  - >-
+    Take a complete shell-only pyc preflight before Python and prove exact
+    terminal equality after the return is written.
+  - >-
+    Change exactly the two owned paths. Do not edit the candidate, review,
+    contract, dependency graph, possession construction, Bronze, product,
+    runtime, Git, dependencies, cloud, containers, endpoints, CI, or deployment.
+definition_of_done:
+  - Exact canonical acceptance binds every frozen authority edge.
+  - Focused contract passes in actual ACCEPTED state.
+  - Candidate and review hashes remain unchanged.
+  - Terminal inventory exactly equals fresh preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen candidate or review digest differs.
+  - Review is not exact PASS with zero findings.
+  - Actor separation or truthful ordered clocks cannot be proven.
+  - Any check, inventory, or allowed-path boundary fails.
+  - Work requires architecture, dependency, rights, storage, root, or
+    local-only change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,63 @@
+schema_version: 1
+task_id: W03-DESIGN-REVIEW-00
+phase_id: W03
+revision: R1
+state: READY
+objective: >-
+  Independently challenge the W03 task decomposition before the database,
+  storage, fixture, and vertical-journey packets are dispatched.
+depends_on:
+  - W03-DEPS-01:ACCEPTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/ownership.yaml
+  - orchestration/task_packets/W03-CONTRACTS-01-R1.yaml
+  - orchestration/task_packets/W03-GOVERNANCE-01-R1.yaml
+  - orchestration/task_packets/W03-STORAGE-01-R1.yaml
+  - orchestration/task_packets/W03-FIXTURES-01-R1.yaml
+  - orchestration/task_packets/W03-DATABASE-01-R1.yaml
+allowed_paths:
+  - reports/reviews/W03/design-packet-review.md
+  - reports/reviews/W03/returns/W03-DESIGN-REVIEW-00-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - services/**
+  - apps/**
+  - tests/**
+deliverables:
+  - >-
+    Requirement-by-requirement mapping of W03.1–W03.6, blueprint P0/P1 controls,
+    and G-W03/G1 acceptance to the current packets.
+  - Path-overlap, concurrency, dependency-order, and master/subagent-authority review.
+  - Concrete omissions, ambiguous acceptance criteria, or unsafe assumptions ranked P0–P2.
+  - ACCEPT or REWORK recommendation without changing any implementation or control file.
+definition_of_done:
+  - The review distinguishes missing implementation from later-phase work.
+  - Every defect cites the controlling requirement and affected packet.
+  - The review does not approve its own work or modify a reviewed artifact.
+  - The mandatory return confirms no Git operation.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    text=Path('reports/reviews/W03/design-packet-review.md').read_text();
+    assert all(term in text for term in
+    ['W03.1', 'W03.2', 'W03.3', 'W03.4', 'W03.5', 'W03.6', 'G-W03'])"
+stop_conditions:
+  - A controlling document is unavailable or internally contradictory.
+  - Any requested work requires a path outside allowed_paths.
+  - A Git command, external service, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,106 @@
+schema_version: 1
+task_id: W03-VERTICAL-01
+phase_id: W03
+revision: R2
+state: READY
+supersedes: orchestration/task_packets/W03-VERTICAL-01-R1.yaml
+objective: Correct only the four vertical-boundary defects recorded by the master.
+depends_on:
+  - REVIEW-W03-VERTICAL-01-R1:REWORK
+assigned_role: vertical_journey_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-VERTICAL-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-VERTICAL-01-R1.yaml
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/threat-model.md
+  - configs/environments/w03-local-review.yaml
+  - src/scouting/serving/synthetic.py
+  - src/scouting/workflow/service.py
+  - src/scouting/web/app.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/security/test_application_authorization.py
+allowed_paths:
+  - src/scouting/serving/synthetic.py
+  - src/scouting/workflow/service.py
+  - src/scouting/web/app.py
+  - services/api/main.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/integration/test_w03_local_telemetry.py
+  - tests/security/test_application_authorization.py
+  - reports/reviews/W03/returns/W03-VERTICAL-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/operations/**
+  - services/worker/**
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - scripts/**
+defects:
+  - code: PROTECTED_GATE_INPUT_REJECTED
+    required_fix: >-
+      Let a master caller explicitly select protected_test domain input through
+      the same implementation while keeping development as the default and
+      never reading an expected-output file.
+  - code: UNGUARDED_DOMAIN_READ
+    required_fix: >-
+      Resolve a named domain beneath an explicit allowed fixture root with
+      traversal/outside/symlink rejection before I/O.
+  - code: DENIED_CONFIDENTIAL_ACTION_NOT_AUDITED
+    required_fix: >-
+      Retain a content-free READ or EXPORT denial attempt as an append-only
+      audit event in the principal tenant without reading the target.
+  - code: FAIL_CLOSED_APPLICATION_PATHS_UNDERTESTED
+    required_fix: >-
+      Exercise unknown session, cross-tenant, observed/available cutoff,
+      model/index unavailable, and worker-no-listener behaviour at their real boundaries.
+deliverables:
+  - Guarded, explicit development/protected_test domain-input selection with no expected-output read.
+  - Append-only, content-free confidential read/export denial-attempt audit path.
+  - Focused application/service/worker regression tests for all recorded omissions.
+  - Complete R2 mandatory return.
+definition_of_done:
+  - Absolute/outside-root/traversal and escaped-symlink domain reads fail before content parsing.
+  - A synthetic protected_test envelope can enter the same serving code only when explicitly selected by the master.
+  - No runtime module contains or opens expected_retrieval.json.
+  - Denied confidential read/export returns no target content and leaves an attributable audit attempt with no evidence payload digest.
+  - Unknown session and cross-tenant API requests deny generically.
+  - Evidence observed or available exactly at the cutoff is excluded end to end.
+  - Missing model or index returns labelled unavailable with no fallback.
+  - Worker readiness proves listener_started=false through the app-role database boundary.
+  - All R1 and new checks pass through uv.
+acceptance_checks:
+  - uv run pytest -q tests/e2e/test_w03_vertical_journey.py tests/integration/test_w03_local_telemetry.py tests/security/test_application_authorization.py
+  - >-
+    uv run ruff format --check src/scouting/serving src/scouting/workflow
+    src/scouting/web services/api tests/e2e/test_w03_vertical_journey.py
+    tests/integration/test_w03_local_telemetry.py
+    tests/security/test_application_authorization.py
+  - >-
+    uv run ruff check src/scouting/serving src/scouting/workflow src/scouting/web
+    services/api tests/e2e/test_w03_vertical_journey.py
+    tests/integration/test_w03_local_telemetry.py
+    tests/security/test_application_authorization.py
+  - uv run mypy src/scouting/serving src/scouting/workflow src/scouting/web services/api
+  - uv run bandit -q -r src/scouting/serving src/scouting/workflow src/scouting/web services/api
+  - >-
+    ! rg -n "expected_retrieval\\.json" src/scouting/serving src/scouting/workflow
+    src/scouting/web services/api
+stop_conditions:
+  - A protected expected output has been accessed or its isolation cannot be maintained.
+  - A contract, policy, audit-writer, telemetry, database, migration, dependency, or path outside allowed_paths must change.
+  - A Git command, Docker command, external service, credential change, public bind, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

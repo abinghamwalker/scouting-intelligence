@@ -1,0 +1,132 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R12
+state: DISPATCHED
+objective: >-
+  Produce a standalone R12 design that retains every R11 passing contract while
+  closing the two independently reproduced P1 defects: omitted exact migration
+  bytecode orphans and the undefined external launcher authority.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R8:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R8.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R8.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R8.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R8-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R11.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R11.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R12.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R12.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Replace the false repository observation with the reproduced whole-repository
+    census: 58 pycs in 19 __pycache__ directories, comprising 35 mapped normal,
+    20 mapped pytest, and three exact source-absent optional inert-orphan rows.
+    Retain the existing PostgreSQL row and add exact predicates for
+    migrations/__pycache__/env.cpython-312.pyc (source migrations/env.py absent,
+    magic cb0d0d0a, tag cpython-312, mode 0o644, size 2795, SHA-256
+    6d93fd4b51bfcfaed59e59358f6694fef65bf04be088e7ff8377340389990ff2)
+    and migrations/versions/__pycache__/0001_foundation.cpython-312.pyc
+    (source migrations/versions/0001_foundation.py absent, magic cb0d0d0a, tag
+    cpython-312, mode 0o644, size 25415, SHA-256
+    b10987536a062b17702b1fdb5dbb94ca0b2293f8c6d91e43a9fd4042dfeea84d).
+    They grant no source, import, repository-code, build, ownership, or semantic
+    authority. Each may be absent in another root; changed-present bytes,
+    source appearance, another path, or another orphan fails. Do not broaden to
+    arbitrary orphans, delete/import a pyc, or treat SQL as Python authority.
+  - >-
+    Update every affected health, stable/operational, negative-test, required-test,
+    count, optional-presence, and two-root statement together. Current operational
+    counts must reconcile exactly to mapped classes plus the three present exact
+    orphans, while stable identity binds the three predicates rather than their
+    presence or operational bytes. Retain whole-repository traversal and zero
+    reads/mutation/cleanup.
+  - >-
+    Name the exact future repository-owned local launcher/control entry point as
+    scripts/launch_wyscout_v5.py. R12 is report-only and must not create it.
+    Define one exact locked/no-sync no-site/no-bytecode invocation, its process
+    role, repository-root working directory, fixed environment, and bootstrap
+    trust tuple covering uv, the physical Python interpreter, exact launcher
+    repo-relative path/bytes/mode/digest, and ordered argv. The launcher is a
+    transient local control process, never a service or product serializer.
+    Explain constructively how its pre-execution measurement is rooted and how
+    launcher identity becomes stable code/environment and build authority without
+    circular dependence.
+  - >-
+    Assign sole ownership for sampling run IDs, creating/proving both contained
+    empty prefixes, setting the child environment, pre/post bytecode snapshots,
+    launching both exact child argv, receiving child results, enforcing the
+    code-manifest-before-build-ID handoff, and final empty/no-read/no-change
+    checks. Explicitly assign the immutable code-manifest writer and build-ID
+    calculator; do not leave either implied. Keep the launcher outside Bronze,
+    Silver, Gold, layer-manifest, boundary-receipt, and rebuild-receipt writers.
+  - >-
+    Specify the exact bounded child-result channel for admission and rebuild:
+    channel kind and descriptor ownership, close rules, magic/version, length
+    framing and maximum, canonical payload schema, child role and nonce/expected
+    code-digest binding, payload digest, EOF/extra-byte behavior, exit-status
+    ordering, timeout/failure behavior, and complete separation of diagnostics.
+    Unknown/duplicate/malformed/truncated/oversized/replayed/wrong-role or
+    wrong-code messages fail and can never become manifest or build authority.
+  - >-
+    Close launcher/child path replacement and mutation races with exact contained
+    non-symlink regular-file identity, mode, size, digest, open/recheck, child
+    self-observation/result binding, and pre/post rules. A replacement or byte,
+    inode, link, mode, path, argv, environment, role, or result mismatch fails.
+    Retain both existing exact child commands unchanged:
+    uv run --locked --no-sync python -S -B scripts/admit_wyscout_v5_runtime.py
+    and
+    uv run --locked --no-sync python -S -B scripts/rebuild_wyscout_v5.py.
+    Do not add site startup, dependency sync, network, generated-wrapper
+    execution, or another product-writing interpreter.
+  - >-
+    Retain every other R11 source, rights, strict temporal, identity/correction,
+    key, source/Gold coverage, path/serializer, Packaging, three .pth,
+    editable-root, 35-executable, three-alias, source-complete pyc, resource,
+    build/two-root, health/card, gate, ownership, and two-local-commit rule
+    without compression or substitution. Final lineage must say R12 closes the
+    returned independent R8 findings without self-approval.
+definition_of_done:
+  - All 58 current repository pycs classify exactly once without cleanup or authority inflation.
+  - The launcher has an exact future path, invocation, trust root, channel, ownership, stable identity, and mutation contract.
+  - Both existing child argv and every other R11 closure remain intact.
+  - No implementation file, architecture, dependency, provider, network, storage-root or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R12.md');
+    assert p.is_file() and p.stat().st_size > 24000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - A correction requires cleanup, dependency/lock change, provider/network access, new storage root, service/container, architecture change, or another product-writing runtime.
+  - Any R11 passing closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

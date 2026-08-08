@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block body %}
+<h1>Candidate workflow history</h1>
+<p role="status">{{ boundary }}</p>
+<p>Entry {{ row.shortlist_entry_id }} — player {{ row.player_id }}. Model output remains advisory only.</p>
+
+{% if guided_study %}
+<section class="next-action">
+  <p class="eyebrow">Your next action</p>
+  {% if 'analyst' in principal.roles and not row.assigned_scout_id %}
+    <h2>T3 · Assign this candidate to the synthetic Scout</h2><p>In the transition form below choose state “scout” and “Synthetic Scout”.</p>
+  {% elif 'analyst' in principal.roles and row.assigned_scout_id %}
+    <h2>T3 · Continue as Scout</h2><p>The candidate is assigned. Switch role once and remain on this page.</p><form method="post" action="/w08/guide/switch-role" class="role-switch-form"><input type="hidden" name="guide_csrf" value="{{ guided_switch_token }}"><input type="hidden" name="role" value="scout"><input type="hidden" name="return_to" value="/w08/entries/{{ row.shortlist_entry_id }}"><button class="role-switch" type="submit">Continue as Scout</button></form>
+  {% elif 'scout' in principal.roles and not observations %}
+    <h2>T3 · Complete the structured observation</h2><p>Use synthetic notes only. Include a disagreement and a next action, then append the observation.</p>
+  {% elif 'scout' in principal.roles and amendable_observations %}
+    <h2>T3 · Append an amendment</h2><p>Your original observation remains visible; use the amendment form near the end of this page.</p>
+  {% elif 'approver' in principal.roles %}
+    <h2>T4 · Record the meeting decisions</h2><p>Use the permitted transition form to exercise hold, rejection and reconsideration with controlled reasons.</p>
+  {% else %}
+    <h2>Return to the journey guide</h2><a class="button-link" href="/w08/guide">Open pilot journey</a>
+  {% endif %}
+</section>
+{% endif %}
+
+<section><h2>Immutable entry revisions</h2>
+<table><caption>Every decision and reversal retained on this candidate</caption>
+<thead><tr><th scope="col">Revision</th><th scope="col">State</th><th scope="col">Transition reason</th><th scope="col">Controlled rejection / hold reason</th><th scope="col">Reason note</th><th scope="col">Assigned scout</th><th scope="col">Next action / owner</th><th scope="col">Actor</th><th scope="col">Timestamp</th></tr></thead>
+<tbody>{% for revision in history %}<tr><th scope="row">{{ revision.revision }}</th><td>{{ revision.state }}</td><td>{{ revision.transition_reason }}</td><td>{{ revision.rejection_reason or revision.hold_reason or '—' }}</td><td>{{ revision.reason_note or '—' }}</td><td>{{ revision.assigned_scout_id or 'unassigned' }}</td><td>{{ revision.next_action or '—' }}{% if revision.next_action_owner_id %}<br>{{ revision.next_action_owner_id }}{% endif %}</td><td>{{ revision.changed_by }}</td><td>{{ revision.created_at }}</td></tr>{% endfor %}</tbody></table>
+</section>
+
+{% if transition_targets %}<section><h2>Permitted attributed transition</h2>
+<form method="post" action="/w08/entries/{{ row.shortlist_entry_id }}/transition"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="expected_lock_version" value="{{ row.lock_version }}">
+<label>State <select name="state">{% for state in transition_targets %}<option value="{{ state }}">{{ state }}</option>{% endfor %}</select></label>
+{% if guided_study %}<label>Scout (for scout state) <select name="assigned_scout_id"><option value="">Leave unchanged</option><option value="{{ guided_role_actor_ids.scout }}" {% if row.assigned_scout_id == guided_role_actor_ids.scout %}selected{% endif %}>Synthetic Scout</option></select></label>{% else %}<label>Scout ID (for scout state) <input name="assigned_scout_id" value="{{ row.assigned_scout_id or '' }}"></label>{% endif %}
+<label>Rejection reason (for rejected state) <select name="rejection_reason"><option value=""></option><option value="outside_brief">outside brief</option><option value="insufficient_evidence">insufficient evidence</option><option value="identity_unresolved">identity unresolved</option><option value="rights_or_eligibility">rights or eligibility</option><option value="scout_not_recommended">scout not recommended</option><option value="duplicate_candidate">duplicate candidate</option><option value="other">other</option></select></label>
+<label>Hold reason (for hold state) <select name="hold_reason"><option value=""></option><option value="awaiting_evidence">awaiting evidence</option><option value="identity_review">identity review</option><option value="rights_review">rights review</option><option value="availability_review">availability review</option><option value="other">other</option></select></label>
+<label>Reason note (required with other) <input name="reason_note"></label><label>Transition reason <input name="transition_reason" {% if guided_study %}value="Guided pilot workflow transition"{% endif %} required></label><label>Next action <input name="next_action" {% if guided_study %}value="Continue the guided pilot journey"{% endif %}></label>{% if guided_study %}<label>Next-action owner <select name="next_action_owner_id"><option value="">None</option>{% for role, label, description in guided_roles %}<option value="{{ guided_role_actor_ids[role] }}">{{ label }}</option>{% endfor %}</select></label>{% else %}<label>Next-action owner ID <input name="next_action_owner_id"></label>{% endif %}<button>{% if guided_study %}Save transition{% else %}Append immutable revision{% endif %}</button></form>
+</section>{% endif %}
+
+<section><h2>Visible comments</h2>
+<form method="post" action="/w08/entries/{{ row.shortlist_entry_id }}/comments"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Visibility <select name="visibility"><option>TEAM</option><option>OWNER_ONLY</option></select></label><label>Comment <input name="body" required></label><button>Append comment</button></form>
+<table><caption>Policy-filtered append-only comments</caption><thead><tr><th scope="col">Author</th><th scope="col">Comment</th><th scope="col">Visibility</th><th scope="col">Origin</th><th scope="col">Timestamp</th></tr></thead><tbody>{% for comment in comments %}<tr><th scope="row">{{ comment.author_id }}</th><td>{{ comment.body }}</td><td>{{ comment.visibility }}</td><td>{{ comment.evidence_origin }}</td><td>{{ comment.created_at }}</td></tr>{% else %}<tr><td colspan="5">No visible comments.</td></tr>{% endfor %}</tbody></table>
+</section>
+
+{% if 'scout' in principal.roles %}<section><h2>Create structured scout observation</h2>
+<form method="post" action="/w08/entries/{{ row.shortlist_entry_id }}/observations"><input type="hidden" name="csrf" value="{{ csrf }}"><label>Visibility <select name="visibility"><option>TEAM</option><option>OWNER_ONLY</option></select></label>{% for dimension in ['role_execution','decision_making','technical_execution','off_ball_contribution','context_and_risk'] %}<fieldset><legend>{{ dimension }}</legend><label>Rating <input name="{{ dimension }}_rating" type="number" min="1" max="5" required></label><label>Confidence <input name="{{ dimension }}_confidence" type="number" min="0" max="1" step="0.1" required></label><label>Note <input name="{{ dimension }}_note" required></label></fieldset>{% endfor %}<label>Overall confidence <input name="overall_confidence" type="number" min="0" max="1" step="0.1" required></label><label>Summary <input name="summary" required></label><label>Local evidence kind <select name="evidence_kind"><option value="local_note">local note</option><option value="local_clip">local clip</option></select></label><label>Local evidence reference <input name="evidence_reference" required></label><label>Disagreement <select name="disagreement"><option value="no">no</option><option value="yes">yes</option></select></label><label>Disagreement reason <input name="disagreement_reason"></label><label>Next action <input name="recommended_next_action" required></label><button>Append observation</button></form>
+</section>{% endif %}
+
+<section><h2>Visible scout observation history</h2>
+<table><caption>Every policy-visible immutable observation version</caption><thead><tr><th scope="col">Observation / version</th><th scope="col">Author</th><th scope="col">Structured rubric</th><th scope="col">Overall confidence</th><th scope="col">Summary</th><th scope="col">Disagreement</th><th scope="col">Next action</th><th scope="col">Visibility / origin</th><th scope="col">Local evidence references</th><th scope="col">Timestamp</th></tr></thead><tbody>{% for observation in observations %}<tr><th scope="row">{{ observation.observation_id }} / {{ observation.version }}</th><td>{{ observation.author_id }}</td><td><ul>{% for dimension in observation.dimensions %}<li>{{ dimension.dimension }}: rating {{ dimension.rating }}, confidence {{ dimension.confidence }}, {{ dimension.note }}</li>{% endfor %}</ul></td><td>{{ observation.overall_confidence }}</td><td>{{ observation.summary }}</td><td>{{ observation.disagreement }}{% if observation.disagreement_reason %}: {{ observation.disagreement_reason }}{% endif %}</td><td>{{ observation.recommended_next_action }}</td><td>{{ observation.visibility }} / {{ observation.evidence_origin }}</td><td><ul>{% for reference in observation.evidence_references %}<li>{{ reference.kind }}: {{ reference.reference }}</li>{% endfor %}</ul></td><td>{{ observation.created_at }}</td></tr>{% else %}<tr><td colspan="10">No visible observations.</td></tr>{% endfor %}</tbody></table>
+</section>
+
+{% for observation in amendable_observations %}<section><h2>Amend own latest visible observation {{ observation.observation_id }}</h2>
+<form method="post" action="/w08/observations/{{ observation.observation_id }}/amend"><input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="expected_version" value="{{ observation.version }}"><label>Visibility <select name="visibility"><option>TEAM</option><option>OWNER_ONLY</option></select></label>{% for dimension in ['role_execution','decision_making','technical_execution','off_ball_contribution','context_and_risk'] %}<label>{{ dimension }} rating <input name="{{ dimension }}_rating" type="number" min="1" max="5" required></label><label>{{ dimension }} confidence <input name="{{ dimension }}_confidence" type="number" min="0" max="1" step="0.1" required></label><label>{{ dimension }} note <input name="{{ dimension }}_note" required></label>{% endfor %}<label>Overall confidence <input name="overall_confidence" type="number" min="0" max="1" step="0.1" required></label><label>Summary <input name="summary" required></label><label>Local evidence kind <select name="evidence_kind"><option value="local_note">local note</option><option value="local_clip">local clip</option></select></label><label>Local evidence reference <input name="evidence_reference" required></label><label>Disagreement <select name="disagreement"><option value="no">no</option><option value="yes">yes</option></select></label><label>Disagreement reason <input name="disagreement_reason"></label><label>Next action <input name="recommended_next_action" required></label><button>Append amendment</button></form>
+</section>{% endfor %}
+{% endblock %}

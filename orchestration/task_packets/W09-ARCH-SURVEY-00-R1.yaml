@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W09-ARCH-SURVEY-00
+phase_id: W09
+revision: R1
+state: DISPATCHED
+objective: >-
+  Map the accepted W04, W05 and W07 implementation seams that W09 should reuse,
+  identify synthetic-only paths that must be excluded from product composition, and
+  return a concrete dependency-safe integration recommendation without editing code.
+depends_on:
+  - W07:CLOSED
+  - RESEARCH_WORKBENCH_PIVOT:ACCEPTED
+assigned_role: architecture_reuse_surveyor
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W09-ARCH-SURVEY-00-R1.yaml
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/phase-gates/W04/acceptance-report.md
+  - reports/phase-gates/W05/acceptance-report.md
+  - reports/phase-gates/W07/acceptance-report.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W07/scoring-parity-report.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/features/registry.py
+  - src/scouting/modeling/baselines.py
+  - src/scouting/m0/core.py
+  - src/scouting/serving/m0.py
+  - src/scouting/serving/synthetic.py
+  - src/scouting/web/w07.py
+  - src/scouting/web/w08.py
+  - services/api/w07_main.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - services/**
+  - apps/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - reports/reviews/W07/**
+  - reports/reviews/W08/**
+requirements:
+  - Identify exact reusable contracts, feature/model/index components and browser composition seams.
+  - Identify every synthetic-only product path that must not be reachable from W09 interactive routes.
+  - Propose path-scoped, dependency-ordered implementation packets for matrix, retrieval, API/UI and evaluation.
+  - Flag import-layer, stale-version, identity, temporal, persistence and W08-preservation risks with exact file references.
+  - Make no implementation edits and no positive football-relevance claim.
+deliverables:
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+definition_of_done:
+  - The master can assign exact W09 production paths without creating a parallel architecture or scorer.
+  - Synthetic product exposure and W08 overlap risks are explicit.
+acceptance_checks:
+  - uv run lint-imports
+  - test -s reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+stop_conditions:
+  - Protected W06 output, external access, a dependency change, a Git operation or an edit outside allowed_paths would be required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

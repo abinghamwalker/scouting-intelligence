@@ -1,0 +1,61 @@
+{
+  "checkpoint": {
+    "commit_message": "build: establish local uv and git foundation",
+    "tag": "checkpoint/w01-accepted"
+  },
+  "decision": "ACCEPT",
+  "evidence": {
+    "acceptance_report": "reports/phase-gates/W01/acceptance-report.md",
+    "clean_tree_report": "reports/verification/W01/clean-tree-report.md",
+    "environment": "reports/verification/W01/environment.json",
+    "master_review": "reports/reviews/W01/master-review.md",
+    "verification_report": "reports/verification/W01/verification-report.md"
+  },
+  "gate": "G-W01",
+  "phase": "W01",
+  "requirements": [
+    {
+      "id": "one-root-uv-project",
+      "result": "PASS"
+    },
+    {
+      "id": "python-3.12",
+      "result": "PASS"
+    },
+    {
+      "id": "zero-git-remotes",
+      "result": "PASS"
+    },
+    {
+      "id": "active-rejecting-pre-push-guard",
+      "result": "PASS"
+    },
+    {
+      "id": "approved-directory-skeleton",
+      "result": "PASS"
+    },
+    {
+      "id": "eight-approved-dependency-groups",
+      "result": "PASS"
+    },
+    {
+      "id": "no-node-manifests",
+      "result": "PASS"
+    },
+    {
+      "id": "no-hosted-ci-cloud-or-external-deployment",
+      "result": "PASS"
+    },
+    {
+      "id": "baseline-checks",
+      "result": "PASS"
+    },
+    {
+      "id": "clean-checkpoint-tree",
+      "result": "PASS"
+    }
+  ],
+  "schema_version": 1,
+  "verified_at_utc": "2026-07-29T09:33:22Z",
+  "wave_scope": "Local uv project and Git safety foundation only"
+}

@@ -1,0 +1,99 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-01
+phase_id: W04
+revision: R3
+state: SUPERSEDED_BY_R4
+objective: >-
+  Correct only R2's two independently reproduced schema-authority gaps: unbound list
+  child metadata and direct semantic hashing of an unvalidated descriptor. Preserve
+  R1 row/key closure, valid vectors, R20 controls and generic serializer behavior.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2:REWORK
+assigned_role: w04_exact_parquet_encoder_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R3.yaml
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R2-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/data_products/**
+  - src/scouting/storage/guarded.py
+fixed_bindings:
+  r2_formats_sha256: cfa25e672072cba702d103a2a68c79f2895852ee91e966b998cc3a2e13beb5ea
+  r2_test_sha256: 113af1f3b23aac813e0b8484b02348f53d96af0eb816cb495ae90325d5dd158f
+  r2_review_sha256: 98222bfbd9d6c5024d4727e3cf92797743601a455f01cccc36565cabe582749d
+  r2_review_return_sha256: 2d24ca59245417601531dbeb1b1c5256286e581fe5f90cbac3159f418bb8ec14
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+requirements:
+  - Verify all fixed hashes before editing and stop on drift.
+  - >-
+    Reject metadata on the value_field of list, large_list and fixed_size_list at
+    every recursive depth. Also validate each value-field name and nested nullability
+    representation under the same closed schema rules before hashing or encoding.
+  - >-
+    Change the new W04 semantic helper boundary to require the exact explicit
+    metadata-free pa.Schema alongside its descriptor. Re-derive the descriptor from
+    that schema and descriptor.schema_role through the same closed encoder validator,
+    then require exact descriptor equality before calculating any digest.
+  - >-
+    There must be no descriptor-only fallback, optional schema or alternate public
+    helper that can emit the W04 semantic domain without accepted-schema validation.
+    Direct binary/malformed/metadata-like/non-UTC/nanosecond claims must fail closed.
+  - >-
+    Update only W04-focused callers/tests for the required schema argument. Preserve
+    semantic preimage bytes and both fixed vectors; validation evidence is not added
+    to the preimage and no existing generic format API changes.
+  - >-
+    Add list/large/fixed nested-metadata differential tests proving both variants
+    cannot be accepted, plus direct-descriptor tests with unsupported/malformed type
+    text, mismatched field/nullability/order/role and a valid exact schema/descriptor.
+definition_of_done:
+  - Both R2 P1 findings are closed with no new P0-P2 issue and all earlier bypasses remain closed.
+  - Existing plus new focused tests and legacy guarded-storage suite pass with unchanged valid vectors.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Either correction requires a semantic-preimage/vector change, new dependency, product contract or architecture change.
+  - Any product/control write, Git, provider/network, cloud/container/CI/endpoint/remote/deployment action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

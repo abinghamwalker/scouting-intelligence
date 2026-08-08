@@ -1,0 +1,116 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R14
+state: DISPATCHED
+objective: >-
+  Retain every R13 closure while making the launcher environment and execution
+  sequence acyclic and complete: an exact bootstrap digest construction, closed
+  child/rebuild input transports, and one chronological prefix/build handoff.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R13:REWORK
+  - W04-SCHEMA-DESIGN-REVIEW-01-R8:REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R13.yaml
+  - reports/verification/W04/wyscout-schema-design-R13-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R13.yaml
+  - reports/reviews/W04/wyscout-schema-design-R13.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R13.md
+  - reports/verification/W04/wyscout-schema-design-R12-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R14.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Break the outer bootstrap self-reference explicitly. The fixed/base
+    environment digest must exclude W04_BOOTSTRAP_TUPLE_B64 and must name every
+    other inclusion, absence, and operational substitution. Put that acyclic
+    digest in w04-local-control-bootstrap-v2, canonical-encode the complete
+    tuple, then set W04_BOOTSTRAP_TUPLE_B64. Define a separate digest of the
+    complete actual transport environment after insertion for operational
+    comparison. Bind the exact construction algorithm in stable authority; do
+    not use a recursive digest, fixed-point assumption, or unbounded exception.
+  - >-
+    Add exhaustive closed admission and rebuild child input contracts. Name
+    every environment variable and every canonical input-envelope key, JSON
+    type, nullability, grammar, cardinality/order rule, role-specific
+    presence/absence, and stable-versus-operational field. Define exact
+    transports for child role, entrypoint/result descriptors, nonce, launcher
+    digest, expected repository-code digest, selected prefix, and the values
+    needed by each role. Unknown behavior-affecting variables, unknown fields,
+    duplicate fields, cross-role fields, and environment/envelope disagreement
+    must fail.
+  - >-
+    The rebuild input must carry or deterministically derive, under one exact
+    named canonical transport, the immutable admitted code-manifest identity,
+    launcher-calculated build ID, run ID, selected rebuild prefix, and all
+    already-authorised schema-bound invocation values required to perform the
+    deterministic rebuild. Retain the exact no-argument child argv. Do not add
+    a directory scan, newest-file selection, generic config discovery, new
+    resource, provider read, or command-line token. Bind every transported
+    value to the accepted result schema and receipt/layer paths.
+  - >-
+    Repair the chronological launcher sequence everywhere. Sampling an
+    operational rebuild UUID before build identity is allowed only if stated,
+    but the launcher creates only the admission prefix before admission. It
+    validates the result, writes/confirms and reads back the immutable code
+    manifest, calculates build ID, and only then creates the exact build-scoped
+    rebuild prefix, constructs the rebuild envelope/environment, and launches
+    rebuild. Reject early prefix creation, placeholder build IDs, or a second
+    ordering.
+  - >-
+    Retain R13's truthful three-source encoding startup and distinct control
+    prefix; feasible launcher and child inherited-descriptor contracts and
+    honest transient race residual; exhaustive w04-child-result-v2 schemas;
+    exact outer and child argv; 58/19 repository census and all four optional
+    orphan predicates; 35 executables, three aliases, three denied .pth
+    classes, 17 resources; and every prior source, rights, temporal, identity,
+    product, path, environment, gate, ownership, two-root, and ledger closure.
+    The future scripts remain absent.
+  - >-
+    The R13 scope attestation was inaccurate because a mistaken parent-workspace
+    report path was briefly created and removed. For R14, resolve every
+    apply_patch path from the project root, change exactly the two allowed R14
+    report paths, and make the return's changed-path and scope confirmation
+    complete and truthful. Do not create any parent-workspace path.
+definition_of_done:
+  - The bootstrap tuple/environment digest graph has one explicit acyclic construction order.
+  - Both child roles have exhaustive closed input/environment contracts and exact no-argument transports.
+  - Rebuild prefix creation occurs only after immutable manifest readback and build-ID calculation.
+  - Every passing R13 and earlier closure remains intact and no implementation file is created.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R14.md');
+    assert p.is_file() and p.stat().st_size > 26000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - Closing the child invocation requires an architecture, dependency, storage-root, provider, network, service, or child-argv change.
+  - The exact environment/digest graph cannot be made acyclic without weakening an accepted authority boundary.
+  - Any R13 passing closure would regress or work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,78 @@
+task_id: W09-RESEARCH-UI-05A
+revision: R1
+owner: subagent
+objective: >-
+  Build one local browser workbench over the accepted W09 API and governed historical
+  artifacts: dataset -> exemplar or weighted profile -> ranked real-player results ->
+  explanations -> comparison -> saved and replayed experiment/report.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - reports/verification/W09/full-canonical-population.md
+  - reports/reviews/W09/returns/W09-RESEARCH-API-04D-R1.md
+  - reports/reviews/W09/returns/W09-RESEARCH-SERVING-04C-R1.md
+  - src/scouting/contracts/research.py
+  - src/scouting/api/research.py
+  - src/scouting/serving/research.py
+  - src/scouting/modeling/research.py
+  - src/scouting/storage/research.py
+  - src/scouting/reporting/research.py
+  - src/scouting/web/w07.py
+  - tests/e2e/test_w07_local_evidence_playwright.py
+allowed_paths:
+  - src/scouting/web/w09.py
+  - services/api/w09_main.py
+  - apps/web/templates/w09/
+  - apps/web/static/w09/
+  - tests/unit/test_w09_research_web.py
+  - tests/e2e/test_w09_research_workbench_playwright.py
+  - reports/reviews/W09/returns/W09-RESEARCH-UI-05A-R1.md
+deliverables:
+  - >-
+    A strict `create_w09_app` composition factory and local-only production bootstrap.
+    Load exactly one accepted feature manifest and exactly one compatible index manifest,
+    validate every pin through the existing loaders/service, use SQLite schema v3 for
+    experiment state and a guarded local report root, and fail closed with an honest
+    unavailable page when artifacts are absent or incompatible. Never inspect provider raw
+    files, fall back to synthetic fixtures, select newest, or mount W07/W08 as the core path.
+  - >-
+    One accessible responsive page at `/` and `/w09` whose normal journey exposes dataset
+    authority/coverage/limitations, real player search, exemplar and weighted-profile query
+    modes, weighted-distance and cosine methods, explicit feature weights, eligibility
+    filters, ranked candidates, per-feature contributions/contrasts/missingness, candidate
+    comparison, save, replay and deterministic JSON/HTML report links. No role switching,
+    fictional identities, brief-revision administration, manual audit entry or terminal step.
+  - >-
+    Use only same-origin local API calls through the accepted `/api/w09` router. Apply
+    loopback-only host policy, no-store, no-referrer and a CSP compatible only with local
+    static assets/API. Render every untrusted value as text, provide clear loading, empty,
+    unavailable, validation-error, stale/conflict and replay-match/mismatch states, and keep
+    unsupported football-relevance/recruitment-usefulness claims explicitly out of the UI.
+  - >-
+    Real-browser Playwright acceptance proves both query modes, both retrieval methods,
+    search -> exemplar -> query -> explanation -> compare -> save -> report -> replay,
+    keyboard landmarks/focus, narrow-screen no-overflow, local request containment and
+    distinct failure states against governed fixture artifacts. Unit tests prove bootstrap
+    ambiguity/incompatibility fails closed and no synthetic substitution occurs.
+checks:
+  - uv run ruff format --check src/scouting/web/w09.py services/api/w09_main.py tests/unit/test_w09_research_web.py tests/e2e/test_w09_research_workbench_playwright.py
+  - uv run ruff check src/scouting/web/w09.py services/api/w09_main.py tests/unit/test_w09_research_web.py tests/e2e/test_w09_research_workbench_playwright.py
+  - uv run mypy src/scouting/web/w09.py services/api/w09_main.py
+  - uv run pytest -q tests/unit/test_w09_research_web.py tests/e2e/test_w09_research_workbench_playwright.py
+  - uv run bandit -q -r src/scouting/web/w09.py services/api/w09_main.py
+stop_conditions:
+  - The accepted API/service composition surface is missing or incompatible.
+  - A coherent journey would require a new product decision or a positive football claim.
+  - Any need for network/provider access, dependencies, Git, orchestration edits, shared
+    contract/API/serving/storage/report edits, production artifact generation, or paths
+    outside allowed_paths.
+constraints:
+  - No Git operations, dependency/lock changes, orchestration-control edits or shared edits.
+  - Use apply_patch for manual edits.
+  - Preserve W04-W08 paths and dormant W08 modules; do not import synthetic W03/W05/W07
+    candidate fixtures or W08 authentication/workflow/audit/role modules.
+  - Synthetic rows may exist only inside automated test fixtures and must be visibly marked
+    in test construction; the product bootstrap and interactive candidate population cannot
+    use them.

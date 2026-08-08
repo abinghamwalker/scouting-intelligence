@@ -1,0 +1,180 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Correct only the three R3 master findings: exact frozen authority bytes/objects,
+  complete executable build/completion/receipt predicate constants, and valid
+  model-led all-twelve-root serialization evidence. Preserve the accepted bounded
+  canonical-Decimal implementation and every product/architecture boundary.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R3:MASTER_REWORK_P1_01_TO_P1_03
+assigned_role: w04_23_root_schema_closure_implementer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R3.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4.yaml
+  - reports/verification/W04/wyscout-23-root-schema-closure-R3-master-verification.md
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_data.py
+  - all R3 read_first paths
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/integration/**
+  - tests/security/**
+fixed_bindings:
+  final_r3_packet_sha256: 0d578583e7896f110e566430f98a6600fc0d6872383fefb7b53e5824547649e4
+  r3_formats_sha256: 84c04be89c6d726ab9129326e7815dda2331bf30ade2f8d41852120e2b6d144c
+  r3_formats_test_sha256: 19cd38b7d104029f96c98243992fda126f7a448e71ee5c545128acf2699e17a4
+  r3_schema_sha256: fa2f0739a617ef112273e8b1010f2a7f81231027b28710198c55934e8363349e
+  r3_schema_test_sha256: ef546491d8ad3618f5982f7a68d3ddeae1cf8c1317d8e9f0ead7c3cad97bc4b4
+  r3_return_sha256: 2049b2eba26d209a00a36d3bcedff5acb68d44db25433a0087ab244324586671
+  r3_master_rework_sha256: 8f123e5b23057155b8dd2e544c9284df0ba01da8a295882399f17052fefa305d
+  r3_acceptance_oracle_sha256: de4a4119cf1a1158156d55f49f26bae8c1c08b46d36f93bb6c6afe102fdd145f
+  r3_acceptance_oracle_return_sha256: d6c58d4a0259063ace731f28a65e673a35605abb94e2f16cd20526378107e7a2
+  build_product_authority_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  season_lineup_authority_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+corrections:
+  exact_authority_objects:
+    - >-
+      Correct the sole match raw-record digest to
+      `1cc084d5527c8fea222039b9362ddafcf5a69efe9dc3456b541f5f3eebf74d86`.
+      Do not merely update a test literal: compare the complete emitted source,
+      season and lineup authority objects against the complete accepted authority
+      JSON subobjects so any future field-level transcription error fails.
+    - >-
+      Emit the complete accepted `completion_index_binding` object, including its
+      exact 13-key shape, eight ordered reader verification/rejection requirements,
+      exact scope, source paths/IDs/digests/counts and both period rows. Additional
+      index-manifest facts may remain separately exact but cannot replace this object.
+    - >-
+      Emit complete exact structured build/product authority subobjects for
+      `build_identity`, `window_authority`, `layer_manifest_authority` and
+      `receipt_contracts`. Tests must load the accepted authority JSON, select each
+      subobject and require deep equality; counts, prose and label lists do not pass.
+    - >-
+      Emit exact ordered component-key and admission/rebuild argv constants from the
+      frozen build contract, including bounds, digest/preimage and inverse rules used
+      by the owning validators. Tests must reproduce them from the contract owner.
+  predicate_closure:
+    - >-
+      Retain mechanically resolvable runtime operands, but expand each summarized
+      build predicate so every cross-field operation performed by its validator has
+      exact operands/constants. In particular close WindowIdentity,
+      PreBuildProjection, RebuildInvocation, EntrypointSourceResult,
+      PreBuildAdmissionResult, PostBuildIdRebuildResult, TemporalBoundaryReceipt,
+      RebuildInvocationReceipt and ChildResultEnvelope.
+    - >-
+      Export the eight separate external/composed authority predicates E1-E8 from
+      the independent oracle: source completion, season/lineup, checked-product
+      issuance, 25-key build composition, sole complete-manifest semantic closure,
+      parent/Gold population closure, receipt clocks/results, and schema acceptance.
+      Every predicate must cite exact frozen source artifacts and carry exact
+      operands/constants; do not collapse distinct gates into one descriptive label.
+    - >-
+      Add independent expected-ledger assertions for owner, validator,
+      classification, operation, operands and material constant corpus. Counting and
+      resolving only the candidate's own emitted records remains insufficient.
+  valid_serialization_evidence:
+    - >-
+      Replace descriptor-generated pseudo-logical values as acceptance evidence with
+      the oracle's minimum 29-row valid variant matrix. Each row must be an accepted
+      instance of its owning one of twelve Pydantic root models, survive a fresh
+      strict `model_validate` of its Python/logical dump, be projected mechanically
+      from the accepted descriptor without schema/value inference, and pass inverse
+      equality to the exact serialization-mode contract row.
+    - >-
+      Exercise every oracle-required tagged JSON arm, raw-kind state, rejected-field
+      arm/quarantine, action position/period/list variant, open and closed lineup,
+      possession equal-clock case, precision-38 1/3 coverage, zero-denominator
+      authority and nested Gold fact case. Reuse already accepted contract fixtures
+      or deterministic builders; do not weaken validators or use `model_construct`.
+    - >-
+      For every malformed canonical-Decimal inverse family, monkeypatch the Parquet
+      writer and assert zero writes. Retain all accepted R3 projection and adversarial
+      tests in addition to the valid-model matrix.
+implementation_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - Preserve exactly 23 roots, 12 Parquet/11 JSON-only split, every field, role,
+    dependency, feature, population, semantic digest path and local-only boundary.
+  - Preserve the accepted R3 storage Decimal behavior and exact two-field owner
+    mapping unless an executable test exposes a bounded implementation bug.
+  - >-
+    Keep contracts-layer isolation: no storage, PyArrow, filesystem or authority-file
+    read in production `wyscout_schema.py`. Authority JSON is test oracle only; the
+    production content remains deterministic in-memory constants derived from frozen
+    contract/authority values.
+  - No aggregate, product, manifest, receipt, provider/network, dependency, cloud,
+    container, CI, publication, deployment or Git action.
+focused_acceptance:
+  - Complete accepted authority subobjects deep-equal independently loaded frozen
+    authority JSON and contract constants.
+  - The exact wrong R3 raw digest is absent; the accepted digest occurs in the exact
+    source binding and mutation of any authority leaf fails closed.
+  - Eight external predicates and the complete runtime expected ledger reproduce.
+  - The all-twelve-root matrix contains at least 29 freshly validated logical model
+    instances and every descriptor-led inverse equality passes.
+  - All Decimal aliases/nonfinite/null/invalid-UTF8 cases fail before every write;
+    valid 1/3 and all eight independent Decimal positions remain exact.
+  - All R1-R3 roster, projection, operand, corpus, placeholder, metadata, tuple/list,
+    inference and caller-authority attacks remain passing as rejection proofs.
+definition_of_done:
+  - All three R3 master findings are closed without any boundary expansion.
+  - Focused and adjacent checks pass with zero warnings or unexpected writes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/storage/formats.py src/scouting/contracts/wyscout_schema.py tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact authority/predicate schema closure correction.
+  - Valid-model all-twelve-root and adversarial test correction.
+  - Additive R4 producer return using the repository template.
+stop_conditions:
+  - Need to change any logical contract, accepted authority byte, root, field,
+    semantic digest, feature, population, dependency, projection scope,
+    provider/local-only boundary, dependency policy or deployment state.
+  - Need for a second schema/semantic authority, product/aggregate/runtime bytes,
+    model validator weakening, `model_construct` acceptance fixture, or any edit
+    outside allowed paths.
+  - Any fixed binding drifts or a valid oracle row cannot be represented by the
+    already authorized projection without changing the boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

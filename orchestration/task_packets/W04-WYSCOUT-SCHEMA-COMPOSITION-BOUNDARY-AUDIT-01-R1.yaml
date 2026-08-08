@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W04-WYSCOUT-SCHEMA-COMPOSITION-BOUNDARY-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Determine, without implementation changes, the smallest authority-preserving
+  composition boundary that lets build receipt validation require the accepted
+  canonical Gold schema identity.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R3:MASTER_SCHEMA_IDENTITY_NONCONFORMANCE_REPRODUCED
+assigned_role: independent_w04_schema_composition_boundary_auditor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-SCHEMA-COMPOSITION-BOUNDARY-AUDIT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-build-contract-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R3.md
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-COMPOSITION-BOUNDARY-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r3_contract_sha256: ea0a5f4cd474a081d97b529e3ecf87f0e3852dccef0041f712544420c85d55fd
+  r3_test_sha256: c153c7a41120a88128301b18f6ee50f1721d0c65431eed1cc8136b5761d9d040
+  r3_return_sha256: dd50227ed1c9ab6fa8f21603a015a1d12a7a15f73da0fccadb6467a9ea38fb54
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+audit_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Trace the approved serial order from build-contract implementation through
+    23-root implemented-schema closure, schema-bundle-v2 materialization,
+    product-contract-v2 materialization and later runtime admission/publication.
+  - >-
+    Determine whether exact Gold Arrow schema identity is already fully derivable
+    from an accepted existing implementation authority, or whether it becomes
+    accepted only at the planned implemented-schema/aggregate gates.
+  - >-
+    Compare these bounded options: a direct exact-schema validator in the current
+    build module; a callback/content input sourced from a later accepted schema
+    authority; or deferring receipt-closure executability until that authority is
+    materialized. Reject any option that creates a second schema, placeholder
+    digest, caller self-authorization, new root, changed 25-key projection, cycle,
+    product write or wider scope.
+  - >-
+    Recommend the smallest option and classify it as either composition within the
+    approved chain or a change to a frozen architecture/sequencing boundary that
+    requires user clarification.
+definition_of_done:
+  - A bounded advisory verdict with exact authority citations and no implementation edit.
+deliverables:
+  - Advisory audit report.
+  - Return using the repository template.
+stop_conditions:
+  - Fixed hash drift.
+  - Need to edit outside the two allowed report paths.
+  - Need to invent any schema/digest or perform Git, provider/network, product-write
+    or external-infrastructure action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

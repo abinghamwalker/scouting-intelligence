@@ -1,0 +1,70 @@
+schema_version: 1
+task_id: W10-EVALUATION-REUSE-SURVEY-00A
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Map the accepted W06 evaluation contracts, deterministic metrics, protected-evidence
+  controls, one-use gate behaviour and negative-result retention that W10 should reuse,
+  without opening protected outputs or editing implementation code.
+depends_on:
+  - W09:CLOSED
+  - checkpoint/w09-unicode-correction-accepted:04c95ee08a79d3515ba20b20f5085929f16c3fd6
+assigned_role: evaluation_reuse_surveyor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W10-EVALUATION-REUSE-SURVEY-00A-R1.yaml
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/phase-gates/W06/acceptance-report.md
+  - reports/verification/W06/limitations.md
+  - reports/evaluation/W06/protected-gate-decision.json
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - src/scouting/evaluation/gate.py
+  - src/scouting/evaluation/research.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/unit/test_w06_robustness.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W10/returns/W10-EVALUATION-REUSE-SURVEY-00A-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - services/**
+  - apps/**
+  - migrations/**
+  - tests/**
+  - reports/evaluation/W06/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Identify exact reusable contracts/functions and incompatible W06 assumptions.
+  - Propose authoritative W10 metrics, denominator rules and PASS/FAIL/INSUFFICIENT_EVIDENCE ordering.
+  - Identify protected-label leakage, one-use execution, immutability and replay controls.
+  - Do not access an absent protected population, fabricate evidence or make a relevance claim.
+deliverables:
+  - reports/reviews/W10/returns/W10-EVALUATION-REUSE-SURVEY-00A-R1.md
+definition_of_done:
+  - The master can design one compatible W10 evaluation system with exact reuse and negative-gate behaviour.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/unit/test_w06_robustness.py
+  - test -s reports/reviews/W10/returns/W10-EVALUATION-REUSE-SURVEY-00A-R1.md
+stop_conditions:
+  - Protected output access, external access, a dependency change, a Git operation or an edit outside allowed_paths would be required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

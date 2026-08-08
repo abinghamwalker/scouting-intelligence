@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W05-CONTRACTS-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Add the strictly additive typed W05 boundary contracts required for deterministic
+  feature state, role taxonomy, M0 artifacts, pinned serving requests, explanations,
+  separate data-confidence evidence and stable result identity without changing any
+  accepted W03/W04 contract or authority byte.
+depends_on:
+  - W04:CLOSED
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/__init__.py
+  - docs/architecture/product-claim.md
+  - docs/architecture/evaluation-contract.md
+  - reports/phase-gates/W04/acceptance-report.md
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - migrations/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    Preserve existing RetrievalRequest, RetrievalResult, RoleBrief, TemporalEvidence,
+    all W04 authorities and all accepted serialized bytes unchanged. Implement only
+    additive W05 contracts in m0.py and re-export them from contracts/__init__.py.
+  - >-
+    Represent VALUE, ZERO, MISSING, SUPPRESSED and UNAVAILABLE as distinct fail-closed
+    states. ZERO must carry numeric zero; VALUE must carry a finite numeric value;
+    every other state must carry no numeric value and must carry a reason code.
+  - >-
+    Bind a versioned football-responsibility taxonomy, deterministic mappings and
+    probabilistic membership. Membership is contextual, ordered, finite, in [0,1],
+    sums deterministically to one, and never becomes a permanent player label.
+  - >-
+    Define one M0 model-family enum covering metadata control, raw Euclidean control,
+    robust-scaled cosine, weighted cosine, PCA and role-aware restriction. Define a
+    safe artifact manifest with exact feature names/order/hash, taxonomy, canonical
+    configuration digest, fitting population identity/count, array payload digest,
+    model/index identities, lineage identity, deterministic seed and serialization
+    format.
+  - >-
+    Define a pinned serving request that fails closed unless expected artifact,
+    schema, taxonomy, configuration, fitting-population and lineage identities match.
+    Define an M0 result wrapper that retains the approved six-dimension
+    resemblance-only RetrievalResult, separate data-confidence evidence,
+    deterministic explanation inputs/reason codes and a SHA-256 result digest.
+  - >-
+    Add strict parsing, unknown-field rejection, JSON round-trip and adversarial
+    invariant tests. No contract may expose a blended match percentage, success/value
+    forecast, learned ranker, W06 partition or external expert-validation claim.
+deliverables:
+  - Additive strict W05 M0 boundary contracts and public exports.
+  - Deterministic and adversarial contract tests.
+  - Complete mandatory return at the exact allowed return path.
+definition_of_done:
+  - Existing contract tests remain byte/behaviour compatible.
+  - All W05 cross-boundary identities required by later producers are strict and pinned.
+  - Invalid feature states, probabilities, digests, family names and substitution inputs fail closed.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+stop_conditions:
+  - Any requirement to modify an existing accepted contract or W04 authority/evidence byte.
+  - Any materially different product behaviour, weakened evidence guarantee or unresolved contract decision.
+  - Any new dependency, provider/network access, external service, deployment, publication, destructive action or secret.
+  - Required work falls outside allowed_paths or overlaps unexplained user work.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

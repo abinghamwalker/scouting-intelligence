@@ -1,0 +1,52 @@
+{
+  "allow_pending_checkpoint": false,
+  "checks": [
+    {
+      "detail": "state: 'READY'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'READY'",
+      "id": "PHASE_GATE_READY",
+      "status": "PASS"
+    },
+    {
+      "detail": "W03:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W04-SOURCE-AUTHORITY-01:ACCEPTED:all referenced packets are complete, master-assigned and task-ID matched, W04-SOURCE-INGEST-01:ACCEPTED:3 retained return(s), W04-AUTHORITY-REVIEW-01:ACCEPTED:4 retained return(s), W04-SCHEMA-DESIGN-01:ACCEPTED:23 retained return(s), W04-SCHEMA-DESIGN-REVIEW-01:ACCEPTED:14 retained return(s), W04-CONTROL-PREIMAGE-01:ACCEPTED:1 retained return(s), W04-CONTROL-PREIMAGE-REVIEW-01:ACCEPTED:1 retained return(s), W04-FIELD-SEMANTIC-V2-DECISION-01:ACCEPTED:1 retained return(s), W04-FIELD-SEMANTIC-V2-REVIEW-01:ACCEPTED:2 retained return(s), W04-FIELD-SEMANTIC-V2-ACCEPT-01:ACCEPTED:1 retained return(s), W04-POSSESSION-SEMANTIC-V2-DECISION-01:ACCEPTED:4 retained return(s), W04-POSSESSION-SEMANTIC-V2-REVIEW-01:ACCEPTED:3 retained return(s), W04-POSSESSION-SEMANTIC-V2-ACCEPT-01:ACCEPTED:1 retained return(s), W04-FEATURE-REGISTRY-DECISION-01:ACCEPTED:4 retained return(s), W04-FEATURE-REGISTRY-REVIEW-01:ACCEPTED:4 retained return(s), W04-FEATURE-REGISTRY-ACCEPT-01:ACCEPTED:2 retained return(s), W04-R21-CROSS-AUTHORITY-TEST-01:ACCEPTED:4 retained return(s), W04-R21-CROSS-AUTHORITY-REVIEW-01:ACCEPTED:2 retained return(s), W04-R21-CROSS-AUTHORITY-GATE-01:ACCEPTED:1 retained return(s), W04-PHASE-VERIFIER-READY-01:ACCEPTED:3 retained return(s), W04-PHASE-VERIFIER-READY-REVIEW-01:ACCEPTED:2 retained return(s), W04-SECURITY-AUTHORITY-FIXTURE-01:ACCEPTED:1 retained return(s), W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01:ACCEPTED:1 retained return(s), W04-FIELD-SEMANTIC-DECISION-01:ACCEPTED:3 retained return(s), W04-FIELD-SEMANTIC-REVIEW-01:ACCEPTED:2 retained return(s), W04-FIELD-SEMANTIC-ACCEPT-01:ACCEPTED:1 retained return(s), W04-POSSESSION-SEMANTIC-DECISION-01:ACCEPTED:1 retained return(s), W04-POSSESSION-SEMANTIC-REVIEW-01:ACCEPTED:1 retained return(s), W04-POSSESSION-SEMANTIC-ACCEPT-01:ACCEPTED:1 retained return(s), W04-CONTRACT-TEMPORAL-01:ACCEPTED:1 retained return(s), W04-CONTRACT-TEMPORAL-REVIEW-01:ACCEPTED:1 retained return(s), W04-SOURCE-INGEST-REVIEW-01:ACCEPTED:3 retained return(s), W04-SOURCE-ACQUIRE-01:ACCEPTED:all referenced packets are complete, master-assigned and task-ID matched, W04-SOURCE-ACQUIRE-REVIEW-01:ACCEPTED:1 retained return(s), W04-SOURCE-PROFILE-01:ACCEPTED:2 retained return(s), W04-SOURCE-PROFILE-REVIEW-01:ACCEPTED:2 retained return(s), W04-SOURCE-MANIFEST-BRIDGE-01:ACCEPTED:1 retained return(s), W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01:ACCEPTED:1 retained return(s), W04-IDENTITY-RULESET-DECISION-01:ACCEPTED:3 retained return(s), W04-IDENTITY-RULESET-REVIEW-01:ACCEPTED:3 retained return(s), W04-IDENTITY-RULESET-ACCEPT-01:ACCEPTED:1 retained return(s), W04-DATA-CONTRACTS-01:ACCEPTED:4 retained return(s), W04-SOURCE-COMPLETION-INDEX-01:ACCEPTED:4 retained return(s), W04-SOURCE-COMPLETION-INDEX-REVIEW-01:ACCEPTED:1 retained return(s), W04-SOURCE-COMPLETION-INDEX-REVIEW-02:ACCEPTED:1 retained return(s), W04-SOURCE-COMPLETION-INDEX-REVIEW-03:ACCEPTED:1 retained return(s), W04-SOURCE-COMPLETION-INDEX-REVIEW-04:ACCEPTED:1 retained return(s), W04-SOURCE-COMPLETION-INDEX-REVIEW-05:ACCEPTED:1 retained return(s), W04-VERTICAL-SLICE-SOURCE-ADAPTER-01:ACCEPTED:2 retained return(s), W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01:ACCEPTED:2 retained return(s), W04-IDENTITY-BUNDLE-RUNTIME-01:ACCEPTED:1 retained return(s), W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01:ACCEPTED:2 retained return(s), W04-PARQUET-SEMANTIC-ENCODER-01:ACCEPTED:4 retained return(s), W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01:ACCEPTED:4 retained return(s), W04-DATA-CONTRACTS-REVIEW-01:ACCEPTED:4 retained return(s), W04-R21-PROGRESSION-FIXTURE-01:ACCEPTED:1 retained return(s), W04-R21-PROGRESSION-FIXTURE-REVIEW-01:ACCEPTED:1 retained return(s), W04-REPOSITORY-PROGRESSION-GUARD-01:ACCEPTED:3 retained return(s), W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01:ACCEPTED:2 retained return(s), W04-BUILD-PRODUCT-AUTHORITY-DECISION-01:ACCEPTED:1 retained return(s), W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01:ACCEPTED:1 retained return(s), W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01:ACCEPTED:2 retained return(s), W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01:ACCEPTED:2 retained return(s), W04-WYSCOUT-BUILD-CONTRACT-01:ACCEPTED:4 retained return(s), W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01:ACCEPTED:3 retained return(s), W04-STAGED-IMMUTABLE-PUBLISHER-01:ACCEPTED:3 retained return(s), W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01:ACCEPTED:2 retained return(s), W04-POST-CORRECTION-PROGRESSION-AUDIT-01:ACCEPTED:1 retained return(s), W04-LOGICAL-ARROW-PROJECTION-DECISION-01:ACCEPTED:2 retained return(s), W04-LOGICAL-ARROW-PROJECTION-REVIEW-01:ACCEPTED:1 retained return(s), W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01:ACCEPTED:3 retained return(s), W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01:ACCEPTED:2 retained return(s), W04-EXACT-DECIMAL128-WITH-EXPONENT-01:ACCEPTED:4 retained return(s), W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01:ACCEPTED:11 retained return(s), W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01:ACCEPTED:1 retained return(s), W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01:ACCEPTED:2 retained return(s), W04-NESTED-PHYSICAL-PRIMARY-KEY-01:ACCEPTED:2 retained return(s), W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01:ACCEPTED:2 retained return(s), W04-WYSCOUT-RUNTIME-CONTROL-01:ACCEPTED:24 retained return(s), W04-WYSCOUT-REAL-ROOT-INVOCATION-01:ACCEPTED:2 retained return(s), W04-WYSCOUT-DATA-HEALTH-01:ACCEPTED:1 retained return(s), W04-WYSCOUT-DATASET-CARD-01:ACCEPTED:1 retained return(s)",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "PASS"
+    },
+    {
+      "detail": "reports/phase-gates/W04/provider-rights-decision-required.md, reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md, reports/verification/W04/wyscout-phase-verifier-ready-R3-master-verification.md, reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md, reports/phase-gates/W04/wyscout-r21-correction-gate.json, reports/verification/W04/wyscout-source-completion-index-R4-complete-repository-gate.md, reports/phase-gates/W04/wyscout-source-completion-index-R4-gate.json, reports/verification/W04/wyscout-pre-build-authority-complete-repository-gate-R1.md, reports/verification/W04/wyscout-build-product-authority-R1-master-acceptance.md, reports/verification/W04/wyscout-season-lineup-product-binding-R1-master-acceptance.md, reports/verification/W04/wyscout-season-lineup-complete-repository-gate-R1.md, reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-verification.md, reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-acceptance.md, reports/verification/W04/wyscout-build-contract-R4-master-verification.md, reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md, reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md, reports/verification/W04/wyscout-logical-arrow-projection-implementation-R3-master-acceptance.md, reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md, reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md, reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md, reports/verification/W04/wyscout-runtime-control-R12-master-acceptance.md, reports/reviews/W04/wyscout-runtime-control-independent-review-R12.md, reports/verification/W04/wyscout-runtime-control-R12-terminal-gate-blocker-correction-master-acceptance.md, reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md, reports/reviews/W04/wyscout-real-root-invocation-independent-review-R3.md, reports/verification/W04/wyscout-terminal-complete-repository-gate-R2-master-verification.md, reports/verification/W04/wyscout-raw-to-gold-R1-master-verification.md, reports/phase-gates/W04/data-health.json, reports/phase-gates/W04/data-health.md, docs/dataset-cards/w04-wyscout-transformed-v1.md, reports/reviews/W04/master-review.md, reports/verification/W04/verification-report.md, reports/verification/W04/phase-verifier-candidate.json, reports/phase-gates/W04/acceptance-report.md, reports/phase-gates/W04/gate-report.json, reports/verification/W04/w04-closure-steer-2026-08-03.md, reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "r21-cross-authority-focused-suite:PASS, r21-phase-verifier-correction:PASS, r21-security-authority-fixture:PASS, r21-correction-gate:PASS, source-completion-index-R4-complete-repository-gate:PASS, pre-build-authority-complete-repository-gate-R1:PASS, build-product-authority-R1:PASS, season-lineup-product-binding-R1:PASS, season-lineup-complete-repository-gate-R1:PASS, staged-immutable-publisher-R3:PASS, wyscout-build-contract-R4:PASS, logical-arrow-projection-authority-R1:PASS, logical-arrow-projection-implementation-R3:PASS, wyscout-runtime-control-R9:PASS, wyscout-runtime-control-R10:PASS, wyscout-runtime-control-R11:PASS, wyscout-runtime-control-terminal-R12:PASS, wyscout-real-root-R3-operational-baseline:PASS, wyscout-data-health:PASS, wyscout-transformed-dataset-card:PASS, terminal-complete-repository-gate:PASS, raw-to-gold-master-readback:PASS, phase-state-and-evidence-candidate:PASS, G-W04:PASS",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "PASS"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w04-start:f29d71c3cb8e6457f7ea9f61ffa4feff28d44572",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "phase_id": "W04",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "READY",
+  "status": "PASS",
+  "validator": "verify_phase"
+}

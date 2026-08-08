@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R6
+state: DISPATCHED
+objective: >-
+  Close the bounded real-invocation gap left by R5: make the exact R20 outer
+  W04_LOCAL_CONTROL path executable through the unchanged locked/no-sync argv,
+  with the master-owned control prefix and inherited launcher-source descriptor,
+  then admit and execute exactly one real-root rebuild without weakening any
+  accepted child, projection, publication, or retained-recheck predicate.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R5:ACCEPTED
+  - W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-REVIEW-01-R1:ACCEPTED
+assigned_role: w04_runtime_control_r6_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R5.yaml
+  - reports/verification/W04/wyscout-runtime-control-R5-master-acceptance.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-four-feature-vertical-slice-R1-master-acceptance.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - scripts/rebuild_wyscout_v5.py
+  - src/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/security/**
+fixed_bindings:
+  r5_admission_child_sha256: cba67d6a143951cbeefa2e63063f5f09aab73f6ec435a1378fb2451d59950cb5
+  r5_launcher_sha256: d3ac8c84995c8475b0a4df983899ebf6b364f047dcbba45c411d55b62c808740
+  r5_runtime_tests_sha256: 61f1d770d1b662df0f30c6d4bc54aace9f0fa1069d32501c7d466be908b66fb4
+  r5_master_acceptance_sha256: a08d2a429c45a52cd7839c41ee3429f91fef227e9e9f41992c8f3a9fdbe8c24c
+  product_master_acceptance_sha256: 984fa64e75717decfe2048337655f00805dcf59543f8d083d006be794b8dec98
+requirements:
+  - Verify every fixed binding before editing and preserve all accepted R5 and product behavior.
+  - >-
+    Implement the smallest sound closed outer invocation contract consistent with
+    R20 Sections 8.0-8.0.2. The unchanged argv must be exactly `uv run --locked
+    --no-sync python -S -B scripts/launch_wyscout_v5.py`; no generated/wrapper or
+    module execution is accepted. The first launcher-side verifier must validate
+    the master-opened source descriptor, closed environment/bootstrap tuple,
+    exact cwd/argv, empty retained control prefix and inherited-descriptor census
+    before admitting children or publishing.
+  - >-
+    Replace the prior preparation-only four-field bootstrap stand-in with the
+    complete accepted `w04-local-control-bootstrap-v4` tuple and independently
+    equal child/launcher reconstruction. The admission child may change only as
+    mechanically required to validate that full tuple digest and to keep the
+    component authority independent; its product-free role and every accepted
+    descriptor/result/environment predicate remain unchanged.
+  - >-
+    Close the operational root/run binding without adding a stable build input or
+    changing digest meaning. The project root is the exact admitted cwd and real
+    publication roots are fixed beneath it; consistent with R20 the launcher may
+    sample distinct admission/rebuild UUIDv4 values itself. Perform one real-root
+    code-manifest publication and one rebuild, validate child completion, require
+    empty three-prefix postconditions, and emit an exact master-facing canonical
+    completion value. Missing, extra, malformed, substituted, replayed, aliased,
+    nonempty or drifted inputs fail before writes.
+  - >-
+    Do not add a dependency, provider/network access, cleanup, alternate product
+    behavior, or any real-root write during producer tests. Use isolated roots for
+    the positive full execution and adversarial cases. Preserve logical contracts,
+    root roster, feature population, product bytes/digests and all guarantees.
+  - >-
+    Add positive exact-argv execution evidence and adversarial tests for argv/cwd,
+    source descriptor/offset/inheritability/extra descriptor, control-prefix
+    identity/content, closed envelope/env, UUID/root substitution, child failure,
+    and canonical final status. Freeze only after the complete final-hash gate.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R6 outer-control correction, isolated positive/adversarial tests and mandatory producer return.
+stop_conditions:
+  - None for bounded implementation defects; continue rework without real-root publication or Git.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

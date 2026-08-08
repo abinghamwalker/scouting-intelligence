@@ -1,0 +1,30 @@
+task_id: W09-RESEARCH-STATE-04A
+revision: R2
+owner: subagent
+objective: >-
+  Adapt storage evidence to the independently tightened explanation and replay-receipt
+  contracts without changing shared contracts, migrations or orchestration.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W09-RESEARCH-STATE-04A-R1.yaml
+  - reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R1.md
+  - src/scouting/contracts/research.py
+  - src/scouting/storage/research.py
+  - tests/integration/test_w09_research_storage.py
+allowed_paths:
+  - tests/integration/test_w09_research_storage.py
+  - reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R2.md
+deliverables:
+  - Update result fixtures for exact scaled explanation operands and arithmetic.
+  - Prove canonical SQLite round-trip of the tightened contribution object.
+  - Prove valid result-mismatch receipt persistence and reject changed-query mismatch evidence.
+checks:
+  - uv run ruff format --check src/scouting/storage/research.py tests/integration/test_w09_research_storage.py
+  - uv run ruff check src/scouting/storage/research.py tests/integration/test_w09_research_storage.py
+  - uv run mypy src/scouting/storage/research.py
+  - uv run pytest -q tests/integration/test_w09_research_storage.py tests/integration/test_migrations.py tests/contracts/test_w09_research_contracts.py
+stop_conditions:
+  - Tightened contracts require an implementation, migration, shared-contract or product change.
+  - Any dependency, W08, Git, orchestration edit by the subagent or path outside allowed_paths.
+constraints:
+  - No Git operations, dependencies, migrations, contracts, package exports or production artifacts.

@@ -1,0 +1,115 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Implement the bounded, read-only verified selected-match context adapter that
+  joins the accepted match member, season/lineup binding, identity bundle and exact
+  1768-action checked population without inventing any product value.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R4:MASTER_ACCEPTED
+  - W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R2:MASTER_ACCEPTED
+  - W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R2:MASTER_ACCEPTED
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R2:MASTER_ACCEPTED
+assigned_role: w04_vertical_slice_match_context_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/identity/wyscout.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/unit/test_wyscout_identity.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout_vertical_slice.py
+  - tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/**
+  - src/scouting/identity/**
+  - src/scouting/storage/**
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/sources/wyscout_manifest.py
+fixed_bindings:
+  completion_adapter_sha256: b1cdb309c3d81e7a3b0606987fdf6c456d61a66c393ca681d93e212e805ac43c
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  identity_runtime_sha256: a9bc386ec759252464e5d6b4b14b95082a3a4218a9a48cbea97ffbcbd11b95cd
+  identity_bundle_sha256: 4127705ab1a66145576439e520351587d817c48a71a572bb2c0cefc291fd1e80
+  season_lineup_decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  season_lineup_acceptance_sha256: 6cbf2cd2aea87489854eee208ee4cbb3f7d3dc2c603d32aa306515418863c27e
+  match_member_sha256: 620725c2e6a58b4db3e574ed6c559136477451d81af543f8a06bd85c3da3fe29
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+requirements:
+  - Verify every fixed binding before editing.
+  - >-
+    Accept only the exact absolute repository source, manifest and identity roots.
+    Descriptor-relatively open archive-members/matches_England.json without
+    following symlinks; require a regular 0600 file of 1694720 bytes, exact digest
+    620725..., strict canonical source JSON array cardinality 380, and select only
+    ordinal 379 with raw-record digest
+    1cc084d5527c8fea222039b9362ddafcf5a69efe9dc3456b541f5f3eebf74d86.
+  - >-
+    Strictly validate match source 2499719, competition 364, season source integer
+    181150, UTC start 2017-08-11T18:45:00Z, teams exactly 1609 and 1631, and the
+    target player 285508 on team 1631's bench with exactly one minute-82
+    substitution-in row. Reject bool/string coercion, omissions, additions,
+    duplicates, alternate ordinals, cross-team/player/match/season values and
+    inferred terminal minutes.
+  - >-
+    Consume bounded_season_uuid(181150) and require the accepted UUID
+    4696aa1f-b512-5d18-af79-33cf031455cf. Recompute and load the accepted identity
+    bundle and require exact canonical competition/team/player/match identities.
+    Load the existing verified event population and require immutable exact 901/867
+    periods, 1768 actions and their accepted membership digests.
+  - >-
+    Return a frozen immutable context whose nested raw match value cannot be
+    mutated. Perform no source, identity, product, manifest, receipt, aggregate,
+    run or staging writes. Do not add a second identity/season derivation or claim
+    wider completeness.
+  - >-
+    Tests must independently construct malformed temporary exact-root mirrors and
+    attack truncation, addition, duplicate selected match, wrong ordinal/digest,
+    symlink/nonregular/unsafe mode, strings/Booleans, cross-match/team/competition/
+    season, bench/substitution drift, identity drift, mutable nested values and
+    incomplete/reordered event population.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_vertical_slice.py tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - uv run ruff check src/scouting/sources/wyscout_vertical_slice.py tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - uv run mypy src/scouting/sources/wyscout_vertical_slice.py tests/unit/test_w04_wyscout_vertical_slice_context.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_vertical_slice_context.py tests/unit/test_wyscout_source_completion_index.py tests/unit/test_wyscout_identity.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_vertical_slice.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Read-only exact match-context adapter and adversarial unit suite.
+  - Mandatory producer return with hashes and exact source/context proof.
+stop_conditions:
+  - Any need to change source authority, season/lineup population, identity rule, logical model, root, feature, product population, digest meaning, dependency or local-only boundary.
+  - Any provider/network, external service, cloud, container, CI, deployment, publication, cost, destructive action or real-root product write.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

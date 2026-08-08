@@ -1,0 +1,127 @@
+schema_version: 1
+task_id: W05-CONTRACTS-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Close the R1 artifact/result substitution defects by making the M0 artifact manifest
+  canonically content-addressed and binding that complete identity into pinned requests
+  and W05 results while preserving the accepted additive boundary.
+depends_on:
+  - REVIEW-W05-CONTRACTS-01-R1:REWORK
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CONTRACTS-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R1.yaml
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - src/scouting/contracts/retrieval.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - migrations/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/wyscout_*.py
+  - src/scouting/data_products/**
+  - src/scouting/sources/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/modeling/**
+  - src/scouting/serving/**
+requirements:
+  - >-
+    Incorporate the accepted architecture-preflight findings in
+    reports/reviews/W05/w05-architecture-preflight-R1.md. Add a closed evidence-class
+    enum separating W04_REAL_GOVERNED from SYNTHETIC_DEVELOPMENT. Artifact identity
+    must bind feature_registry_id, canonical registry/descriptor digests, evidence
+    class, and a fitting-population manifest digest. W04_REAL_GOVERNED must pin only
+    the exact four accepted feature names in registry order; broader families must be
+    SYNTHETIC_DEVELOPMENT and cannot be represented as W04 authority.
+  - >-
+    Add artifact_manifest_digest to M0ArtifactManifest, derive it from one documented
+    canonical compact sorted-key JSON projection excluding the digest itself, and
+    reject any supplied digest mismatch on construction and JSON reload.
+  - >-
+    Add expected_artifact_manifest_digest to PinnedM0ServingRequest and require exact
+    equality after the manifest's own validation. An attacker changing array payload,
+    feature order, family, serialization format, configuration, fitting population,
+    taxonomy, lineage, model or index must not retain admission merely by reusing the
+    UUID.
+  - >-
+    Add closed, non-executable numeric-array descriptors and bundle identity binding
+    ordered name, semantic role, dtype, shape, endianness, memory order, byte length
+    and digest. Object/pickle-capable or unknown formats are not admitted. Pin the PCA
+    orientation policy (lowest-index maximum-absolute pivot forced non-negative) and
+    deterministic component tie-order policy for PCA artifacts.
+  - >-
+    Bind a candidate-universe manifest identity/count separately from the fitting
+    population. The pinned request must carry a resolved role-brief/query digest,
+    ordered exclusion digest, shared-core version and exact candidate-universe digest.
+    Define the canonical tie policy as score/distance then canonical player UUID bytes;
+    result contracts require contiguous, limit-bounded ranks and exact exclusion.
+  - >-
+    Bind the complete self-verifying M0ArtifactManifest into M0RetrievalResult and its
+    result digest. Validate the embedded RetrievalResult feature_schema_hash,
+    model_version and index_version against that manifest. The result wire bytes must
+    directly expose and bind taxonomy version, fitting population and lineage through
+    the manifest.
+  - >-
+    Make DataConfidenceEvidence carry the authoritative score, applicability, coverage,
+    limitations and ordered reason codes. In M0RetrievalResult require exact agreement
+    with each candidate's existing ConfidenceAssessment, coverage and legacy
+    data_confidence evidence dimension. Add explicit per-dimension feature/evidence
+    states so unsupported, suppressed or missing dimensions cannot contribute to
+    ranking or be described as measured evidence. Preserve all six accepted dimensions
+    without an unsupported blended percentage.
+  - >-
+    Add adversarial tests for same-artifact-ID payload/manifest substitution, feature
+    reordering, family/format substitution, wrong manifest digest and result/artifact
+    schema/model/index mismatch. Retain strict JSON round-trip and all R1 invariants.
+    Also test real/synthetic evidence-class substitution, unsafe array descriptors,
+    PCA-policy substitution, candidate-universe/query/exclusion/tie drift, rank gaps,
+    limit/exclusion violations and confidence/dimension-state contradiction.
+deliverables:
+  - Corrected content-addressed artifact, request and result contracts.
+  - Adversarial substitution tests proving both P1 findings closed.
+  - Complete mandatory R2 return at the exact allowed path.
+definition_of_done:
+  - No manifest or result substitution described in REVIEW-W05-CONTRACTS-01-R1 is admitted.
+  - Existing W03/W04 contracts, authorities and serialized bytes remain unchanged.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/contracts/__init__.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/contracts/__init__.py
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run lint-imports
+stop_conditions:
+  - Any requirement to modify an existing accepted contract or W04 authority/evidence byte.
+  - Any materially different product behaviour, weakened evidence guarantee or unresolved contract decision.
+  - Any new dependency, external access/service, deployment/publication, destructive action or secret.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

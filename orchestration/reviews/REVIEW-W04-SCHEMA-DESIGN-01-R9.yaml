@@ -1,0 +1,44 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R9
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: FAIL_TRANSIENT_MASTER_REMEDIATED
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - {id: W04-DESIGN-STAGE0-BUILD-ID-CYCLE-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-REPOSITORY-ORPHAN-PYC-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-PYC-STABLE-MAP-CONTRADICTION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-PYTHON312-ALIAS-OMISSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-TRANSIENT-SCOPE-VIOLATION-01, severity: P2, status: master_remediated}
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R10
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R9.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R9.md
+  - reports/verification/W04/wyscout-schema-design-R9-master-verification.md
+  - src/scouting/storage/__pycache__/postgres.cpython-312.pyc
+  - reports/reviews/W04/wyscout-schema-design-R8.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-R9.md');
+      assert p.is_file() and p.stat().st_size > 22000"
+    result: PASS_96263_BYTES
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: >-
+      uv run python -c "<classify current repository pyc against present sources>"
+    result: FAIL_EVIDENCE_35_NORMAL_MAPPED_20_PYTEST_MAPPED_1_ORPHAN_POSTGRES
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+  - command: test ! -e ../reports
+    result: PASS_AFTER_MASTER_REMOVED_AGENT_CREATED_EMPTY_DIRECTORIES

@@ -1,0 +1,95 @@
+schema_version: 1
+task_id: W06-EVAL-VALUE-IDENTITY-REVIEW-03
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently verify the final W06 metric/value/identity split, including one exact
+  persisted result implementation, formulas, missingness, comparison semantics,
+  interval lineage and child uniqueness, without reopening accepted gate population work.
+depends_on:
+  - W06-EVAL-VALUE-IDENTITY-03-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-03-R1.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R3.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-02-R2.yaml
+  - reports/reviews/W06/evaluation-gate-binding-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R1.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-value-identity-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Are Precision@k, Recall@k, NDCG@k and Coverage exact under zero positives, partial gain, insufficient k, ties, UNJUDGED and ABSTAIN?
+  - Do pair prediction states distinguish predicted, explicit abstention and missing without mapping missing to an incorrect observation?
+  - Do pair and agreement inputs bind governed reviewer identity and the exact protocol rubric, with canonical agreement orientation?
+  - Is MetricResult/BootstrapInterval the only core and persisted result implementation, with protocol, population, ordered-input, result and resample lineage retained unchanged through EvaluationRun?
+  - Do rank-comparison identities bind distinct ordered left/right inputs and enforce Spearman, overlap, Jaccard, churn and disagreement arithmetic while retaining valid set metrics when correlation is unavailable?
+  - Do negative statistics, impossible bounds, computed reasons, unsupported primary capability, duplicate slice/failure children and protocol/population substitutions fail closed?
+  - Do all accepted gate-population R2 regressions remain green and is the public fixture digest/authority notice unchanged?
+master_counterexamples:
+  - distinct comparison inputs previously collided at 4011d5fc2ba5ac6ee61c41baccaf29d64942c3a8575196c58c7ec01e5c378350
+  - pair rubric substitution previously accepted at cb4261e45ccd3c067ef480110fe081cece8307861c6191155ff8a64ee4e44666
+  - core/persisted translations previously emitted different digests bc74844c and 3f9f8a51
+  - Spearman 2.0 previously validated at 0726186654b6e32564da3600d911a97a321084d5207ebc67e92abb4e3fdc7826
+  - overlap_count 2 at k 1 previously validated at 6ca6259f72a2cd0d74e0630f944e04fe4249703f13fb6aae2c78b11b00880467
+  - computed metric reason previously validated at f73f54f9a964b90c56ba666ea3bad201e9d5ea4c5f8dc3091c84899cb901f082
+deliverables:
+  - One fresh report-only ACCEPT or REWORK verdict with exact formula/identity/constructor matrix and severities.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.md.
+definition_of_done:
+  - Every prior R3 and master P1 witness is independently reproduced as closed or retained with exact severity.
+  - Any new finding demonstrably changes a metric value, interval, persisted identity, population lineage or gate input.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/evaluation-value-identity-independent-review-R1.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and formula/identity/constructor matrix with severities
+  - exact commands, exit statuses and concise results
+  - exact remaining counterexamples and identities or explicit closure
+  - residual metric, interval, identity, population, applicability and claim risks
+  - smallest bounded correction or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

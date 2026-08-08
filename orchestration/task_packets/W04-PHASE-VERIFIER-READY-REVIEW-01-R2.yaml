@@ -1,0 +1,65 @@
+schema_version: 1
+task_id: W04-PHASE-VERIFIER-READY-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Freshly review the final R3 phase-verifier correction, including canonical
+  packet completeness, without modifying implementation or superseded evidence.
+depends_on:
+  - W04-PHASE-VERIFIER-READY-01-R3:ACCEPTED_FOR_FRESH_INDEPENDENT_REVIEW
+assigned_role: independent_orchestration_control_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R3.yaml
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-REVIEW-01-R1.yaml
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-REVIEW-01-R2.yaml
+  - scripts/verify_phase.py
+  - scripts/verify_task_return.py
+  - tests/unit/test_orchestration_controls.py
+  - reports/reviews/W04/wyscout-phase-verifier-ready-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R3.md
+  - reports/verification/W04/wyscout-master-packet-schema-correction-R1.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-phase-verifier-ready-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - scripts/**
+  - tests/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/phase_registry.yaml
+  - orchestration/master_plan.yaml
+  - configs/**
+  - src/**
+  - data/**
+review_bindings:
+  verifier_physical_sha256: ad2c668c22ed2bc21b840c1fa2a8b842091a2cc9cc1bd731e7a62d2d7e276da5
+  tests_physical_sha256: 825097186cea1ce65403f01b995895ce8856aa480675354259a1c0881ebb1253
+  r3_return_physical_sha256: b3f523342b93ef0af3aa4e8d12f6100da98c2e0d6546fb1163b63e400a303ad6
+  superseded_r1_review_physical_sha256: d5f9ed587f9045de2234ba1295cee73a22e1b6349179005262c6fdb940dd0965
+deliverables:
+  - Verify all four physical bindings before analysis.
+  - Independently prove READY retains every other phase gate.
+  - Independently prove empty-return exemption requires complete canonical packets, exact master assignment, and exact task identity for every referenced packet.
+  - Reproduce the skeletal packet finding as rejected and test current source-authority/source-acquire positives.
+  - Issue PASS or REWORK with concrete findings and a complete R2 handback.
+definition_of_done:
+  - PASS is allowed only if the R1 finding is closed and no bypass remains within the bounded correction.
+  - R1 REWORK evidence remains byte-for-byte unchanged.
+  - The review distinguishes verifier acceptance from R21 gate acceptance and product authorization.
+acceptance_checks:
+  - uv run ruff format --check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run ruff check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run mypy scripts/verify_phase.py
+  - uv run pytest -q tests/unit/test_orchestration_controls.py
+stop_conditions:
+  - Any physical binding differs.
+  - A finding requires work beyond the bounded verifier/control evidence.
+  - A secret, external account, deployment, destructive action, dependency change, or Git operation is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

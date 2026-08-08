@@ -1,0 +1,155 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R5
+state: DISPATCHED
+objective: >-
+  Correct only the two R4 independent/master P1 findings: complete exact runtime
+  predicate operands/constants and the deficient Bronze/SilverAction variants in
+  the already-counted 29-row valid-model matrix. Preserve every passing authority,
+  projection, canonical-Decimal and architectural boundary.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4:REWORK_P1_01_TO_P1_02
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4:MASTER_REWORK_P1_01_TO_P1_02
+assigned_role: w04_23_root_schema_closure_implementer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.yaml
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R4-master-verification.md
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+allowed_paths:
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/integration/**
+  - tests/security/**
+fixed_bindings:
+  r4_schema_sha256: 67b29d6f13228f8e9ba87468545457961c6fdf808831aa1d2ae08ef12d2b7c3b
+  r4_schema_test_sha256: c6ae3c4c469c0fec819a18ee3d929ec9cd291f386ff8dae2fb44394173fa7c42
+  accepted_formats_sha256: 84c04be89c6d726ab9129326e7815dda2331bf30ade2f8d41852120e2b6d144c
+  accepted_formats_test_sha256: 8e68548967293b28e694359509667106951bdc5ba8e1636a541f81f7c3773e1a
+  r4_independent_review_sha256: 676f911ad8e2ad4bff9900e7b53b7d57408a69b51f35f3dc61dc865666abed65
+  r4_review_return_sha256: 43919ae91e483fe7534cf5cf4479092dfddd7f58e75d1b1bc035b7df33ea4639
+  r4_master_rework_sha256: 956c6463ba34db257cae64c20e3924e0796672a447938af0d4ad9dabbab85a0b
+  acceptance_oracle_sha256: de4a4119cf1a1158156d55f49f26bae8c1c08b46d36f93bb6c6afe102fdd145f
+  build_product_authority_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  season_lineup_authority_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+corrections:
+  exact_runtime_predicates:
+    - >-
+      Re-audit all 56 reachable owner/validator bindings against the actual frozen
+      validator bodies, not only the 26 known failures. Each predicate must name
+      every material direct and composed runtime input used by its operation and
+      carry every exact constant needed to reproduce its cross-field decisions.
+      Do not solve this by advertising every model field indiscriminately.
+    - >-
+      At minimum close every omission enumerated by R4 P1-01, including all nine
+      inherited product-row bindings, Bronze source/tenant/rights/lineage, coverage
+      name/zero-denominator authority, Action source/event/team/player/scale/state/
+      lineage, player-fact and Gold build/source/coverage/applicability state,
+      LayerManifest source/index/rights/clocks/feature state, entry schema role,
+      applicability state and temporal source/index/authority/feature state.
+    - >-
+      Add a test-owned, explicit expected ledger keyed by owner and validator. It
+      must assert the exact advertised operand sequence plus operation and material
+      constants for all 56 reachable bindings. It must also independently parse
+      direct validator field reads and require no omission. A count or digest built
+      only from candidate-emitted records is insufficient.
+    - >-
+      Retain the exact eight separate external predicates. Do not add unreachable
+      schemas, a second semantic authority, or an alternate predicate surface.
+  exact_29_row_variants:
+    - >-
+      Preserve exactly 29 valid rows and the existing per-root cardinalities. Change
+      only the deficient Bronze-known, Bronze-rejected-record and SilverAction
+      fixtures, retaining every already-passing rejected-field, lineup, possession,
+      fact and Gold variant.
+    - >-
+      The two Bronze-known rows must have materially different raw shapes. Across
+      them require one nested object/array value that recursively exercises all
+      seven canonical tagged JSON arms, including present tagged null, and one
+      materially different empty or alternate nested object. Reproduce each raw
+      digest, source-row and lineage equality under strict validation.
+    - >-
+      Preserve the five raw-kind states for Bronze-rejected-record but give all five
+      rows distinct raw-record shapes with independently reproduced digests and
+      lineage/source bindings.
+    - >-
+      Preserve three SilverAction rows and explicitly cover: one, zero and two
+      positions; source scales 0 and 18; and one valid action with null player/team/
+      event/subevent taxonomy IDs whose complete sequence derives
+      PREDICATE_UNMAPPED and INELIGIBLE_UNMAPPED. All action/sequence/source/lineage
+      equalities must survive fresh strict validation.
+    - >-
+      Add explicit property assertions for every frozen variant above. Row and role
+      counts alone must fail if any required variant is removed or aliased.
+implementation_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - Use only uv for Python environment, dependency and command execution.
+  - Preserve exact 23 roots, 12/11 split, root dependencies and canonical content shape.
+  - Preserve all nine accepted authority subobjects and E1-E8 byte-semantically.
+  - Preserve accepted canonical-Decimal behavior and exact two-logical-owner mapping.
+  - >-
+    Do not change logical contract models, logical fields, semantic digest paths,
+    features, population, dependencies, projection descriptors, provider/local-only
+    boundary, dependency policy, products, aggregates, manifests or receipts.
+  - No Git, provider/network, dependency, cloud, container, CI, publication or deployment action.
+focused_acceptance:
+  - Independent direct-field AST probe reports zero incomplete reachable bindings.
+  - Exact explicit expected ledger covers all 56 reachable runtime bindings.
+  - The exact 29-row matrix asserts and exhibits every corrected frozen variant.
+  - All R1-R4 authority, projection, Decimal and adversarial evidence remains passing.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected exact runtime-predicate closure.
+  - Corrected exact 29-row variant matrix and explicit variant assertions.
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.md
+stop_conditions:
+  - Any fixed binding drifts before editing.
+  - >-
+    A correction requires changing a logical model, root, field, semantic path,
+    feature, population, dependency, projection behavior, accepted authority byte,
+    provider/local-only boundary, dependency policy or product architecture.
+  - Any edit outside allowed paths or need for aggregate/product/runtime bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

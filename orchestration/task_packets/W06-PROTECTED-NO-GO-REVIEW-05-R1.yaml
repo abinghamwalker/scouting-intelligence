@@ -1,0 +1,92 @@
+schema_version: 1
+task_id: W06-PROTECTED-NO-GO-REVIEW-05
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the frozen missing-population preregistration and one-use broker,
+  with exact focus on protocol/candidate/inventory substitution and retained NO_GO.
+depends_on:
+  - W06-PROTECTED-NO-GO-05-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-PROTECTED-NO-GO-05-R1.yaml
+  - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-05-R1.yaml
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R1.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - reports/phase-gates/W05/gate-report.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/gate.py
+  - scripts/run_w06_missing_population_gate.py
+  - tests/unit/test_w06_missing_population_gate.py
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - tests/fixtures/w06/public-missing-population-gate-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/protected-no-go-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R1.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - reports/evaluation/W06/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+master_counterexample:
+  protocol_digest: 0315215e86788e773050637a2ac6d6cda70464efbdc4297f28c2cac3b27a3f4e
+  preregistration_digest: 5f71bc77d1ea5430e3663ac5e0f0f84697b07c00776a4f3a1ce678a24cb3dffe
+  mutation: >-
+    Swap AUTHENTIC_GOVERNED_EXPERT_EVIDENCE and NONEMPTY_PROTECTED_POPULATION,
+    replace stop_rule with 'Proceed despite missing expert evidence.', re-sign both.
+  current_outcome: ACCEPT
+review_questions:
+  - Are every candidate field and all four W05 selected artifact/configuration identities exactly frozen and substitution-resistant?
+  - Are the complete primary/secondary metric roster, unsupported k, baselines, nulls, bootstrap, minimum effect, fail-closed order and stop rule exactly frozen under re-signing?
+  - Can any nonzero/fabricated expert or protected population pass the inventory or broker boundary?
+  - Does the broker exclusively persist one access outcome, one NO_GO and one receipt without accepting protected inputs or constructing bundle/run/access objects?
+  - Does any complete or partial pre-existing output prevent overwrite before a rerun?
+  - Is the sole reason MISSING_EXPERT_RELEVANCE_EVIDENCE and claim boundary resemblance_only retained exactly?
+deliverables:
+  - One report-only ACCEPT or REWORK verdict with exact P0/P1 counts and mutation/one-use matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R1.md.
+definition_of_done:
+  - Every field capable of changing the protected decision or claim is independently tested under re-signing.
+  - One-use and no-protected-access behavior are independently reproduced in a temporary directory only.
+  - Review does not access repository protected outputs or production output paths.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation scripts/run_w06_missing_population_gate.py tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_missing_population_gate.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation scripts/run_w06_missing_population_gate.py
+  - uv run --no-sync lint-imports
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-missing-population-gate-v1.json
+stop_conditions:
+  - A required check needs protected expected-output, a production output invocation, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - final verdict and exact severity counts
+  - exact frozen/substitution and one-use matrices
+  - exact focused commands/statuses/results
+  - remaining P0/P1 risks and smallest correction or none
+  - no Git/dependency/protected/production-output/external/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

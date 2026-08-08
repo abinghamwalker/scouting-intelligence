@@ -1,0 +1,44 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1
+task_id: W04-POSSESSION-SEMANTIC-V2-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: NOT_APPLICABLE_MASTER_OWNED
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-FEATURE-REGISTRY-DECISION-01-R1
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - reports/verification/W04/wyscout-possession-semantic-v2-acceptance-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: canonical acceptance and bound authority reconstruction
+    result: PASS_2438FB02_15_KEYS_1046_BYTES_ACCEPTED
+  - command: focused authority suite
+    result: PASS_332_TESTS
+  - command: local-only verifier
+    result: PASS_25_CHECKS
+  - command: orchestration YAML parse
+    result: PASS
+  - command: retained bytecode/cache count
+    result: PASS_1145_FILES_150_DIRECTORIES
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    Acceptance binds the exact corrected decision/candidate, fresh independent
+    PASS review, UUIDv5 actors, clocks, and possession-v1 supersession.
+  - >-
+    Only the serial supported-feature authority is released; cross-authority
+    and product work remain blocked.

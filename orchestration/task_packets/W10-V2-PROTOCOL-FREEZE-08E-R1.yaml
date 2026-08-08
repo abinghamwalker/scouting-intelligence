@@ -1,0 +1,54 @@
+schema_version: 1
+task_id: W10-V2-PROTOCOL-FREEZE-08E
+phase_id: W10
+revision: R1
+state: PLANNED
+objective: >-
+  Freeze a fresh v2 protocol/query/presentation/evaluator authority after the sufficiency pilot,
+  and require a new explicit product-owner approval before formal access.
+depends_on:
+  - W10-V2-MECHANICS-PILOT-08D:ACCEPTED_GO
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  - reports/verification/W10/v2-mechanics-pilot.md
+allowed_paths:
+  - src/scouting/contracts/expert_relevance.py
+  - src/scouting/evaluation/expert_relevance.py
+  - src/scouting/storage/expert_study.py
+  - services/api/w10_study_main.py
+  - configs/evaluation/*v2*.json
+  - scripts/build_w10_expert_protocol.py
+  - scripts/evaluate_w10_expert_relevance.py
+  - tests/contracts/test_w10_expert_relevance_contracts.py
+  - tests/unit/test_w10_expert_relevance_evaluation.py
+  - tests/integration/test_w10_expert_relevance_evaluation_integration.py
+  - reports/verification/W10/v2-protocol-freeze.md
+  - reports/reviews/W10/returns/W10-V2-PROTOCOL-FREEZE-08E-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/features/w09-historical-player-window-v1.json
+  - configs/models/w09-historical-retrieval-v1.json
+  - data/derived/w09/**
+requirements:
+  - Build a formal pack disjoint from the v2 pilot and bind exact evidence definitions and participant bytes.
+  - Preserve preregistration, one-use evaluation, negative-result retention and zero label feedback into W09.
+  - Reject v1 approval, v1 sessions, pilot authority and mixed v1/v2 digests at every boundary.
+  - Present the fresh burden, evidence, metrics and limitations for explicit v2 approval; never approve automatically.
+deliverables:
+  - Fresh canonical v2 authorities and verification report.
+  - reports/reviews/W10/returns/W10-V2-PROTOCOL-FREEZE-08E-R1.md
+definition_of_done:
+  - Formal v2 access remains disabled until one exact post-pilot human approval binds every v2 digest.
+acceptance_checks:
+  - Cross-version substitution, stale approval, mixed digest, pilot contamination and replay tests fail closed.
+stop_conditions:
+  - Any threshold/query/evidence decision is proposed after inspecting protected formal outcomes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

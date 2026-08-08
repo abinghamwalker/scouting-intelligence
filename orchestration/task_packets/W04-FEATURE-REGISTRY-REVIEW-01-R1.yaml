@@ -1,0 +1,131 @@
+schema_version: 1
+task_id: W04-FEATURE-REGISTRY-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent adversarial review of the frozen R21 supported
+  feature decision, candidate, lineage, applicability, and progression. PASS
+  requires zero P0-P2 findings.
+depends_on:
+  - W04-FEATURE-REGISTRY-DECISION-01-R1:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_supported_feature_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FEATURE-REGISTRY-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - tests/contracts/test_w04_supported_feature_authority.py
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R1.md
+  - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-supported-feature-registry-decision-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+review_authority:
+  review_id: w04-wyscout-supported-feature-registry-independent-review-R1
+  review_schema_version: w04-authority-independent-review-v1
+  independent_actor_id: f816bdd7-4569-534e-b43d-a2c863c55548
+  candidate_id: w04-wyscout-supported-count-features-v1
+  candidate_physical_sha256: 8901e09c8b0cd9ab2bfce9f6855702e518e36efa98c7f7653082eee52fcc2d95
+  candidate_sha256: 49065bcfe762caa7585082d897d845d82c9a9ef2f57a84a5312e55a12ffea10f
+  decision_id: w04-wyscout-supported-feature-registry-decisions-v1
+  decision_physical_sha256: bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941
+  decision_sha256: bf46f42585adfdec48f5e3670c70d9e517b9f542645089ba63b91dd218d33941
+  focused_contract_sha256: 976eeea142ee96d8c4274bb22dd8637c7486c6a1b71aec591f69962117501411
+requirements:
+  - >-
+    Read every input completely and independently reconstruct canonical bytes,
+    physical and canonical digests, exact keysets, clocks, actors, ten bindings,
+    exact policies, and all fifteen feature rows.
+  - >-
+    Prove exactly the four R21-supported features are supported, every input is
+    an accepted field-v2 output, and the resolved-possession feature requires
+    exact accepted possession eligibility without adding a fourth input.
+  - >-
+    Adversarially challenge accepted-position applicability, absent/invalid
+    identifiers, fifth support, roster mutation, unaccepted/name/internal
+    inputs, preimage swaps, physical/canonical substitution, and feature hash
+    use before acceptance.
+  - >-
+    Verify review and acceptance schemas, UUIDv5 actor separation, digest and
+    clock progression, fail-closed later-authority blocking, and absence of all
+    cross-authority and product paths.
+  - >-
+    Write exactly one canonical review fence with the fixed review ID, exact
+    digests, truthful fresh clock, packet UUIDv5 actor, and every P0-P2 finding.
+    PASS requires findings=[]; REWORK requires at least one finding.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory; use only
+    root uv with --locked --no-sync and bytecode disabled; reproduce the exact
+    inventory after the return. Do not sync, install, clean, or repair.
+  - >-
+    Use apply_patch only for the two exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, edit any authority/candidate/test/predecessor,
+    create acceptance, or begin cross-authority, identity, Bronze, Silver,
+    Gold, build, model, product, cloud, container, endpoint, hosted CI, or
+    deployment work.
+definition_of_done:
+  - Complete independent review reports every P0-P2 finding.
+  - All producer and predecessor bytes remain unchanged.
+  - Review is canonical, fixed-route, digest-bound, truthful, and independent.
+  - Focused/Ruff/local-only/inventory checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_supported_feature_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_supported_feature_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any candidate, decision, test, predecessor, or preimage byte changes.
+  - Exact R21 semantics or any mandatory input/check cannot be independently proven.
+  - Any terminal inventory differs.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

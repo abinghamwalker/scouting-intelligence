@@ -1,0 +1,31 @@
+schema_version: 1
+review_id: REVIEW-W04-AUTHORITY-REVIEW-01-R3
+task_id: W04-AUTHORITY-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SOURCE-INGEST-REVIEW-01-R1
+reviewer: master
+evidence:
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/authority-boundary-audit-R3.md
+  - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R3.md
+checks:
+  - command: >-
+      uv run pytest -q tests/governance/test_w04_source_authority.py
+      tests/security/test_w04_source_authority_boundary.py
+    result: 43 passed
+  - command: >-
+      uv run ruff format --check tests/security/test_w04_source_authority_boundary.py
+    result: PASS
+  - command: uv run ruff check tests/security/test_w04_source_authority_boundary.py
+    result: PASS
+  - command: uv run mypy tests/security/test_w04_source_authority_boundary.py
+    result: PASS
+

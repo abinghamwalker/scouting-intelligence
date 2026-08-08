@@ -1,0 +1,93 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01
+phase_id: W04
+revision: R7
+state: REWORK
+objective: >-
+  Independently review the R7 23-root closure after the bounded predicate-ledger
+  correction, reproducing the frozen 56-row oracle, C1-C11 material closure,
+  Decimal projection, 29-row matrix, all root bytes and derived digests.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7:COMPLETE
+assigned_role: independent_w04_23_root_schema_r7_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7.yaml
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7.md
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-R2-master-acceptance.md
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R7.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R7.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r7_schema_sha256: 8ff15eb36e588806d3768e7a3769d7e5cad9a95ea994f676f5930bc63205d0f4
+  r7_test_sha256: af355c891aa6472e778c2ad104ccd5a593700c9433bedaf3f7e2cc6f82eb8636
+  r7_producer_return_sha256: e156f57547424dc194c3d20e7b7794a03abae7576f4b7fdcce0c0634ba9722f8
+  r5_acceptance_oracle_sha256: a3f15f92a14ff342efd0f5b2848b60eab4898ea79eb69c7fd6f09e6946077efa
+  accepted_formats_sha256: 2dfdf3675a47f6c2b53478857de1af27aebecb85def8f0701e6ef86c65fafcc9
+  accepted_formats_test_sha256: ba38c5a66f41aee8ef2b998f4622c71ec30f3b8861d7ef07d8540d001b0bee89
+requirements:
+  - Verify every fixed binding before reviewing.
+  - >-
+    Extract the exact JSONL between the R5 oracle markers without importing the
+    candidate or candidate tests. Reproduce 56 rows and SHA-256 c36ad193..., then
+    normalize every emitted runtime predicate to exact keys
+    constants,declared_owner,operation,operands,owner,validator and require byte-
+    exact equality in order. Independently audit effective/inherited binding roster
+    and direct-field operand coverage.
+  - >-
+    Independently resolve every C1-C11 reference to material candidate corpus and
+    compare it with the R3 oracle/accepted executable inputs. Reject missing,
+    unknown, duplicated, reordered, unreferenced or non-material labels and altered
+    L: literals. Confirm external E1-E8 remain distinct and exact.
+  - >-
+    Independently regenerate all 23 canonical content bytes/digests, validate exact
+    earlier-only dependency closure, 12 descriptors/11 JSON-only roots, all
+    noncoverage Decimal struct mappings, six coverage UTF8 mappings, strict inverse
+    logical-byte reproduction and the exact 29-row cardinality/variant roster.
+  - >-
+    Run the focused and adjacent acceptance gates. Report P0/P1/P2 findings and
+    return PASS only with 0/0/0; otherwise REWORK with the smallest exact defect.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R7 review with exact reconstruction evidence and verdict.
+  - Mandatory independent reviewer return with artifact hashes.
+stop_conditions:
+  - None for bounded defects: return REWORK and do not edit producer bytes.
+  - Stop only for a required change outside the standing W04 correction authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

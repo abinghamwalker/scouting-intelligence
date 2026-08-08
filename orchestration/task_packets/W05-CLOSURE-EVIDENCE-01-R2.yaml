@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W05-CLOSURE-EVIDENCE-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct only the three evidence-precision findings in the R1 master review without
+  changing any accepted identity, product byte, phase gate or integration state.
+depends_on:
+  - REVIEW-W05-CLOSURE-EVIDENCE-01-R1:REWORK
+assigned_role: evidence_producer
+risk: low
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CLOSURE-EVIDENCE-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-CLOSURE-EVIDENCE-01-R1.yaml
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - reports/reviews/W05/w05-m0-serving-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/**
+  - reports/verification/W04/**
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R1.md
+deliverables:
+  - >-
+    limitations.md explicitly records accepted W04 elapsed-minutes/rates/per-90
+    suppression and both accepted model-side and serving-side P2 residuals.
+  - >-
+    training-serving-parity-report.md labels the three accepted serving UUIDs exactly
+    as m0_result_id, retrieval_result_id and retrieval_run_id.
+  - Mandatory R2 return with exact path roster and checks.
+definition_of_done:
+  - All three R1 findings are closed with no other semantic change.
+acceptance_checks:
+  - rg -n "elapsed.minutes|per.90|list.collection|query/exclusion|m0_result_id|retrieval_result_id|retrieval_run_id" reports/verification/W05/training-serving-parity-report.md reports/verification/W05/limitations.md
+stop_conditions:
+  - Any need to change an accepted identity, product behavior, W04 authority, W06 scope, phase gate, dependency, external boundary or path outside this packet.
+mandatory_return_requirements:
+  - Exact changed-path roster and confirmation that every R1 finding is closed.
+  - Acceptance-check results and explicit no-Git/no-delegation statement.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

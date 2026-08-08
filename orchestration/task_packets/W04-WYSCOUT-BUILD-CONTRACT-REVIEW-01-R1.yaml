@@ -1,0 +1,121 @@
+schema_version: 1
+task_id: W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the corrected R2 W04 build contract against the frozen R20,
+  R21, R4, build/product, and season/lineup authorities, including exact v15 admission
+  proof binding and composed three-manifest receipt closure.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_wyscout_build_contract_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R2.yaml
+  - orchestration/task_packets/W04-BUILD-CONTRACT-R2-AUTHORITY-AUDIT-01-R1.yaml
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R2.md
+  - reports/reviews/W04/returns/W04-BUILD-CONTRACT-R2-AUTHORITY-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-contract-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r2_packet_sha256: 8995671c7591b022c36f755e065c5f12b0bfd9138bf6e1a7d40633c3f678d368
+  r2_authority_audit_return_sha256: 393113a0f7c06e876c20518a4dc8f7a0a3a016a33127e045a1f48fcf3925ea91
+  r2_contract_sha256: ed7345a8bddbfcb0b26deef57fba09726ce05691e553e1fc1166308e449b06dd
+  r2_test_sha256: 9a6446a441ebc8a625395418c0c914a76f980c43fe7e17bd2b40294db95fd1ec
+  r2_return_sha256: f69a00196915ac819c6debf06a9c2da034541ef8e1546fc134d77b2af5309912
+  r1_return_sha256: 3d6b6f017d1974620024bd32507b600340b65ef16f3c6a75aab738acbe3cd5c8
+  complete_repository_gate_sha256: 22b0b73078d4d2f0cc7e5eed3920a5401fd3d0e02d9ee3c66d9c7af02f76f469
+  build_authority_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  build_authority_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  season_lineup_decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  season_lineup_acceptance_sha256: 6cbf2cd2aea87489854eee208ee4cbb3f7d3dc2c603d32aa306515418863c27e
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  wyscout_data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Independently reconstruct the exact one-match window, season UUID, five accepted
+    authority rows, five dependency rows, 25-key pre-build projection, 25-key strict
+    inverse invocation, and sole one-hash build derivation. Confirm there is no added
+    result role, schema root, feature, aggregate, product row, or wider population.
+  - >-
+    Decode the v15 admission bytes independently and prove their exact 23-key lexical
+    roster: the exact twenty COMPONENT_KEYS plus environment_digest,
+    repository_code_sha256 and schema_version. Recompute the 20-component environment
+    digest, every value proof, proof-array digest, exact uv version, selector grammar,
+    digest grammar, and independently supplied ordered count seam. Attack omission,
+    addition, reordering, type drift, Boolean counts and coherent downstream rehashes.
+  - >-
+    Independently reproduce competition_id cb5c5317-fa4a-571e-93dc-ef6ce482eab7
+    from competition source ID 364 and confirm it is the sole admitted Gold path.
+  - >-
+    Audit receipt closure across exactly Bronze, Silver and Gold complete physical
+    manifests: canonical bytes plus one LF, parsed equality, digest/size, exact frozen
+    authority and lineage, sole R4 two-key complete-manifest semantic derivation,
+    exact Bronze-empty/Silver-to-Bronze/Gold-to-Silver parents, and exact one-entry
+    Gold-derived boundary population. Attack each summary, physical readback, parsed
+    object, authority field, parent field/cardinality/order, Gold role/path/cardinality,
+    product digest/count, boundary, receipt, and downstream child rehash.
+  - >-
+    Confirm the pure contract remains side-effect free, local-only, standard-library
+    plus Pydantic, and created no product/data/run bytes, dependency, Git operation,
+    provider/network access, cloud, container, hosted CI, endpoint or deployment.
+definition_of_done:
+  - PASS with P0/P1/P2 equal 0/0/0, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review report and mandatory reviewer return with finding counts.
+stop_conditions:
+  - Candidate or fixed hash drift.
+  - Need to edit implementation/tests or any non-review path.
+  - Any architecture, schema-root, product, dependency, Git, provider/network or external-infrastructure action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

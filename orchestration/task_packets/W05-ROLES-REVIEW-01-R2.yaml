@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W05-ROLES-REVIEW-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently prove the accepted full claim-bearing taxonomy is one normally validated
+  shared contract identity and all R1 role behavior remains exact.
+depends_on:
+  - W05-ROLES-01-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-ROLES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-ROLES-01-R1.yaml
+  - reports/reviews/W05/w05-role-taxonomy-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-ROLES-01-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/roles/taxonomy.py
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - tests/contracts/test_w05_m0_contracts.py
+  - tests/unit/test_w05_roles.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-role-taxonomy-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-ROLES-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+review_questions:
+  - Does the loaded RoleTaxonomy.contract pass normal public validation and recompute exact digest 596886... over every claim-bearing semantic field?
+  - Is model_construct absent and do fully re-signed responsibility/role/mapping/claim/expert/exemplar substitutions reject?
+  - Are config and fixture logical and physical bytes unchanged from R1?
+  - Do contextual exact-sum probabilities, context variation, fail-closed inputs, no permanent label and 18-row alignment remain exact?
+  - Can downstream model work safely source taxonomy ID/version/digest from this authenticated contract object, with arbitrary raw digest input outside the role API?
+deliverables:
+  - Independent P0/P1/P2 verdict with strict public round-trip, digest recomputation and retained adversarial evidence.
+  - Complete mandatory R2 return.
+definition_of_done:
+  - The R1 public-contract P1 is closed without accepted byte or behavior regression.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_roles.py tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts/m0.py src/scouting/roles tests/contracts/test_w05_m0_contracts.py tests/unit/test_w05_roles.py
+  - uv run mypy src/scouting/contracts/m0.py src/scouting/roles
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted byte, authority, dependency, external or out-of-scope change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

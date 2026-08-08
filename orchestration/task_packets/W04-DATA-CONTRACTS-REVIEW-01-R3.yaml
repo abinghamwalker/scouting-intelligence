@@ -1,0 +1,152 @@
+schema_version: 1
+task_id: W04-DATA-CONTRACTS-REVIEW-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Perform a new fresh independent, read-only review of the W04 data-contract
+  R3 correction. Reproduce closure of all nine R2/master finding families,
+  challenge every new proof-bearing constructor and aggregation, and recommend
+  PASS only with zero open P0-P2 findings. Do not modify implementation.
+depends_on:
+  - W04-DATA-CONTRACTS-01-R3:RETURNED_FOR_FRESH_INDEPENDENT_REVIEW
+assigned_role: fresh_independent_w04_data_contracts_reviewer_r3
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R3.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-01-R3.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-REVIEW-01-R2.yaml
+  - reports/verification/W04/wyscout-data-contracts-R2-master-verification.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/wyscout-data-contracts-independent-review-R3.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R1.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R3.md
+fixed_bindings:
+  corrected_implementation_sha256: 53abc69b85a1a60c13107a8b0a09ee6e066e792b1667c866cf9a9c3f5fd242ff
+  corrected_focused_test_sha256: f13b5ccb8930bef22c94f74feeda1b66c87224704458c0460de022e66af3764b
+  r3_producer_return_sha256: 338c01c40b1913db384b6e0c02ea3d1bdbb01f581f6c3de84baabe54769b36a9
+  r2_independent_review_sha256: 38f2bb9fd6971bf1e9a38aed44dd2acd59b3187124204b69152ad43c80bfcd8a
+  identity_acceptance_sha256: 37764392cdaf9626ffaff26e119fb142218d36489e87a8b1d55402e3e2dc7f86
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+  feature_acceptance_sha256: d3b3c552784f4734f6b002569d9add1b4dd2d2eaaed57643a8ca4d5226fca78c
+  product_contract_preimage_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+  schema_bundle_preimage_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+requirements:
+  - >-
+    Read every listed input fully, recompute every fixed digest, inspect all
+    4,850 implementation/test lines, and reproduce every packet check.
+  - >-
+    Reproduce all seven independent R2 probes and both master probes:
+    ActionSubeventOutcome forgery; possession-v2 eligible-state drift;
+    duplicate physical source location and partition drift; identity
+    UUIDv5/digest substitution; Gold coverage drift; arbitrary applicability
+    reasons; zero-row/zero-byte entries; non-subevent rejected-field
+    representation; and unproven player-match/Gold action counts.
+  - >-
+    Challenge the R3 additions for constructor/factory disagreement, partial
+    119-row registry coverage, reason aliases, optional/absent event handling,
+    tag/predicate overlap, duplicate action or possession membership,
+    cross-player/match/team/build/lineage leakage, double counting, empty action
+    evidence, coverage aggregation state collapse, optional zero-denominator
+    substitution, uncertainty reason loss, identity fixed-point/cycle, ordinal
+    aliases, and non-Parquet count regressions.
+  - >-
+    Verify exactly four supported features remain and no serializer, product
+    byte, manifest file, receipt, runtime, build, dependency, architecture
+    revision, provider access, or external service was created.
+  - >-
+    Write only the two allowed review artifacts, with exact byte identities,
+    commands/results, one section per finding, all new P0-P2 findings,
+    recommendation, and scope confirmation. PASS requires zero open P0-P2.
+definition_of_done:
+  - Every R3 finding is independently closed or returned with exact evidence.
+  - Every new P0-P2 finding is reported.
+  - Reviewed and authority bytes remain unchanged.
+  - Exact focused static security and local-only checks complete.
+acceptance_checks:
+  - >-
+    uv run ruff format --check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run ruff check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run mypy src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - >-
+    uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+    tests/contracts/test_foundation_contracts.py
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any reviewed implementation, test, return, authority, preimage, R20/R21, or prior evidence byte changes.
+  - Any P0-P2 finding remains reproducible.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,93 @@
+schema_version: 1
+task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-01
+phase_id: W04
+revision: R1
+state: PLANNED
+objective: >-
+  As master, execute the exact accepted outer W04 launcher twice against the fixed
+  local real roots, prove immutable/idempotent raw-to-Gold output and retain the
+  complete operational control/admission/rebuild evidence for final gates.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9:MASTER_ACCEPTED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+  - reports/verification/W04/wyscout-four-feature-vertical-slice-R1-master-acceptance.md
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - data/manifests/wyscout/v5/code/**
+  - data/manifests/wyscout/v5/bronze/**
+  - data/manifests/wyscout/v5/silver/**
+  - data/manifests/wyscout/v5/gold/**
+  - data/working/wyscout/v5/.staging/**
+  - data/working/wyscout/v5/bronze/**
+  - data/working/wyscout/v5/silver/**
+  - data/working/wyscout/v5/gold/**
+  - runs/w04/wyscout-rebuild/**
+  - reports/verification/W04/wyscout-real-root-invocation-R1-master-acceptance.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+requirements:
+  - >-
+    Before the first run, rerun locked offline sync and the complete accepted R9
+    master gate, freeze every code/resource byte and prove main/zero-remotes/guard.
+    No code, dependency, source, identity, schema, authority or accepted report may
+    change after the first admitted manifest is built.
+  - >-
+    For each run the master alone samples/creates the exact fresh control UUIDv4
+    prefix, opens and verifies the launcher once with O_NOFOLLOW, passes only that
+    descriptor through the exact literal normal-PATH-selected command `uv run
+    --locked --no-sync python -S -B scripts/launch_wyscout_v5.py`, and supplies the
+    complete closed outer map/full v4 tuple. Never use a wrapper/module/alternate
+    argv, direct physical uv path, network or unreviewed environment value.
+  - >-
+    Run exactly two complete real-root invocations. Require one immutable code
+    manifest, one stable build ID, byte-identical products and three manifests,
+    distinct operational admission/rebuild/control UUIDs and two receipt families.
+    Guard-read/reopen all seven Parquet products, three manifests, both boundary
+    and invocation receipt families and every completion cross-field.
+  - >-
+    Record complete no-follow pre/mid/post real-root inventories, PYC inventories,
+    control/admission/rebuild prefixes, source-descriptor/encoding/uv/frame/status
+    observations, row counts, SHA-256/semantic digests, two-run equality, local-only
+    checks and residual risk. Retain all staging and PYC evidence; do not clean.
+acceptance_checks:
+  - uv run ruff format --check .
+  - uv run ruff check .
+  - uv run mypy src/scouting scripts
+  - uv run lint-imports
+  - uv run pytest -q -p no:cacheprovider
+  - uv run bandit -q -r scripts src
+  - uv run python scripts/install_local_git_guards.py --check
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Two real local run families, immutable products/manifests, receipts and master acceptance report.
+stop_conditions:
+  - None for bounded implementation or evidence defects; rework without cleanup. User input only for a true standing-authority boundary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

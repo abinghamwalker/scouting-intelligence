@@ -1,0 +1,162 @@
+schema_version: 1
+plan_id: scouting-intelligence-local-delivery
+objective: >-
+  Build a local, provider-neutral ML research workbench over governed historical
+  football data, with a verified adapter boundary for any future licensed current source.
+controlling_documents:
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - docs/architecture/w10-expert-relevance-validation.md
+  - docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+approval:
+  local_only: true
+  git_remote_allowed: false
+  hosted_ci_allowed: false
+  external_deployment_allowed: false
+  highest_authorised_wave: W11
+  continuous_phase_progression: true
+  checkpoint_review_pause_required: false
+  bounded_correction_autonomy: true
+  bounded_rework_review_continuation: true
+  bounded_correction_authorised_at: "2026-08-02"
+  research_workbench_pivot_authorised_at: "2026-08-05"
+  w10_expert_relevance_and_hardening_authorised_at: "2026-08-05"
+  w10_evidence_presentation_v2_addendum_authorised_at: "2026-08-06"
+  w08_product_path: dormant_optional_module
+  w09_entry_authority: accepted_w07_plus_explicit_research_workbench_pivot
+  w10_entry_authority: accepted_unicode_corrected_w09_plus_w10_architecture_and_v2_addendum
+  current_provider_access_authorised: false
+  mechanics_pilot_counts_toward_g_rw4: false
+  formal_g_rw4_protocol_user_approval_required: true
+  bounded_correction_scope:
+    - serialization_and_arrow_projections
+    - physical_schema_descriptors
+    - predicate_operands_and_constants
+    - test_completeness
+    - mechanical_derivations_from_accepted_algorithms
+    - implementation_defects_and_refactors
+  user_reapproval_required_for:
+    - logical_model_or_root_change
+    - feature_population_or_intended_output_change
+    - accepted_source_data_rights_or_digest_meaning_change
+    - weakened_reversibility_validation_completeness_or_temporal_safety
+    - new_dependency_external_access_service_cloud_deployment_or_publication
+    - w08_collaboration_workflow_reactivation
+    - formal_g_rw4_protocol_freeze_or_human_study_start
+    - destructive_action
+    - materially_different_product_behaviour
+architecture_constraints:
+  authority: docs/adr/0004-container-free-embedded-runtime.md
+  product_authority: docs/architecture/research-workbench-pivot.md
+  active_phase_authority: docs/architecture/w10-expert-relevance-validation.md
+  verification: reports/verification/architecture/container-free-runtime.md
+  runtime: container_free
+  operational_store: embedded_sqlite
+  analytical_store: parquet_duckdb
+  vector_retrieval: versioned_local_artifacts_and_in_process_python
+  jobs_cache_and_locks: in_process_or_guarded_local_files
+  provider_boundary: canonical_tables_and_capability_declarations
+  interactive_product_population: governed_historical_players_only
+  synthetic_data_scope: automated_tests_only
+  forbidden_without_new_explicit_user_approval:
+    - container_definitions
+    - external_operational_database
+    - external_vector_database
+    - external_cache
+    - external_queue
+    - mandatory_service_process
+    - provider_network_or_credential_access
+  reapproval_requires:
+    - retained_necessity_evidence
+    - explicit_user_approval
+    - new_accepted_adr
+    - production_blueprint_amendment
+    - implementation_workflow_amendment
+    - governance_gate_amendment
+active_wave:
+  phase_id: W10
+  title: Expert relevance validation and research hardening
+  state: REWORK
+last_closed_wave: W09
+next_wave:
+  phase_id: W11
+  state: PLANNED
+active_blockers:
+  - >-
+    G-RW4 has not been performed. This blocks positive football-relevance,
+    recruitment-usefulness, recommendation, value, availability, fit and outcome claims,
+    but does not invalidate the accepted W09 historical-resemblance engineering or block
+    W10 protocol, console, evaluation and runtime-hardening implementation.
+  - >-
+    Formal G-RW4 responses cannot be collected under presentation v1. Its approval is retained
+    but withdrawn after the mechanics pilot proved that identity and minutes do not supply enough
+    playing evidence for a football role/style judgement. Zero formal v1 responses exist.
+  - >-
+    W10 v2 A4 engineering verification has passed and 08C is accepted. A separate
+    evidence-sufficiency pilot now requires at least two authentic eligible football-domain
+    reviewers before fresh digests, 08F and explicit v2 approval can be prepared for the formal
+    study.
+w10_delivery_boundary:
+  authority: docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+  current_preformal_state: PILOT_READY_HUMAN_EVIDENCE_REQUIRED
+  formal_v2_collection_enabled: false
+  engineering_sequence:
+    - suspend_v1_and_preserve_pilot_evidence
+    - position_specific_construct_and_source_capability_design
+    - versioned_participant_evidence_contracts_and_derivation
+    - participant_safe_v2_comparison_interface
+    - scientific_adversarial_verification
+    - disjoint_v2_mechanics_pilot
+    - v2_protocol_query_presentation_freeze_independent_review_and_explicit_approval
+    - formal_study_evaluation_and_closure
+  formal_outcomes:
+    - PASS
+    - FAIL
+    - INSUFFICIENT_EVIDENCE
+  engineering_ready_checkpoint: checkpoint/w10-engineering-ready
+  accepted_checkpoint: checkpoint/w10-accepted
+  corrective_engineering_wall_clock_estimate_hours: 16-30
+  v2_mechanics_pilot_calendar: normally_one_working_day_subject_to_reviewer_availability
+  formal_study_calendar: governed_by_approved_protocol_and_participant_availability
+  blocks_w10_closure_without_formal_result: true
+  blocks_w11_start_without_w10_closure: true
+state_machine:
+  - PLANNED
+  - READY
+  - DISPATCHED
+  - IMPLEMENTED
+  - MASTER_REVIEW
+  - REWORK
+  - VERIFIED
+  - CHECKPOINTED
+  - CLOSED
+global_stop_conditions:
+  - Any Git remote exists or the pre-push guard is absent.
+  - The root uv lock or Python 3.12 environment cannot be reproduced.
+  - Work requires an unapproved external account, credential, service, provider connection, or deployment.
+  - User-owned changes overlap a packet or the dirty tree is unexplained.
+  - A subagent changes a forbidden path or performs a Git operation.
+  - A secret or restricted datum appears in tracked files or evidence.
+  - A high-severity security, leakage, temporal, identity, or data-rights issue remains.
+  - Work proposes a container or external database/cache/queue without satisfying every architecture reapproval requirement.
+  - A required correction crosses the standing bounded-correction authority; bounded implementation defects and review rework do not stop progression.
+checkpoint_policy:
+  start_tag: checkpoint/<wave-lower>-start
+  accepted_tag: checkpoint/<wave-lower>-accepted
+  master_only_git: true
+  clean_tree_required: true
+  empty_remote_list_required: true
+  advance_after_acceptance_without_review_pause: true
+  product_pivot_dependency_override:
+    authorised_at: "2026-08-05"
+    active_phase: W09
+    accepted_dependency: W07
+    bypassed_phase: W08
+    reason: manual_workflow_module_is_not_a_dependency_of_player_research
+    w08_disposition: dormant_optional_module
+    does_not_authorize:
+      - w08_acceptance_checkpoint_or_closure
+      - representative_user_acceptance_claims
+      - expert_relevance_or_recruitment_recommendation_claims
+      - shadow_recruitment_pilot
+      - provider_access_external_deployment_or_publication

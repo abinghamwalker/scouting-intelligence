@@ -1,0 +1,115 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R3
+state: REWORK
+objective: >-
+  Correct every bounded R2 exactness omission in the R20 v15 admission child and
+  genuinely separate launcher retained reconstruction, preserving the accepted
+  component roster, digest meanings, contracts, roots, dependencies and local-only
+  boundary.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R2:REWORK
+assigned_role: w04_runtime_control_exactness_rework_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R2.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/contracts/wyscout_build.py
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/contracts/**
+fixed_bindings:
+  r2_admission_child_sha256: cd8a12da6b9db08c9041823c8b99fae782cf7ff99a72628970354a105c36ce67
+  r2_launcher_sha256: c56263cc5c4ba79a7dce5ba3ce3623def04b29933a5fdc8f0f0187d1aaf6332d
+  r2_tests_sha256: 3ea58958683ff6d1e244925fc98a8cce77d89e34f2814a9b43f2003b656aac6a
+  r2_producer_return_sha256: a97a8a28e3e0d9f39def99f3614dd1d6e5d507c6ab08c5a5096f8c7be83ed45e
+  r2_review_sha256: 4a8ac98ba094499ec38f41e2196b24f412fd355f7d0efc9dce81e2b0cd69f704
+  r2_reviewer_return_sha256: 0ffcb9793a54a7ed0e867660eb4c664709a2a30af2e8f3a782d736cafddc8bfe
+  r20_design_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+requirements:
+  - Verify every fixed binding and preserve every accepted non-runtime-control byte.
+  - >-
+    Enforce the exact three-.pth site census and ownership classes, the frozen
+    _virtualenv.pth/_virtualenv.py and coverage-hook bytes/modes/hashes, absence of
+    every fourth .pth/.egg/.egg-info/unowned site file, and absence of bootstrap or
+    coverage execution/import observations.
+  - >-
+    Fully reconstruct the editable project: singular nine-row RECORD ownership,
+    exact INSTALLER/REQUESTED/uv_build.json and root-independent metadata, strict
+    root-bearing .pth and direct_url normalization, exact uv_cache key/structural
+    predicate excluding only its documented clocks, and a stable editable-root
+    digest over those normalized bytes plus pyproject, lock and repository manifest.
+  - >-
+    Require every wheel-cache association to be exactly one symlink to one regular
+    non-symlink archive-v0 directory with no chain, alias, shared ambiguity or
+    escape. Validate strict extracted RECORD paths/tree equality and complete
+    collision-free PEP 427 mapping for root and .data/{purelib,platlib,scripts,
+    headers,data}; unsupported, skipped, overwritten or unmapped payloads fail.
+  - >-
+    Close installed ownership and generated-byte equality: exact purelib/platlib
+    roots, canonical versions and one-to-one L==I/dist-info association, singular
+    ownership, exact base generated rows, executable-only controlled generation,
+    and no unowned/additional installed file or generated metadata authority.
+  - >-
+    Enforce exactly the three interpreter aliases and no fourth alias; exact lstat
+    modes/distinct identities/raw targets/one-hop topology/physical leaf, launch
+    observation, implementation/full version/platform/ABI/extension suffixes,
+    physical interpreter, libpython and loader images. Bind complete exact stdlib
+    roots/files and reject symlinked or writable code authority.
+  - >-
+    Implement the complete Section 8.7 ownership/runtime-subset predicates and the
+    exhaustive outer/admission/rebuild environment, argv, descriptor, prefix,
+    no-site, source-read, PYC no-read/no-change and pre-write/final recheck controls.
+    Every launcher predicate must be separately derived and must reject the same
+    cache, mapping, bootstrap, editable, alias, ownership and environment attacks.
+  - >-
+    Add adversarial isolated tests for every corrected predicate, including the
+    reproduced two-hop cache, .data/data omission, fourth alias, changed bootstrap
+    bytes, fourth .pth, editable metadata/direct_url/uv_cache drift, unowned file,
+    mapping collision and child-only coherent substitution. Preserve frame,
+    publisher, v2 digest, projection/inverse and no-real-root properties.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected exact v15 runtime control, complete adversarial tests and mandatory R3 return.
+stop_conditions:
+  - None for bounded implementation defects; reframe or split and continue rework.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

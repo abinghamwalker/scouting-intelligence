@@ -1,0 +1,90 @@
+task_id: W09-INDEPENDENT-REVIEW-07A
+revision: R1
+owner: independent_subagent
+objective: >-
+  Independently review the complete W09 retained-data research workbench and report actionable
+  findings on G-RW1 through G-RW3 and claim boundaries. Do not implement or self-approve fixes.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/verification/W09/full-canonical-population.md
+  - reports/verification/W09/full-feature-matrix.md
+  - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+  - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R5.md
+  - reports/reviews/W09/returns/W09-FULL-FEATURE-MATRIX-02C-R1.md
+  - reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R2.md
+  - reports/reviews/W09/returns/W09-RESEARCH-SERVING-04C-R1.md
+  - reports/reviews/W09/returns/W09-RESEARCH-API-04D-R1.md
+  - reports/reviews/W09/returns/W09-RESEARCH-UI-05A-R1.md
+  - reports/reviews/W09/returns/W09-EVALUATION-06A-R1.md
+  - src/scouting/contracts/research.py
+  - src/scouting/sources/wyscout_historical.py
+  - src/scouting/data_products/wyscout/historical.py
+  - src/scouting/features/historical.py
+  - src/scouting/modeling/research.py
+  - src/scouting/serving/research.py
+  - src/scouting/api/research.py
+  - src/scouting/storage/research.py
+  - src/scouting/reporting/research.py
+  - src/scouting/web/w09.py
+  - src/scouting/evaluation/research.py
+  - services/api/w09_main.py
+allowed_paths:
+  - reports/reviews/W09/independent-review.md
+deliverables:
+  - >-
+    A source-backed P0/P1/P2/P3 finding register with exact file/line or artifact evidence,
+    reproduction command, impact and bounded remediation. Distinguish an implementation bug
+    from an evidence limitation. If no finding exists in an area, record the exact witness
+    inspected; do not infer acceptance from another packet's report.
+  - >-
+    Independently re-read retained canonical/feature/index manifests and physical artifacts;
+    reconcile 1,826 matches, 3,071,395 actions, 142 teams, 3,603 catalogue players, identity
+    exclusions, 3,059 eligibility grains and 1,975 matrix/index rows. Audit uniqueness,
+    canonical IDs, no synthetic product rows, rights, checksums, schema, lineage and temporal
+    cutoffs. Test representative stale/tampered/incompatible authorities only in temporary
+    copies.
+  - >-
+    Audit temporal leakage and membership/minute policy from raw-authority boundary through
+    feature rows: no current-team or action-based membership/minute inference, strict
+    source/identity availability before cutoff, fixed closed window, lower-bound propagation
+    and no silent imputation.
+  - >-
+    Independently exercise full-population Euclidean and cosine retrieval for exemplar and
+    weighted profile queries, exact tie order, filters, missingness, contributions/contrasts,
+    stale pins, repeatability and saved-report replay. Confirm no synthetic/stale fallback and
+    no pre-limit/approximation.
+  - >-
+    Independently exercise the coherent browser path dataset -> both query modes -> ranked
+    real players -> explanations -> compare -> save/report -> replay at desktop and narrow
+    widths, including keyboard, local request containment, failure states and absence of W08
+    role/auth/manual-audit core journey. Inspect rendered claims for G-RW4 overreach.
+  - >-
+    Review the frozen evaluation for deterministic reproduction, correct coverage/stability/
+    eligibility/explanation calculations and honest weaknesses. State explicitly that lack of
+    G-RW4 blocks positive football-relevance/recruitment-usefulness claims but not W09
+    engineering acceptance.
+  - >-
+    End with one decision: `REJECT`, `CONDITIONAL_ACCEPT`, or `ACCEPT`, exact counts by
+    severity, the status of G-RW1/G-RW2/G-RW3, and the unresolved G-RW4 limitation. Any P0/P1
+    means REJECT. The master must resolve every P0/P1 and request independent re-review.
+checks:
+  - uv run pytest -q tests/contracts/test_w09_research_contracts.py tests/unit/test_w09_historical_features.py tests/integration/test_w09_feature_matrix.py tests/unit/test_w09_research_index.py tests/integration/test_w09_research_index_build.py tests/unit/test_w09_research_serving.py tests/integration/test_w09_research_serving_integration.py tests/unit/test_w09_research_api.py tests/integration/test_w09_research_api_integration.py tests/unit/test_w09_research_web.py tests/e2e/test_w09_research_workbench_playwright.py tests/unit/test_w09_research_evaluation.py tests/integration/test_w09_research_evaluation_integration.py
+  - uv run ruff check src/scouting/contracts/research.py src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py src/scouting/features/historical.py src/scouting/modeling/research.py src/scouting/serving/research.py src/scouting/api/research.py src/scouting/storage/research.py src/scouting/reporting/research.py src/scouting/web/w09.py src/scouting/evaluation/research.py services/api/w09_main.py
+  - uv run mypy src/scouting/contracts/research.py src/scouting/sources/wyscout_historical.py src/scouting/data_products/wyscout/historical.py src/scouting/features/historical.py src/scouting/modeling/research.py src/scouting/serving/research.py src/scouting/api/research.py src/scouting/storage/research.py src/scouting/reporting/research.py src/scouting/web/w09.py src/scouting/evaluation/research.py services/api/w09_main.py
+  - uv run bandit -q -r src/scouting/api/research.py src/scouting/serving/research.py src/scouting/web/w09.py src/scouting/evaluation/research.py services/api/w09_main.py
+stop_conditions:
+  - >-
+    UI/evaluation final files or retained production evaluation evidence are not yet available:
+    complete core review, notify the master and wait for a continuation message before decision.
+  - Any need to mutate retained artifacts, implementation, dependencies, Git, orchestration
+    controls, network/provider access or paths outside allowed_paths.
+constraints:
+  - You are independent and read-only except for your return report. Do not edit, fix,
+    self-approve, use Git, change dependencies, or write production artifacts.
+  - Use apply_patch for the return report. Temporary adversarial fixtures must remain under a
+    unique temp root and must never replace accepted files.

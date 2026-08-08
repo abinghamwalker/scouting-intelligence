@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W02-SYNTH-01
+phase_id: W02
+revision: R1
+state: READY
+objective: >-
+  Create a harmless structured subagent-return fixture and matching Markdown
+  handback to exercise scope enforcement and the mandatory return contract.
+depends_on:
+  - W02-CONTROL-01:IMPLEMENTED
+assigned_role: fixture_implementer
+risk: low
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W02-SYNTH-01-R1.yaml
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml
+  - orchestration/reviews/W02-SYNTH-01-return-R1.md
+forbidden_paths:
+  - .git/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/**
+  - scripts/**
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/ownership.yaml
+  - orchestration/templates/**
+deliverables:
+  - tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml
+  - orchestration/reviews/W02-SYNTH-01-return-R1.md
+definition_of_done:
+  - The YAML fixture contains every field shown in the packet's structured_return_shape.
+  - The Markdown handback contains every heading in the mandatory return template.
+  - Only the two allowed paths are created.
+  - No Git command is run.
+structured_return_shape:
+  task:
+    task_id: W02-SYNTH-01
+    objective: one-sentence objective
+  files_changed:
+    - exact relative path
+  summary: one or more sentences
+  tests_run:
+    - command: uv-run command
+      exit_status: 0
+      result: concise result
+  artifacts_evidence:
+    - exact relative path
+  risks:
+    - none
+  follow_up_items:
+    - none
+  scope_confirmation:
+    git_operations_performed: false
+    dependency_or_lockfile_changes: false
+    edits_outside_allowed_paths: false
+drill_control:
+  purpose: Exercise a mandatory REWORK decision before acceptance.
+  injected_defect:
+    field: scope_confirmation.git_operations_performed
+    first_return_value: "false"
+    required_type_after_rework: boolean
+  instruction: >-
+    In R1 only, write the injected field as the quoted string "false".
+    Do not correct it until the master issues an R2 rework packet.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path; import yaml;
+    assert yaml.safe_load(Path('tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml').read_text())"
+stop_conditions:
+  - Either allowed path already contains user-owned work.
+  - Any requested work requires a forbidden path.
+  - A Git command, dependency change, external service, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

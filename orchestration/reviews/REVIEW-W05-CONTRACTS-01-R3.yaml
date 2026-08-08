@@ -1,0 +1,53 @@
+schema_version: 1
+review_id: REVIEW-W05-CONTRACTS-01-R3
+task_id: W05-CONTRACTS-01
+phase_id: W05
+revision: R3
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: NOT_RUN_INCOMPLETE_RETURN
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+accepted_partial_changes:
+  - canonical negative-zero rejection
+  - self-verifying taxonomy digest and artifact/request taxonomy pins
+  - stricter family-specific safe-array role and shape checks
+defects:
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      The mandatory typed resolved-query projection and explicit scored-candidate
+      total order were not implemented, so query drift and rank/tie drift remain
+      admissible after recomputing a result digest.
+    required_fix: >-
+      Complete a small query-and-ranking contract packet before any feature work.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      Dimension state remains global rather than per candidate and explanations do
+      not have to equal scored query/candidate inputs and contributions.
+    required_fix: >-
+      Complete a separate candidate-evidence-and-explanation packet after the query
+      and ranking projection is accepted.
+  - severity: P1
+    blocker_tests: [1, 2, 4, 6]
+    evidence: >-
+      The W04 accepted candidate digest is still confused with the decision digest,
+      the exact-four descriptor digest is not derived, and complete family array
+      shape relationships are not yet executable.
+    required_fix: >-
+      Close W04 descriptor and array semantics in the second split packet.
+convergence_audit:
+  attempts_reviewed: [R1, R2, R3]
+  repeated_broad_rework_forbidden: true
+  genuine_product_defects: true
+  w10_only_findings: []
+  action: >-
+    Preserve the correct R3 partial changes and split the residual contract work
+    serially into W05-CONTRACTS-QUERY-02 and W05-CONTRACTS-TRUTH-03. Do not issue an
+    R4 of the broad W05-CONTRACTS-01 packet and do not create another authority.
+decision: SPLIT_REWORK
+next_packet: orchestration/task_packets/W05-CONTRACTS-QUERY-02-R1.yaml
+reviewer: master

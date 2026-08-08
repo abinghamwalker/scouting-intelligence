@@ -1,0 +1,27 @@
+schema_version: 1
+review_id: REVIEW-W05-ROLES-01-R1
+task_id: W05-ROLES-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      RoleTaxonomy.contract is created with model_construct and fails normal public
+      FootballResponsibilityTaxonomy validation because the private full-config digest
+      596886... differs from the projected contract digest 26e90f.... Downstream pins
+      cannot unambiguously authenticate the claim-bearing taxonomy semantics.
+    required_fix: >-
+      Add the five accepted claim-boundary fields to the shared taxonomy contract and
+      its canonical digest, replace model_construct with normal validation, and prove
+      exact public round-trip/recomputation while preserving accepted config bytes.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-ROLES-01-R2.yaml
+reviewer: master

@@ -1,0 +1,70 @@
+schema_version: 1
+task_id: W10-RUNTIME-HOST-STATE-HARDENING-05A
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement independent portable PYC/cache security projections and bounded audit-only
+  classifications while retaining raw audit inventories and every accepted W04 fail-closed,
+  substitution, zero-read/use, product, and truthful-completion control.
+depends_on:
+  - W10-RUNTIME-HARDENING-SURVEY-00B:R1
+assigned_role: runtime_security_implementer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W10-RUNTIME-HOST-STATE-HARDENING-05A-R1.yaml
+  - reports/reviews/W10/returns/W10-RUNTIME-HARDENING-SURVEY-00B-R1.md
+  - reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W10/returns/W10-RUNTIME-HOST-STATE-HARDENING-05A-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - src/**
+  - services/**
+  - apps/**
+  - migrations/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Follow the survey's ten required implementation properties exactly.
+  - Keep the R12 exact foreign predicate ahead of generic classification.
+  - Allow same-tag audit-only rows only through an exact frozen accepted post-W04 source roster.
+  - Independently implement child and launcher projections without cross-import or cross-call.
+  - Preserve complete raw inventories as explicitly audit-only evidence.
+  - Do not edit, skip, xfail, weaken, or delete any existing W04 witness.
+  - Add portable fixtures proving raw host metadata may vary while portable security authority remains stable.
+deliverables:
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W10/returns/W10-RUNTIME-HOST-STATE-HARDENING-05A-R1.md
+definition_of_done:
+  - Full W04 runtime unit gate passes including the prior three concrete cache-row failures.
+  - Focused contract, security, E2E, formatting, lint, and type checks pass.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_v2_aggregates.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+stop_conditions:
+  - Any need to weaken a protected W04 control, make a dependency/lock/schema/product-preimage change, use Git, or edit outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

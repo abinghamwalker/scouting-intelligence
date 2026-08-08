@@ -1,0 +1,33 @@
+schema_version: 1
+review_id: REVIEW-W03-GOVERNANCE-01-R1
+task_id: W03-GOVERNANCE-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    code: WORKFLOW_STATE_MACHINES_UNDEFINED
+    evidence: reports/reviews/W03/design-packet-review.md
+    affected_definition_of_done: >-
+      The P0 role-brief and shortlist control boundary must define owners,
+      transitions, approvals, rejection reasons, visibility, and retention.
+    required_fix: >-
+      Add a normative workflow state-machine document without implementing the
+      later W08 collaborative workflow.
+  - severity: P1
+    code: GOVERNANCE_YAML_ONLY_PARSE_CHECKED
+    evidence: orchestration/task_packets/W03-GOVERNANCE-01-R1.yaml
+    affected_definition_of_done: >-
+      Deny-by-default authorisation, synthetic-only rights, and loopback-only
+      environment controls must be semantically executable.
+    required_fix: >-
+      Add a bounded semantic validator and tests for required policy identifiers,
+      four roles, global/default denies, rights classification, export denial,
+      loopback bindings, and prohibited remote/cloud settings.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-GOVERNANCE-01-R2.yaml
+reviewer: master

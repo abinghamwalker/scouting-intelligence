@@ -1,0 +1,95 @@
+schema_version: 1
+review_id: REVIEW-W05-MODEL-01-R4
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R4
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS_AS_REPORTED_BUT_INADEQUATE
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+retained_parity:
+  numeric_arrays: EXACT_R3_MATCH_REPORTED
+  six_scores: EXACT_R3_MATCH_REPORTED
+  geometry_or_selection_change: NONE
+defects:
+  - severity: P1
+    blocker_tests: [1, 2, 3, 6]
+    evidence: >-
+      load_m0_artifact and fit_m0_artifact still accept arbitrary Mapping config values
+      and call only the self-digest helper. Callers pass configuration.values, so the
+      source-pinned M0Configuration wrapper is bypassed. Its fields are not typed
+      properties and its accepted fixed scalar/pin values are not fully validated.
+    required_fix: >-
+      Make the immutable M0Configuration object mandatory at every fit/load/check API;
+      expose typed immutable fields/canonical payload internally; reject Mapping and
+      normally revalidate every exact scalar, digest, six-family map and fixed value.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      candidate_population_projection_digest is only the ordered UUID-list digest, not
+      the required full ordered candidate projection. Runtime does not compare universe
+      fixture/query/population/taxonomy/claim pins to config, validate dependency times,
+      or recompute artifact UUID/model/index identities. With unchanged pinned arrays,
+      a re-signed universe can substitute metadata, roles or lineage and change filters,
+      eligibility, explanations and results.
+    required_fix: >-
+      Pin the full ordered candidate projection including metadata, role distributions
+      and dependency identities; validate every exact universe/config/manifest pin and
+      claim; recompute canonical artifact/model/index identities and temporal lineage.
+  - severity: P1
+    blocker_tests: [1, 4, 6]
+    evidence: >-
+      The development check accepts caller-supplied peer_groups rather than the pinned
+      explicit query fixture, so relevance labels and query order are substitutable.
+      Candidate fixture loading does not require exact canonical bytes/root/row/nested
+      keys and no query fixture loader exists.
+    required_fix: >-
+      Add normally validated immutable candidate/query development authorities with
+      exact bytes, keys, strict types, accepted digests and cross-pins. The check must
+      consume the typed query authority and exact ordered candidate authority only.
+  - severity: P1
+    blocker_tests: [1, 3, 4, 6]
+    evidence: >-
+      Metadata artifacts still write the six-feature schema hash while naming only
+      three metadata features. PCA score still emits three component terms against six
+      manifest feature names. These facts break schema/explanation parity.
+    required_fix: >-
+      Use the accepted metadata-control schema hash and matching universe values for
+      metadata; make loader schema selection family-aware; deterministically project
+      PCA cosine contribution terms to exactly six original-feature positions.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      _population still silently continues past missing role rows and materialization/
+      numeric errors. _require_root tests is_symlink only after resolve. Loaded universe
+      nesting remains mutable, exclusions are not strict and role probabilities/role
+      sets are loosely coerced. NPZ fixed member metadata is written but never checked.
+    required_fix: >-
+      Fail every candidate error, reject symlinked roots/ancestors and unsafe ZIP member
+      metadata, deep-freeze all loaded state, strictly validate exclusion/exemplar UUIDs
+      and exact taxonomy-bound membership scalars/order/set.
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 5, 6]
+    evidence: >-
+      tests/unit/test_w05_m0_models.py has 21 lines and only two smoke tests. The 62-test
+      command is the unchanged 60 predecessor tests plus these two. No family fit,
+      deterministic rebuild, PCA, tie, exemplar, temporal, safe-load, immutability,
+      authority substitution, array corruption or exact score/ranking assertion exists.
+    required_fix: >-
+      Deliver the packet-required dedicated adversarial suite and make every retained
+      identity/score/ranking/deterministic/fail-closed claim executable.
+bounded_rework:
+  fixture_bytes:
+    candidate_logical_digest: 710c38554f33f8f650d814df1fee3c8bac7a8a2bc22804f93e3b9a8dfd1e50d9
+    query_logical_digest: fb027563b3f99f563d43f1b909c535f860f3d04d2d8aa0ed44e902fd2a37e900
+    decision: FREEZE_NO_R5_EDIT
+  array_payload_digests: PRESERVE_ALL_SIX_R4_VALUES
+  exact_scores: PRESERVE_R3_R4_VALUES
+  selection_or_tuning: FORBIDDEN
+  correction_scope: CONFIG_POPULATION_PIN_SOURCE_RUNTIME_AND_TESTS_ONLY
+decision: REWORK
+next_packet: orchestration/task_packets/W05-MODEL-01-R5.yaml
+reviewer: master

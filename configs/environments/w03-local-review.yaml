@@ -1,0 +1,118 @@
+schema_version: 1
+environment_id: w03-local-review
+status: local_review_only
+
+runtime:
+  tenant_mode: single-tenant
+  python_environment: .venv
+  dependency_authority: uv
+  application_process: fastapi
+  worker_process: local_worker
+  containers_allowed: false
+  external_service_processes_allowed: false
+  public_endpoint_allowed: false
+  cloud_resource_allowed: false
+  remote_deployment_allowed: false
+  external_model_call_allowed: false
+
+network:
+  bind_scope: loopback_only
+  allowed_bind_addresses:
+    - 127.0.0.1
+  lan_bind_allowed: false
+  public_bind_allowed: false
+  external_runtime_connections_allowed: false
+
+services:
+  fastapi:
+    execution: root_uv_environment
+    bind_address: 127.0.0.1
+    exposure: loopback_only
+  worker:
+    execution: root_uv_environment
+    network_listener: false
+  embedded_sqlite:
+    execution: root_uv_environment
+    required: true
+    network_listener: false
+    database_path: data/working/scouting.sqlite3
+    credentials_required: false
+    authority: operational_workflow_and_audit
+    single_tenant_enforced: true
+  local_jobs_cache_and_locks:
+    execution: in_process_or_guarded_file
+    required: false
+    external_service_allowed: false
+    authoritative_decision_storage: false
+  model_registry:
+    enabled: false
+    implementation: versioned_local_manifests
+    external_service_allowed: false
+    reason: not_required_for_w03_contract_spine
+
+identity:
+  local_accounts_only: true
+  external_identity_allowed: false
+  hosted_identity_allowed: false
+  authorization_policy: w03-authorization-v1
+  deny_by_default: true
+
+data:
+  allowed_classifications:
+    - w03_synthetic_generated
+  frozen_synthetic_fixtures_only: true
+  real_data_allowed: false
+  personal_data_allowed: false
+  external_export_allowed: false
+  external_sharing_allowed: false
+  rights_policy: w03-synthetic-data-rights-v1
+
+storage:
+  operational_store: embedded_sqlite
+  analytical_store: parquet_duckdb
+  vector_retrieval: versioned_local_artifact_and_in_process_similarity
+  external_database_allowed: false
+  external_cache_or_queue_allowed: false
+  guarded_local_roots:
+    - data/source
+    - data/reference
+    - data/working
+    - data/manifests
+    - runs
+    - reports
+  outside_root_reads_allowed: false
+  outside_root_writes_allowed: false
+  escaped_symlinks_allowed: false
+  immutable_manifests_required: true
+
+telemetry:
+  local_structured_logs: true
+  local_metrics: true
+  local_traces: true
+  hosted_telemetry_allowed: false
+  external_telemetry_export_allowed: false
+  confidential_payload_logging_allowed: false
+
+secrets:
+  committed_values_allowed: false
+  fixture_credentials_allowed: false
+  source: ignored_local_environment_only
+
+delivery:
+  git_remote_allowed: false
+  hosted_ci_allowed: false
+  public_registry_allowed: false
+  infrastructure_deployment_allowed: false
+  container_definition_allowed: false
+
+evidence_status:
+  configuration_is_normative: true
+  security_test_completed: false
+  penetration_test_completed: false
+  pilot_completed: false
+  real_data_review_completed: false
+
+revisit_trigger: >-
+  Containers, external databases, cache servers and queue services may be introduced
+  only after explicit user approval of a new architecture decision and matching
+  amendments to both controlling plans.

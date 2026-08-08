@@ -1,0 +1,94 @@
+schema_version: 1
+task_id: W10-EXPERT-STUDY-CONSOLE-02A
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement the local-only W10 protocol-approval page, blinded expert study journey, SQLite
+  operational store, immutable captures, safe resume/idempotency/concurrency, and explicit
+  mechanics-pilot/formal separation using only the participant-safe presentation authority.
+depends_on:
+  - W10-STUDY-CONSOLE-SURVEY-00C:R1
+  - W10-EXPERT-RELEVANCE-PROTOCOL-01:FROZEN_DRAFT
+assigned_role: study_console_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W10-EXPERT-STUDY-CONSOLE-02A-R1.yaml
+  - reports/reviews/W10/returns/W10-STUDY-CONSOLE-SURVEY-00C-R1.md
+  - src/scouting/contracts/expert_relevance.py
+  - configs/evaluation/w10-expert-relevance-protocol-v1.json
+  - configs/evaluation/w10-expert-study-presentation-v1.json
+  - src/scouting/storage/embedded.py
+  - src/scouting/storage/research.py
+  - src/scouting/web/w09.py
+  - apps/web/templates/w09/workbench.html
+  - apps/web/static/w09/workbench.js
+  - tests/unit/test_w09_research_web.py
+  - tests/e2e/test_w09_research_workbench_playwright.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/expert_study.py
+  - src/scouting/web/w10_expert_study.py
+  - services/api/w10_study_main.py
+  - apps/web/templates/w10_expert_study/base.html
+  - apps/web/templates/w10_expert_study/dashboard.html
+  - apps/web/templates/w10_expert_study/participant.html
+  - apps/web/templates/w10_expert_study/complete.html
+  - apps/web/templates/w10_expert_study/unavailable.html
+  - apps/web/static/w10-expert-study/study.css
+  - apps/web/static/w10-expert-study/study.js
+  - tests/unit/test_w10_expert_study_web.py
+  - tests/integration/test_w10_expert_study_console.py
+  - tests/e2e/test_w10_expert_study_playwright.py
+  - reports/reviews/W10/returns/W10-EXPERT-STUDY-CONSOLE-02A-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - src/scouting/contracts/**
+  - src/scouting/evaluation/**
+  - src/scouting/web/w08*
+  - src/scouting/web/w09*
+  - services/api/w09_main.py
+  - apps/web/templates/w08/**
+  - apps/web/templates/w09/**
+  - apps/web/static/w08/**
+  - apps/web/static/w09/**
+  - migrations/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - The web process may load only the frozen protocol and participant-safe presentation bundle, never the evaluator query pack, W09 router/runtime, provenance, rank, score, method, arm, threshold result, labels, or aggregate result.
+  - Serve one simple loopback study entry URL at /w10 with the concise human approval page, pilot entry, and formal participant entry as applicable.
+  - Require an explicit human product-owner pseudonym and exact confirmation before creating an immutable ProtocolApproval; never auto-approve in code, tests, startup, or fixtures.
+  - Formal preparation requires an existing exact-digest approval plus protocol-defined eligibility, material-conflict handling and all consent items. Pilot is plainly labelled and needs no expert claim.
+  - Implement the 82-presentation formal journey: all 80 blinded primary candidates plus two delayed blinded repeats, participant-keyed deterministic order, neutral slot/task identities, relevance 0-4, confidence 1-5, explicit abstain/unable, optional bounded failure category/explanation, progress, resume, review, submit-once and local receipt.
+  - Use separate pilot.sqlite3 and formal.sqlite3 authorities and separate immutable capture roots. Pilot captures can use only the first two queries, never instantiate FormalStudySubmission, never enter formal tables/files, and never unlock a gate.
+  - Use exact command-id retry and expected-revision semantics; same command/same bytes is idempotent, reused command/different bytes or stale revision is 409; SQLite transactions and uniqueness constraints must make concurrent completion safe.
+  - A completed formal session and its canonical content-addressed FormalStudySubmission/CompletionReceipt files are immutable. Exact duplicate completion returns the same receipt.
+  - No fictional sign-in, roles, workflow tasks, terminal instructions, browser storage, innerHTML, external request, arbitrary record lookup, evaluator route, /api/w09 route, or relevance verdict.
+  - Add security headers, bounded strict form/JSON parsing, process-random CSRF HttpOnly SameSite=Strict cookies, safe text-node rendering, accessible semantic landmarks/focus/status and responsive 320px layout.
+  - Missing, ambiguous or digest-incompatible authority must expose a neutral 503 page and no participant mutation routes; never fall back to synthetic/alternate data.
+  - Tests may use TEST_ONLY stores/fixtures but may not write to real pilot/formal roots or create a real approval/formal evidence artifact.
+deliverables:
+  - All allowed implementation, test, asset, and return paths listed above.
+definition_of_done:
+  - Focused unit/integration/browser tests prove the full accessible journey, leakage absence, pilot/formal separation, resume, abstain/missingness, idempotency, concurrency, immutable completion and stale-authority rejection.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w10_expert_study_web.py
+  - uv run pytest -q tests/integration/test_w10_expert_study_console.py
+  - uv run pytest -q tests/e2e/test_w10_expert_study_playwright.py
+  - uv run ruff format --check src/scouting/storage/expert_study.py src/scouting/web/w10_expert_study.py services/api/w10_study_main.py tests/unit/test_w10_expert_study_web.py tests/integration/test_w10_expert_study_console.py tests/e2e/test_w10_expert_study_playwright.py
+  - uv run ruff check src/scouting/storage/expert_study.py src/scouting/web/w10_expert_study.py services/api/w10_study_main.py tests/unit/test_w10_expert_study_web.py tests/integration/test_w10_expert_study_console.py tests/e2e/test_w10_expert_study_playwright.py
+  - uv run mypy src/scouting/storage/expert_study.py src/scouting/web/w10_expert_study.py services/api/w10_study_main.py
+stop_conditions:
+  - Any need for real approval/participant evidence, evaluator/query-pack bytes in the web process, Git, dependency changes, network/deployment, or edits outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

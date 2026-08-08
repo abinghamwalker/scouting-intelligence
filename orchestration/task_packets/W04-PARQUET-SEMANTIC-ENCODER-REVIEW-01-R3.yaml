@@ -1,0 +1,87 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01
+phase_id: W04
+revision: R3
+state: REWORK
+objective: >-
+  Independently review the exact R3 encoder candidate, proving closure of R2's
+  recursive list-child metadata and public descriptor-only authority findings while
+  preserving every R1/R2 row-binding correction and both fixed vectors.
+depends_on:
+  - W04-PARQUET-SEMANTIC-ENCODER-01-R3:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_parquet_r3_byte_security_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3.yaml
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R1.md
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R3-master-verification.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-parquet-semantic-encoder-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  formats_sha256: 76c46de2b54b4d69a9f7bef89b7976e00f9d384cddded50206de0f7fc3723edc
+  focused_test_sha256: 38241e232f886c85d350a7fcd01d45ed4675abfc4ee69f012a807a9e0d80b54b
+  producer_return_sha256: ae16eafc67808fa1062c8bcd7a0110f657d29cd11bac6bbab84bfb7f28425645
+  physical_vector_sha256: 889b525bcda3e11ff710112fd4095089935d8274c375cf3d6bed9636c8b63d2b
+  semantic_vector_sha256: 6ac5879732257cb40bfd6480c7605ddddd1df430e44fc41cc642d3874c0205e7
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Differentially probe metadata-free versus physically distinct list, large-list,
+    fixed-size-list and nested value fields carrying hidden name/metadata variations;
+    require all non-canonical variants to fail before semantic hashing or encoding.
+  - >-
+    Invoke the public semantic helper with omitted schemas, directly fabricated
+    descriptors, descriptor/schema mismatch, unsupported binary types, malformed or
+    metadata-like type text, invalid roles, non-UTC or wrong-precision timestamps and
+    recursively hidden child metadata. Require fail-closed rejection.
+  - >-
+    Repeat R1/R2 Arrow-row congruence, non-key divergence, exact primary-key type and
+    value, null/list/decimal/UTC/struct recursion, unsupported-type and finite-float
+    probes. Confirm physical and semantic rows cannot diverge.
+  - >-
+    Reconstruct both fixed vectors and semantic framing independently; recheck exact
+    Parquet controls and 65,535/65,536/65,537 row-group boundaries.
+  - Confirm generic serializer behavior is unchanged and no product/control/provider/network/Git/cloud/container/CI/remote/deployment action occurred.
+definition_of_done:
+  - Exact R3 candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R3 review and mandatory return with exact finding counts.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

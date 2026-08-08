@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>{% block title %}W10 expert relevance study{% endblock %}</title>
+  <link rel="stylesheet" href="/static/w10-expert-study/legacy-study.css">
+  <script src="/static/w10-expert-study/legacy-study.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Skip to study content</a>
+  <header class="site-header">
+    <div>
+      <p class="eyebrow">Scouting Intelligence · W10</p>
+      <h1>{{ shell_heading|default('Football-expert relevance study') }}</h1>
+      <p class="lede">{{ shell_lede|default('A blinded, local assessment of retained 2017/18 football comparisons.') }}</p>
+    </div>
+    <span class="local-badge">Local only</span>
+  </header>
+  <nav aria-label="Study sections"><a href="{{ shell_home|default('/w10') }}">Study home</a><a href="#boundary">Evidence boundary</a><a href="#study-content">Current step</a></nav>
+  <main id="main-content" tabindex="-1">
+    <section id="boundary" class="boundary-card" aria-labelledby="boundary-title">
+      <div><p class="section-kicker">Claim boundary</p><h2 id="boundary-title">Football relevance, not recruitment advice</h2></div>
+      <p>The study concerns historical role/style comparisons only. It does not establish current ability, future performance, price, availability, squad fit or transfer suitability.</p>
+    </section>
+    {% block body %}{% endblock %}
+  </main>
+  <footer><p>Participant-safe presentation authority · no ranking provenance or relevance verdict is shown.</p></footer>
+</body>
+</html>

@@ -1,0 +1,80 @@
+schema_version: 1
+policy_id: w08-authorization-v1
+status: planned_r1_local_control
+default: deny
+roles:
+  analyst:
+    allow:
+      - work_queue.read
+      - role_brief.create
+      - role_brief.read
+      - role_brief.update_owned
+      - role_brief.submit_owned
+      - role_brief.version_owned
+      - retrieval_link.create_owned
+      - retrieval_link.read_owned
+      - shortlist.create_owned
+      - shortlist.read
+      - shortlist_entry.add_owned
+      - shortlist_entry.transition_owned
+      - shortlist_entry.reject_with_reason
+      - shortlist_comment.create
+      - observation.read_team_visible
+      - evidence_export.create
+  scout:
+    allow:
+      - work_queue.read
+      - role_brief.read_approved
+      - retrieval_link.read_assigned
+      - shortlist.read_assigned
+      - shortlist_comment.create
+      - observation.create_assigned
+      - observation.read_own
+      - observation.read_team_visible
+      - observation.amend_own
+      - observation.flag_disagreement
+      - shortlist_entry.recommend_next_action
+  approver:
+    allow:
+      - work_queue.read
+      - role_brief.read
+      - role_brief.approve
+      - role_brief.reject
+      - retrieval_link.read
+      - shortlist.read
+      - shortlist_comment.create
+      - shortlist_entry.transition
+      - shortlist_entry.approve
+      - shortlist_entry.hold
+      - shortlist_entry.reject_with_reason
+      - observation.read_team_visible
+      - evidence_export.create
+  admin:
+    allow:
+      - local_account.create
+      - local_account.disable
+      - local_account.assign_role
+      - local_session.revoke
+      - policy.read
+      - audit.read
+      - audit.export_local
+global_denies:
+  - recruitment.autonomous_select
+  - recruitment.autonomous_approve
+  - protected_trait.infer
+  - protected_trait.rank
+  - evidence.external_share
+  - evidence.external_model_send
+  - audit.update
+  - audit.delete
+  - tenant.cross_access
+admin_not_granted:
+  - role_brief.approve
+  - shortlist_entry.approve
+  - evidence_export.create
+visibility:
+  allowed:
+    - OWNER_ONLY
+    - TEAM
+  owner_only_requires_owner_or_assignment: true
+  team_requires_action_grant: true

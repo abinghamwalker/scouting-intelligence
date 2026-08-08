@@ -1,0 +1,103 @@
+schema_version: 1
+task_id: W04-CONTROL-PREIMAGE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize only the two R21 descriptor-only canonical JSON control
+  preimages, implement their exact focused contract test, preserve all
+  predecessor evidence, and return them for fresh independent review.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R15:MASTER_ACCEPTED
+assigned_role: bounded_r21_control_preimage_materializer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-CONTROL-PREIMAGE-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R15.yaml
+  - reports/verification/W04/wyscout-schema-design-R21-master-verification.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R15-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/returns/W04-CONTROL-PREIMAGE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/features/**
+  - configs/taxonomies/**
+  - reports/reviews/W04/authorities/**
+implementation_requirements:
+  - >-
+    Create the exact product-contract preimage from R21 Section 7 as canonical
+    compact JSON with Unicode-code-point sorted object keys, explicit array
+    order, UTF-8, no insignificant whitespace, and exactly one terminal LF.
+    Bind exact R20 SHA and accepted R21 SHA
+    faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020.
+  - >-
+    Include exactly the 17 ordered path-template rows, ten ordered
+    serializer-owner rows with each role owned once, two exact primary-key
+    contracts, five exact manifest/receipt rows, layer order, identity, and
+    closed policy. These are inert descriptor strings and must create no listed
+    destination.
+  - >-
+    Create the exact schema-bundle preimage from R21 Section 8 using the same
+    canonical byte rules and byte-equal authority links. Include exactly 16
+    ordered descriptors, identical dependency_order, earlier-only depends_on
+    edges, exact descriptor-only surface literal, and typed unresolved feature
+    placeholder with null concrete value.
+  - >-
+    Neither preimage may contain its own digest, the sibling digest, a concrete
+    feature digest, downstream authority digest, clock, root, host, absolute
+    path, build/run ID, product output, generated manifest/receipt, or mutable
+    runtime observation. The two files are siblings and neither depends on the
+    other.
+  - >-
+    Implement exhaustive focused tests for canonical physical bytes, exact keys,
+    IDs/hashes/cardinalities/order, unique ownership, earlier-only descriptor
+    edges, sibling DAG, forbidden values/edges, typed unresolved placeholder,
+    and absence of every described product destination.
+  - >-
+    Do not implement field v2, possession v2, feature authority, cross-authority
+    final test, Bronze, Silver, Gold, serializers, manifests, receipts, builds,
+    models, or product code.
+definition_of_done:
+  - Both files parse and reserialize byte-identically under the exact canonical
+    algorithm, with physical SHA equal to canonical SHA.
+  - Exact 17/10/2/5 and 16 descriptor cardinalities pass.
+  - No sibling/self/downstream/product cycle or overclaim is present.
+  - Focused test and all 25 local-only checks pass.
+  - Return binds final physical/canonical hashes after the last edit.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    Exact materialization requires a product schema, serializer, output,
+    architecture, source/provider/right, root, dependency, storage, local-only,
+    network, cloud, container, endpoint, hosted CI, or deployment change.
+  - Any product destination would be created.
+  - Any edit outside the four allowed paths is required.
+  - Any inventory, canonicalization, focused-test, or local-only check fails.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

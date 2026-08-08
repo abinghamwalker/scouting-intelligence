@@ -1,0 +1,71 @@
+schema_version: 1
+task_id: W04-REPOSITORY-PROGRESSION-GUARD-01
+phase_id: W04
+revision: R2
+state: REWORK_PAIRED_REVIEW_RECORD_SUBSTITUTION
+objective: >-
+  Correct only R1's unbound non-empty gate-report and gate-return evidence by
+  requiring their exact accepted physical SHA-256 values and direct substitution
+  attacks in both progression fixtures.
+depends_on:
+  - W04-REPOSITORY-PROGRESSION-GUARD-01-R1:MASTER_REWORK
+assigned_role: bounded_w04_progression_guard_r2_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R2.yaml
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R1.yaml
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R1.md
+  - reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-GATE-01-R1.md
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+fixed_bindings:
+  r1_field_test_sha256: 47644d44fa846fb467742f0f094264d22333fa6d22f9ea07fe3f2618ce012f46
+  r1_possession_test_sha256: c4c7a25947ec84a5b2ecf9b80279f5b6fd410a9b98247defe74d5de7d4a32294
+  r1_return_sha256: ca1ffde73964ab27b23479997f06246038e5047ce6622f1e9bc9ef2cd90c642a
+  r21_gate_report_sha256: 656769e7e9fe894421056230344ed9e976d583895cabe42600d1a2294042e14e
+  r21_gate_return_sha256: 8f45128b4609b2a575a9f7da5e147dd95c5ef83f203812d27ac97e6fbd9eb051
+requirements:
+  - Verify every fixed binding before editing and stop on drift.
+  - >-
+    In both modules, bind the supplied gate-report and gate-return bytes to the exact
+    accepted physical SHA-256 constants above in addition to all R1 path, canonical
+    record and dynamic complete-review digest checks.
+  - Add direct changed-report-bytes and changed-return-bytes adversarial cases in both modules.
+  - Preserve every R1 correction, all lower-authority validators and central R21 lifecycle ownership.
+  - Do not alter or exclude any governed downstream path or any authority/gate byte.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run ruff check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run pytest -q tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R2 test correction and mandatory return with new hashes.
+stop_conditions:
+  - Any production/source/data/authority/gate byte, dependency, architecture, product scope or local-only change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

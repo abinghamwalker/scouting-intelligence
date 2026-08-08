@@ -1,0 +1,42 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R10
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - {id: W04-DESIGN-UV-RUN-READONLY-CONTRADICTION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-R10-LINEAGE-LABEL-01, severity: P2, status: returned_for_rework}
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R11
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R10.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R10.md
+  - reports/verification/W04/wyscout-schema-design-R10-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-R10.md');
+      assert p.is_file() and p.stat().st_size > 22000"
+    result: PASS_105527_BYTES
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: >-
+      uv run --locked --no-sync python -S -B -c
+      "import sys; ..."
+    result: PASS_PROPOSED_READONLY_LAUNCH_PYTHON3_NO_SITE_NO_VIRTUALENV
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    R10's two-process and source-complete bytecode corrections are coherent, but
+    the written plain uv run command does not enforce the stated no-sync boundary.

@@ -1,0 +1,130 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R13
+state: DISPATCHED
+objective: >-
+  Retain every R12 closure while making the new local-control bootstrap
+  executable: truthful pre-guard stdlib loading, exact inherited source
+  descriptors, and exhaustive typed child-result payloads.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R12:REWORK
+  - W04-SCHEMA-DESIGN-REVIEW-01-R8:REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R12.yaml
+  - reports/verification/W04/wyscout-schema-design-R12-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R12.yaml
+  - reports/reviews/W04/wyscout-schema-design-R12.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R12.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R8.md
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R13.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R13.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Replace the false built-in/frozen-only and zero-pre-guard-pyc-read claim.
+    Under the exact outer launch, CPython 3.12.12 preloads file-backed
+    encodings, encodings.aliases, and encodings.utf_8 and, without a cache
+    prefix, reads their installed pycs before user code. Bind the three exact
+    stdlib source rows and independently reproduced sizes/digests from the R12
+    master verification as interpreter-bootstrap authority; the first user
+    instruction verifies their exact sys.modules origins/source rows before any
+    further file-backed import. Never claim an audit hook observed work before
+    its installation.
+  - >-
+    Define a distinct exact outer-control prefix under the existing approved
+    data/working/wyscout/v5/.staging tree, with a fresh control_run_id and a
+    runtime-pycache leaf. The master invocation trust-root owner alone samples
+    the UUID, creates/contains/proves the path empty, sets its absolute value as
+    PYTHONPYCACHEPREFIX plus PYTHONDONTWRITEBYTECODE=1 before uv/Python exists,
+    and proves it empty/unchanged after launcher exit without cleanup. This
+    prefix is operational and excluded from stable/build identity; its policy
+    and role are stable. Retain the distinct admission and rebuild child
+    prefixes, and update every two/three-process, prefix, health, operational,
+    negative-test, and required-test statement consistently.
+  - >-
+    Preserve the exact outer argv and prove constructively that its empty
+    control prefix makes the three pre-start encoding modules load from the
+    exact verified source rows rather than their installed pycs, with no prefix
+    write under -B. If the future implementation cannot reproduce this, stop;
+    do not delete stdlib pycs or weaken bytecode denial.
+  - >-
+    Add one exact bootstrap environment field
+    W04_LAUNCHER_SOURCE_FD containing the strict decimal number of the one
+    master-opened launcher source descriptor. Define O_RDONLY/no-follow open,
+    fstat, mode/link/size/digest checks, seek position, inheritable and
+    FD_CLOEXEC transition, transport through uv into the outer Python process,
+    first-instruction fstat/read/digest comparison, lifetime through both
+    children, and sole close ownership. The descriptor number/device/inode are
+    operational; the bytes/digest/path/role are stable. A missing, closed,
+    substituted, extra-inherited, non-preserved, or unequal descriptor fails;
+    implementation must positively test uv preservation and has no reopen
+    fallback.
+  - >-
+    Make each child source-descriptor contract equally explicit. The launcher
+    keeps its preopened descriptor and passes a dedicated read-only inherited
+    descriptor identified by W04_ENTRYPOINT_SOURCE_FD alongside the existing
+    result descriptor. Update the prior claim that the result descriptor is the
+    only nonstandard inherited descriptor. Bind role/path/bytes/digest/argv/
+    environment/nonce; define lifetime and close ownership; require the child's
+    first-instruction comparison and final result binding. State exactly which
+    persistent replacements the pre/open/self/post checks detect and preserve
+    the threat model's same-trust-domain residual risk rather than claiming
+    cryptographic prevention of an unobservable transient replace-and-restore.
+    Both exact child argv remain unchanged.
+  - >-
+    Replace each prose-only role-specific result object with exhaustive closed
+    schemas. Name every key and its exact JSON type, nullability, cardinality,
+    order rule, path grammar, digest/base64/UUID grammar, and cross-field
+    equality. Admission must name the canonical-manifest-bytes field and exact
+    component-proof field(s). Rebuild must name the build/run IDs, receipt row,
+    layer-manifest row schema/list ordering, and final-recheck schema. Define
+    canonical JSON number/string rules and reject every missing, unknown,
+    duplicate, mistyped, null, unordered, inconsistent, or over-cardinality
+    value. Keep frame, nonce, digest, EOF, diagnostics, timeout, and exit rules.
+  - >-
+    Retain R12's exact 58/19 repository census, the site-six plus three
+    repository optional predicates, launcher path/role/ownership, manifest
+    writer/build calculator, both child argv, all prior source/rights/temporal/
+    identity/product/environment/resource/gate/ledger closures, and report-only
+    scope. Final lineage says R13 closes returned R12 master findings.
+definition_of_done:
+  - Outer startup makes no installed stdlib-pyc read and truthfully verifies the three preloaded encoding sources.
+  - The master-opened launcher descriptor and both child entry-point descriptors have exact feasible transports and ownership.
+  - Admission and rebuild result payloads are fully closed typed schemas.
+  - Every R12 and earlier accepted closure remains intact and no implementation file is created.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R13.md');
+    assert p.is_file() and p.stat().st_size > 26000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - The descriptor cannot survive uv/Python without changing dependency policy or using an unreviewed fallback.
+  - A correction requires cleanup, provider/network access, new storage root, service/container, architecture change, or another product-writing runtime.
+  - Any R12 passing closure would regress or work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

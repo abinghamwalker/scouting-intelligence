@@ -1,0 +1,82 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-02
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently and adversarially review the exact R3 checked-capability candidate
+  for construction, copy, serialization, replay, substitution and downstream product
+  boundary bypasses. Return PASS only if exact completion-reader comparison is an
+  executable prerequisite for every authorized checked Silver/Gold path.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-01-R3:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: independent_w04_capability_security_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1.yaml
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R3.yaml
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R3.md
+  - reports/verification/W04/wyscout-source-completion-index-R3-master-verification.md
+  - reports/reviews/W04/wyscout-source-completion-index-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-source-completion-index-capability-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: 22d825631af0d27d1583a79ce4bb8adb10643bb32fe139630871727f814f1415
+  contract_implementation_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  source_test_sha256: 5beb37ee5fffadcab1d7355b879fcb65b76816b969c5581a943b1096afd98580
+  contract_test_sha256: 7ef542d5ed65437683063e2980e08a94b260771405147a860ca5d4541f1c004b
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  producer_return_sha256: e9ff75d989e605f70aeed77d85913092a95bbe98d5fc83852ec51651671a8ce9
+review_requirements:
+  - Verify every fixed binding before review and stop on drift.
+  - Reproduce the original fail-fast-reader/direct-constructor bypass and prove it now fails closed.
+  - Challenge direct construction, model validation, dump-copy, copied real digest, object.__new__, subclass/type spoofing, copy, deepcopy, pickle, replay and cross-scope substitution.
+  - Challenge period versus complete-match authority, checked Action/Fact/Gold scope mixing and detached raw `.value` reuse.
+  - Inspect the ordinary public surface, exported symbols and closure/registry design for any practical issuer or registry bypass; an underscore-only convention is not authority.
+  - Prove a future accepted serializer must take an authentic checked handle and call `require_checked_product`; identify any path by which a raw value could already receive accepted product authority.
+  - Confirm no `model_construct`, dependency, product byte, provider/network, Git, cloud, container, hosted CI, endpoint, remote or deployment change.
+definition_of_done:
+  - Every fixed candidate hash is exact.
+  - The original bypass and all bounded capability attacks are independently reproduced closed, or an exact defect is returned for rework.
+  - The review and mandatory return record PASS or REWORK with P0/P1/P2 counts and executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py -k 'checked or completion_reader or copied_real_membership'
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - One independent review with PASS or REWORK and exact P0/P1/P2 findings.
+  - One mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or any need to edit implementation/test/data/frozen paths.
+  - Any Git/destructive/provider/network/dependency/product/cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

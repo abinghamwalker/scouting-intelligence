@@ -1,0 +1,61 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-V2-REVIEW-01-R1
+task_id: W04-FIELD-SEMANTIC-V2-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: FAIL_NARRATIVE_AUTHORITY
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: FAIL_PROGRESSION_DESCRIPTION
+security_temporal_review: PASS
+defects:
+  - id: R1-P2-01
+    severity: P2
+    summary: >-
+      The progression section incorrectly says the product-contract and
+      schema-bundle preimages still require future separate review/acceptance
+      and calls them later candidate bytes. Their R21 independent review and
+      master acceptance are already complete, and R21 defines no later
+      acceptance packet for either preimage.
+    required_correction: >-
+      Correct only the progression narrative to name the already completed
+      preimage gate and the exact remaining field acceptance, possession,
+      feature, cross-authority, and complete-repository gates. Remove the
+      nonexistent v3/later-preimage implications, issue a fresh review clock,
+      rerun checks, and return R2.
+decision: REWORK
+next_packet: W04-FIELD-SEMANTIC-V2-REVIEW-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-field-semantic-v2-review-R1-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.yaml
+checks:
+  - command: complete review and return readback
+    result: PASS_346_REVIEW_LINES_61_RETURN_LINES
+  - command: canonical review record physical/canonical reconstruction
+    result: PASS_B51660A1_F4D1F956
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+      tests/contracts/test_w04_field_semantic_v2_authority.py
+      tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS_271_TESTS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: progression narrative against accepted R21 graph
+    result: FAIL_R1_P2_01
+decision_notes:
+  - >-
+    Candidate merits, canonical review record structure, reviewer independence,
+    focused tests, taxonomy reconstruction, and local-only evidence all pass.
+  - >-
+    A PASS review must also state the authority graph accurately. The bounded
+    progression error can misdirect later orchestration and therefore requires
+    correction before master acceptance.
+  - >-
+    Exact failed R1 review and return bytes are hash-preserved in temporary
+    quarantine before the fixed review path is revised. The R1 return and this
+    master decision remain retained repository evidence.

@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-DESIGN-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Return a report-only exact implementation boundary for the authorized reversible
+  projection inside the existing W04 encoder while preserving the semantic digest
+  formula and all current deterministic vectors.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-AUTHORIZATION-01:USER_AUTHORIZED
+assigned_role: independent_w04_logical_arrow_projection_implementation_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-DESIGN-01-R1.yaml
+  - reports/verification/W04/wyscout-logical-arrow-projection-authorization-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-readiness-audit-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/storage/formats.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-design-R1.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-DESIGN-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  authorization_sha256: eeb28f62b631b70e6c7046f3e8a6cdba74c1a7a4996c7024e98c471b08b8dd69
+  readiness_audit_sha256: f9961082a27b949da6b9c1647b50f9ce18b6862c66fb8c104826c4b20ca746a0
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  accepted_formats_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+  accepted_format_tests_sha256: c0afb390ef44f19d4759b62495bc0125a14fb80ac0f1e4376972a798702e3a9f
+design_requirements:
+  - Verify every fixed hash and stop on drift.
+  - >-
+    Specify the smallest additive public/internal descriptor types and encoder
+    arguments needed to project physical Arrow rows back to exact logical contract
+    rows. The accepted descriptor, never a callback or observed row, must own every
+    recursive mapping.
+  - >-
+    Specify exact tagged-JSON writer/inverse parser behavior, outer null handling,
+    positional-struct tuple behavior, homogeneous list behavior, recursive schema
+    equality and malformed-input ordering.
+  - >-
+    Preserve the exact existing semantic version, schema-descriptor byte format,
+    logical contract-row framing, parent framing, Parquet settings and simple
+    identity-projection golden vectors. Explain how projection rules are bound by
+    the later accepted root schema without creating a second semantic digest.
+  - >-
+    Return exact owned implementation/test paths and an adversarial focused matrix.
+    Do not edit code/tests or create authority/schema/digest/product bytes.
+definition_of_done:
+  - Bounded implementation design with no unresolved API or semantic choice.
+deliverables:
+  - Design report and return.
+stop_conditions:
+  - Fixed hash drift.
+  - Exact authorization cannot be implemented without a new dependency, semantic
+    digest path, root, field, product scope or architecture change.
+  - Need to edit outside the two reports or perform Git/external action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

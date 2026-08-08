@@ -1,0 +1,129 @@
+schema_version: 1
+task_id: W04-DATA-CONTRACTS-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent, read-only review of the W04 data-contract R1
+  implementation against frozen R20/R21 and every packet-fixed accepted
+  authority. Report every P0-P2 defect and recommend PASS only when the
+  implementation is complete, conservative, acyclic, deterministic, and
+  executable without broadening scope. Do not modify or accept implementation.
+depends_on:
+  - W04-DATA-CONTRACTS-01-R1:RETURNED_FOR_INDEPENDENT_REVIEW
+assigned_role: fresh_independent_w04_data_contracts_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R1.yaml
+  - orchestration/task_packets/W04-DATA-CONTRACTS-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+  - configs/features/wyscout-v5-supported-count-features-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/wyscout-data-contracts-independent-review-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - tests/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+fixed_bindings:
+  implementation_sha256: 9d90641965ef6d9351d76785d5729cc932ed7ea3cae11ff931dcef3279148452
+  focused_test_sha256: 568859f5879766c0470169e480177c3089b26788456c3133294e86ba2b0dc69a
+  producer_return_sha256: abc9418fa0e61187097a6ff7ed11345f7e265703116aff1ad2a5ce30e200176a
+  identity_acceptance_sha256: 37764392cdaf9626ffaff26e119fb142218d36489e87a8b1d55402e3e2dc7f86
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  possession_acceptance_sha256: 2438fb0255641b02c0631b6a42e727a033fbe58e759bdf4c61e0e09692eda0a1
+  feature_acceptance_sha256: d3b3c552784f4734f6b002569d9add1b4dd2d2eaaed57643a8ca4d5226fca78c
+  product_contract_preimage_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+  schema_bundle_preimage_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+requirements:
+  - >-
+    Read every listed input fully. Recompute all fixed digests and inspect every
+    implementation/test line. Challenge the implementation independently;
+    producer assertions and passing tests are evidence, not approval.
+  - >-
+    Verify exact seven-kind dispatch, zero-based source-record ordinal,
+    Decimal/type preservation, root-safe unknown-kind evidence, strict
+    integer-only event/subevent mapping, no bool/float/string coercion, exact
+    admitted pair taxonomy, and full rejected evidence.
+  - >-
+    Verify all Bronze, eight Silver, player-match, Gold four-feature, coverage,
+    applicability, temporal, key, lineage, path, manifest, and serializer-owner
+    contracts against R20/R21 and accepted authorities. Challenge missing
+    invariants, contradictory validators, optionality leaks, equality/coercion
+    traps, mutable values, incomplete negative matrices, and producer-owned
+    assumptions.
+  - >-
+    Reproduce the exact static and focused acceptance commands. The review
+    Markdown must identify implementation/test/return digests, checks run,
+    findings with severity and exact evidence, recommendation, and scope
+    confirmation. PASS requires zero open P0-P2 findings; otherwise REWORK.
+  - >-
+    Use apply_patch only for the two exact allowed paths. Do not run Git,
+    delegate, edit implementation/tests/authorities/dependencies, create an
+    acceptance, access provider/network data, or begin Bronze, Silver, Gold,
+    identity runtime, build, model, cloud, container, endpoint, hosted-CI, or
+    deployment work.
+definition_of_done:
+  - Every P0-P2 finding is reported with reproducible evidence.
+  - Implementation, tests, producer return, authorities, and preimages remain unchanged.
+  - Exact focused and static checks complete.
+acceptance_checks:
+  - >-
+    uv run ruff format --check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run ruff check src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - >-
+    uv run mypy src/scouting/contracts/wyscout_data.py
+    tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - >-
+    uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+    tests/contracts/test_foundation_contracts.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/unit/test_wyscout_source_manifest.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any implementation, test, producer-return, authority, or preimage byte changes.
+  - Any P0-P2 finding is reproducible.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,117 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R8
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 design by correcting the eight P1 and two P2
+  regressions returned against R7, retaining R7's deterministic distribution
+  closure and safe unknown partition plus every R6/R5 accepted boundary.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R6:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R7.yaml
+  - reports/reviews/W04/wyscout-schema-design-R6.md
+  - reports/reviews/W04/wyscout-schema-design-R7.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R6.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/evidence.py
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R8.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R8.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Restore exact strict-before temporal eligibility from R6/existing
+    TemporalEvidence: observed_at, available_at and aggregate watermark must all be
+    strictly less than cutoff; equality fails for every dependency and authority.
+  - >-
+    Keep R7's fixed record_kind=unknown digest partition, but take record kind only
+    from a strict source-record envelope. Map completion paths exactly:
+    competitions→competition, teams→team, players→player,
+    eventid2name.csv→event-taxonomy, tags2name.csv→tag-taxonomy,
+    matches_<country>→match, events_<country>→action. Payload content never selects
+    its family. Unknown/missing/null/non-string fixture envelope discriminators use
+    the safe quarantine route and never enter known raw/Silver/Gold.
+  - >-
+    Restore verbatim R6 identities: known Bronze path
+    records/record_kind=<known-kind>/..., player-match key
+    (tenant_id,source_manifest_id,match_id,player_id,
+    player_match_fact_schema_version), and Gold key including
+    role_context_id, role_context_version and dependency_lineage_hash.
+    feature_schema_hash remains a non-key proof field.
+  - >-
+    Restore the separate R6 six Gold coverage dimensions
+    identity/lineup/action/coordinate/possession/temporal with their exact integer
+    equations, zero-denominator rules, minimum and applicability states. Do not
+    replace or mix them with the six strict source DataCoverage dimensions.
+  - >-
+    Retain R7's conservative all-groups L==I closure and define uv-generated
+    console/gui scripts exactly. Derive allowed safe script names from verified
+    entry_points.txt; accept controlled ../../../bin/<safe-name> RECORD scheme
+    paths only when they resolve beneath the exact venv scripts directory; verify
+    actual bytes/hash/size/mode and exact interpreter shebang; deny script reads and
+    execution during rebuild. Put actual root-bearing script bytes/path in
+    operational evidence and bind a deterministic reviewed normalization of the
+    verified shebang plus remaining exact bytes in stable two-root/build identity.
+    No other generated bin payload is allowed.
+  - >-
+    Restore R6 pre-existing pyc enumeration and read denial rather than fatal
+    absence. Require safe paths, current magic/cache tag, one verified RECORD-owned
+    source mapping, actual operational hashes, an early alternate pycache prefix,
+    -B/PYTHONDONTWRITEBYTECODE and zero pyc reads/new files. Root-dependent pyc bytes
+    stay out of stable semantic/two-root identity; the stable policy/source map is
+    bound.
+  - >-
+    Keep uv version and physical executable digest in stable environment identity,
+    but move its resolved absolute path to the operational admission receipt.
+  - >-
+    Restore the exact R6 17-path local-resource allowlist: four authority YAML
+    candidates; decision/review/acceptance artifacts for identity, field,
+    possession and supported-feature authorities; and the source profile. Keep
+    strict source, identity, runtime and output categories separate. Window/cutoff
+    and neutral-context values remain schema-bound unless an exact already-approved
+    file is named.
+  - >-
+    Retain all other R7 distribution-closure, unknown-digest, identity, source,
+    rights, path, serializer, health/card, gate and two-local-commit ledger rules
+    and every earlier closure without compression-driven substitution.
+definition_of_done:
+  - All eight P1 and two P2 findings close with exact algorithms, schemas, paths and tests.
+  - R7's two intended corrections and all R6/R5 closures remain intact.
+  - The standalone graph remains complete for W04.1-W04.7/P2.1-P2.9/G-W04.
+  - No architecture, dependency, migration, source-rights, provider, network or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R8.md');
+    assert p.is_file() and p.stat().st_size > 22000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any correction requires destructive environment cleanup, dependency/lock change, network acquisition, new root or provider access.
+  - Any retained source, temporal, identity, path, coverage, resource or ledger closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

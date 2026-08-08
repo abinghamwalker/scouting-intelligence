@@ -1,0 +1,28 @@
+schema_version: 1
+policy_id: w08-local-export-v1
+status: planned_r1_local_control
+default: deny
+allowed_classification: w08_local_confidential_synthetic_workflow
+allowed_destination: guarded_project_local_evidence_pack_root
+allowed_roles:
+  - analyst
+  - approver
+required_contents:
+  - classification
+  - underlying_values
+  - role_brief_version
+  - retrieval_link
+  - model_version
+  - data_version
+  - limitations
+  - checksums
+  - audit_receipt
+forbidden_contents:
+  - private_observation_not_visible_to_exporter
+  - plaintext_session_token
+  - password_material
+  - raw_provider_payload
+network_transfer_allowed: false
+external_sharing_allowed: false
+removable_media_transfer_allowed: false
+revocation_is_append_only: true

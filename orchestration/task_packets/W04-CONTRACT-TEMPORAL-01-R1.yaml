@@ -1,0 +1,69 @@
+schema_version: 1
+task_id: W04-CONTRACT-TEMPORAL-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Correct the generic source-manifest temporal contract so actual local acquisition
+  and upstream source availability remain distinct truthful instants, including the
+  Wyscout case where the 2020 source release precedes the 2026 local acquisition.
+depends_on:
+  - W04-SOURCE-AUTHORITY-01:VERIFIED
+assigned_role: contracts_platform_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - configs/sources/w04-provider.yaml
+  - docs/dataset-cards/w04-source.md
+  - src/scouting/contracts/evidence.py
+  - tests/contracts/test_foundation_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evidence.py
+  - tests/contracts/test_foundation_contracts.py
+  - reports/reviews/W04/returns/W04-CONTRACT-TEMPORAL-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - migrations/**
+  - src/scouting/sources/**
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - >-
+    SourceSnapshotManifest documents acquired_at as actual local receipt and
+    available_at as upstream fact/source availability; neither timestamp may be
+    fabricated from the other.
+  - >-
+    Remove the invalid ordering assumption that source availability cannot precede
+    acquisition without weakening UTC, strict-model, duplicate-object, coverage,
+    digest, or frozen-contract controls.
+  - Tests accepting source availability before, equal to, and after acquisition.
+  - Tests retaining strict UTC and duplicate source-object rejection.
+definition_of_done:
+  - The exact Wyscout release-before-acquisition case validates.
+  - Existing acquired-before-available synthetic/embargo-like evidence still validates.
+  - Both fields remain required UTC instants and no downstream cutoff rule changes.
+  - No source, data-product, dependency, migration, or protected-fixture path changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_foundation_contracts.py
+  - uv run ruff format --check src/scouting/contracts/evidence.py tests/contracts/test_foundation_contracts.py
+  - uv run ruff check src/scouting/contracts/evidence.py tests/contracts/test_foundation_contracts.py
+  - uv run mypy src/scouting/contracts/evidence.py
+  - uv run bandit -q src/scouting/contracts/evidence.py
+stop_conditions:
+  - A field rename, migration, dependency, or broader temporal architecture change is required.
+  - Required work falls outside allowed paths.
+  - Existing strict/frozen/UTC/source-object invariants cannot be retained.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

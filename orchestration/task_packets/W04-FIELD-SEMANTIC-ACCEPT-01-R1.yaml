@@ -1,0 +1,115 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-ACCEPT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Create and independently verify the exact master-owned formal acceptance for
+  the frozen zero-finding W04 field-semantic authority. Do not begin Bronze.
+depends_on:
+  - W04-FIELD-SEMANTIC-REVIEW-01-R2:MASTER_ACCEPTED
+assigned_role: master_field_semantic_acceptor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-ACCEPT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-field-semantic-independent-review-R2-master-verification.md
+  - tests/contracts/test_wyscout_field_registry_authority.py
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-ACCEPT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - "!reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json"
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-ACCEPT-01-R1.md"
+frozen_authority:
+  decision_id: w04-wyscout-field-semantic-decisions-v1
+  decision_physical_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  decision_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  candidate_id: w04-wyscout-field-registry-v1
+  candidate_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  candidate_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  review_id: w04-wyscout-field-semantic-independent-review-R1
+  review_physical_sha256: e2e983c99ed06eb2043c1f3f9a4eac8e4f4c6d69da97fe55bfc9a27745ade861
+  review_record_sha256: 8beb747f71f43586c4a57125fae405e90db8af2bd8b6b408346b38b64d7e7fa0
+authority:
+  acceptance_id: w04-wyscout-field-semantic-acceptance-v1
+  acceptance_schema_version: w04-authority-acceptance-v1
+  accepted_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  review_recommendation: PASS
+  supersedes_acceptance_id: null
+requirements:
+  - >-
+    Master owns this packet. Reproduce every frozen physical/canonical digest,
+    strict review record, zero findings, PASS recommendation, actor inequality,
+    and decided_at <= reviewed_at before writing acceptance.
+  - >-
+    Sample accepted_at from the actual local UTC clock only after all prior
+    authority checks pass. It must be canonical and satisfy
+    decided_at <= reviewed_at <= accepted_at.
+  - >-
+    Write strict canonical UTF-8 JSON with one terminal LF and exactly the R20
+    acceptance keys/values. accepted_by equals the decision master ActorId and
+    differs from reviewed_by. Bind complete physical and canonical review
+    digests; `supersedes_acceptance_id` is JSON null.
+  - >-
+    Take a complete current shell-only pyc baseline before acceptance
+    verification. After acceptance exists, run the focused 123-test suite; it
+    must strictly validate the complete review/acceptance graph. Run Ruff and
+    local-only checks and reproduce the inventory exactly.
+  - >-
+    Keep every downstream path absent during this packet. Acceptance validates
+    the authority but does not itself implement Bronze, identity, possession,
+    feature, product, runtime, cloud, container, endpoint, or deployment work.
+  - >-
+    Use root uv, locked/no-sync, and process-start bytecode denial for Python.
+    Do not clean, repair, or mutate pycs.
+  - >-
+    Change exactly the two owned paths. Do not run Git, delegate acceptance,
+    access network/provider data, or create any downstream artifact.
+definition_of_done:
+  - Acceptance JSON is exact, canonical, digest-linked, actor/clock valid.
+  - Focused contract passes with actual acceptance present.
+  - Frozen upstream authority remains unchanged.
+  - Downstream paths remain absent and terminal inventory equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen digest/review/actor/clock edge fails.
+  - Any downstream path exists before acceptance verification completes.
+  - Any check or preflight/postflight inventory differs.
+  - Work requires an edit outside the two owned paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

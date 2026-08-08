@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W04-WYSCOUT-SCHEMA-CLOSURE-R3-ACCEPTANCE-ORACLE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce a report-only, implementation-independent executable acceptance oracle
+  for the R3 predicate operands, frozen constant corpora, twelve-root coverage and
+  exact two-field canonical-Decimal projection boundary.
+depends_on:
+  - W04-CANONICAL-DECIMAL-ARROW-AUTHORIZATION-01-R1:AUTHORIZED
+  - W04-WYSCOUT-23-ROOT-RUNTIME-CONSTRAINT-CENSUS-01-R2:COMPLETE
+assigned_role: w04_schema_closure_r3_acceptance_oracle_analyst
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-SCHEMA-CLOSURE-R3-ACCEPTANCE-ORACLE-01-R1.yaml
+  - reports/verification/W04/wyscout-23-root-schema-closure-R2-master-verification.md
+  - reports/verification/W04/wyscout-canonical-decimal-arrow-authorization-R1.md
+  - reports/reviews/W04/wyscout-23-root-runtime-constraint-census-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-23-root-schema-readiness-audit-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-CLOSURE-R3-ACCEPTANCE-ORACLE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - all paths not listed in allowed_paths
+fixed_bindings:
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  corrected_constraint_census_sha256: 3ac167f4a63f26d930abe039ec7417637d204f984db6f0cc578dd322526c2120
+  r2_master_rework_sha256: 9c5092ccf75e4a77ebdb7079a1a3b4360b8b96e52823189355a1cd8e7953a76d
+  decimal_authorization_sha256: cddc7fae1ac256b2312a34dc1291dddebdff35162321b0215580103ba6569b5e
+requirements:
+  - >-
+    Do not inspect, test or judge `src/scouting/contracts/wyscout_schema.py`,
+    `src/scouting/storage/formats.py`, their focused tests, or the R3 producer
+    return. This is an independent expected-value oracle, not a candidate review.
+  - >-
+    Enumerate every transitive runtime model validator and give its exact owning
+    model, runtime-resolvable operand paths, operation and constants. Separately
+    enumerate guarded-reader/composed external authority predicates, their exact
+    evidence source and exact operand/constant objects.
+  - >-
+    Reproduce the complete exact constant corpora named in the R3 producer packet,
+    with authoritative source location, deterministic count and canonical SHA-256
+    where a corpus is large. Include enough executable extraction detail for the
+    master to reproduce it without trusting this report.
+  - >-
+    Enumerate all Decimal occurrences reachable from the twelve Parquet root
+    models by owning model and field path. Mark exactly
+    `GoldCoverageDimension.coverage` and `GoldCoverage.coverage_overall` as
+    CANONICAL_DECIMAL_UTF8 and every other occurrence as decimal128(22,18).
+  - >-
+    Give an adversarial acceptance matrix for canonical Decimal tokens and the
+    minimum distinct valid row/variant matrix needed to exercise all twelve roots.
+  - Report discrepancies or genuine authority contradictions; do not propose or
+    perform architecture, contract, product or implementation changes.
+acceptance_checks:
+  - shasum -a 256 of every fixed binding
+  - uv run python read-only extraction/probe commands as needed
+  - uv run python scripts/verify_local_only.py
+definition_of_done:
+  - The master has one exact, reproducible expected-value oracle independent of the
+    implementation candidate.
+deliverables:
+  - One R1 acceptance-oracle report.
+  - One R1 return using the repository template.
+stop_conditions:
+  - Any fixed binding drifts, candidate inspection would be required, an authority
+    source contradicts another frozen authority, or an edit outside allowed paths
+    would be needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

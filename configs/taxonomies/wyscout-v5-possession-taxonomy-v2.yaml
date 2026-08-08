@@ -1,0 +1,510 @@
+bound_inputs:
+  event_taxonomy_source_sha256: ce7bafb341b36ab4c6093bf1c09c967e9cea10d4223724a1fc679086e5d16842
+  field_acceptance_sha256: beb66d3a8f07e41fe0fa5fe82fee06e3602f3c3045f48d2a11ca6fa9f20cc436
+  field_registry_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  field_registry_id: w04-wyscout-field-registry-v2
+  tag_taxonomy_source_sha256: e0bc1bd8ff6ea5339586fdfc3e8e9b285a4a18f1ae2f5868ccc9ec9cecc8a922
+decision_id: w04-wyscout-possession-semantic-decisions-v2
+decision_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+policies:
+  cross_authority_selector:
+    admitted_state: PREDICATE_ADMITTED
+    allowed_input_fields:
+    - action_event_taxonomy_id
+    - action_subevent_taxonomy_id
+    - action_team_source_id
+    - action_tag_ids
+    coercion_policy: FORBIDDEN
+    exact_pair_policy: REQUIRE_EXACT_PREDICATE
+    missing_or_mistyped_input_policy: PREDICATE_UNMAPPED
+    output_field: predicate_selection_state
+    raw_rejected_name_label_matching: FORBIDDEN
+    tag_array_contract: SORTED_UNIQUE_STRICT_INTEGER_REQUIRED
+    team_requirement: ACTION_TEAM_REQUIRES_CANONICAL_TEAM
+    unmapped_state: PREDICATE_UNMAPPED
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION_OR_UNASSIGNED
+  period_boundary_policy: CLOSE
+  provider_native_possession_claim: false
+  runtime_label_matching: FORBIDDEN
+  simultaneous_cross_team_policy: UNCERTAIN_BOUNDARY
+  unknown_combination_policy: UNMAPPED
+  unknown_name_matching: FORBIDDEN
+  same_period_sequence_resolution:
+    action_order_fields:
+    - period_rank
+    - period_elapsed_seconds
+    - source_record_ordinal
+    - source_event_record_id
+    assignment_cardinality: EXACTLY_ONE_DETERMINISTIC_RESOLVED_POSSESSION
+    contested_attachment_policy: PREDICATE_PRECEDING_BUFFER_OR_UNASSIGNED_WITHIN_PERIOD
+    control_open_policy: OPEN_ACTION_TEAM_CONTROL
+    cross_period_state_policy: FORBIDDEN
+    dead_ball_attachment_policy: PREDICATE_PRECEDING_OR_UNASSIGNED
+    equal_clock_cross_team_policy: UNCERTAIN_BOUNDARY_UNASSIGNED
+    final_output_field: possession_eligibility_state
+    ineligible_state: INELIGIBLE_UNMAPPED
+    match_period_scope_fields:
+    - action_match_source_id
+    - action_period_code
+    non_control_administration_policy: UNASSIGNED
+    opposing_team_transition_policy: CLOSE_PRIOR_AND_OPEN_NEW
+    period_boundary_policy: CLOSE_AND_UNASSIGN_BUFFER
+    resolved_state: ELIGIBLE_RESOLVED
+    restart_policy: CLOSE_PRIOR_AND_OPEN_ACTION_TEAM_CONTROL
+    same_team_transition_policy: CONTINUE_OPEN_POSSESSION
+    selector_admitted_state: PREDICATE_ADMITTED
+    selector_unmapped_state: PREDICATE_UNMAPPED
+predicates:
+- closes_control: false
+  contested_attachment: BUFFER_UNTIL_FOLLOWING_RESOLVED_POSSESSION
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTESTED
+  event_id: 1
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (1,10): treat this duel as contested and buffer it to the following resolved same-period possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 10
+- closes_control: false
+  contested_attachment: BUFFER_UNTIL_FOLLOWING_RESOLVED_POSSESSION
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTESTED
+  event_id: 1
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (1,11): treat this duel as contested and buffer it to the following resolved same-period possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 11
+- closes_control: false
+  contested_attachment: BUFFER_UNTIL_FOLLOWING_RESOLVED_POSSESSION
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTESTED
+  event_id: 1
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (1,12): treat this duel as contested and buffer it to the following resolved same-period possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 12
+- closes_control: false
+  contested_attachment: BUFFER_UNTIL_FOLLOWING_RESOLVED_POSSESSION
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTESTED
+  event_id: 1
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (1,13): treat this duel as contested and buffer it to the following resolved same-period possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 13
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,20): close control and attach this foul to the preceding resolved possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 20
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,21): close control and attach this foul to the preceding resolved possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 21
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,22): close control and attach this foul to the preceding resolved possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 22
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: UNASSIGNED
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,23): close control but leave this out-of-game foul unassigned because the local evidence does not justify attachment. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 23
+- closes_control: false
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: NON_CONTROL_ADMIN
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,24): retain this protest as non-control administration without opening, closing, buffering, or attaching control. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 24
+- closes_control: false
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: UNMAPPED
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,25): evidence is insufficient to assign simulation a possession transition, so it remains explicitly unmapped. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 25
+- closes_control: false
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: NON_CONTROL_ADMIN
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,26): retain this time-lost event as non-control administration without opening, closing, buffering, or attaching control. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 26
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 2
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (2,27): close control and attach this foul to the preceding resolved possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 27
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,30): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 30
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,31): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 31
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,32): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 32
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,33): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 33
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,34): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 34
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,35): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 35
+- closes_control: true
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: RESTART
+  event_id: 3
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (3,36): close prior control and open a restart for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 36
+- closes_control: false
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: UNMAPPED
+  event_id: 4
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (4,40): evidence is insufficient to assign this goalkeeper action a possession transition, so it remains explicitly unmapped. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 40
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 5
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (5,50): close control and attach this ball-out interruption to the preceding resolved possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 50
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: UNASSIGNED
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 5
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (5,51): close control but leave this whistle interruption unassigned because the local evidence does not justify attachment. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 51
+- closes_control: true
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: PRECEDING_RESOLVED_POSSESSION
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: DEAD_BALL
+  event_id: 6
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (6,60): close control and attach this offside event to the preceding resolved possession. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 60
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 7
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (7,70): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 70
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 7
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (7,71): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 71
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 7
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (7,72): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 72
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,80): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 80
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,81): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 81
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,82): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 82
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,83): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 83
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,84): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 84
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,85): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 85
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 8
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (8,86): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 86
+- closes_control: false
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: UNMAPPED
+  event_id: 9
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (9,90): evidence is insufficient to assign this save action a possession transition, so it remains explicitly unmapped. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 90
+- closes_control: false
+  contested_attachment: null
+  control_team_source: NONE
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: UNMAPPED
+  event_id: 9
+  forbidden_tag_ids: []
+  opens_control: false
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (9,91): evidence is insufficient to assign this save action a possession transition, so it remains explicitly unmapped. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 91
+- closes_control: false
+  contested_attachment: null
+  control_team_source: ACTION_TEAM
+  dead_ball_attachment: null
+  decided_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision: CONTROL
+  event_id: 10
+  forbidden_tag_ids: []
+  opens_control: true
+  rationale: 'Project-owned conservative inference from the frozen local taxonomy label for exact integer pair (10,100): open control for the action team. This is not provider-native possession truth; runtime matching uses only integers and frozen digests.'
+  required_tag_ids: []
+  subevent_id: 100
+prior_authority:
+  acceptance_id: w04-wyscout-possession-semantic-acceptance-v1
+  acceptance_physical_sha256: f6b2efcb746907886ab97876bf253115a804786e31cae34b25a1eb3771346112
+  acceptance_schema_version: w04-authority-acceptance-v1
+  acceptance_sha256: f6b2efcb746907886ab97876bf253115a804786e31cae34b25a1eb3771346112
+  accepted_at: '2026-07-30T16:55:47Z'
+  accepted_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  candidate_id: w04-wyscout-possession-taxonomy-v1
+  candidate_physical_sha256: e456377183d6e7f3742a64dcbbd2972eeb6cc70ef55184d40c2dbb822e15a78d
+  candidate_sha256: 6a598da111bdf4be71b59d5646d56560c0024ffd7532d95e1553aa6fcaf4fdfa
+  decision_id: w04-wyscout-possession-semantic-decisions-v1
+  decision_physical_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  decision_sha256: 4161e0c062a1ad7a819a2c28c49473d54ae0494184e907a81eccbb88975c8d71
+  review_id: w04-wyscout-possession-semantic-independent-review-R1
+  review_physical_sha256: 1f70cc4b1a9d988d85daf573219c6316791709f7341f9abd802b7ceb1d28ccd4
+  review_recommendation: PASS
+  review_record_sha256: 40aa258984714f33d91c502df1d50eefd4e076a7617c0ac6659c9679937d0962
+  supersedes_acceptance_id: null
+source_id: wyscout-soccer-match-events-figshare-v5
+taxonomy_id: w04-wyscout-possession-taxonomy-v2
+taxonomy_schema_version: w04-possession-taxonomy-v2

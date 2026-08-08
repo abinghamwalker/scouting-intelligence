@@ -1,0 +1,51 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R7
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - {id: W04-DESIGN-CUTOFF-EQUALITY-REGRESSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-RECORD-KIND-AUTHORITY-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-UV-CONSOLE-SCRIPTS-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-PYC-ADMISSION-REGRESSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-GOLD-KEY-REGRESSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-GOLD-COVERAGE-REGRESSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-PLAYER-MATCH-KEY-REGRESSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-BRONZE-PATH-REGRESSION-01, severity: P1, status: returned_for_rework}
+  - {id: W04-DESIGN-UV-ABSOLUTE-PATH-IDENTITY-01, severity: P2, status: returned_for_rework}
+  - {id: W04-DESIGN-RESOURCE-ALLOWLIST-REGRESSION-01, severity: P2, status: returned_for_rework}
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R8
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R7.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R7.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R6.md
+  - reports/verification/W04/wyscout-schema-design-R7-master-verification.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/evidence.py
+  - .venv/lib/python3.12/site-packages
+  - reports/reviews/W04/wyscout-schema-design-R6.md
+checks:
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-R7.md');
+      assert p.is_file() and p.stat().st_size > 18000"
+    result: PASS_52872_BYTES
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: >-
+      uv run python -c "from pathlib import Path; import csv;
+      print([r for p in Path('.venv').rglob('RECORD')
+      for r in csv.reader(p.open()) if r[0].startswith('../../../bin/')])"
+    result: PASS_EVIDENCE_35_ROWS_21_OWNERS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY

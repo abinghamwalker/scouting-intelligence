@@ -1,0 +1,90 @@
+schema_version: 1
+task_id: W06-CARDS-REVIEW-06
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the W06 factual cards and limitations against accepted source
+  evidence and retained one-use broker outputs, reporting only defects that can change
+  a metric, interval, partition, leakage behavior, protected decision or claim.
+depends_on:
+  - W06-CARDS-06-R1:PRODUCED
+assigned_role: independent_evidence_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-CARDS-06-R1.yaml
+  - reports/reviews/W06/returns/W06-CARDS-06-R1.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - reports/readiness/W06/evaluation-readiness.md
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - reports/evaluation/W06/protected-access-outcome.json
+  - reports/evaluation/W06/protected-gate-decision.json
+  - reports/evaluation/W06/protected-execution-receipt.json
+  - reports/evaluation/W06/evaluation-protocol-card.md
+  - reports/evaluation/W06/evaluation-evidence-card.md
+  - reports/evaluation/W06/m0-model-evaluation-card.md
+  - reports/evaluation/W06/baseline-comparison-report.md
+  - reports/evaluation/W06/robustness-transfer-report.md
+  - reports/evaluation/W06/null-control-report.md
+  - reports/evaluation/W06/failure-case-register.md
+  - reports/evaluation/W06/protected-access-record.md
+  - reports/evaluation/W06/protected-comparison-report.md
+  - reports/evaluation/W06/applicability-contract.md
+  - reports/verification/W06/limitations.md
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - reports/reviews/W06/evaluation-robustness-independent-review-R6.md
+  - reports/reviews/W06/protected-no-go-independent-review-R2.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/cards-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-CARDS-REVIEW-06-R1.md
+forbidden_paths:
+  - reports/evaluation/**
+  - reports/verification/**
+  - reports/phase-gates/**
+  - reports/readiness/**
+  - orchestration/**
+  - src/**
+  - tests/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - scripts/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+deliverables:
+  - Independent report with exact ACCEPT or REWORK verdict and P0/P1 counts.
+  - Mandatory return at reports/reviews/W06/returns/W06-CARDS-REVIEW-06-R1.md.
+definition_of_done:
+  - Every protected identity, count, reason, absent object and claim boundary is checked against the retained JSON/config sources.
+  - Every metric/baseline/null/robustness/failure statement is checked against accepted implementation/fixture/review evidence.
+  - The reviewer verifies that public fixtures are never represented as expert or empirical evidence and that unsupported populations are not silently converted to zero or passing results.
+  - The reviewer verifies that W07 remains PLANNED and unauthorised and that the stated future input does not authorise external acquisition or rerun.
+acceptance_checks:
+  - shasum -a 256 configs/evaluation/w06-protected-preregistration-v1.json tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json reports/evaluation/W06/protected-access-outcome.json reports/evaluation/W06/protected-gate-decision.json reports/evaluation/W06/protected-execution-receipt.json
+  - test -s reports/reviews/W06/cards-independent-review-R1.md
+  - test -s reports/reviews/W06/returns/W06-CARDS-REVIEW-06-R1.md
+stop_conditions:
+  - Review requires protected expected labels/results, external/provider access, a dependency, Git operation or any write outside allowed_paths.
+  - A reproducible P0/P1 source contradiction can change the retained decision, partition, metric meaning, interval meaning, leakage behavior or claim.
+mandatory_return_requirements:
+  - verdict and exact P0/P1 counts
+  - exact identities and evidence boundaries reproduced
+  - exact findings with paths and evidence or none
+  - acceptance-check results
+  - remaining decision-bearing risk or none
+  - no Git/dependency/protected-expected-output/external/orchestration/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

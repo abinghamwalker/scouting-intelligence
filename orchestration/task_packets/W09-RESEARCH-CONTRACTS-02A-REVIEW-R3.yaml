@@ -1,0 +1,35 @@
+task_id: W09-RESEARCH-CONTRACTS-02A-REVIEW
+revision: R3
+owner: subagent
+objective: >-
+  Independently verify that all seven R2 P1 contract/scorer findings are resolved,
+  that no new executable contradiction remains, and that accepted W05 compatibility
+  and the historical-resemblance-only claim boundary remain intact.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R2.md
+  - src/scouting/contracts/research.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w09_research_contracts.py
+  - src/scouting/m0/scoring.py
+  - src/scouting/m0/core.py
+  - tests/unit/test_w09_scoring_kernel.py
+allowed_paths:
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R3.md
+deliverables:
+  - Finding-by-finding disposition of every R2 P1 with exact executable evidence.
+  - Fresh severity-ranked findings, if any, and an explicit ACCEPT or REWORK recommendation.
+  - Explicit W05 public-export/scorer parity, strict numeric interoperability, and W09 claim-boundary conclusions.
+checks:
+  - uv run ruff check src/scouting/contracts/research.py src/scouting/contracts/__init__.py tests/contracts/test_w09_research_contracts.py src/scouting/m0/scoring.py src/scouting/m0/core.py tests/unit/test_w09_scoring_kernel.py
+  - uv run mypy src/scouting/contracts/research.py src/scouting/m0/scoring.py src/scouting/m0/core.py
+  - uv run pytest -q tests/contracts/test_w09_research_contracts.py tests/unit/test_w09_scoring_kernel.py tests/unit/test_w05_m0_models.py tests/integration/test_w05_m0_serving.py
+  - test -s reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R3.md
+stop_conditions:
+  - Any need for implementation, test, orchestration, dependency, or Git changes.
+constraints:
+  - Report-only; no Git, dependencies, implementation, test or orchestration edits.
+  - Attempt adversarial constructions for all seven former findings; do not accept from tests alone.
+  - Use apply_patch for the allowed report.

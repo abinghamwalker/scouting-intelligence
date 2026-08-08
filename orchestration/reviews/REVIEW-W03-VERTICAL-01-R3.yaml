@@ -1,0 +1,39 @@
+schema_version: 1
+review_id: REVIEW-W03-VERTICAL-01-R3
+task_id: W03-VERTICAL-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+verified_results:
+  database_backed_packet_tests: 21_passed
+  metric_agnostic_candidate_selection: PASS
+  request_bound_result_run_ids: PASS
+  artifact_catalog_lineage: PASS
+  protected_candidate_identity: PASS
+  protected_exact_result: FAIL
+  protected_exact_explanations: FAIL
+  ruff_format: PASS
+  ruff_lint: PASS
+  mypy_strict: PASS
+  bandit: PASS
+defects:
+  - severity: P0
+    code: DEVELOPMENT_PRESENTATION_PROFILE_HARDCODED
+    evidence: reports/verification/W03/protected-gate-attempt-R2.json
+    affected_definition_of_done: >-
+      The frozen protected output must be reproducible through the same serving
+      implementation without development-only scoring, confidence, reason,
+      limitation or explanation constants.
+    required_fix: >-
+      Define one immutable retrieval-presentation profile carried by the
+      selected artifact catalog. It may supply bounded scores, confidence,
+      reason codes, limitations and a candidate-name explanation template, but
+      it must not supply or override candidate identity, rank, eligibility,
+      tenant, cutoff or lineage.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-VERTICAL-01-R4.yaml
+reviewer: master

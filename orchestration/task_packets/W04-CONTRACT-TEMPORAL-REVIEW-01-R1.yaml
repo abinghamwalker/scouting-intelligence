@@ -1,0 +1,60 @@
+schema_version: 1
+task_id: W04-CONTRACT-TEMPORAL-REVIEW-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Independently review the shared SourceSnapshotManifest clock correction, challenge
+  all three legitimate acquisition/availability orderings, and prove strict UTC,
+  serialization, object identity, and downstream cutoff controls remain intact.
+depends_on:
+  - W04-CONTRACT-TEMPORAL-01:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-CONTRACT-TEMPORAL-01-R1.yaml
+  - src/scouting/contracts/evidence.py
+  - tests/contracts/test_foundation_contracts.py
+  - docs/architecture/evaluation-contract.md
+  - configs/sources/w04-provider.yaml
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_source_temporal_review.py
+  - reports/reviews/W04/source-temporal-contract-review-R1.md
+  - reports/reviews/W04/returns/W04-CONTRACT-TEMPORAL-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Additive independent contract and adversarial tests.
+  - Review report with ACCEPT-or-REWORK recommendation to master.
+  - Mandatory return without self-approval.
+definition_of_done:
+  - Release-before-acquisition, equality, and embargo-after-receipt remain distinct.
+  - Required strict UTC fields survive canonical JSON round-trip.
+  - Duplicate source paths, prohibited rights, unknown fields, and bad digests still reject.
+  - TemporalEvidence continues to reject observed/available cutoff equality and later facts.
+  - No producer test or implementation path changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_source_temporal_review.py
+  - uv run ruff format --check tests/contracts/test_w04_source_temporal_review.py
+  - uv run ruff check tests/contracts/test_w04_source_temporal_review.py
+  - uv run mypy tests/contracts/test_w04_source_temporal_review.py
+stop_conditions:
+  - Any shared contract regression or ambiguous timestamp serialization is reproduced.
+  - Review requires editing a forbidden producer path.
+  - A P0-P2 temporal or lineage defect remains.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

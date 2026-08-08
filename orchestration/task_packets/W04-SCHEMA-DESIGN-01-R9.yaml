@@ -1,0 +1,156 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R9
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 design by retaining every R8 closure and
+  correcting the three executable-classification defects found by master
+  verification against the actual locked all-groups uv environment.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R8:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R8.yaml
+  - reports/verification/W04/wyscout-schema-design-R8-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R8.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R8.md
+  - pyproject.toml
+  - uv.lock
+  - .venv/lib/python3.12/site-packages/ruff-0.16.0.dist-info/RECORD
+  - .venv/lib/python3.12/site-packages/pip-26.1.2.dist-info/RECORD
+  - .venv/lib/python3.12/site-packages/pip-26.1.2.dist-info/entry_points.txt
+  - .venv/bin/ruff
+  - .venv/bin/pip
+  - .venv/bin/pip3
+  - .venv/bin/pip3.12
+  - .venv/bin/pytest
+  - .venv/lib/python3.12/site-packages/_virtualenv.py
+  - .venv/lib/python3.12/site-packages/_virtualenv.pth
+  - .venv/lib/python3.12/site-packages/a1_coverage.pth
+  - .venv/lib/python3.12/site-packages/scouting_intelligence.pth
+  - .venv/lib/python3.12/site-packages/scouting_intelligence-0.1.0.dist-info/RECORD
+  - .venv/lib/python3.12/site-packages/scouting_intelligence-0.1.0.dist-info/direct_url.json
+  - .venv/lib/python3.12/site-packages/scouting_intelligence-0.1.0.dist-info/uv_cache.json
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R9.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R9.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Make installed ../../../bin classification total and mutually exclusive for
+    the exact locked all-groups environment. Retain verified entry_points.txt as
+    authority for ordinary generated console/gui wrappers, but also define the
+    exact reviewed uv-generated pip interpreter-version alias: pip 26.1.2 declares
+    pip and pip3 for pip._internal.cli.main:main and the installed set additionally
+    requires exactly pip<python-major>.<python-minor>, currently pip3.12. Bind its
+    owner, target, exact wrapper bytes/hash/size/mode, stable normalization, and
+    negative tests; no other alias is permitted.
+  - >-
+    Admit wheel-provided .data/scripts payloads as a separate class derived from
+    the verified extracted RECORD and PEP 427 scripts mapping, not from entry
+    points. For the locked environment prove the sole member is Ruff 0.16.0:
+    extracted ruff-0.16.0.data/scripts/ruff maps to installed ../../../bin/ruff,
+    Ruff has no console/gui entry point, and extracted/installed bytes are exactly
+    equal. Bind safe name/path resolution, singular ownership, executable mode,
+    exact bytes/hash/size, stable root-independent identity, collision rejection,
+    no execution during admission, and no read/execute during rebuild. If a
+    wheel-script shebang rewrite class is described, make its trigger, exact byte
+    transformation, normalization and rejection cases constructive; otherwise
+    fail on any non-byte-identical mapped wheel script.
+  - >-
+    Replace incidental sys.executable-spelling equality with an exact canonical
+    venv wrapper-interpreter alias contract. Current generated wrappers use
+    <project>/.venv/bin/python while uv run python reports
+    <project>/.venv/bin/python3; require both admitted aliases to be safe
+    non-escaping venv links that resolve to the same frozen physical Python 3.12.12
+    interpreter, record actual alias/shebang operationally, and normalize only the
+    verified root-bearing canonical wrapper shebang for stable identity. Do not
+    relax interpreter bytes, ABI, version, mode, containment, or target checks.
+  - >-
+    Add a positive installed-script census for exactly 35 rows: 33 direct
+    console/gui entry-point wrappers, one pip3.12 reviewed alias, and one
+    wheel-provided Ruff script, with 21 owners. Every row must be classified once;
+    any missing, extra, multiply classified, unsafe, colliding, unowned, changed,
+    read, or executed script fails. Stop if a fresh locked sync changes the census.
+  - >-
+    Make interpreter startup constructive before any third-party or executable
+    .pth code can run. The current site root has unowned executable
+    _virtualenv.pth/_virtualenv.py, RECORD-owned executable a1_coverage.pth, and
+    root-bearing editable scouting_intelligence.pth. Prefer an exact
+    `uv run python -S -B` stdlib/repository-owned stage-0 with an already-set empty
+    alternate pycache prefix, followed by manual addition of only the verified
+    site and repository source roots; do not call site.addsitedir or execute any
+    .pth. Bind the two uv-bootstrap source files as a separate exact venv-bootstrap
+    class, bind/deny the coverage hook as installed distribution content, and
+    verify the editable .pth is exactly the one absolute <project>/src line before
+    stable root-token normalization. Cover root-bearing direct_url.json and
+    timestamp-bearing uv_cache.json as operational editable-install evidence,
+    while retaining exact stable root metadata bytes and build inputs.
+  - >-
+    Correct the pre-existing bytecode grammar without cleanup. The current site
+    inventory is 1,075 pyc: 962 normal, 112 pytest-9.1.1 assertion-rewrite names,
+    and one source-absent orphan six.cpython-312.pyc; the uv-bootstrap pyc has
+    bootstrap rather than distribution ownership. Define mutually exclusive
+    normal, pytest-rewrite, bootstrap, and orphaned-inert operational classes with
+    safe containment/current magic/tag/hash/size/mode evidence. Map normal and
+    pytest files to one verified source and require the pytest suffix version to
+    equal the admitted pytest distribution. Allow an orphan only as an
+    operationally hashed, never-read inert file under the same early alternate
+    prefix and audit denial. Also inventory the current 56 repository pyc files in
+    17 cache directories under the same operational/no-read/no-change policy and
+    stable source-map authority. Counts/hashes remain operational and may differ
+    across two roots; policy/source authority remains stable.
+  - >-
+    Remove the ordering cycle between the statement that pre-execution admission
+    imports no third-party code and use of packaging.tags.sys_tags(). Define either
+    a repository-owned stdlib-only exact compatible-tag selector, or a narrow
+    stage-0 rule that first admits the pure universal packaging wheel and all of
+    its bytes without executing it, then imports only that admitted module to
+    compute and freeze tags before any other third-party execution. Bind the
+    bootstrap observation and reject selector disagreement or any additional
+    import.
+  - >-
+    Retain every other R8 source, rights, strict temporal, identity/correction,
+    exact key, source/Gold coverage, path/serializer, all-groups L==I, extracted
+    tree, pyc enumerate-and-deny, uv operational-path, exact 17-resource,
+    build/two-root, health/card, gate, ownership, and two-commit-ledger rule
+    without compression or substitution.
+definition_of_done:
+  - Every current installed ../../../bin RECORD row has one constructive authority.
+  - The three master P1 findings close with exact algorithms, paths, bytes and tests.
+  - Every R8 and earlier accepted closure remains intact.
+  - The standalone graph remains complete for W04.1-W04.7/P2.1-P2.9/G-W04.
+  - No architecture, dependency, migration, source-rights, provider, network or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R9.md');
+    assert p.is_file() and p.stat().st_size > 22000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Fresh uv sync changes the exact installed executable census or locked environment.
+  - A correction requires dependency/lock change, network acquisition, new root, cleanup, provider access or architecture change.
+  - Any retained closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

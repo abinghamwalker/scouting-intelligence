@@ -1,0 +1,49 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT_FOR_INDEPENDENT_REVIEW
+next_packet: W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R3-master-verification.md
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: frozen authority and evidence digests
+    result: PASS_DECISION_CANDIDATE_R1_R2_UNCHANGED
+  - command: independent reversed multi-scope sequence challenge
+    result: PASS_SCOPE_LOCAL_IDS_INPUT_ORDER_INVARIANT
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+      tests/contracts/test_w04_possession_semantic_v2_authority.py
+      tests/contracts/test_w04_possession_semantic_authority.py
+      tests/contracts/test_w04_field_semantic_v2_authority.py
+    result: PASS_328_TESTS
+  - command: focused ruff format and lint
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: retained bytecode/cache count
+    result: PASS_1145_FILES_150_DIRECTORIES_ZERO_SYMLINKS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    R3 closes only the bounded test-owned multi-scope determinism defect; all
+    declarative authority bytes remain frozen.
+  - >-
+    No possession acceptance or later authority/product permission is implied.

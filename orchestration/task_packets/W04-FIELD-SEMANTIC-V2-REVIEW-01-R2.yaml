@@ -1,0 +1,126 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-V2-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct R1-P2-01 in the fixed field-v2 review by stating the accepted R21
+  progression accurately, then issue a fresh canonical review clock, rerun the
+  bounded suite, and return complete R2 evidence.
+depends_on:
+  - W04-FIELD-SEMANTIC-V2-REVIEW-01-R1:MASTER_REWORK
+assigned_role: independent_field_semantic_v2_evidence_rework_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.yaml
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-field-semantic-v2-review-R1-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/wyscout-r21-control-preimage-independent-review-R1.md
+  - reports/verification/W04/wyscout-r21-control-preimage-independent-review-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+correction:
+  defect_id: R1-P2-01
+  frozen_candidate:
+    decision_sha256: cd4d51c0d7c365b73b0c23997716eb7755797889dca1fc545772263dc9924736
+    registry_physical_sha256: 15023556072f90b1e956277f255dc4a1df0bea78a5dcbb14b4863346ff9b5193
+    registry_canonical_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  required_progression:
+    completed:
+      - R21 design independent review and master acceptance
+      - sibling control-preimage materialization, independent review, and master acceptance
+      - field-v2 decision/candidate producer master verification
+    remaining:
+      - field-v2 independent review master acceptance and acceptance JSON
+      - possession-v2 decision, review, and acceptance
+      - exact feature decision, review, and acceptance
+      - cross-authority test, independent review, and master gate
+      - complete repository and R21-specific gate
+requirements:
+  - >-
+    Correct only the inaccurate progression/absence narrative and directly
+    related conclusion text. Remove nonexistent v3 review/acceptance references,
+    any claim that the two preimages need a future acceptance packet, and any
+    description of their bytes as later candidates.
+  - >-
+    State that both sibling control preimages already passed independent review
+    and master acceptance but remain inert and confer no product authority.
+    State the exact remaining serial gates from `required_progression`.
+  - >-
+    Keep the fixed review ID/schema/actor and all candidate/decision digests.
+    Because R2 is a fresh corrected review, set `reviewed_at` in narrative and
+    the sole canonical fenced record to one identical truthful canonical UTC
+    instant after the R1 correction and after the decision.
+  - >-
+    Rerun the exact focused suites with the corrected review present and verify
+    the canonical fenced record, PASS/empty findings, local-only boundary,
+    v1/candidate immutability, and absence of acceptance/downstream/product work.
+  - >-
+    Take a fresh shell-only R2 pyc/__pycache__ inventory before Python and
+    reproduce it after the final report and R2 return. Use only
+    PYTHONDONTWRITEBYTECODE=1 with `uv run --locked --no-sync`; do not sync,
+    install, clean, or repair.
+  - >-
+    Use the two exact absolute allowed paths for every patch header. Do not
+    edit the R1 return, candidate, test, orchestration, dependency, source,
+    acceptance, possession, feature, cross-authority, product, or other path.
+    Do not run Git, delegate, self-approve, or access network/provider data.
+definition_of_done:
+  - R1-P2-01 is fully removed without changing candidate/test bytes.
+  - Corrected review has one valid fresh canonical PASS record and zero findings.
+  - Exact focused/local-only checks and inventory equality pass.
+  - Only the fixed review and new R2 return are changed.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    p=Path('reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md');
+    s=p.read_text(); assert p.stat().st_size > 12000;
+    assert s.count('```w04-authority-review-v1') == 1;
+    assert 'Recommendation: PASS' in s or 'Recommendation\\n\\nPASS' in s;
+    assert 'P0' in s and 'P1' in s and 'P2' in s;
+    assert 'v3 review' not in s and 'v3 acceptance' not in s"
+stop_conditions:
+  - Any frozen candidate/test/v1 hash differs.
+  - A third output or semantic candidate change is needed.
+  - Any check, inventory, local-only, or path-absence assertion fails.
+  - >-
+    Correction requires broader architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

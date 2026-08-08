@@ -1,0 +1,111 @@
+schema_version: 1
+task_id: W04-STAGED-IMMUTABLE-PUBLISHER-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Correct the independently reproduced equal-final replay staged-appearance race by
+  adding one final identity-bound no-follow absence checkpoint and adversarial tests,
+  while preserving every accepted R2 behavior and failed-review evidence.
+depends_on:
+  - W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1:REWORK
+assigned_role: bounded_w04_staged_immutable_publisher_r3_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.yaml
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R3.yaml
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.md
+  - reports/reviews/W04/wyscout-staged-product-publisher-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1.md
+  - src/scouting/storage/wyscout_publication.py
+  - tests/unit/test_w04_staged_product_publisher.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/wyscout_publication.py
+  - tests/unit/test_w04_staged_product_publisher.py
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/wyscout-staged-product-publisher-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.md
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.md
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1.md
+  - src/scouting/storage/__init__.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - src/scouting/contracts/**
+fixed_bindings:
+  r2_packet_sha256: bab41bf6e8d7e9b01c2820f3f288ae92559d30cd4d8f0d3d290119afe0ed1a50
+  r2_publisher_sha256: 9805dbad85cdcf7c49c50634e31eefda4c1eef7b3f22cc0d969e98f93b0c3a6f
+  r2_test_sha256: d509b04df48c9dfbeb6661e5bab9e32dd74ce9c8d2243b70b77f5a52b95681e5
+  r2_return_sha256: 916a5b7cffdb668eb0326b33290bcab4f4e3de2457b6ca86d0aede0069303cbe
+  failed_review_sha256: 6e574fde38eefba002db7568596f10346beb7d6e16c7149bdda2af6cb402a7d3
+  failed_review_return_sha256: bdb9826137d6b094b8e19d79e6480c5f2fcfb792df51534e5ab9f022b453ceb7
+  complete_repository_gate_sha256: 22b0b73078d4d2f0cc7e5eed3920a5401fd3d0e02d9ee3c66d9c7af02f76f469
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  guarded_storage_sha256: 62a026560c4821d123d42afcd3438be18572ec0fef03f1747a0cbcfa97f030ef
+  parquet_encoder_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+finding:
+  id: W04-PUBLISHER-R2-P1-REPLAY-STAGED-APPEARANCE-RACE
+  priority: P1
+  master_reproduction: REPRODUCED_FAIL_OPEN_REPLAY_RACE
+requirements:
+  - Verify every fixed hash and stop on drift before editing.
+  - >-
+    In the existing equal-final replay branch, after validator and final recheck and
+    after the fresh immutable-final readback, perform a final descriptor-relative
+    no-follow checkpoint of the exact serializer-owned staged name. Bind the read to
+    the originally fixed staging root identity and originally opened staging-parent
+    identity. Return replay success only when that exact name is still absent.
+  - >-
+    A newly appeared regular file, symlink, hardlink, FIFO, directory, unsafe mode or
+    link count, disappeared/replaced staging parent, or any other non-absent state
+    must raise with no result. Retain both the pre-existing final and raced evidence;
+    do not unlink, chmod, repair, replace or reinterpret it.
+  - >-
+    Add an isolated equal-final replay test creating the exact .partial during
+    final_recheck and require fail-closed/no result with both final and staged bytes
+    unchanged. Cover nonregular/link variants and staging-parent rename/replacement
+    at the same final checkpoint. State the accepted same-trust-domain residual: a
+    transient appearance entirely between checkpoints cannot be cryptographically
+    excluded, but an artifact present at the final checkpoint is never success.
+  - >-
+    Preserve the exact three-name root vocabulary, all R1/R2 path/mode/link/race/
+    recheck/replay rules, both post-link fsync evidence states, no-sidecar/no-replace
+    behavior and every frozen/evidence byte. Add no real product path, dependency,
+    public export, Git, provider/network or infrastructure action.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run ruff check src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run mypy src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run pytest -q tests/unit/test_w04_staged_product_publisher.py tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/wyscout_publication.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Bounded replay-race correction, adversarial tests and mandatory R3 return.
+stop_conditions:
+  - Any accepted publication semantic or fixed binding must change.
+  - A new trust boundary or architecture change is required to make the final checkpoint useful.
+  - Any sidecar, replacement, real product write, dependency, Git, provider/network or external-infrastructure action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

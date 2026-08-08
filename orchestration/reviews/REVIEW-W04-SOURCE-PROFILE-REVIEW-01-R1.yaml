@@ -1,0 +1,58 @@
+schema_version: 1
+review_id: REVIEW-W04-SOURCE-PROFILE-REVIEW-01-R1
+task_id: W04-SOURCE-PROFILE-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: FAIL_REVIEWER_RAN_FORBIDDEN_READ_ONLY_GIT_STATUS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS_WITH_EXPECTED_FAILURE
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: W04-PROFILE-COMPLETION-BRIDGE-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-PROFILE-PARTITION-COVERAGE-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-PROFILE-EVENT-IDENTITY-01
+    severity: P1
+    status: returned_for_rework
+  - id: W04-PROFILE-TEMPORAL-MINUTES-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-PROFILE-COORDINATE-DOMAIN-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-PROFILE-OUTPUT-PATH-01
+    severity: P2
+    status: returned_for_rework
+  - id: W04-REVIEW-GIT-SCOPE-01
+    severity: P2
+    status: reviewer_disqualified_for_acceptance
+    detail: >-
+      The reviewer disclosed a read-only git status invocation despite explicit
+      git_operations: forbidden. No Git state changed; its findings were used only
+      after independent master reproduction and cannot serve as acceptance evidence.
+decision: REWORK
+next_packet: W04-SOURCE-PROFILE-01-R2
+reviewer: master
+evidence:
+  - tests/security/test_w04_wyscout_profile_review.py
+  - reports/reviews/W04/wyscout-source-profile-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-PROFILE-REVIEW-01-R1.md
+  - reports/phase-gates/W04/source-schema-profile.md
+checks:
+  - command: >-
+      uv run pytest -q tests/unit/test_wyscout_profile.py
+      tests/security/test_w04_wyscout_profile_review.py
+    result: EXPECTED_FAIL_1_FAILED_9_PASSED
+  - command: >-
+      uv run pytest -q
+      tests/security/test_w04_wyscout_profile_review.py::test_report_exposes_partition_scope_and_r3_required_measured_inputs
+    result: EXPECTED_FAIL_MASTER_REPRODUCED
+  - command: uv run python scripts/profile_wyscout_v5.py --check
+    result: PASS
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+

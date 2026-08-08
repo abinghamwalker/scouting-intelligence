@@ -1,0 +1,80 @@
+schema_version: 1
+task_id: W04-SOURCE-INGEST-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Implement the idempotent, fail-closed local acquisition and raw-admission path for
+  the exact Wyscout Figshare v5 objects frozen by W04-SOURCE-AUTHORITY-01, using only
+  synthetic test payloads; the master alone will perform the real bounded acquisition.
+depends_on:
+  - W04-SOURCE-AUTHORITY-01:VERIFIED
+assigned_role: source_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - docs/dataset-cards/w04-source.md
+  - src/scouting/storage/guarded.py
+  - src/scouting/contracts/evidence.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout.py
+  - src/scouting/sources/__init__.py
+  - scripts/acquire_wyscout_v5.py
+  - tests/unit/test_wyscout_source.py
+  - tests/fixtures/wyscout/**
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - configs/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/**
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+  - data/source/**
+  - data/working/**
+  - data/manifests/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Strict loader for the reviewed W04 source YAML with exact-key and type validation.
+  - >-
+    Bounded downloader primitive with exact HTTPS URL allowlist, atomic temporary
+    file handling, bounded retry/timeout behavior, size/MD5 verification, computed
+    SHA-256, and no redirect to an unapproved host or path.
+  - >-
+    Safe ZIP admission that rejects links, duplicates, absolute/parent paths, unknown
+    members, excessive expansion, and partial completion.
+  - >-
+    Deterministic completion manifest covering original object digests, admitted
+    archive members, collection version, licence/attribution, acquisition time, and
+    source availability time.
+  - Idempotent CLI that does not download during import or tests.
+  - Synthetic Wyscout-shaped fixtures and adversarial unit tests.
+definition_of_done:
+  - No network is opened by tests.
+  - Exact replay returns the same manifest and conflicting local bytes fail closed.
+  - Any unexpected redirect, size/hash mismatch, archive member, link, or path is rejected.
+  - No completion manifest is written before every admitted object is durable and verified.
+  - Source availability is the frozen collection release, never acquisition time.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source.py
+  - uv run ruff format --check src/scouting/sources/wyscout.py src/scouting/sources/__init__.py scripts/acquire_wyscout_v5.py tests/unit/test_wyscout_source.py
+  - uv run ruff check src/scouting/sources/wyscout.py src/scouting/sources/__init__.py scripts/acquire_wyscout_v5.py tests/unit/test_wyscout_source.py
+  - uv run mypy src/scouting/sources/wyscout.py scripts/acquire_wyscout_v5.py
+  - uv run bandit -q src/scouting/sources/wyscout.py scripts/acquire_wyscout_v5.py
+stop_conditions:
+  - Real provider data must be downloaded or inspected to complete implementation.
+  - A dependency or lock change appears necessary.
+  - Required work falls outside allowed paths.
+  - A credential, account, deployment, or unreviewed URL is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

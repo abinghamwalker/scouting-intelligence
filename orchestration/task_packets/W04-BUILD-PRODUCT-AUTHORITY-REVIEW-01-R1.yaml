@@ -1,0 +1,102 @@
+schema_version: 1
+task_id: W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01
+phase_id: W04
+revision: R1
+state: ACCEPTED_AUTHORITY_ONLY_PRODUCT_BLOCKED
+objective: >-
+  Independently attack the exact canonical R1 build/product decision-only authority,
+  reproduce all R4 invariants, and classify the discovered season/lineup gaps without
+  editing authority, tests, implementation or product bytes.
+depends_on:
+  - W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_build_product_authority_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-build-product-authority-authorization-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R4.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - reports/reviews/W04/returns/W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1.md
+  - reports/verification/W04/wyscout-build-product-authority-decision-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-build-product-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - src/**
+  - tests/**
+fixed_bindings:
+  decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  authority_test_sha256: 94cafedb2c4d0e50aecebb8a52ffc6666f2f37607d14d7155f25a0d5aea18ed8
+  producer_return_sha256: d4d1032d8fbf48f5c0789d8eadb2f46dec6dc1d7435da77283b29e1bcd056ecf
+  master_verification_sha256: 21f424bac76eac85f36449673b737aadfa6fe7cca3c5e5af3393153b73a8d64c
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r4_review_sha256: 288c58c29bbd572b8fe9bf5df9875d5a6b9c24cfca44923b8780e2dcb7bd7827
+  build_schema_audit_sha256: 402106160add4af2d12b46022220b6d7d71b3f0243e85162b56fd1674c28fc24
+  vertical_slice_audit_sha256: ccc7a7c803cf2acfb5a787f0f8594c7f2c1c446ba3365ced84bcde2e35b3cad7
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Reconstruct the exact canonical decision bytes, all 17 bound-input hashes, window
+    preimage/SHA/UUID, completion-index binding and period population independently.
+  - >-
+    Mechanically prove exact 23-root dependency order is acyclic, 25-key projection
+    and inverse use one hash, receipt rosters/clocks are exact, and the sole two-key
+    complete-LayerManifest semantic derivation has no second preimage or cycle.
+  - >-
+    Attack missing/additional/reordered roots, projection/receipt/population/features,
+    all placeholder/null/future digest routes, partial-manifest/copy/swap/downstream
+    rehash substitutions, changed bound inputs and lifecycle bypass.
+  - >-
+    Confirm the decision created no aggregate instance, product, manifest, receipt,
+    build or data byte and grants no product permission before acceptance/downstream gates.
+  - >-
+    Independently inspect source seasonId/contract season_id and target lineup evidence.
+    Return exactly one classification: PASS_AUTHORITY_ONLY_PRODUCT_BLOCKED if the exact
+    R4 authority is sound but downstream dispatch needs new bounded user authority;
+    REWORK if the decision overclaims or violates R4; or PASS only if accepted bytes
+    already close both gaps with executable proof. Do not invent either rule.
+  - >-
+    Report exact P0/P1/P2 findings. A downstream blocker is not silently downgraded;
+    identify whether it changes frozen architecture/binding or needs a bounded additive
+    semantic/population clarification.
+definition_of_done:
+  - Exact review with executable attacks, recommendation and downstream classification.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_build_product_authority.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_build_product_authority.py
+  - uv run mypy tests/contracts/test_w04_wyscout_build_product_authority.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review with machine-readable record and mandatory return.
+stop_conditions:
+  - Candidate hash drift or need to edit any authority/test/implementation/data/product byte.
+  - Any Git, dependency, provider/network, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

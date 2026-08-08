@@ -1,0 +1,2960 @@
+schema_version: 1
+registry_id: scouting-intelligence-phase-registry
+allowed_states:
+  - PLANNED
+  - READY
+  - DISPATCHED
+  - IMPLEMENTED
+  - MASTER_REVIEW
+  - REWORK
+  - VERIFIED
+  - CHECKPOINTED
+  - CLOSED
+architecture_authority:
+  adr: docs/adr/0004-container-free-embedded-runtime.md
+  verification: reports/verification/architecture/container-free-runtime.md
+  container_free_required: true
+  embedded_sqlite_required: true
+  external_database_cache_queue_allowed: false
+  explicit_user_reapproval_required: true
+phases:
+  W00:
+    title: Documentation approval and authority freeze
+    state: CLOSED
+    depends_on: []
+    tasks: []
+    evidence: []
+    checks: []
+    checkpoint: null
+  W01:
+    title: Local uv project and Git safety foundation
+    state: CLOSED
+    depends_on:
+      - W00
+    tasks: []
+    evidence:
+      - path: reports/phase-gates/W01/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W01/gate-report.json
+        required: true
+      - path: reports/reviews/W01/master-review.md
+        required: true
+      - path: reports/verification/W01/verification-report.md
+        required: true
+      - path: reports/verification/W01/clean-tree-report.md
+        required: true
+    checks:
+      - id: G-W01
+        status: PASS
+        evidence: reports/phase-gates/W01/gate-report.json
+    checkpoint:
+      start_tag: null
+      commit_message: "build: establish local uv and git foundation"
+      accepted_tag: checkpoint/w01-accepted
+      accepted_commit: 259c0408517ebe9136deb3872bd2de6903a7a064
+  W02:
+    title: Master orchestration system and synthetic task drill
+    state: CLOSED
+    depends_on:
+      - W01
+    tasks:
+      - task_id: W02-SYNTH-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W02-SYNTH-01-R1.yaml
+          - orchestration/task_packets/W02-SYNTH-01-R2.yaml
+        returns:
+          - tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml
+          - orchestration/reviews/W02-SYNTH-01-return-R1.md
+          - orchestration/reviews/W02-SYNTH-01-return-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W02-SYNTH-01-R1.yaml
+          - orchestration/reviews/REVIEW-W02-SYNTH-01-R2.yaml
+    evidence:
+      - path: reports/phase-gates/W02/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W02/gate-report.json
+        required: true
+      - path: reports/reviews/W02/master-review.md
+        required: true
+      - path: reports/verification/W02/verification-report.md
+        required: true
+      - path: reports/verification/W02/clean-tree-report.md
+        required: true
+      - path: reports/verification/W02/synthetic-return-R1-failure.json
+        required: true
+      - path: reports/verification/W02/synthetic-return-R2-pass.json
+        required: true
+      - path: reports/verification/W02/parallel-safety.json
+        required: true
+      - path: reports/verification/W02/phase-verifier-candidate.json
+        required: true
+    checks:
+      - id: G-W02
+        status: PASS
+        evidence: reports/phase-gates/W02/gate-report.json
+      - id: task-return-deliberate-rework
+        status: PASS
+        evidence: reports/verification/W02/synthetic-return-R1-failure.json
+      - id: task-return-correction
+        status: PASS
+        evidence: reports/verification/W02/synthetic-return-R2-pass.json
+      - id: parallel-safety
+        status: PASS
+        evidence: reports/verification/W02/parallel-safety.json
+      - id: local-only-and-shared-suite
+        status: PASS
+        evidence: reports/verification/W02/verification-report.md
+      - id: phase-state-and-evidence
+        status: PASS
+        evidence: reports/verification/W02/phase-verifier-candidate.json
+    checkpoint:
+      start_tag: checkpoint/w02-start
+      commit_message: "orchestration: accept master subagent control plane"
+      accepted_tag: checkpoint/w02-accepted
+      accepted_commit: null
+      accepted_commit_resolution: "git rev-parse checkpoint/w02-accepted^{}"
+  W03:
+    title: Contracts and synthetic vertical slice
+    state: CLOSED
+    historical_runtime_superseded_by: docs/adr/0004-container-free-embedded-runtime.md
+    historical_service_evidence_is_current_authority: false
+    depends_on:
+      - W02
+    tasks:
+      - task_id: W03-DEPS-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-DEPS-01-R1.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-DEPS-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-DEPS-01-R1.yaml
+      - task_id: W03-CONTRACTS-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-CONTRACTS-01-R1.yaml
+          - orchestration/task_packets/W03-CONTRACTS-01-R2.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-CONTRACTS-01-R1.md
+          - reports/reviews/W03/returns/W03-CONTRACTS-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-CONTRACTS-01-R1.yaml
+          - orchestration/reviews/REVIEW-W03-CONTRACTS-01-R2.yaml
+      - task_id: W03-GOVERNANCE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-GOVERNANCE-01-R1.yaml
+          - orchestration/task_packets/W03-GOVERNANCE-01-R2.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-GOVERNANCE-01-R1.md
+          - reports/reviews/W03/returns/W03-GOVERNANCE-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-GOVERNANCE-01-R1.yaml
+          - orchestration/reviews/REVIEW-W03-GOVERNANCE-01-R2.yaml
+      - task_id: W03-DESIGN-REVIEW-00
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-DESIGN-REVIEW-00-R1.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-DESIGN-REVIEW-00-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-DESIGN-REVIEW-00-R1.yaml
+      - task_id: W03-ARCHITECTURE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-ARCHITECTURE-01-R1.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-ARCHITECTURE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-ARCHITECTURE-01-R1.yaml
+      - task_id: W03-STORAGE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-STORAGE-01-R1.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-STORAGE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-STORAGE-01-R1.yaml
+      - task_id: W03-FIXTURES-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-FIXTURES-01-R1.yaml
+          - orchestration/task_packets/W03-FIXTURES-01-R2.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-FIXTURES-01-R1.md
+          - reports/reviews/W03/returns/W03-FIXTURES-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-FIXTURES-01-R1.yaml
+          - orchestration/reviews/REVIEW-W03-FIXTURES-01-R2.yaml
+      - task_id: W03-DATABASE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-DATABASE-01-R1.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-DATABASE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-DATABASE-01-R1.yaml
+      - task_id: W03-VERTICAL-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-VERTICAL-01-R1.yaml
+          - orchestration/task_packets/W03-VERTICAL-01-R2.yaml
+          - orchestration/task_packets/W03-VERTICAL-01-R3.yaml
+          - orchestration/task_packets/W03-VERTICAL-01-R4.yaml
+          - orchestration/task_packets/W03-VERTICAL-01-R5.yaml
+          - orchestration/task_packets/W03-VERTICAL-01-R6.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-VERTICAL-01-R1.md
+          - reports/reviews/W03/returns/W03-VERTICAL-01-R2.md
+          - reports/reviews/W03/returns/W03-VERTICAL-01-R3.md
+          - reports/reviews/W03/returns/W03-VERTICAL-01-R4.md
+          - reports/reviews/W03/returns/W03-VERTICAL-01-R5.md
+          - reports/reviews/W03/returns/W03-VERTICAL-01-R6.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-R1.yaml
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-R2.yaml
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-PROTECTED-R1.yaml
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-R3.yaml
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-R4.yaml
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-R5.yaml
+          - orchestration/reviews/REVIEW-W03-VERTICAL-01-R6.yaml
+      - task_id: W03-BOUNDARY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W03-BOUNDARY-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W03-BOUNDARY-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W03/returns/W03-BOUNDARY-REVIEW-01-R1.md
+          - reports/reviews/W03/returns/W03-BOUNDARY-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W03-BOUNDARY-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W03-BOUNDARY-REVIEW-01-R2.yaml
+    evidence:
+      - path: reports/phase-gates/W03/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W03/gate-report.json
+        required: true
+      - path: reports/reviews/W03/master-review.md
+        required: true
+      - path: reports/verification/W03/verification-report.md
+        required: true
+      - path: reports/verification/W03/security-dependency-container-report.md
+        required: true
+      - path: reports/verification/W03/protected-gate-attempt-R4.json
+        required: true
+      - path: reports/reviews/W03/boundary-audit-R2.md
+        required: true
+      - path: reports/verification/W03/phase-verifier-candidate.json
+        required: true
+      - path: reports/verification/W03/clean-tree-report.md
+        required: true
+    checks:
+      - id: G-W03
+        status: PASS
+        evidence: reports/phase-gates/W03/gate-report.json
+      - id: G1-foundation-contribution
+        status: PASS
+        evidence: reports/phase-gates/W03/acceptance-report.md
+      - id: complete-master-suite
+        status: PASS
+        evidence: reports/verification/W03/verification-report.md
+      - id: protected-synthetic-gate
+        status: PASS
+        evidence: reports/verification/W03/protected-gate-attempt-R4.json
+      - id: independent-boundary-review
+        status: PASS
+        evidence: reports/reviews/W03/boundary-audit-R2.md
+      - id: local-security-dependency-containers
+        status: PASS
+        evidence: reports/verification/W03/security-dependency-container-report.md
+      - id: phase-state-and-evidence
+        status: PASS
+        evidence: reports/verification/W03/phase-verifier-candidate.json
+      - id: checkpoint-clean-tree-procedure
+        status: PASS
+        evidence: reports/verification/W03/clean-tree-report.md
+    checkpoint:
+      start_tag: checkpoint/w03-start
+      commit_message: "phase(w03): accept contract first synthetic slice"
+      accepted_tag: checkpoint/w03-accepted
+      accepted_commit: null
+      accepted_commit_resolution: "git rev-parse checkpoint/w03-accepted^{}"
+  W04:
+    title: Source data, identities and Bronze/Silver/Gold
+    state: CLOSED
+    depends_on:
+      - W03
+    tasks:
+      - task_id: W04-SOURCE-AUTHORITY-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-AUTHORITY-01-R1.yaml
+          - orchestration/task_packets/W04-SOURCE-AUTHORITY-01-R2.yaml
+        returns: []
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-AUTHORITY-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-SOURCE-AUTHORITY-01-R2.yaml
+      - task_id: W04-SOURCE-INGEST-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-INGEST-01-R1.yaml
+          - orchestration/task_packets/W04-SOURCE-INGEST-01-R2.yaml
+          - orchestration/task_packets/W04-SOURCE-INGEST-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R1.md
+          - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R2.md
+          - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-01-R3.yaml
+      - task_id: W04-AUTHORITY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-AUTHORITY-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-AUTHORITY-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-AUTHORITY-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R3.md
+          - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R4.yaml
+      - task_id: W04-SCHEMA-DESIGN-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R1.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R2.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R3.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R4.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R5.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R6.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R7.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R8.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R9.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R10.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R11.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R12.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R13.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R14.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R15.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R16.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R17.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R18.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R19.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R20.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R2.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R1.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R2.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R3.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R4.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R5.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R6.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R7.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R8.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R9.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R10.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R11.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R12.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R13.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R14.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R15.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R16.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R17.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R18.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R19.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R20.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R4.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R5.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R6.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R7.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R8.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R9.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R10.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R11.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R12.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R13.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R14.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R15.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R16.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R17.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R18.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R19.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R20.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R1.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R2.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R3.yaml
+      - task_id: W04-SCHEMA-DESIGN-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R3.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R4.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R5.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R6.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R7.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R8.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R9.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R10.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R11.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R13.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R14.yaml
+          - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R15.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R3.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R4.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R5.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R6.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R8.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R9.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R10.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R11.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R12.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R13.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R14.md
+          - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R15.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R4.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R5.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R6.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R8.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R9.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R10.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R11.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R13.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R14.yaml
+          - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R15.yaml
+      - task_id: W04-CONTROL-PREIMAGE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-CONTROL-PREIMAGE-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-CONTROL-PREIMAGE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-CONTROL-PREIMAGE-01-R1.yaml
+      - task_id: W04-CONTROL-PREIMAGE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-CONTROL-PREIMAGE-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-CONTROL-PREIMAGE-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-CONTROL-PREIMAGE-REVIEW-01-R1.yaml
+      - task_id: W04-FIELD-SEMANTIC-V2-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-DECISION-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-DECISION-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-DECISION-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-DECISION-01-R2.yaml
+      - task_id: W04-FIELD-SEMANTIC-V2-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.yaml
+      - task_id: W04-FIELD-SEMANTIC-V2-ACCEPT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1.yaml
+      - task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.yaml
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.yaml
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.md
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.md
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.md
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.yaml
+      - task_id: W04-POSSESSION-SEMANTIC-V2-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.yaml
+      - task_id: W04-POSSESSION-SEMANTIC-V2-ACCEPT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-ACCEPT-01-R1.yaml
+      - task_id: W04-FEATURE-REGISTRY-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-DECISION-01-R2.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-DECISION-01-R3.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-DECISION-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R1.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R2.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R3.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-DECISION-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-DECISION-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-DECISION-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-DECISION-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-DECISION-01-R4.yaml
+      - task_id: W04-FEATURE-REGISTRY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-REVIEW-01-R3.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-REVIEW-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R3.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-REVIEW-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-REVIEW-01-R4.yaml
+      - task_id: W04-FEATURE-REGISTRY-ACCEPT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-ACCEPT-01-R1.yaml
+          - orchestration/task_packets/W04-FEATURE-REGISTRY-ACCEPT-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-ACCEPT-01-R1.md
+          - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-ACCEPT-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-ACCEPT-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FEATURE-REGISTRY-ACCEPT-01-R2.yaml
+      - task_id: W04-R21-CROSS-AUTHORITY-TEST-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R1.yaml
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R2.yaml
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R3.yaml
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R1.md
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R2.md
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R3.md
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-R21-CROSS-AUTHORITY-TEST-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-R21-CROSS-AUTHORITY-TEST-01-R4.yaml
+      - task_id: W04-R21-CROSS-AUTHORITY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-R21-CROSS-AUTHORITY-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-R21-CROSS-AUTHORITY-REVIEW-01-R2.yaml
+      - task_id: W04-R21-CROSS-AUTHORITY-GATE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-GATE-01-R1.yaml
+          - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-GATE-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-GATE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-R21-CROSS-AUTHORITY-GATE-01-R2.yaml
+      - task_id: W04-PHASE-VERIFIER-READY-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R1.yaml
+          - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R2.yaml
+          - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R1.md
+          - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R2.md
+          - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-PHASE-VERIFIER-READY-01-R3.yaml
+      - task_id: W04-PHASE-VERIFIER-READY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-PHASE-VERIFIER-READY-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-PHASE-VERIFIER-READY-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-PHASE-VERIFIER-READY-REVIEW-01-R2.yaml
+      - task_id: W04-SECURITY-AUTHORITY-FIXTURE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SECURITY-AUTHORITY-FIXTURE-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SECURITY-AUTHORITY-FIXTURE-01-R1.yaml
+      - task_id: W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1.yaml
+      - task_id: W04-FIELD-SEMANTIC-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R2.yaml
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R1.md
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R2.md
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R3.yaml
+      - task_id: W04-FIELD-SEMANTIC-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-REVIEW-01-R2.yaml
+      - task_id: W04-FIELD-SEMANTIC-ACCEPT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-ACCEPT-01-R1.yaml
+          - orchestration/task_packets/W04-FIELD-SEMANTIC-ACCEPT-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-ACCEPT-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-ACCEPT-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-ACCEPT-01-R2.yaml
+      - task_id: W04-POSSESSION-SEMANTIC-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-DECISION-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-DECISION-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-DECISION-01-R1.yaml
+      - task_id: W04-POSSESSION-SEMANTIC-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-REVIEW-01-R1.yaml
+      - task_id: W04-POSSESSION-SEMANTIC-ACCEPT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.yaml
+          - orchestration/task_packets/W04-POSSESSION-SEMANTIC-ACCEPT-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-ACCEPT-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-ACCEPT-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-ACCEPT-01-R2.yaml
+      - task_id: W04-CONTRACT-TEMPORAL-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-CONTRACT-TEMPORAL-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-CONTRACT-TEMPORAL-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-CONTRACT-TEMPORAL-01-R1.yaml
+      - task_id: W04-CONTRACT-TEMPORAL-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-CONTRACT-TEMPORAL-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-CONTRACT-TEMPORAL-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-CONTRACT-TEMPORAL-REVIEW-01-R1.yaml
+      - task_id: W04-SOURCE-INGEST-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-INGEST-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-SOURCE-INGEST-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-SOURCE-INGEST-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R3.yaml
+      - task_id: W04-SOURCE-ACQUIRE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-ACQUIRE-01-R1.yaml
+        returns: []
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-ACQUIRE-01-R1.yaml
+      - task_id: W04-SOURCE-ACQUIRE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-ACQUIRE-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-ACQUIRE-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-ACQUIRE-REVIEW-01-R1.yaml
+      - task_id: W04-SOURCE-PROFILE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-PROFILE-01-R1.yaml
+          - orchestration/task_packets/W04-SOURCE-PROFILE-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-PROFILE-01-R1.md
+          - reports/reviews/W04/returns/W04-SOURCE-PROFILE-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-PROFILE-01-R2.yaml
+      - task_id: W04-SOURCE-PROFILE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-PROFILE-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-SOURCE-PROFILE-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-PROFILE-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-SOURCE-PROFILE-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-PROFILE-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-SOURCE-PROFILE-REVIEW-01-R2.yaml
+      - task_id: W04-SOURCE-MANIFEST-BRIDGE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-MANIFEST-BRIDGE-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-MANIFEST-BRIDGE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-MANIFEST-BRIDGE-01-R1.yaml
+      - task_id: W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-MANIFEST-BRIDGE-REVIEW-01-R1.yaml
+      - task_id: W04-IDENTITY-RULESET-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-IDENTITY-RULESET-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-IDENTITY-RULESET-DECISION-01-R2.yaml
+          - orchestration/task_packets/W04-IDENTITY-RULESET-DECISION-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R1.md
+          - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R2.md
+          - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-DECISION-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-DECISION-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-DECISION-01-R3.yaml
+      - task_id: W04-IDENTITY-RULESET-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-IDENTITY-RULESET-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-IDENTITY-RULESET-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-IDENTITY-RULESET-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R1-rework-a0f637b4.md
+          - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R2-rework-f20ecbd9.md
+          - reports/reviews/W04/returns/W04-IDENTITY-RULESET-REVIEW-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-REVIEW-01-R3.yaml
+      - task_id: W04-IDENTITY-RULESET-ACCEPT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-IDENTITY-RULESET-ACCEPT-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-IDENTITY-RULESET-ACCEPT-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-IDENTITY-RULESET-ACCEPT-01-R1.yaml
+      - task_id: W04-DATA-CONTRACTS-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-DATA-CONTRACTS-01-R1.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-01-R2.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-01-R3.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-01-R4.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-01-R5.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R1.md
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R2.md
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R3.md
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-01-R4.yaml
+      - task_id: W04-SOURCE-COMPLETION-INDEX-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R1.yaml
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R2.yaml
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R3.yaml
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R1.md
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R2.md
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R3.md
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-COMPLETION-INDEX-01-R4.yaml
+      - task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-COMPLETION-INDEX-REVIEW-01-R1.yaml
+      - task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1.yaml
+      - task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-03-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-03-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-COMPLETION-INDEX-REVIEW-03-R1.yaml
+      - task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-04
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1.yaml
+      - task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-05
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-05-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-05-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SOURCE-COMPLETION-INDEX-REVIEW-05-R1.yaml
+      - task_id: W04-VERTICAL-SLICE-SOURCE-ADAPTER-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R1.yaml
+          - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R1.md
+          - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.yaml
+      - task_id: W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.yaml
+      - task_id: W04-IDENTITY-BUNDLE-RUNTIME-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.yaml
+          - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1-ADDENDUM-01.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-IDENTITY-BUNDLE-RUNTIME-01-R1.yaml
+      - task_id: W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R2.yaml
+      - task_id: W04-PARQUET-SEMANTIC-ENCODER-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R1.yaml
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R2.yaml
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R3.yaml
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R1.md
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R2.md
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R3.md
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-PARQUET-SEMANTIC-ENCODER-01-R4.yaml
+      - task_id: W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3.yaml
+          - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R3.md
+          - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-PARQUET-SEMANTIC-ENCODER-REVIEW-01-R4.yaml
+      - task_id: W04-DATA-CONTRACTS-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R3.yaml
+          - orchestration/task_packets/W04-DATA-CONTRACTS-REVIEW-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R3.md
+          - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-REVIEW-01-R3.yaml
+          - orchestration/reviews/REVIEW-W04-DATA-CONTRACTS-REVIEW-01-R4.yaml
+      - task_id: W04-R21-PROGRESSION-FIXTURE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-R21-PROGRESSION-FIXTURE-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-R21-PROGRESSION-FIXTURE-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-R21-PROGRESSION-FIXTURE-01-R1.yaml
+      - task_id: W04-R21-PROGRESSION-FIXTURE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-R21-PROGRESSION-FIXTURE-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-R21-PROGRESSION-FIXTURE-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-R21-PROGRESSION-FIXTURE-REVIEW-01-R1.yaml
+      - task_id: W04-REPOSITORY-PROGRESSION-GUARD-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R1.yaml
+          - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R2.yaml
+          - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R1.md
+          - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R2.md
+          - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-REPOSITORY-PROGRESSION-GUARD-01-R3.yaml
+      - task_id: W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R2.yaml
+      - task_id: W04-BUILD-PRODUCT-AUTHORITY-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1.yaml
+      - task_id: W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-BUILD-PRODUCT-AUTHORITY-REVIEW-01-R1.yaml
+      - task_id: W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1.md
+          - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2.yaml
+      - task_id: W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R2.yaml
+      - task_id: W04-WYSCOUT-BUILD-CONTRACT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R2.yaml
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R3.yaml
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R4.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R1.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R2.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R3.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R4.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R2.yaml
+      - task_id: W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R2.yaml
+      - task_id: W04-STAGED-IMMUTABLE-PUBLISHER-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.yaml
+          - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.yaml
+          - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.md
+          - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.md
+          - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R2.yaml
+      - task_id: W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R2.yaml
+      - task_id: W04-POST-CORRECTION-PROGRESSION-AUDIT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.yaml
+      - task_id: W04-LOGICAL-ARROW-PROJECTION-DECISION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-DECISION-01-R1.yaml
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-DESIGN-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-DECISION-01-R1.md
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-DESIGN-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-LOGICAL-ARROW-PROJECTION-REVIEW-01-R1.yaml
+      - task_id: W04-LOGICAL-ARROW-PROJECTION-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-LOGICAL-ARROW-PROJECTION-REVIEW-01-R1.yaml
+      - task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.yaml
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.yaml
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.md
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.md
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2.yaml
+      - task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2.yaml
+      - task_id: W04-EXACT-DECIMAL128-WITH-EXPONENT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.yaml
+          - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.yaml
+          - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R1.md
+          - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.md
+          - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2.yaml
+      - task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R2.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R3.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R6.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R7.yaml
+          - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R8.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R2.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R3.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R7.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R6.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R7.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R8.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.yaml
+      - task_id: W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1.yaml
+      - task_id: W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1.yaml
+          - orchestration/task_packets/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1.md
+          - reports/reviews/W04/returns/W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-VERTICAL-SLICE-MATCH-CONTEXT-ADAPTER-01-R1.yaml
+      - task_id: W04-NESTED-PHYSICAL-PRIMARY-KEY-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1.yaml
+          - orchestration/task_packets/W04-NESTED-PHYSICAL-PRIMARY-KEY-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1.md
+          - reports/reviews/W04/returns/W04-NESTED-PHYSICAL-PRIMARY-KEY-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1.yaml
+      - task_id: W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-FOUR-FEATURE-VERTICAL-SLICE-01-R1.yaml
+      - task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R2.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R3.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R4.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R5.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R6.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R7.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R8.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R11.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R3.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R4.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R5.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R6.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R7.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R11.yaml
+          - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R12.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R1.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R2.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R3.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R4.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R5.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R6.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R7.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R8.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R11.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R1.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R2.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R3.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R4.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R5.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R6.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R7.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R11.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R12.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R9.yaml
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R10.yaml
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R11.yaml
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R12.yaml
+      - task_id: W04-WYSCOUT-REAL-ROOT-INVOCATION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R2.yaml
+          - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.yaml
+          - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.md
+          - reports/reviews/W04/returns/W04-WYSCOUT-REAL-ROOT-INVOCATION-REVIEW-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R3.yaml
+      - task_id: W04-WYSCOUT-DATA-HEALTH-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-DATA-HEALTH-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-DATA-HEALTH-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-DATA-HEALTH-01-R1.yaml
+      - task_id: W04-WYSCOUT-DATASET-CARD-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W04-WYSCOUT-DATASET-CARD-01-R1.yaml
+        returns:
+          - reports/reviews/W04/returns/W04-WYSCOUT-DATASET-CARD-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W04-WYSCOUT-DATASET-CARD-01-R1.yaml
+    evidence:
+      - path: reports/phase-gates/W04/provider-rights-decision-required.md
+        required: true
+      - path: reports/reviews/W04/wyscout-r21-cross-authority-composability-independent-review-R1.md
+        required: true
+      - path: reports/verification/W04/wyscout-phase-verifier-ready-R3-master-verification.md
+        required: true
+      - path: reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+        required: true
+      - path: reports/phase-gates/W04/wyscout-r21-correction-gate.json
+        required: true
+      - path: reports/verification/W04/wyscout-source-completion-index-R4-complete-repository-gate.md
+        required: true
+      - path: reports/phase-gates/W04/wyscout-source-completion-index-R4-gate.json
+        required: true
+      - path: reports/verification/W04/wyscout-pre-build-authority-complete-repository-gate-R1.md
+        required: true
+      - path: reports/verification/W04/wyscout-build-product-authority-R1-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-season-lineup-product-binding-R1-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-season-lineup-complete-repository-gate-R1.md
+        required: true
+      - path: reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-verification.md
+        required: true
+      - path: reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-build-contract-R4-master-verification.md
+        required: true
+      - path: reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-logical-arrow-projection-implementation-R3-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-runtime-control-R12-master-acceptance.md
+        required: true
+      - path: reports/reviews/W04/wyscout-runtime-control-independent-review-R12.md
+        required: true
+      - path: reports/verification/W04/wyscout-runtime-control-R12-terminal-gate-blocker-correction-master-acceptance.md
+        required: true
+      - path: reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+        required: true
+      - path: reports/reviews/W04/wyscout-real-root-invocation-independent-review-R3.md
+        required: true
+      - path: reports/verification/W04/wyscout-terminal-complete-repository-gate-R2-master-verification.md
+        required: true
+      - path: reports/verification/W04/wyscout-raw-to-gold-R1-master-verification.md
+        required: true
+      - path: reports/phase-gates/W04/data-health.json
+        required: true
+      - path: reports/phase-gates/W04/data-health.md
+        required: true
+      - path: docs/dataset-cards/w04-wyscout-transformed-v1.md
+        required: true
+      - path: reports/reviews/W04/master-review.md
+        required: true
+      - path: reports/verification/W04/verification-report.md
+        required: true
+      - path: reports/verification/W04/phase-verifier-candidate.json
+        required: true
+      - path: reports/phase-gates/W04/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W04/gate-report.json
+        required: true
+      - path: reports/verification/W04/w04-closure-steer-2026-08-03.md
+        required: true
+      - path: reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+        required: true
+      - path: reports/verification/W04/content-addressed-evidence-byte-preservation-R1.md
+        required: true
+      - path: reports/verification/W04/clean-tree-report.md
+        required: true
+    checks:
+      - id: r21-cross-authority-focused-suite
+        status: PASS
+        evidence: reports/verification/W04/wyscout-r21-cross-authority-gate-R1-master-verification.md
+      - id: r21-phase-verifier-correction
+        status: PASS
+        evidence: reports/verification/W04/wyscout-phase-verifier-ready-R3-master-verification.md
+      - id: r21-security-authority-fixture
+        status: PASS
+        evidence: reports/verification/W04/security-authority-fixture-review-R1-master-verification.md
+      - id: r21-correction-gate
+        status: PASS
+        evidence: reports/phase-gates/W04/wyscout-r21-correction-gate.json
+      - id: source-completion-index-R4-complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W04/wyscout-source-completion-index-R4-complete-repository-gate.md
+      - id: pre-build-authority-complete-repository-gate-R1
+        status: PASS
+        evidence: reports/verification/W04/wyscout-pre-build-authority-complete-repository-gate-R1.md
+      - id: build-product-authority-R1
+        status: PASS
+        evidence: reports/verification/W04/wyscout-build-product-authority-R1-master-acceptance.md
+      - id: season-lineup-product-binding-R1
+        status: PASS
+        evidence: reports/verification/W04/wyscout-season-lineup-product-binding-R1-master-acceptance.md
+      - id: season-lineup-complete-repository-gate-R1
+        status: PASS
+        evidence: reports/verification/W04/wyscout-season-lineup-complete-repository-gate-R1.md
+      - id: staged-immutable-publisher-R3
+        status: PASS
+        evidence: reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-acceptance.md
+      - id: wyscout-build-contract-R4
+        status: PASS
+        evidence: reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+      - id: logical-arrow-projection-authority-R1
+        status: PASS
+        evidence: reports/verification/W04/wyscout-logical-arrow-projection-R1-master-acceptance.md
+      - id: logical-arrow-projection-implementation-R3
+        status: PASS
+        evidence: reports/verification/W04/wyscout-logical-arrow-projection-implementation-R3-master-acceptance.md
+      - id: wyscout-runtime-control-R9
+        status: PASS
+        evidence: reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+      - id: wyscout-runtime-control-R10
+        status: PASS
+        evidence: reports/verification/W04/wyscout-runtime-control-R10-master-acceptance.md
+      - id: wyscout-runtime-control-R11
+        status: PASS
+        evidence: reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md
+      - id: wyscout-runtime-control-terminal-R12
+        status: PASS
+        evidence: reports/verification/W04/wyscout-runtime-control-R12-terminal-gate-blocker-correction-master-acceptance.md
+      - id: wyscout-real-root-R3-operational-baseline
+        status: PASS
+        evidence: reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+      - id: wyscout-data-health
+        status: PASS
+        evidence: reports/phase-gates/W04/data-health.json
+      - id: wyscout-transformed-dataset-card
+        status: PASS
+        evidence: docs/dataset-cards/w04-wyscout-transformed-v1.md
+      - id: terminal-complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W04/wyscout-terminal-complete-repository-gate-R2-master-verification.md
+      - id: raw-to-gold-master-readback
+        status: PASS
+        evidence: reports/verification/W04/wyscout-raw-to-gold-R1-master-verification.md
+      - id: phase-state-and-evidence-candidate
+        status: PASS
+        evidence: reports/verification/W04/phase-verifier-candidate.json
+      - id: G-W04
+        status: PASS
+        evidence: reports/phase-gates/W04/gate-report.json
+      - id: content-addressed-evidence-byte-preservation
+        status: PASS
+        evidence: reports/verification/W04/content-addressed-evidence-byte-preservation-R1.md
+      - id: checkpoint-clean-tree-procedure
+        status: PASS
+        evidence: reports/verification/W04/clean-tree-report.md
+    blocked_on: []
+    checkpoint:
+      start_tag: checkpoint/w04-start
+      commit_message: "phase(w04): accept governed data spine"
+      accepted_tag: checkpoint/w04-accepted
+      accepted_commit: 330141315f67df64ba1b7ad63d5c1f6e95c2f978
+      accepted_commit_resolution: "git rev-parse checkpoint/w04-accepted^{}"
+      gate_report:
+        path: reports/phase-gates/W04/gate-report.json
+        sha256: b13b6c4abe45a9bf3ef8fd08a66e8cc9371ba880696d685b40e0b3437fca8d1c
+      acceptance_report:
+        path: reports/phase-gates/W04/acceptance-report.md
+        sha256: 764425240b213476065e279da954cde61b59f37de8d1f9f44645911ba2f8d9af
+      evidence:
+        - reports/reviews/W04/master-review.md
+        - reports/verification/W04/verification-report.md
+        - reports/verification/W04/wyscout-terminal-complete-repository-gate-R2-master-verification.md
+        - reports/verification/W04/wyscout-runtime-control-R12-master-acceptance.md
+        - reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md
+        - reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+        - reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+        - reports/verification/W04/content-addressed-evidence-byte-preservation-R1.md
+        - reports/verification/W04/clean-tree-report.md
+  W05:
+    title: Features, roles and transparent M0 retrieval
+    state: CLOSED
+    depends_on:
+      - W04
+    tasks:
+      - task_id: W05-ARCH-REVIEW-00
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-ARCH-REVIEW-00-R1.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-ARCH-REVIEW-00-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-ARCH-REVIEW-00-R1.yaml
+      - task_id: W05-CONTRACTS-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CONTRACTS-01-R1.yaml
+          - orchestration/task_packets/W05-CONTRACTS-01-R2.yaml
+          - orchestration/task_packets/W05-CONTRACTS-01-R3.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CONTRACTS-01-R1.md
+          - reports/reviews/W05/returns/W05-CONTRACTS-01-R2.md
+          - reports/reviews/W05/returns/W05-CONTRACTS-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R2.yaml
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-01-R3.yaml
+      - task_id: W05-CONTRACTS-QUERY-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CONTRACTS-QUERY-02-R1.yaml
+          - orchestration/task_packets/W05-CONTRACTS-QUERY-02-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R1.md
+          - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-02-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-QUERY-02-R1.yaml
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-QUERY-02-R2.yaml
+      - task_id: W05-CONTRACTS-QUERY-REVIEW-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CONTRACTS-QUERY-REVIEW-02-R1.yaml
+          - orchestration/task_packets/W05-CONTRACTS-QUERY-REVIEW-02-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-REVIEW-02-R1.md
+          - reports/reviews/W05/returns/W05-CONTRACTS-QUERY-REVIEW-02-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-QUERY-REVIEW-02-R1.yaml
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-QUERY-REVIEW-02-R2.yaml
+      - task_id: W05-CONTRACTS-TRUTH-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R1.yaml
+          - orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R1.md
+          - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-03-R1.yaml
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-03-R2.yaml
+      - task_id: W05-CONTRACTS-TRUTH-REVIEW-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CONTRACTS-TRUTH-REVIEW-03-R1.yaml
+          - orchestration/task_packets/W05-CONTRACTS-TRUTH-REVIEW-03-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-REVIEW-03-R1.md
+          - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-REVIEW-03-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-REVIEW-03-R1.yaml
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-TRUTH-REVIEW-03-R2.yaml
+      - task_id: W05-FEATURES-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-FEATURES-01-R1.yaml
+          - orchestration/task_packets/W05-FEATURES-01-R2.yaml
+          - orchestration/task_packets/W05-FEATURES-01-R3.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-FEATURES-01-R1.md
+          - reports/reviews/W05/returns/W05-FEATURES-01-R2.md
+          - reports/reviews/W05/returns/W05-FEATURES-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-FEATURES-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-FEATURES-01-R2.yaml
+          - orchestration/reviews/REVIEW-W05-FEATURES-01-R3.yaml
+      - task_id: W05-FEATURES-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-FEATURES-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W05-FEATURES-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W05-FEATURES-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R1.md
+          - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R2.md
+          - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-FEATURES-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-FEATURES-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W05-FEATURES-REVIEW-01-R3.yaml
+      - task_id: W05-ROLES-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-ROLES-01-R1.yaml
+          - orchestration/task_packets/W05-ROLES-01-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-ROLES-01-R1.md
+          - reports/reviews/W05/returns/W05-ROLES-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-ROLES-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-ROLES-01-R2.yaml
+      - task_id: W05-ROLES-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-ROLES-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W05-ROLES-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-ROLES-REVIEW-01-R1.md
+          - reports/reviews/W05/returns/W05-ROLES-REVIEW-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-ROLES-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-ROLES-REVIEW-01-R2.yaml
+      - task_id: W05-MODEL-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-MODEL-01-R1.yaml
+          - orchestration/task_packets/W05-MODEL-01-R2.yaml
+          - orchestration/task_packets/W05-MODEL-01-R3.yaml
+          - orchestration/task_packets/W05-MODEL-01-R4.yaml
+          - orchestration/task_packets/W05-MODEL-01-R5.yaml
+          - orchestration/task_packets/W05-MODEL-01-R6.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+          - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+          - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+          - reports/reviews/W05/returns/W05-MODEL-01-R4.md
+          - reports/reviews/W05/returns/W05-MODEL-01-R5.md
+          - reports/reviews/W05/returns/W05-MODEL-01-R6.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-MODEL-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-MODEL-01-R2.yaml
+          - orchestration/reviews/REVIEW-W05-MODEL-01-R3.yaml
+          - orchestration/reviews/REVIEW-W05-MODEL-01-R4.yaml
+          - orchestration/reviews/REVIEW-W05-MODEL-01-R5.yaml
+          - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+      - task_id: W05-MODEL-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-MODEL-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W05-MODEL-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R1.md
+          - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R2.md
+        reviews:
+          - reports/reviews/W05/w05-m0-model-independent-review-R1.md
+          - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+      - task_id: W05-SERVING-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-SERVING-01-R1.yaml
+          - orchestration/task_packets/W05-SERVING-01-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-SERVING-01-R1.md
+          - reports/reviews/W05/returns/W05-SERVING-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-SERVING-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-SERVING-01-R2.yaml
+      - task_id: W05-SERVING-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-SERVING-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W05-SERVING-REVIEW-01-R2.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R1.md
+          - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R2.md
+        reviews:
+          - reports/reviews/W05/w05-m0-serving-independent-review-R1.md
+          - reports/reviews/W05/w05-m0-serving-independent-review-R2.md
+      - task_id: W05-PARITY-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-PARITY-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-PARITY-REVIEW-01-R1.md
+        reviews:
+          - reports/reviews/W05/w05-training-serving-parity-independent-review-R1.md
+          - orchestration/reviews/REVIEW-W05-PARITY-REVIEW-01-R1.yaml
+      - task_id: W05-FEATURES-SECURITY-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-FEATURES-SECURITY-02-R1.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-FEATURES-SECURITY-02-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-FEATURES-SECURITY-02-R1.yaml
+      - task_id: W05-FEATURES-SECURITY-REVIEW-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-FEATURES-SECURITY-REVIEW-02-R1.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-FEATURES-SECURITY-REVIEW-02-R1.md
+        reviews:
+          - reports/reviews/W05/w05-feature-security-independent-review-R1.md
+      - task_id: W05-CONTRACTS-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CONTRACTS-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CONTRACTS-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CONTRACTS-REVIEW-01-R1.yaml
+      - task_id: W05-CLOSURE-EVIDENCE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W05-CLOSURE-EVIDENCE-01-R1.yaml
+          - orchestration/task_packets/W05-CLOSURE-EVIDENCE-01-R2.yaml
+          - orchestration/task_packets/W05-CLOSURE-EVIDENCE-01-R3.yaml
+        returns:
+          - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R1.md
+          - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R2.md
+          - reports/reviews/W05/returns/W05-CLOSURE-EVIDENCE-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W05-CLOSURE-EVIDENCE-01-R1.yaml
+          - orchestration/reviews/REVIEW-W05-CLOSURE-EVIDENCE-01-R2.yaml
+          - orchestration/reviews/REVIEW-W05-CLOSURE-EVIDENCE-01-R3.yaml
+    evidence:
+      - path: reports/phase-gates/W05/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W05/gate-report.json
+        required: true
+      - path: reports/reviews/W05/master-review.md
+        required: true
+      - path: reports/verification/W05/verification-report.md
+        required: true
+      - path: reports/verification/W05/model-baseline-evidence.md
+        required: true
+      - path: reports/verification/W05/training-serving-parity-report.md
+        required: true
+      - path: reports/verification/W05/limitations.md
+        required: true
+      - path: reports/verification/W05/phase-verifier-candidate.json
+        required: true
+      - path: reports/verification/W05/clean-tree-report.md
+        required: true
+    checks:
+      - id: G-W05
+        status: PASS
+        evidence: reports/phase-gates/W05/gate-report.json
+      - id: complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W05/verification-report.md
+      - id: training-serving-parity
+        status: PASS
+        evidence: reports/verification/W05/training-serving-parity-report.md
+      - id: model-baseline-comparison
+        status: PASS
+        evidence: reports/verification/W05/model-baseline-evidence.md
+      - id: local-only-and-security
+        status: PASS
+        evidence: reports/verification/W05/verification-report.md
+      - id: phase-state-and-evidence
+        status: PASS
+        evidence: reports/verification/W05/phase-verifier-candidate.json
+      - id: checkpoint-clean-tree
+        status: PASS
+        evidence: reports/verification/W05/clean-tree-report.md
+    checkpoint:
+      start_tag: checkpoint/w05-start
+      commit_message: "phase(w05): accept transparent retrieval baseline"
+      accepted_tag: checkpoint/w05-accepted
+      accepted_commit: 1dd3f6e3296100b3d1615bd57e18cf256e312043
+      accepted_commit_resolution: "git rev-parse checkpoint/w05-accepted^{}"
+  W06:
+    title: Evaluation harness and protected model gate
+    state: CLOSED
+    depends_on:
+      - W05
+    tasks:
+      - task_id: W06-PREFLIGHT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-PREFLIGHT-01-R1.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-PREFLIGHT-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-PREFLIGHT-01-R1.yaml
+      - task_id: W06-PREFLIGHT-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-PREFLIGHT-REVIEW-01-R1.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-PREFLIGHT-REVIEW-01-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-PREFLIGHT-REVIEW-01-R1.yaml
+      - task_id: W06-EVAL-CORE-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-CORE-01-R1.yaml
+          - orchestration/task_packets/W06-EVAL-CORE-01-R2.yaml
+          - orchestration/task_packets/W06-EVAL-CORE-01-R3.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-CORE-01-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-CORE-01-R2.md
+          - reports/reviews/W06/returns/W06-EVAL-CORE-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R2.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R3.yaml
+      - task_id: W06-EVAL-CORE-REVIEW-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-CORE-REVIEW-01-R1.yaml
+          - orchestration/task_packets/W06-EVAL-CORE-REVIEW-01-R2.yaml
+          - orchestration/task_packets/W06-EVAL-CORE-REVIEW-01-R3.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R2.md
+          - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R3.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-CORE-REVIEW-01-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-CORE-REVIEW-01-R2.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-CORE-REVIEW-01-R3.yaml
+      - task_id: W06-EVAL-GATE-BINDING-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R1.yaml
+          - orchestration/task_packets/W06-EVAL-GATE-BINDING-02-R2.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-02-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-02-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-02-R2.yaml
+      - task_id: W06-EVAL-GATE-BINDING-REVIEW-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-GATE-BINDING-REVIEW-02-R1.yaml
+          - orchestration/task_packets/W06-EVAL-GATE-BINDING-REVIEW-02-R2.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-GATE-BINDING-REVIEW-02-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-REVIEW-02-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-GATE-BINDING-REVIEW-02-R2.yaml
+      - task_id: W06-EVAL-VALUE-IDENTITY-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-03-R1.yaml
+          - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-03-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+      - task_id: W06-EVAL-VALUE-IDENTITY-REVIEW-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.yaml
+          - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.yaml
+      - task_id: W06-EVAL-ROBUSTNESS-04
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R1.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R2.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R3.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R4.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R5.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R6.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R7.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R2.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R3.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R4.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R5.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R6.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R7.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R2.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R3.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R4.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R5.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R6.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R7.yaml
+      - task_id: W06-EVAL-ROBUSTNESS-REVIEW-04
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R4.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R6.yaml
+          - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R7.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R4.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.md
+          - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R6.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R1.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R2.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R3.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R4.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R5.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R6.yaml
+          - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R7.yaml
+      - task_id: W06-PROTECTED-NO-GO-05
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-PROTECTED-NO-GO-05-R1.yaml
+          - orchestration/task_packets/W06-PROTECTED-NO-GO-05-R2.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R1.md
+          - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-05-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-05-R1.yaml
+          - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-05-R2.yaml
+      - task_id: W06-PROTECTED-NO-GO-REVIEW-05
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-PROTECTED-NO-GO-REVIEW-05-R1.yaml
+          - orchestration/task_packets/W06-PROTECTED-NO-GO-REVIEW-05-R2.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R1.md
+          - reports/reviews/W06/returns/W06-PROTECTED-NO-GO-REVIEW-05-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-REVIEW-05-R1.yaml
+          - orchestration/reviews/REVIEW-W06-PROTECTED-NO-GO-REVIEW-05-R2.yaml
+      - task_id: W06-CARDS-06
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-CARDS-06-R1.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-CARDS-06-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-CARDS-06-R1.yaml
+      - task_id: W06-CARDS-REVIEW-06
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-CARDS-REVIEW-06-R1.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-CARDS-REVIEW-06-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-CARDS-REVIEW-06-R1.yaml
+      - task_id: W06-OPTIMIZED-GUARDS-07
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-OPTIMIZED-GUARDS-07-R1.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-07-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-OPTIMIZED-GUARDS-07-R1.yaml
+      - task_id: W06-OPTIMIZED-GUARDS-REVIEW-07
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W06-OPTIMIZED-GUARDS-REVIEW-07-R1.yaml
+        returns:
+          - reports/reviews/W06/returns/W06-OPTIMIZED-GUARDS-REVIEW-07-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W06-OPTIMIZED-GUARDS-REVIEW-07-R1.yaml
+    evidence:
+      - path: reports/phase-gates/W06/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W06/gate-report.json
+        required: true
+      - path: reports/reviews/W06/master-review.md
+        required: true
+      - path: reports/reviews/W06/cards-independent-review-R1.md
+        required: true
+      - path: reports/reviews/W06/protected-no-go-independent-review-R2.md
+        required: true
+      - path: reports/reviews/W06/optimized-guards-independent-review-R1.md
+        required: true
+      - path: reports/verification/W06/verification-report.md
+        required: true
+      - path: reports/verification/W06/limitations.md
+        required: true
+      - path: reports/verification/W06/phase-verifier-candidate.json
+        required: true
+      - path: reports/evaluation/W06/protected-access-outcome.json
+        required: true
+      - path: reports/evaluation/W06/protected-gate-decision.json
+        required: true
+      - path: reports/evaluation/W06/protected-execution-receipt.json
+        required: true
+      - path: reports/verification/W06/clean-tree-report.md
+        required: true
+    checks:
+      - id: G-W06
+        status: PASS
+        evidence: reports/phase-gates/W06/gate-report.json
+      - id: deterministic-evaluation-core
+        status: PASS
+        evidence: reports/reviews/W06/evaluation-core-independent-review-R3.md
+      - id: robustness-null-applicability
+        status: PASS
+        evidence: reports/reviews/W06/evaluation-robustness-independent-review-R6.md
+      - id: one-use-protected-no-go
+        status: PASS
+        evidence: reports/evaluation/W06/protected-execution-receipt.json
+      - id: optimized-python-security
+        status: PASS
+        evidence: reports/reviews/W06/optimized-guards-independent-review-R1.md
+      - id: complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W06/verification-report.md
+      - id: local-only-controls
+        status: PASS
+        evidence: reports/verification/W06/verification-report.md
+      - id: phase-state-and-evidence
+        status: PASS
+        evidence: reports/verification/W06/phase-verifier-candidate.json
+      - id: checkpoint-clean-tree
+        status: PASS
+        evidence: reports/verification/W06/clean-tree-report.md
+    checkpoint:
+      start_tag: checkpoint/w06-start
+      commit_message: "phase(w06): accept deterministic evaluation and no-go gate"
+      accepted_tag: checkpoint/w06-accepted
+      accepted_commit: 0bc6165f8f6e6638698a3f6a4cc948b24a7b4cc0
+      accepted_commit_resolution: "git rev-parse checkpoint/w06-accepted^{}"
+  W07:
+    title: Local R0 evidence application
+    state: CLOSED
+    depends_on:
+      - W06
+    tasks:
+      - task_id: W07-APPLICATION-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W07-APPLICATION-01-R1.yaml
+          - orchestration/task_packets/W07-APPLICATION-01-R2.yaml
+        returns:
+          - reports/reviews/W07/returns/W07-APPLICATION-01-R1.md
+          - reports/reviews/W07/returns/W07-APPLICATION-01-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W07-APPLICATION-01-R1.yaml
+          - orchestration/reviews/REVIEW-W07-APPLICATION-01-R2.yaml
+          - orchestration/reviews/REVIEW-W07-APPLICATION-01-R3.yaml
+      - task_id: W07-DOMAIN-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W07-DOMAIN-02-R1.yaml
+          - orchestration/task_packets/W07-DOMAIN-02-R2.yaml
+        returns:
+          - reports/reviews/W07/returns/W07-DOMAIN-02-R1.md
+          - reports/reviews/W07/returns/W07-DOMAIN-02-R2.md
+        reviews:
+          - orchestration/reviews/REVIEW-W07-DOMAIN-02-R1.yaml
+          - orchestration/reviews/REVIEW-W07-DOMAIN-02-R2.yaml
+          - orchestration/reviews/REVIEW-W07-DOMAIN-02-R3.yaml
+      - task_id: W07-PRESENTATION-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W07-PRESENTATION-03-R1.yaml
+        returns:
+          - reports/reviews/W07/returns/W07-PRESENTATION-03-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W07-PRESENTATION-03-R1.yaml
+      - task_id: W07-EVIDENCE-TEST-04
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W07-EVIDENCE-TEST-04-R1.yaml
+        returns:
+          - reports/reviews/W07/returns/W07-EVIDENCE-TEST-04-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W07-EVIDENCE-TEST-04-R1.yaml
+      - task_id: W07-INDEPENDENT-REVIEW-05
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W07-INDEPENDENT-REVIEW-05-R1.yaml
+        returns:
+          - reports/reviews/W07/returns/W07-INDEPENDENT-REVIEW-05-R1.md
+        reviews:
+          - orchestration/reviews/REVIEW-W07-INDEPENDENT-REVIEW-05-R1.yaml
+    evidence:
+      - path: reports/phase-gates/W07/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W07/gate-report.json
+        required: true
+      - path: reports/reviews/W07/master-review.md
+        required: true
+      - path: reports/reviews/W07/w07-application-independent-review-R1.md
+        required: true
+      - path: reports/verification/W07/verification-report.md
+        required: true
+      - path: reports/verification/W07/browser-accessibility-report.md
+        required: true
+      - path: reports/verification/W07/scoring-parity-report.md
+        required: true
+      - path: reports/verification/W07/limitations.md
+        required: true
+      - path: reports/verification/W07/protected-output-boundary.md
+        required: true
+      - path: reports/verification/W07/phase-verifier-candidate.json
+        required: true
+      - path: reports/verification/W07/clean-tree-report.md
+        required: true
+    checks:
+      - id: G-W07
+        status: PASS
+        evidence: reports/phase-gates/W07/gate-report.json
+      - id: single-accepted-scorer-and-parity
+        status: PASS
+        evidence: reports/verification/W07/scoring-parity-report.md
+      - id: browser-and-accessibility
+        status: PASS
+        evidence: reports/verification/W07/browser-accessibility-report.md
+      - id: protected-output-boundary
+        status: PASS
+        evidence: reports/verification/W07/protected-output-boundary.md
+      - id: complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W07/verification-report.md
+      - id: local-only-controls
+        status: PASS
+        evidence: reports/verification/W07/verification-report.md
+      - id: phase-state-and-evidence
+        status: PASS
+        evidence: reports/verification/W07/phase-verifier-candidate.json
+      - id: clean-checkpoint-tree
+        status: PASS
+        evidence: reports/verification/W07/clean-tree-report.md
+    checkpoint:
+      start_tag: checkpoint/w07-start
+      commit_message: "phase(w07): accept local evidence application"
+      accepted_tag: checkpoint/w07-accepted
+      accepted_tag_object: 356f71abfe16f5cf88dfad8314ec2637d2c71b81
+      accepted_commit: 406a5bd88da58afbfc72a718d48ae96777957bd5
+      accepted_commit_resolution: "git rev-parse checkpoint/w07-accepted^{}"
+  W08:
+    title: Dormant optional collaboration workflow (historical W08)
+    state: MASTER_REVIEW
+    optional: true
+    disposition: DORMANT_BY_RESEARCH_WORKBENCH_PIVOT
+    progression_gate: NONE
+    reactivation_requires: explicit_user_product_authority
+    depends_on:
+      - W07
+    tasks:
+      - task_id: W08-AUTH-AUDIT-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-AUTH-AUDIT-01-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-AUTH-AUDIT-01-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-AUTH-POLICY-INTEGRITY-01B
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-AUTH-POLICY-INTEGRITY-01B-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-AUTH-POLICY-INTEGRITY-01B-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WORKFLOW-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WORKFLOW-02-R1.yaml
+          - orchestration/task_packets/W08-WORKFLOW-02-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WORKFLOW-02-R1.md
+          - reports/reviews/W08/returns/W08-WORKFLOW-02-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WORKFLOW-INTEGRITY-02B
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WORKFLOW-INTEGRITY-02B-R1.yaml
+          - orchestration/task_packets/W08-WORKFLOW-INTEGRITY-02B-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WORKFLOW-INTEGRITY-02B-R1.md
+          - reports/reviews/W08/returns/W08-WORKFLOW-INTEGRITY-02B-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-E2E-04
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-E2E-04-R1.yaml
+          - orchestration/task_packets/W08-WEB-E2E-04-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-E2E-04-R1.md
+          - reports/reviews/W08/returns/W08-WEB-E2E-04-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-WORKFLOW-04A
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-WORKFLOW-04A-R1.yaml
+          - orchestration/task_packets/W08-WEB-WORKFLOW-04A-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-WORKFLOW-04A-R1.md
+          - reports/reviews/W08/returns/W08-WEB-WORKFLOW-04A-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-EXPORT-04C
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-EXPORT-04C-R1.yaml
+          - orchestration/task_packets/W08-WEB-EXPORT-04C-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R1.md
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-EXPORT-UI-04I
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-EXPORT-UI-04I-R1.yaml
+          - orchestration/task_packets/W08-WEB-EXPORT-UI-04I-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-UI-04I-R1.md
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-UI-04I-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-EXPORT-JOURNEY-04K
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-EXPORT-JOURNEY-04K-R1.yaml
+          - orchestration/task_packets/W08-WEB-EXPORT-JOURNEY-04K-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-04K-R1.md
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-04K-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-EXPORT-JOURNEY-WITNESS-04L
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R1.yaml
+          - orchestration/task_packets/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R1.md
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-EXPORT-SECURITY-04J
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-EXPORT-SECURITY-04J-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-EXPORT-SECURITY-04J-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-BRIEF-04D
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-BRIEF-04D-R1.yaml
+          - orchestration/task_packets/W08-WEB-BRIEF-04D-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-BRIEF-04D-R1.md
+          - reports/reviews/W08/returns/W08-WEB-BRIEF-04D-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-BRIEF-HISTORY-04E
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-BRIEF-HISTORY-04E-R1.yaml
+          - orchestration/task_packets/W08-WEB-BRIEF-HISTORY-04E-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-BRIEF-HISTORY-04E-R1.md
+          - reports/reviews/W08/returns/W08-WEB-BRIEF-HISTORY-04E-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-BRIEF-WITNESS-04G
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-BRIEF-WITNESS-04G-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-BRIEF-WITNESS-04G-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-REPLAY-GUARD-04F
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-REPLAY-GUARD-04F-R1.yaml
+          - orchestration/task_packets/W08-WEB-REPLAY-GUARD-04F-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R1.md
+          - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-REPLAY-CONTRACT-02C
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-REPLAY-CONTRACT-02C-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-REPLAY-CONTRACT-02C-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-BROWSER-A11Y-04B
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-BROWSER-A11Y-04B-R1.yaml
+          - orchestration/task_packets/W08-BROWSER-A11Y-04B-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R1.md
+          - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-BROWSER-OVERFLOW-04M
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-BROWSER-OVERFLOW-04M-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-BROWSER-OVERFLOW-04M-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-STUDY-HARNESS-07A
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-STUDY-HARNESS-07A-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-STUDY-HARNESS-07A-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-INDEPENDENT-SECURITY-05
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-INDEPENDENT-SECURITY-05-R1.yaml
+          - orchestration/task_packets/W08-INDEPENDENT-SECURITY-05-R2.yaml
+          - orchestration/task_packets/W08-INDEPENDENT-SECURITY-05-R3.yaml
+        returns:
+          - reports/reviews/W08/w08-independent-security-review-R1.md
+          - reports/reviews/W08/w08-independent-security-review-R2.md
+          - reports/reviews/W08/w08-independent-security-review-R3.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-SCOUT-BRIEF-AUTHZ-04P
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-MULTIROLE-SHORTLIST-AUTHZ-04Q
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-MULTIROLE-SHORTLIST-AUTHZ-04Q-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-MULTIROLE-SHORTLIST-AUTHZ-04Q-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-MULTIROLE-AUTHZ-REVIEW-05D
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-MULTIROLE-AUTHZ-REVIEW-05D-R1.yaml
+        returns:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-EXPORT-IMPORT-BOUNDARY-05E
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-EXPORT-IMPORT-BOUNDARY-05E-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-EXPORT-IMPORT-BOUNDARY-05E-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-EXPORT-IMPORT-BOUNDARY-REVIEW-05F
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-EXPORT-IMPORT-BOUNDARY-REVIEW-05F-R1.yaml
+        returns:
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-AUDIT-RECEIPT-BINDING-05B
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-AUDIT-RECEIPT-BINDING-05B-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-AUDIT-RECEIPT-BINDING-05B-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-WEB-EVIDENCE-ORIGIN-04N
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-WEB-EVIDENCE-ORIGIN-04N-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-WEB-EVIDENCE-ORIGIN-04N-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-EXPORT-BYTE-TAMPER-05C
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-EXPORT-BYTE-TAMPER-05C-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-EXPORT-BYTE-TAMPER-05C-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-EXPORT-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-EXPORT-03-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-EXPORT-03-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-EXPORT-INTEGRITY-03B
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-EXPORT-INTEGRITY-03B-R1.yaml
+          - orchestration/task_packets/W08-EXPORT-INTEGRITY-03B-R2.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R1.md
+          - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R2.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - task_id: W08-AUDIT-EXPORT-TAMPER-05A
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W08-AUDIT-EXPORT-TAMPER-05A-R1.yaml
+        returns:
+          - reports/reviews/W08/returns/W08-AUDIT-EXPORT-TAMPER-05A-R1.md
+        reviews:
+          - reports/reviews/W08/w08-independent-security-review-R4.md
+          - reports/reviews/W08/w08-export-import-boundary-review-R1.md
+    evidence:
+      - path: reports/phase-gates/W08/gate-report.json
+        required: true
+      - path: reports/phase-gates/W08/pilot-gate-report.json
+        required: true
+      - path: reports/reviews/W08/master-review.md
+        required: true
+      - path: reports/reviews/W08/w08-independent-security-review-R4.md
+        required: true
+      - path: reports/reviews/W08/w08-export-import-boundary-review-R1.md
+        required: true
+      - path: reports/verification/W08/verification-report.md
+        required: true
+      - path: reports/verification/W08/authentication-authorization-report.md
+        required: true
+      - path: reports/verification/W08/workflow-audit-export-recovery-report.md
+        required: true
+      - path: reports/verification/W08/security-confidentiality-report.md
+        required: true
+      - path: reports/verification/W08/browser-accessibility-report.md
+        required: true
+      - path: reports/verification/W08/export-import-boundary-report.md
+        required: true
+      - path: reports/verification/W08/limitations.md
+        required: true
+      - path: reports/verification/W08/protected-output-boundary.md
+        required: true
+      - path: reports/verification/W08/representative-user-evidence-status.md
+        required: true
+      - path: reports/verification/W08/moderated-study-protocol.md
+        required: true
+      - path: reports/verification/W08/morning-handoff.md
+        required: true
+      - path: reports/verification/W08/pilot-user-guide.md
+        required: true
+      - path: reports/verification/W08/pivot-disposition.md
+        required: true
+      - path: reports/verification/W08/phase-verifier-diagnostic.json
+        required: true
+      - path: reports/verification/W08/clean-tree-report.md
+        required: true
+    checks:
+      - id: automated-authentication-authorization
+        status: PASS
+        evidence: reports/verification/W08/authentication-authorization-report.md
+      - id: workflow-export-audit-concurrency-recovery
+        status: PASS
+        evidence: reports/verification/W08/workflow-audit-export-recovery-report.md
+      - id: independent-security-confidentiality
+        status: PASS
+        evidence: reports/reviews/W08/w08-independent-security-review-R4.md
+      - id: export-import-boundary
+        status: PASS
+        evidence: reports/reviews/W08/w08-export-import-boundary-review-R1.md
+      - id: browser-and-accessibility-mechanics
+        status: PASS
+        evidence: reports/verification/W08/browser-accessibility-report.md
+      - id: complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W08/verification-report.md
+      - id: local-only-controls
+        status: PASS
+        evidence: reports/verification/W08/verification-report.md
+      - id: protected-output-boundary
+        status: PASS
+        evidence: reports/verification/W08/protected-output-boundary.md
+      - id: moderated-study-protocol-prepared
+        status: PASS
+        evidence: reports/verification/W08/moderated-study-protocol.md
+    checkpoint:
+      start_tag: checkpoint/w08-start
+      accepted_tag: checkpoint/w08-accepted
+  W09:
+    title: Historical-player ML research workbench
+    state: CLOSED
+    optional: false
+    depends_on:
+      - W07
+    entry_authority:
+      decision: RESEARCH_WORKBENCH_PIVOT
+      authorised_at: "2026-08-05"
+      evidence: docs/architecture/research-workbench-pivot.md
+    tasks:
+      - task_id: W09-DATA-INVENTORY-01
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-ARCH-SURVEY-00-R1.yaml
+          - orchestration/task_packets/W09-DATA-INVENTORY-01-R1.yaml
+        returns:
+          - reports/reviews/W09/returns/W09-ARCH-SURVEY-00-R1.md
+          - reports/reviews/W09/returns/W09-DATA-INVENTORY-01-R1.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+      - task_id: W09-FULL-FEATURE-MATRIX-02
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R1.yaml
+          - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R2.yaml
+          - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R3.yaml
+          - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R4.yaml
+          - orchestration/task_packets/W09-FULL-CANONICAL-BUILD-02B-R5.yaml
+          - orchestration/task_packets/W09-FULL-FEATURE-MATRIX-02C-R1.yaml
+        returns:
+          - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R1.md
+          - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R2.md
+          - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R3.md
+          - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R4.md
+          - reports/reviews/W09/returns/W09-FULL-CANONICAL-BUILD-02B-R5.md
+          - reports/reviews/W09/returns/W09-FULL-FEATURE-MATRIX-02C-R1.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+      - task_id: W09-RETRIEVAL-BASELINES-03
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-RESEARCH-CONTRACTS-02A-REVIEW-R1.yaml
+          - orchestration/task_packets/W09-RESEARCH-CONTRACTS-02A-REVIEW-R2.yaml
+          - orchestration/task_packets/W09-RESEARCH-CONTRACTS-02A-REVIEW-R3.yaml
+          - orchestration/task_packets/W09-RESEARCH-CONTRACTS-02A-REVIEW-R4.yaml
+          - orchestration/task_packets/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.yaml
+          - orchestration/task_packets/W09-RETRIEVAL-INDEX-03B-R1.yaml
+          - orchestration/task_packets/W09-RETRIEVAL-INDEX-03B-R2.yaml
+        returns:
+          - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R1.md
+          - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R2.md
+          - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R3.md
+          - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R4.md
+          - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R5.md
+          - reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R1.md
+          - reports/reviews/W09/returns/W09-RETRIEVAL-INDEX-03B-R2.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+      - task_id: W09-RESEARCH-API-04
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-RESEARCH-STATE-04A-R1.yaml
+          - orchestration/task_packets/W09-RESEARCH-STATE-04A-R2.yaml
+          - orchestration/task_packets/W09-REPRODUCIBLE-REPORT-04B-R1.yaml
+          - orchestration/task_packets/W09-RESEARCH-SERVING-04C-R1.yaml
+          - orchestration/task_packets/W09-RESEARCH-API-04D-R1.yaml
+        returns:
+          - reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R1.md
+          - reports/reviews/W09/returns/W09-RESEARCH-STATE-04A-R2.md
+          - reports/reviews/W09/returns/W09-REPRODUCIBLE-REPORT-04B-R1.md
+          - reports/reviews/W09/returns/W09-RESEARCH-SERVING-04C-R1.md
+          - reports/reviews/W09/returns/W09-RESEARCH-API-04D-R1.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+      - task_id: W09-RESEARCH-UI-05
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-RESEARCH-UI-05A-R1.yaml
+        returns:
+          - reports/reviews/W09/returns/W09-RESEARCH-UI-05A-R1.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+      - task_id: W09-EVALUATION-06
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-EVALUATION-06A-R1.yaml
+        returns:
+          - reports/reviews/W09/returns/W09-EVALUATION-06A-R1.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+      - task_id: W09-INDEPENDENT-REVIEW-07
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W09-INDEPENDENT-REVIEW-07A-R1.yaml
+        returns:
+          - reports/reviews/W09/independent-review.md
+        reviews:
+          - reports/reviews/W09/master-review.md
+          - reports/reviews/W09/independent-review.md
+    evidence:
+      - path: docs/architecture/research-workbench-pivot.md
+        required: true
+      - path: reports/verification/W09/data-inventory-and-coverage.md
+        required: true
+      - path: reports/verification/W09/full-canonical-population.md
+        required: true
+      - path: reports/verification/W09/full-feature-matrix.md
+        required: true
+      - path: reports/verification/W09/retrieval-evaluation.md
+        required: true
+      - path: reports/verification/W09/research-workbench-journey.md
+        required: true
+      - path: reports/verification/W09/unicode-correction.md
+        required: true
+      - path: reports/reviews/W09/master-review.md
+        required: true
+      - path: reports/reviews/W09/independent-review.md
+        required: true
+      - path: reports/reviews/W09/unicode-correction-review.md
+        required: true
+      - path: reports/phase-gates/W09/acceptance-report.md
+        required: true
+      - path: reports/phase-gates/W09/gate-report.json
+        required: true
+      - path: reports/verification/W09/verification-report.md
+        required: true
+      - path: reports/verification/W09/phase-verifier-candidate.json
+        required: true
+      - path: reports/verification/W09/clean-tree-report.md
+        required: true
+    checks:
+      - id: research-workbench-pivot-authority
+        status: PASS
+        evidence: docs/architecture/research-workbench-pivot.md
+      - id: G-RW1
+        status: PASS
+        evidence: reports/phase-gates/W09/gate-report.json
+      - id: G-RW2
+        status: PASS
+        evidence: reports/phase-gates/W09/gate-report.json
+      - id: G-RW3
+        status: PASS
+        evidence: reports/phase-gates/W09/gate-report.json
+      - id: g-rw4-claim-boundary
+        status: PASS
+        evidence: reports/reviews/W09/independent-review.md
+      - id: independent-review
+        status: PASS
+        evidence: reports/reviews/W09/independent-review.md
+      - id: provider-unicode-correction
+        status: PASS
+        evidence: reports/reviews/W09/unicode-correction-review.md
+      - id: complete-repository-gate
+        status: PASS
+        evidence: reports/verification/W09/verification-report.md
+      - id: local-only-controls
+        status: PASS
+        evidence: reports/verification/W09/verification-report.md
+      - id: phase-state-and-evidence
+        status: PASS
+        evidence: reports/verification/W09/phase-verifier-candidate.json
+      - id: checkpoint-clean-tree-procedure
+        status: PASS
+        evidence: reports/verification/W09/clean-tree-report.md
+    checkpoint:
+      start_tag: checkpoint/w09-start
+      commit_message: "phase(w09): accept historical research workbench"
+      accepted_tag: checkpoint/w09-research-workbench-accepted
+      accepted_commit: f57ce70e84b74c5c43b9691d2df93fd977042954
+      accepted_commit_resolution: "git rev-parse checkpoint/w09-research-workbench-accepted^{}"
+      corrective_tag: checkpoint/w09-unicode-correction-accepted
+      corrective_commit: 04c95ee08a79d3515ba20b20f5085929f16c3fd6
+      corrective_commit_resolution: "git rev-parse checkpoint/w09-unicode-correction-accepted^{}"
+  W10:
+    title: Expert relevance validation and research hardening
+    state: REWORK
+    depends_on:
+      - W09
+    entry_authority:
+      decision: W10_EXPERT_RELEVANCE_AND_HARDENING
+      authorised_at: "2026-08-05"
+      evidence: docs/architecture/w10-expert-relevance-validation.md
+      corrective_decision: W10_A01_EXPERT_EVIDENCE_PRESENTATION_V2
+      corrective_authorised_at: "2026-08-06"
+      corrective_evidence: docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+    tasks:
+      - task_id: W10-EXPERT-RELEVANCE-PROTOCOL-01
+        state: ACCEPTED
+        disposition: SUPERSEDED_FOR_HUMAN_COLLECTION_BY_W10_A01
+        packets:
+          - orchestration/task_packets/W10-EXPERT-RELEVANCE-PROTOCOL-01-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-EXPERT-RELEVANCE-PROTOCOL-01-R1.md
+        reviews:
+          - reports/reviews/W10/independent-review.md
+      - task_id: W10-EXPERT-STUDY-CONSOLE-02A
+        state: ACCEPTED
+        disposition: REWORK_REQUIRED_FOR_PARTICIPANT_EVIDENCE_V2
+        packets:
+          - orchestration/task_packets/W10-EXPERT-STUDY-CONSOLE-02A-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-EXPERT-STUDY-CONSOLE-02A-R1.md
+        reviews:
+          - reports/reviews/W10/independent-review.md
+      - task_id: W10-FORMAL-EXPERT-STUDY-02B
+        state: PLANNED
+        blocked_by:
+          - W10-V2-EVIDENCE-DESIGN-08A
+          - W10-V2-DATA-CONTRACTS-08B
+          - W10-V2-STUDY-CONSOLE-08C
+          - W10-V2-MECHANICS-PILOT-08D
+          - W10-V2-PROTOCOL-FREEZE-08E
+          - W10-V2-INDEPENDENT-REVIEW-08F
+        packets:
+          - orchestration/task_packets/W10-FORMAL-EXPERT-STUDY-02B-R1.yaml
+        returns: []
+        reviews: []
+      - task_id: W10-RELEVANCE-EVALUATION-04A
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W10-RELEVANCE-EVALUATION-04A-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-RELEVANCE-EVALUATION-04A-R1.md
+        reviews:
+          - reports/reviews/W10/independent-review.md
+      - task_id: W10-RUNTIME-HOST-STATE-HARDENING-05A
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W10-RUNTIME-HOST-STATE-HARDENING-05A-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-RUNTIME-HOST-STATE-HARDENING-05A-R1.md
+        reviews:
+          - reports/reviews/W10/independent-review.md
+      - task_id: W10-INDEPENDENT-REVIEW-07A
+        state: ACCEPTED
+        disposition: HISTORICAL_ENGINEERING_REVIEW_REOPENED_BY_PILOT_FINDING
+        packets:
+          - orchestration/task_packets/W10-INDEPENDENT-REVIEW-07A-R1.yaml
+        returns:
+          - reports/reviews/W10/independent-review.md
+        reviews: []
+      - task_id: W10-V2-EVIDENCE-DESIGN-08A
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W10-V2-EVIDENCE-DESIGN-08A-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-V2-EVIDENCE-DESIGN-08A-R1.md
+        reviews:
+          - reports/reviews/W10/v2-independent-review.md
+      - task_id: W10-V2-DATA-CONTRACTS-08B
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W10-V2-DATA-CONTRACTS-08B-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-V2-DATA-CONTRACTS-08B-R1.md
+        reviews:
+          - reports/reviews/W10/v2-independent-review.md
+      - task_id: W10-V2-STUDY-CONSOLE-08C
+        state: ACCEPTED
+        packets:
+          - orchestration/task_packets/W10-V2-STUDY-CONSOLE-08C-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-V2-STUDY-CONSOLE-08C-R1.md
+        reviews:
+          - reports/reviews/W10/v2-independent-review.md
+          - reports/reviews/W10/v2-bounded-rework-independent-review.md
+          - reports/reviews/W10/v2-bounded-confinement-independent-review.md
+      - task_id: W10-V2-MECHANICS-PILOT-08D
+        state: READY
+        packets:
+          - orchestration/task_packets/W10-V2-MECHANICS-PILOT-08D-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-V2-MECHANICS-PILOT-08D-R1.md
+        reviews: []
+      - task_id: W10-V2-PROTOCOL-FREEZE-08E
+        state: PLANNED
+        packets:
+          - orchestration/task_packets/W10-V2-PROTOCOL-FREEZE-08E-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-V2-PROTOCOL-FREEZE-08E-R1.md
+        reviews:
+          - reports/reviews/W10/v2-independent-review.md
+      - task_id: W10-V2-INDEPENDENT-REVIEW-08F
+        state: PLANNED
+        packets:
+          - orchestration/task_packets/W10-V2-INDEPENDENT-REVIEW-08F-R1.yaml
+        returns:
+          - reports/reviews/W10/returns/W10-V2-INDEPENDENT-REVIEW-08F-R1.md
+        reviews:
+          - reports/reviews/W10/master-v2-review.md
+    implementation_sequence:
+      - suspend_v1_and_preserve_pilot_evidence
+      - position_specific_construct_and_source_capability_design
+      - versioned_participant_evidence_contracts_and_derivation
+      - participant_safe_v2_comparison_interface
+      - scientific_adversarial_verification
+      - disjoint_v2_mechanics_pilot
+      - v2_protocol_query_presentation_freeze_independent_review_and_explicit_approval
+      - formal_study_evaluation_and_closure
+    human_gate:
+      prepilot_a4_status: PASS
+      v2_mechanics_pilot_status: PILOT_READY_HUMAN_EVIDENCE_REQUIRED
+      v2_formal_collection_enabled: false
+      protocol_user_approval_required: true
+      v1_approval_disposition: WITHDRAWN_BEFORE_FORMAL_COLLECTION
+      v2_explicit_approval_required: true
+      v2_mechanics_pilot_required_before_approval: true
+      mechanics_pilot_counts_toward_g_rw4: false
+      synthetic_responses_count_toward_g_rw4: false
+      real_eligible_expert_responses_required: true
+      formal_outcomes:
+        - PASS
+        - FAIL
+        - INSUFFICIENT_EVIDENCE
+      engineering_ready_may_precede_formal_study: true
+      formal_result_required_for_phase_closure: true
+    evidence:
+      - path: docs/architecture/w10-expert-relevance-validation.md
+        required: true
+      - path: docs/architecture/w10-expert-evidence-presentation-v2-addendum.md
+        required: true
+      - path: reports/verification/W10/presentation-v1-pilot-finding.md
+        required: true
+      - path: reports/verification/W10/v2-evidence-capability-and-construct.md
+        required: true
+      - path: reports/verification/W10/v2-scientific-adversarial-verification.md
+        required: true
+      - path: reports/verification/W10/v2-mechanics-pilot.md
+        required: true
+      - path: reports/reviews/W10/v2-independent-review.md
+        required: true
+      - path: reports/reviews/W10/v2-bounded-rework-independent-review.md
+        required: true
+      - path: reports/reviews/W10/v2-bounded-confinement-independent-review.md
+        required: true
+      - path: reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+        required: false
+      - path: reports/verification/W10/expert-relevance-protocol.md
+        required: true
+      - path: reports/verification/W10/expert-relevance-study.md
+        required: true
+      - path: reports/verification/W10/relevance-evaluation.md
+        required: true
+      - path: reports/verification/W10/runtime-host-state-hardening.md
+        required: true
+      - path: reports/reviews/W10/independent-review.md
+        required: true
+      - path: reports/verification/W10/verification-report.md
+        required: true
+      - path: reports/reviews/W10/master-review.md
+        required: true
+      - path: reports/phase-gates/W10/gate-report.json
+        required: true
+      - path: reports/phase-gates/W10/acceptance-report.md
+        required: true
+      - path: reports/verification/W10/phase-verifier-candidate.json
+        required: true
+      - path: reports/verification/W10/clean-tree-report.md
+        required: true
+      - path: reports/verification/W10/user-approval-and-participation.md
+        required: true
+    checks:
+      - id: engineering-implementation
+        status: PASS
+        evidence: reports/verification/W10/verification-report.md
+      - id: protocol-and-frozen-authority
+        status: SUPERSEDED_BY_V2_REWORK
+        evidence: reports/verification/W10/expert-relevance-protocol.md
+      - id: local-study-console
+        status: V2_A4_PASS_PILOT_ONLY
+        evidence: reports/verification/W10/v2-scientific-adversarial-verification.md
+      - id: protected-relevance-evaluator
+        status: PASS
+        evidence: reports/verification/W10/relevance-evaluation.md
+      - id: retained-runtime-host-state
+        status: PASS
+        evidence: reports/verification/W10/runtime-host-state-hardening.md
+      - id: independent-engineering-review
+        status: V2_PREPILOT_PASS_NOT_08F
+        evidence: reports/reviews/W10/v2-bounded-confinement-independent-review.md
+      - id: v2-scientific-adversarial-verification
+        status: PASS
+        evidence: reports/verification/W10/v2-scientific-adversarial-verification.md
+      - id: v2-mechanics-pilot
+        status: PILOT_READY_HUMAN_EVIDENCE_REQUIRED
+        evidence: reports/verification/W10/v2-mechanics-pilot.md
+      - id: local-only-controls
+        status: PASS
+        evidence: reports/verification/W10/verification-report.md
+      - id: G-RW4-PROTOCOL
+        status: V1_APPROVAL_WITHDRAWN_V2_REQUIRED
+        evidence: reports/verification/W10/user-approval-and-participation.md
+      - id: G-RW4-STUDY
+        status: INSUFFICIENT_EVIDENCE
+        evidence: reports/verification/W10/user-approval-and-participation.md
+      - id: G-RW4-RESULT
+        status: INSUFFICIENT_EVIDENCE
+        evidence: reports/verification/W10/no-formal-evidence-status.json
+    checkpoint:
+      start_tag: checkpoint/w10-start
+      engineering_ready_tag: checkpoint/w10-engineering-ready
+      engineering_ready_tag_object: 0ab4202098816629d9313a0bf982082cd5d925a6
+      engineering_ready_commit: 638ba874d0d248e284b805f1295fc233729db42d
+      engineering_ready_commit_resolution: "git rev-parse checkpoint/w10-engineering-ready^{}"
+      accepted_tag: checkpoint/w10-accepted
+      accepted_tag_requires_formal_result: true
+  W11:
+    title: Governance, maintenance and future decision boundary
+    state: PLANNED
+    depends_on:
+      - W10
+    tasks: []
+    evidence: []
+    checks: []
+    checkpoint:
+      start_tag: checkpoint/w11-start
+      accepted_tag: checkpoint/w11-<period>-closed

@@ -1,0 +1,99 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-REVIEW-04
+phase_id: W06
+revision: R5
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R4.yaml
+objective: >-
+  Independently review R5, reproducing the exact numeric-child closures and deciding
+  whether the implementation genuinely has one shared deterministic metric/interval
+  core rather than two formula paths.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-04-R5:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R5.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R5.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R4.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R5.md
+  - docs/architecture/evaluation-contract.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-robustness-independent-review-R5.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+master_counterexamples:
+  - >-
+    Exact metadata comparison parent
+    fa8bea37b980b8761427695e18840789f6ea4da26f63fc73d581d42e8776a8fb
+    and aggregate parent
+    e67c82c8800e1e4c0efa360153cd918f36d21859079ef630b3fe3d2fab477815
+    now reject in master reproduction. Reproduce the exact stress parent
+    2e70e316301230b85db9bae9785c16f431f1cf3a251affd9ba3d792174741404.
+  - >-
+    src/scouting/evaluation/core.py retains evaluate_ranking and bootstrap_interval,
+    while src/scouting/contracts/evaluation.py now contains a separate complete
+    derive_ranking_metric_children formula. Trace every producer/validator call site
+    and decide whether this violates the one-core requirement or can cause a protected
+    versus robustness value/interval divergence.
+review_questions:
+  - Do all three exact R4 numeric-child parents reject under normal construction?
+  - Are comparison values produced and validated by one shared derivation with no live duplicate formula?
+  - Are per-query, aggregate and interval values produced and validated by one shared derivation used by the general evaluation core and robustness owners?
+  - Do supported/unsupported, partial relevance, missing-label, tie, seed, resample and interval semantics remain exactly accepted and consistent?
+  - Did fixture identities remain stable and all R3/R4 closures remain intact?
+deliverables:
+  - One report-only ACCEPT or REWORK verdict with exact P0/P1 counts, call-path evidence and witness outcomes.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R5.md.
+definition_of_done:
+  - Exact numeric substitutions and the one-core/no-second-implementation requirement are independently adjudicated.
+  - Any additional finding must change or permit drift in metric, interval, population, leakage, applicability or protected-decision evidence.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-evaluation-v1.json tests/fixtures/w06/public-robustness-v1.json
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - final verdict and exact severity counts
+  - exact three-witness outcomes and formula call-path matrix
+  - exact focused commands, statuses and results
+  - remaining P0/P1 risks and smallest correction or none
+  - no Git/dependency/protected/external/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

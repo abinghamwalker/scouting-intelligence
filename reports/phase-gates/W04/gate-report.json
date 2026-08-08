@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "phase_id": "W04",
+  "gate_id": "G-W04-TERMINAL-R12",
+  "status": "PASS",
+  "decision": "VERIFIED",
+  "date": "2026-08-03",
+  "runtime_revision": "R12",
+  "new_runtime_authority": false,
+  "operational_baseline": [
+    "accepted-runtime-R11",
+    "retained-real-root-R3"
+  ],
+  "checks": [
+    {
+      "id": "locked-offline-environment",
+      "status": "PASS",
+      "detail": "83 packages resolved; 82 audited"
+    },
+    {
+      "id": "repository-format",
+      "status": "PASS",
+      "detail": "711 files"
+    },
+    {
+      "id": "repository-lint",
+      "status": "PASS"
+    },
+    {
+      "id": "source-typing",
+      "status": "PASS",
+      "detail": "65 source files"
+    },
+    {
+      "id": "import-boundaries",
+      "status": "PASS",
+      "detail": "3 kept; 0 broken"
+    },
+    {
+      "id": "complete-repository-tests",
+      "status": "PASS",
+      "passed": 2618,
+      "failed": 0,
+      "warnings": 1,
+      "duration_seconds": "1888.19"
+    },
+    {
+      "id": "security-scan",
+      "status": "PASS"
+    },
+    {
+      "id": "local-git-guard",
+      "status": "PASS"
+    },
+    {
+      "id": "local-only-controls",
+      "status": "PASS",
+      "passed": 25,
+      "failed": 0
+    },
+    {
+      "id": "w04-phase-verifier",
+      "status": "PASS"
+    },
+    {
+      "id": "git-diff-check",
+      "status": "PASS"
+    },
+    {
+      "id": "main-branch-zero-remotes",
+      "status": "PASS"
+    },
+    {
+      "id": "health-readback",
+      "status": "PASS"
+    },
+    {
+      "id": "dataset-card",
+      "status": "PASS"
+    }
+  ],
+  "evidence": {
+    "terminal_independent_review": {
+      "path": "reports/reviews/W04/wyscout-runtime-control-independent-review-R12.md",
+      "sha256": "7c37979f3e57701907363513376d269e6f0e9edca37b0e8d991324549b132597"
+    },
+    "terminal_r12_master_acceptance": {
+      "path": "reports/verification/W04/wyscout-runtime-control-R12-master-acceptance.md",
+      "sha256": "50b3f5d79751834d2db5767761949a355740fc98d776a610ddd0566459d6626d"
+    },
+    "terminal_gate_blocker_correction": {
+      "path": "reports/verification/W04/wyscout-runtime-control-R12-terminal-gate-blocker-correction-master-acceptance.md",
+      "sha256": "92fdaa8053a96d2e485383d5d8be31cfefe9de056eabc28bcc96bbce8d661d55"
+    },
+    "complete_gate": {
+      "path": "reports/verification/W04/wyscout-terminal-complete-repository-gate-R2-master-verification.md",
+      "sha256": "6eb72c4966f6b0b418ca5c01a1aaa88af0bbb1ba5d87b5ca915a2cd3b94f8c24"
+    },
+    "data_health": {
+      "path": "reports/phase-gates/W04/data-health.json",
+      "sha256": "ecbf0e52ec702a42b06a2b0a0528bd1716ee7c2922ab4924e468cca83fd9cfd5"
+    },
+    "dataset_card": {
+      "path": "docs/dataset-cards/w04-wyscout-transformed-v1.md",
+      "sha256": "5e61793da4b160e3bf5bf857217040044e2b84d32774c5cd45801445430c9b30"
+    },
+    "w10_deferred_host_state": {
+      "path": "reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md",
+      "sha256": "58cc966f4e7ff2877649bcaff2288161f18d9e4cc33f3f745c7a51d3a2601407",
+      "w04_blocking": false
+    }
+  },
+  "blockers": [],
+  "checkpoint_ready": true
+}

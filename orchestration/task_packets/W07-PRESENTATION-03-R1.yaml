@@ -1,0 +1,92 @@
+schema_version: 1
+task_id: W07-PRESENTATION-03
+phase_id: W07
+revision: R1
+state: DISPATCHED
+objective: >-
+  Prove the presentation invariant: every master-frozen W07 context is rendered with
+  accessible, responsive hierarchy, explicit evidence classes/states and prominent
+  evidence-honest NO_GO language using local server-rendered assets only.
+depends_on:
+  - REVIEW-W07-APPLICATION-01-R2:REWORK_SPLIT
+assigned_role: w07_presentation_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W07-APPLICATION-01-R2.yaml
+  - orchestration/task_packets/W07-PRESENTATION-03-R1.yaml
+  - orchestration/task_packets/W07-DOMAIN-02-R1.yaml
+  - apps/web/templates/w07/landing.html
+  - apps/web/templates/w07/search.html
+  - apps/web/templates/w07/player.html
+  - apps/web/templates/w07/result.html
+  - apps/web/templates/w07/evidence.html
+  - apps/web/templates/w07/state.html
+  - apps/web/static/w07/app.css
+  - reports/verification/W05/limitations.md
+  - reports/verification/W06/limitations.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - apps/web/templates/w07/**
+  - apps/web/static/w07/**
+  - reports/reviews/W07/returns/W07-PRESENTATION-03-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - src/**
+  - services/**
+  - tests/**
+  - runs/**
+  - configs/**
+  - reports/evaluation/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/w06/**
+requirements:
+  - >-
+    Create a Jinja base and reusable evidence/authority primitives. Every page has
+    html lang, viewport, descriptive title, first-tab skip link, banner, primary nav,
+    one main, one h1, footer, current-location signal and valid heading order.
+  - >-
+    Render landing, search with GET form and filters, candidate table/empty state,
+    player feature/role tables, retrieval rankings, genuine comparison contrast,
+    evidence centre W04/W05/W06 cards, and distinct loading/empty/unavailable/error/
+    NO_GO pages using the exact context contract in W07-DOMAIN-02-R1.
+  - >-
+    On every evidence result, expose source/evidence class, model/index versions,
+    artifact/manifest/result, feature registry/schema, taxonomy/configuration, window,
+    cutoff, confidence, applicability, limitations and lineage. Use accessible details
+    for long digests without hiding them. Every ranked row links to genuine compare.
+  - >-
+    W06 NO_GO and MISSING_EXPERT_RELEVANCE_EVIDENCE appear in a labelled high-priority
+    banner on landing, player, retrieval, compare and evidence centre. Never imply
+    positive validation, expert approval, recommendation, transfer, outcome, price,
+    value or production fitness. Never display a match percentage/blended score.
+  - >-
+    Use substantial multi-line semantic HTML and local CSS design tokens. Provide WCAG
+    AA contrast, focus-visible with offset, minimum pointer targets, responsive grid,
+    table overflow wrappers, overflow-wrap for digests, 320px support, reduced-motion
+    handling, print-safe evidence, and state-specific styles. Use no external asset,
+    script, webfont, SVG network source or client-side scoring/filtering.
+acceptance_checks:
+  - uv run ruff format --check .
+  - uv run pytest -q tests/integration/test_w07_local_evidence_app.py
+stop_conditions:
+  - Python/composition/test change is required rather than a template/CSS correction.
+  - Protected output access, external asset/service, Node, dependency, Git or destructive action is required.
+  - Required work falls outside allowed_paths.
+deliverables:
+  - Complete semantic template system and responsive local CSS.
+  - Mandatory return at reports/reviews/W07/returns/W07-PRESENTATION-03-R1.md.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

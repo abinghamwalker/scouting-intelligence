@@ -1,0 +1,175 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-V2-DECISION-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize the accepted R21 field-semantic v2 decision and candidate,
+  together with a focused fail-closed contract suite, while preserving every
+  v1 byte and changing only the strict action subevent authority.
+depends_on:
+  - W04-CONTROL-PREIMAGE-REVIEW-01-R1:MASTER_ACCEPTED
+assigned_role: field_semantic_v2_authority_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/verification/W04/wyscout-schema-design-R21-master-verification.md
+  - reports/reviews/W04/wyscout-r21-control-preimage-independent-review-R1.md
+  - reports/verification/W04/wyscout-r21-control-preimage-independent-review-R1-master-verification.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - data/source/wyscout/v5/objects/eventid2name.csv
+  - data/source/wyscout/v5/objects/tags2name.csv
+  - src/scouting/contracts/primitives.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-DECISION-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/**
+  - "!reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json"
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-DECISION-01-R1.md"
+  - configs/**
+  - "!configs/schema/wyscout-v5-field-registry-v2.yaml"
+  - tests/**
+  - "!tests/contracts/test_w04_field_semantic_v2_authority.py"
+frozen_inputs:
+  r20_design_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_design_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  product_contract_preimage_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+  schema_bundle_preimage_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+  field_v1_decision_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  field_v1_candidate_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  field_v1_candidate_canonical_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  field_v1_review_physical_sha256: e2e983c99ed06eb2043c1f3f9a4eac8e4f4c6d69da97fe55bfc9a27745ade861
+  field_v1_acceptance_sha256: fd6b9f813c8e810e972ba5d943b2fb4c5fe2fcd7716b4ec9a38ddca3b0439365
+authority:
+  master_actor_id: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  decision_id: w04-wyscout-field-semantic-decisions-v2
+  decision_schema_version: w04-field-semantic-decision-v2
+  registry_id: w04-wyscout-field-registry-v2
+  registry_schema_version: w04-field-registry-v2
+  future_review_id: w04-wyscout-field-semantic-independent-review-v2-R1
+  future_acceptance_id: w04-wyscout-field-semantic-acceptance-v2
+  supersedes_acceptance_id: w04-wyscout-field-semantic-acceptance-v1
+preflight_postflight:
+  - >-
+    Before invoking Python, create and retain a shell-only inventory of every
+    existing repository/site pyc and __pycache__ directory with path, size,
+    mode, link, mtime, first bytes, and full SHA. Do not clean or repair.
+  - >-
+    All Python/test commands set PYTHONDONTWRITEBYTECODE=1 before uv and use
+    `--locked --no-sync`; helpers invoke `python -B`, or `-S -B` when packages
+    are unnecessary. Do not sync or install.
+  - >-
+    After the final return edit and checks, repeat the identical inventory.
+    Any difference invalidates the return and must be reported without cleanup.
+requirements:
+  - >-
+    Verify every frozen input before editing. Preserve every v1 authority,
+    candidate, review, acceptance, test, profile, taxonomy, and source byte.
+  - >-
+    Write the v2 decision as strict canonical UTF-8 JSON with sorted keys,
+    NFC strings, no insignificant whitespace, and exactly one terminal LF.
+    Its exact ten top-level keys, ten bound-input keys, IDs, schema, actor,
+    truthful canonical UTC clock, source ID, policies, and immutable
+    seventeen-key field-v1 prior_authority are those fixed by R21 Sections
+    2, 3.1, and 5.
+  - >-
+    Write the v2 YAML candidate so its strict parsed value has exactly the nine
+    R21 keys and byte-semantically repeats decision bound_inputs, decisions as
+    fields, policies, prior_authority, and source_id. Bind the decision's
+    physical/canonical SHA-256 without circular or future authority edges.
+  - >-
+    Produce exactly 119 unique rows in the R20 source-profile sequence:
+    competition, team, player, match, action, event-taxonomy, tag-taxonomy,
+    preserving each kind's declared order. Exactly 118 rows must be
+    semantically equal to v1. The sole changed row is
+    (action, $.subEventId), exactly as R21 Section 5.3.
+  - >-
+    The sole changed row emits action_subevent_taxonomy_id only when the raw
+    JSON value is a strict integer excluding bool and the exact already-
+    canonical event/integer-subevent pair exists in the frozen taxonomy.
+    Strings, bools, null, noninteger numbers, arrays, objects, absent canonical
+    events, and unknown integer pairs emit nothing and preserve exact typed raw
+    rejected-field evidence without coercion, lookup, inference, or loss.
+  - >-
+    Implement the complete seven-condition reason-code table from R21 Section
+    5.4. Pin the measured integer:3063574/string:7821 shape and prove strings
+    including "10", " 10", "+10", and "010" are never parsed or canonicalized.
+  - >-
+    The focused test must independently reconstruct canonical decision bytes,
+    strict YAML parsing, physical/canonical hashes, closed keys, prior authority,
+    preimage bindings, source roster/shapes, exact taxonomy-pair behavior, and
+    v1 immutability. Include positive and in-memory mutation cases; do not rely
+    only on pinned whole-file hashes.
+  - >-
+    Make future review/acceptance state validation progression-safe: absence is
+    valid during this producer packet; if later present, only the exact R21 IDs,
+    digest edges, independent actor, truthful clock order, PASS consistency,
+    v1 supersession, and closed R20 review/acceptance schemas may validate.
+    Do not create those future files or grant product authority.
+  - >-
+    At completion, future field-v2 review/acceptance, all possession-v2,
+    feature, cross-authority, Bronze, Silver, Gold, manifest, receipt, build,
+    serializer, and product paths remain absent. No source/provider access,
+    runtime build, model, cloud, container, endpoint, hosted CI, deployment,
+    dependency/lock edit, Git operation, delegation, or self-approval.
+definition_of_done:
+  - Exactly the four allowed paths are created.
+  - Decision and candidate satisfy the complete closed R21 field-v2 contract.
+  - The 119 rows differ semantically from v1 at exactly one required row.
+  - Strict-integer mapping and every preserve-unmapped reason are mutation-tested.
+  - Focused v2, immutable v1, Ruff, and local-only checks pass.
+  - Preflight and terminal pyc/__pycache__ inventories are byte-identical.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen input differs, a mandatory source is missing, or v1 bytes change.
+  - A future/downstream/product path already exists unexpectedly.
+  - Any check or preflight/postflight inventory comparison fails.
+  - >-
+    Correct implementation requires an architecture, product, provider/right,
+    root, dependency/lock, storage, network, cloud, container, endpoint,
+    hosted-CI, deployment, or broader-scope change.
+  - Work requires a fifth output path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

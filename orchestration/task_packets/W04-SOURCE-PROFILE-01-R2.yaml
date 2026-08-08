@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W04-SOURCE-PROFILE-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Complete the deterministic measured Wyscout profile with the exact aggregate
+  provenance, partition, event-identity, match-bound, temporal/minutes, coordinate,
+  and output-boundary evidence required by schema-design R3.
+depends_on:
+  - W04-SOURCE-PROFILE-01-R1:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R1:REWORK
+assigned_role: source_profiler
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-PROFILE-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-PROFILE-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-source-profile-review-R1.md
+  - tests/security/test_w04_wyscout_profile_review.py
+  - scripts/profile_wyscout_v5.py
+  - tests/unit/test_wyscout_profile.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - orchestration/templates/subagent_return.md
+allowed_read_paths:
+  - data/source/wyscout/v5/**
+allowed_paths:
+  - scripts/profile_wyscout_v5.py
+  - tests/unit/test_wyscout_profile.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - reports/reviews/W04/returns/W04-SOURCE-PROFILE-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - migrations/**
+  - src/**
+  - data/**
+  - runs/**
+  - tests/security/**
+  - tests/fixtures/synthetic/protected/**
+defects_to_close:
+  - W04-PROFILE-COMPLETION-BRIDGE-01
+  - W04-PROFILE-PARTITION-COVERAGE-01
+  - W04-PROFILE-EVENT-IDENTITY-01
+  - W04-PROFILE-TEMPORAL-MINUTES-01
+  - W04-PROFILE-COORDINATE-DOMAIN-01
+  - W04-PROFILE-OUTPUT-PATH-01
+required_corrections:
+  - >-
+    Emit classification, licence ID, and every completion-declared object/member
+    logical path, byte size, and SHA-256 while distinguishing source objects from
+    separately durable admitted members.
+  - >-
+    Emit per-member match/event counts, five admitted competition IDs, 98 admitted
+    team IDs, and exact event-member-to-match-member partition equality evidence.
+  - >-
+    Emit event record `id` distinct/duplicate evidence, two-team match structure,
+    teamsData key/team ID equality, event-to-match and event-team-to-match relations,
+    and aggregate non-zero player-match pair evidence without inferring minutes.
+  - >-
+    Parse JSON decimal values without binary-float loss and emit exact eventSec
+    decimal-scale evidence, parseable dateutc count, duration categories, substitution
+    container shapes including six literal `null` strings, and explicit terminal/
+    minutes/per-90 unsupported status.
+  - >-
+    Emit position-array cardinalities, axis minima/maxima, and inclusive 0..100
+    anomaly counts; retain the three anomalies without clamping or repair.
+  - >-
+    Remove arbitrary production CLI source/output overrides or reject every resolved
+    source/output path except the approved repository paths. Retain internal fixture
+    APIs and atomic same-directory writes.
+  - >-
+    Retain aggregate-only privacy, completion digest binding, bounded-memory streaming,
+    admitted-only reads, deterministic bytes, and every R1 producer regression.
+definition_of_done:
+  - The retained independent R1 completeness gate passes unchanged.
+  - All six defects are closed with measured aggregates and no guessed semantics.
+  - The report remains player-name/raw-record free and byte-stable.
+  - No provider, ZIP object, excluded member, data mutation, dependency, or architecture change occurs.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_profile.py tests/security/test_w04_wyscout_profile_review.py
+  - uv run python scripts/profile_wyscout_v5.py --check
+  - uv run ruff format --check scripts/profile_wyscout_v5.py tests/unit/test_wyscout_profile.py
+  - uv run ruff check scripts/profile_wyscout_v5.py tests/unit/test_wyscout_profile.py
+  - uv run mypy scripts/profile_wyscout_v5.py
+  - uv run bandit -q scripts/profile_wyscout_v5.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Required aggregate cannot be measured from completion-declared admitted data.
+  - Correction requires raw names/records in output, excluded payload, provider/network access, or semantic guessing.
+  - A dependency, contract, storage, architecture, rights, or data mutation is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

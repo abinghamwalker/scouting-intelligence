@@ -1,0 +1,33 @@
+task_id: W09-RESEARCH-CONTRACTS-02A-REVIEW
+revision: R1
+owner: subagent
+objective: >-
+  Independently adversarially review the new W09 research contracts for strictness,
+  digest coherence, stale-version safety, query-mode ambiguity, result explanations,
+  replayability, and the historical-resemblance-only claim boundary.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/research.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w09_research_contracts.py
+allowed_paths:
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R1.md
+deliverables:
+  - A severity-ranked findings report with exact file/line references.
+  - Explicit review of fail-closed pins, temporal rules, digest projections, finite numeric validation, uniqueness, mode exclusivity, population reconciliation, immutable experiment/replay binding, and naming/export collisions.
+  - An accept/rework recommendation; no code changes.
+checks:
+  - uv run ruff check src/scouting/contracts/research.py src/scouting/contracts/__init__.py tests/contracts/test_w09_research_contracts.py
+  - uv run mypy src/scouting/contracts/research.py
+  - uv run pytest -q tests/contracts/test_w09_research_contracts.py
+  - test -s reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R1.md
+stop_conditions:
+  - Any need to modify implementation, tests, orchestration, dependencies, or Git state.
+constraints:
+  - No Git operations, no dependency changes, no implementation edits.
+  - Use apply_patch for the review report.

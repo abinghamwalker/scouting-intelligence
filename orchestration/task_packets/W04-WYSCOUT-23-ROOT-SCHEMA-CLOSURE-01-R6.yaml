@@ -1,0 +1,129 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R6
+state: REWORK
+objective: >-
+  Resume and complete the preserved partial R5 23-root closure by adopting the
+  accepted EXACT_DECIMAL128_WITH_EXPONENT physical projection only for non-coverage
+  Decimal fields formerly represented by scalar decimal128(22,18), while retaining
+  the complete 56-predicate ledger and exact 29-row R5 variant corrections.
+depends_on:
+  - W04-EXACT-DECIMAL128-WITH-EXPONENT-REVIEW-01-R2:ACCEPTED
+  - W04-EXACT-DECIMAL128-WITH-EXPONENT-01-R2:MASTER_ACCEPTED
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5:BLOCKED_PRESERVED
+assigned_role: bounded_w04_23_root_schema_r6_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.yaml
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R5.md
+  - reports/verification/W04/wyscout-decimal128-exponent-reversibility-blocker-R1.md
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-R2-master-acceptance.md
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R2.md
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R4.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R4-master-verification.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/integration/**
+  - tests/security/**
+fixed_bindings:
+  partial_r5_schema_sha256: e86d8de760c545e14ddb46b4de216fdc94cefea8c5d2e745fd4e10b0b1ab0e1b
+  partial_r5_test_sha256: 7133e736c80af8c6f60ae31e78bbe3c5611f1eaa92ed7716a9bac9cbbb8cda40
+  blocked_r5_return_sha256: 7b85730b07f5cc1bbc26b988538fcca007ce32c99ec4342aac17db7b7fbb856b
+  accepted_formats_sha256: 2dfdf3675a47f6c2b53478857de1af27aebecb85def8f0701e6ef86c65fafcc9
+  accepted_formats_test_sha256: ba38c5a66f41aee8ef2b998f4622c71ec30f3b8861d7ef07d8540d001b0bee89
+  exact_decimal_master_acceptance_sha256: 2ef880502ed45350e85a02d86bcc903940ddf1e13e7a82af88cd7a94822dbec9
+  r5_acceptance_oracle_sha256: a3f15f92a14ff342efd0f5b2848b60eab4898ea79eb69c7fd6f09e6946077efa
+  r5_oracle_return_sha256: b09297fb45eb7a16f431959f7e7840b8ae930902928094079fd7e26b1ba79116
+requirements:
+  - Verify every fixed binding before editing and retain the partial R5 bytes as the exact starting point.
+  - >-
+    In canonical schema content and executable descriptors, replace each non-coverage
+    logical Decimal mapping that is currently scalar DECIMAL128(22,18) with the
+    accepted EXACT_DECIMAL128_WITH_EXPONENT ordered struct. The exact children are
+    value identity DECIMAL128 precision 22 scale 18, exponent identity INT8, and
+    negative_zero identity BOOL, all non-null and metadata-free. Outer logical
+    optionality remains unchanged.
+  - >-
+    Keep every coverage and coverage_overall Decimal mapping exactly on scalar UTF8
+    with CANONICAL_DECIMAL_UTF8. Do not change any logical model, root, field,
+    dependency, population, authority, feature, digest meaning/formula or serializer
+    implementation.
+  - >-
+    Update the descriptor content validator, recursive projection instantiation,
+    physical/logical fixture projection, Decimal path audits and exact-schema tests
+    mechanically for the accepted struct. All scale 0/18, positive exponent,
+    significant trailing-zero and signed-zero logical values must reproduce exact
+    Pydantic JSON-mode row bytes through descriptor-led encode/inverse.
+  - >-
+    Retain the complete partial-R5 56-binding explicit predicate ledger, independent
+    AST direct-field audit with zero omissions, exact operation/operand/material-
+    constant expectations, and all earlier external predicates. Correct any bounded
+    constant/operand drift found by executable tests; do not advertise all fields
+    indiscriminately or create a second predicate authority.
+  - >-
+    Retain exactly 29 strictly validated rows with the frozen per-root cardinalities
+    and distinct Bronze-known/rejected shapes, all seven tagged arms, five raw-kind
+    states, SilverAction position counts 0/1/2, source scales 0/18, null taxonomy/
+    identity action state and every R5 property assertion.
+  - >-
+    Regenerate changed canonical root-content bytes and digests solely from the
+    accepted algorithm. Require all 23 roles/order/six-key rows/earlier-only closure
+    edges, nine authority objects, E1-E8, 12 executable descriptors and 11 explicit
+    JSON-only states to remain exact. No aggregate or product bytes are written.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_schema.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Complete exact 23-root schema closure with accepted Decimal projection adoption.
+  - Retained/corrected predicate ledger and exact 29-row adversarial matrix.
+  - Mandatory R6 producer return with exact hashes and derived root-content digests.
+stop_conditions:
+  - Any need to change a logical model/root/field/feature/population/intended output, accepted source/data-rights authority, digest meaning/formula, dependency, or local-only/product boundary.
+  - Any provider/network, external service, cloud, container, CI, deployment, publication, cost or destructive action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

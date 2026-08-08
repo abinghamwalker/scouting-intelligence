@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W08-WEB-SCOUT-BRIEF-AUTHZ-04P
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct independent-review R2 scout brief/replay disclosures and mixed-role grant
+  composition through one shared, deny-by-default web authorisation predicate.
+depends_on:
+  - W08-INDEPENDENT-SECURITY-05:R2_FAIL_2P1_1P2
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+invariant: >-
+  A scout-only principal sees only approved briefs and only replay links connected to
+  a currently assigned shortlist entry; analyst/approver grants compose by union, and
+  no role presence may override or silently broaden another explicit grant.
+read_first:
+  - AGENTS.md
+  - reports/reviews/W08/w08-independent-security-review-R2.md
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/web/w08.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/web/w08.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Add an explicit analyst `retrieval_link.read_owned` grant and bind the policy
+    implementation/tests to the exact updated allowlist; no implicit link-read grant.
+  - Implement one shared brief-read predicate used by queue and detail. A principal
+    with `role_brief.read` keeps that grant; otherwise `role_brief.read_approved`
+    succeeds only for an approved latest revision. Multi-role grants compose by union.
+  - Filter replay links separately from brief visibility. Analyst link read requires
+    owner plus `retrieval_link.read_owned`; approver requires `retrieval_link.read`;
+    scout requires `retrieval_link.read_assigned` and a latest current assignment
+    reached through that exact link's shortlist/entry. Former/reassigned, unassigned,
+    wrong-tenant and unauthorised role paths reveal no link/projection/select option.
+  - Add route witnesses for draft/submitted/rejected absence from scout queue, approved
+    presence, unassigned link absence, current-assignment presence, former-assignment
+    removal, mixed analyst+scout own-draft detail, cross-tenant and OWNER_ONLY denial.
+  - Preserve generic denial, evidence origin, replay integrity and fixed W06 wording.
+definition_of_done:
+  - Both R2 P1 probes deny disclosure, the P2 mixed-role path succeeds only through
+    its analyst grant, and focused policy/web/security regressions pass.
+focused_checks:
+  - uv run ruff format --check src/scouting/policy/r1.py src/scouting/web/w08.py tests/security/test_w08_auth_audit.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/policy/r1.py src/scouting/web/w08.py tests/security/test_w08_auth_audit.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/policy/r1.py src/scouting/web/w08.py
+  - uv run pytest -q tests/security/test_w08_auth_audit.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run bandit -q src/scouting/policy/r1.py src/scouting/web/w08.py
+stop_conditions:
+  - A contract/schema/migration/dependency, audit/export/workflow core, template,
+    protected output, external service/network, container, Node/npm, destructive
+    action or Git command is required.
+  - Passing would use role presence as an override, infer assignment from tenant alone
+    or show replay content without one explicit applicable grant.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files and policy delta
+  - brief and replay-link decision table for single/multi-role principals
+  - exact R2 exploit reproduction before/after and assignment transition matrix
+  - exact commands/exits/test counts
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-evidence/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

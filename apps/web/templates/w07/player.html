@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_authority.html" import no_go_banner, authority_panel %}
+{% block content %}
+  {{ no_go_banner(no_go) }}
+  {% set record = player|default({}) %}
+  {% set source_row = record.row|default({}) %}
+  {% set feature_row = source_row.feature_row|default({}) %}
+  {% set role_row = source_row.role_row|default({}) %}
+  <header class="page-intro"><p class="eyebrow">Synthetic-development candidate record</p><h1>{{ record.label|default(record.name|default('Synthetic candidate evidence')) }}</h1><p>Stable local identifier: <code>{{ feature_row.player_id|default(record.player_id|default(record.id|default(player_id|default('UNAVAILABLE')))) }}</code></p><p>{{ feature_row.synthetic_position_code|default(record.position|default('UNAVAILABLE')) }} · age {{ feature_row.synthetic_age_years|default(record.age|default('UNAVAILABLE')) }} · cutoff {{ feature_row.feature_cutoff_ts|default(record.feature_cutoff_ts|default(record.cutoff|default('UNAVAILABLE'))) }}</p></header>
+  <section class="two-column" aria-label="Candidate evidence">
+    <section><h2>Feature evidence</h2><div class="table-wrap" tabindex="0"><table><caption>Accepted feature states and values</caption><thead><tr><th scope="col">Feature</th><th scope="col">State</th><th scope="col">Value</th></tr></thead><tbody>{% set raw_inputs = feature_row.raw_numerator_inputs|default({}) %}{% for name, feature_value in raw_inputs.items() %}<tr><th scope="row">{{ name }}</th><td>VALUE</td><td>{{ feature_value }}</td></tr>{% else %}<tr><td colspan="3">Feature evidence is unavailable in this governed context.</td></tr>{% endfor %}</tbody></table></div><p>Row lineage: <code>{{ feature_row.dependency_identity.lineage_hash|default('UNAVAILABLE') }}</code></p></section>
+    <section><h2>Role evidence</h2><div class="table-wrap" tabindex="0"><table><caption>Accepted role probabilities</caption><thead><tr><th scope="col">Role</th><th scope="col">Probability</th></tr></thead><tbody>{% for role in role_row.expected_role_probabilities|default([]) %}<tr><th scope="row">{{ role.role_code }}</th><td>{{ role.probability }}</td></tr>{% else %}<tr><td colspan="2">Role evidence is unavailable in this governed context.</td></tr>{% endfor %}</tbody></table></div></section>
+  </section>
+  <p><a class="button-link" href="/w07/retrieval/{{ record.player_id }}">Inspect role-aware retrieval</a></p>
+  {{ authority_panel(authority|default({})) }}
+{% endblock %}

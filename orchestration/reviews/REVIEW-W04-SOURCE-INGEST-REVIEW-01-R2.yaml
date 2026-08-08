@@ -1,0 +1,42 @@
+schema_version: 1
+review_id: REVIEW-W04-SOURCE-INGEST-REVIEW-01-R2
+task_id: W04-SOURCE-INGEST-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS_WITH_EXPECTED_FAILURE
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+defects:
+  - id: W04-INGEST-EXPIRY-DOMAIN-01
+    severity: P2
+    status: returned_for_rework
+    detail: >-
+      A 5,000-digit ASCII decimal X-Amz-Expires value is rejected before body
+      read but escapes as raw ValueError rather than WyscoutDownloadError.
+decision: REWORK
+next_packet: W04-SOURCE-INGEST-01-R3
+reviewer: master
+evidence:
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - reports/reviews/W04/wyscout-ingest-review-R2.md
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-REVIEW-01-R2.md
+checks:
+  - command: >-
+      uv run pytest -q tests/unit/test_wyscout_source.py
+      tests/security/test_w04_wyscout_ingest_review.py
+    result: EXPECTED_FAIL_1_failed_102_passed
+  - command: >-
+      uv run pytest -q
+      tests/security/test_w04_wyscout_ingest_review.py::test_malformed_numeric_expiry_is_domain_error_before_body_read
+    result: EXPECTED_FAIL_1_failed_8_passed_MASTER_REPRODUCED
+  - command: uv run ruff format --check tests/security/test_w04_wyscout_ingest_review.py
+    result: PASS
+  - command: uv run ruff check tests/security/test_w04_wyscout_ingest_review.py
+    result: PASS
+  - command: uv run mypy tests/security/test_w04_wyscout_ingest_review.py
+    result: PASS
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS
+

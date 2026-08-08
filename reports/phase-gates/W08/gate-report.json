@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "phase_id": "W08",
+  "gate_id": "G-W08B",
+  "legacy_gate_id": "G-W08",
+  "status": "BLOCKED",
+  "decision": "REPRESENTATIVE_USER_EVIDENCE_REQUIRED",
+  "recorded_at_utc": "2026-08-05T01:01:37Z",
+  "lifecycle_state": "MASTER_REVIEW",
+  "automated_status": "PASS",
+  "claim_boundary": "resemblance_only synthetic_development_only LIMITED applicability; no recommendation evidence",
+  "protected_outputs_opened": false,
+  "w06_decision": "NO_GO",
+  "w06_sole_reason": "MISSING_EXPERT_RELEVANCE_EVIDENCE",
+  "checks": [
+    {"id": "local-authentication-and-sessions", "status": "PASS"},
+    {"id": "default-deny-role-and-object-authorization", "status": "PASS"},
+    {"id": "versioned-brief-workflow-and-observations", "status": "PASS"},
+    {"id": "export-audit-tamper-concurrency-recovery", "status": "PASS"},
+    {"id": "independent-security-confidentiality", "status": "PASS", "p0": 0, "p1": 0, "p2": 0, "p3": 0, "passed": 72, "failed": 0},
+    {"id": "export-import-boundary", "status": "PASS", "passed": 72, "failed": 0},
+    {"id": "browser-and-accessibility-mechanics", "status": "PASS"},
+    {"id": "complete-repository-tests", "status": "PASS", "passed": 2804, "failed": 0, "detail": "2800 complete-run passes plus the exact four W04 host-state admission witnesses after recoverable PYC census restoration"},
+    {"id": "local-only-controls", "status": "PASS", "passed": 25, "failed": 0},
+    {"id": "protected-output-boundary", "status": "PASS", "detail": "not accessed"},
+    {"id": "moderated-representative-user-study", "status": "BLOCKED", "present": 0, "required": 5}
+  ],
+  "representative_user_evidence": {
+    "required": 5,
+    "present": 0,
+    "automated_personas_counted": 0,
+    "outcome": "PENDING",
+    "requirement": "Five distinct authorised and consenting representative users covering analyst, scout and approver/meeting responsibilities; each completes T1-T7 unaided with every core task PASS, no unsupported inference and no P0/P1 finding; de-identified receipts, checksums and summary reproduced and independently reviewed."
+  },
+  "development_progression": {
+    "gate_id": "G-W08A",
+    "evidence": "reports/phase-gates/W08/pilot-gate-report.json",
+    "status": "PENDING",
+    "decision": "PILOT_EVIDENCE_REQUIRED",
+    "required_complete_reviewed_pilots": 1,
+    "present": 0,
+    "authorized_scope_after_pass": "bounded_local_w09_challenger_experimentation",
+    "counts_toward_representative_user_evidence": false
+  },
+  "unresolved_product_or_security_defects": [],
+  "checkpoint_ready": false,
+  "accepted_tag_present": false,
+  "w09_state": "PLANNED",
+  "w10_state": "PLANNED"
+}

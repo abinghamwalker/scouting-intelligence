@@ -1,0 +1,72 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01
+phase_id: W04
+revision: R2
+state: INDEPENDENT_PASS_MASTER_ACCEPTED
+objective: >-
+  Independently review the exact R2 source-adapter candidate, with emphasis on closure
+  of R1's nested raw-tags mutation path and byte-identical accepted membership.
+depends_on:
+  - W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_source_adapter_r2_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-vertical-slice-source-adapter-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-vertical-slice-source-adapter-R2-master-verification.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-01-R2.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-vertical-slice-source-adapter-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-ADAPTER-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: b1cdb309c3d81e7a3b0606987fdf6c456d61a66c393ca681d93e212e805ac43c
+  source_test_sha256: 1acb8908bd2cbb11a4f9e1d3d25ed270e5781c11e0cc6fa0c94b97d486e064f4
+  producer_return_sha256: 5b9fc93d2f9cd0d2e896a4fb55df3da2959b01c3b59515e65acd7d3aa48e1df9
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  action_frame_sha256: 5b94fec338d67564aa16e37b8eb60ec70995182c8a7dc1bd5d02c1e32b83ca4e
+  one_action_membership_sha256: c245045382071ae38bf26557b2acb16282db1997e0fbaf50a9a9faafc8ba6d21
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - Reproduce failed mutation through public evidence and require TypeError without relying only on the candidate test.
+  - Reuse the same checked capability after the failed mutation and require exact 901 plus 867 periods.
+  - Independently reconstruct the fixed action frame and membership vectors and rehash the accepted index.
+  - Inspect for any other mutable object reachable from public raw/evidence/capability state and exercise at least one nested raw-record mutation.
+  - Confirm no product/dependency/provider/network/Git/cloud/container/CI/endpoint/remote/deployment action.
+definition_of_done:
+  - R2 receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py -k 'action_projection or verified_match_adapter or verified_member_reader'
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R2 review and mandatory return with exact finding counts.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

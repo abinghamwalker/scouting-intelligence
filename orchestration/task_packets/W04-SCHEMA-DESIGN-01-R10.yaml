@@ -1,0 +1,122 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R10
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 design by retaining every R9 and earlier closure
+  while removing the stage-0/build-ID cycle, classifying the measured repository
+  orphan pyc, and making stable bytecode authority independent of operational
+  inventory.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R9:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R9.yaml
+  - reports/verification/W04/wyscout-schema-design-R9-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R9.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R9.md
+  - src/scouting/storage/__pycache__/postgres.cpython-312.pyc
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R10.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R10.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Remove the stage-0/build-ID cycle with two exact operational alternate-bytecode
+    prefixes and a constructive two-process order. Before build identity exists,
+    sample an operational admission_run_id and create/prove empty
+    data/working/wyscout/v5/.staging/admission/
+    admission_run_id=<uuid>/runtime-pycache/. Set that absolute path,
+    PYTHONDONTWRITEBYTECODE=1 and -S -B before the stage-0 interpreter starts.
+    Stage-0 admits code/environment, writes or returns the immutable code manifest,
+    and only then makes build_id available. The separate rebuild interpreter then
+    uses the existing exact
+    data/working/wyscout/v5/.staging/<build_id>/<run_id>/runtime-pycache/
+    prefix selected after build_id formation. Prove each prefix empty before and
+    after its process, no in-place bytecode read/change, and exclude both absolute
+    paths/IDs from stable identity. A stage-0 prefix under unknown build_id fails.
+  - >-
+    Correct the current repository pyc census: 56 total equals 35 normal files
+    mapped to present admitted source, 20 pytest-9.1.1 rewrite files mapped to
+    present admitted source, and exactly one source-absent optional inert orphan at
+    src/scouting/storage/__pycache__/postgres.cpython-312.pyc. Bind its current
+    safe relative path, current magic/tag/hash/size/mode operationally, deny every
+    read/import/change, and grant no source/owner/code/build authority. Its absence
+    in a fresh second root is allowed; a changed present file, different orphan, or
+    second orphan fails.
+  - >-
+    Make stable bytecode authority independent of current pyc inventory. Bind the
+    complete sorted map of every admitted third-party RECORD-owned .py, every
+    repo-code-manifest-owned .py, and the exact uv-bootstrap source, with source
+    bytes/hash/size and allowed normal/pytest cache-name grammar, regardless of
+    whether a pyc exists. Classify each actual pyc operationally against that map or
+    the exact optional site-six/repository-postgres orphan predicates. Current
+    1,075-site and 56-repository counts are first-root observations only; counts,
+    paths, and hashes may differ across roots and after accepted code additions
+    without changing stable identity, provided every present file is constructively
+    classified and denied. Do not freeze a 56-row source map or require current
+    operational counts as two-root equality.
+  - >-
+    Correct the exact interpreter-alias census. The current venv has exactly three
+    mode-0755 symlinks: python -> the admitted absolute physical Python 3.12.12
+    executable, python3 -> python, and python3.12 -> python. Admit and bind all three
+    distinct lstat rows/chains; require both relative links to stay inside the
+    scripts directory and all three to resolve to the same frozen physical bytes.
+    Keep python as the sole canonical generated-wrapper shebang and record
+    `uv run python` reporting python3 operationally. A missing alias, fourth alias,
+    changed raw target, cycle, extra hop, escape, inode alias, or physical mismatch
+    fails. Stable topology includes both python3/python3.12 relative chains but no
+    root-bearing absolute spellings.
+  - >-
+    Retain R9's constructive no-site Packaging bootstrap, exact three .pth and
+    editable-root closure, canonical interpreter aliases, total fixed 35-row
+    executable census, site normal/pytest/bootstrap/optional-six classifications,
+    stable/operational separation, and every earlier source, rights, temporal,
+    identity, key, coverage, path, serializer, resource, build, health/card, gate,
+    ownership, and two-local-commit ledger rule without compression or
+    substitution.
+  - >-
+    Use only the two exact repository-owned output paths. Do not create even a
+    transient parent-workspace duplicate or directory; resolve both paths from the
+    repository root before writing. Disclose any scope anomaly and stop.
+definition_of_done:
+  - The admission/rebuild ordering contains no unavailable identifier or path cycle.
+  - All three and only the three current venv interpreter aliases are admitted.
+  - Every current site and repository pyc is constructively classified without cleanup.
+  - Stable bytecode identity is equal for roots with different operational pyc inventories.
+  - Every R9 and earlier accepted closure remains intact.
+  - No architecture, dependency, migration, source-rights, provider, network or local-only change is proposed.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R10.md');
+    assert p.is_file() and p.stat().st_size > 22000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A correction requires dependency/lock change, network acquisition, new storage root, cleanup, provider access or architecture change.
+  - Any R9 retained closure would regress.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

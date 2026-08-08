@@ -1,0 +1,124 @@
+schema_version: 1
+task_id: W08-MULTIROLE-AUTHZ-REVIEW-05D
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Freshly and independently prove the narrowed 04Q all-actions multi-role union
+  invariant, re-run the complete W08 security/browser focused surface, and decide
+  whether any security, confidentiality, authorisation, audit, accessibility or
+  evidence-honesty finding remains.
+depends_on:
+  - W08-MULTIROLE-SHORTLIST-AUTHZ-04Q:MASTER_ACCEPTED
+assigned_role: independent_reviewer_gpt-5.6-sol_medium
+risk: critical
+invariant: >-
+  Every shortlist/entry read and transition decision succeeds iff at least one
+  explicit applicable grant authorises the exact resource; no role presence may
+  suppress or broaden another grant, and scout-only/current-assignment, OWNER_ONLY,
+  tenant, replay and generic-denial boundaries remain exact.
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - reports/reviews/W08/w08-independent-security-review-R3.md
+  - orchestration/task_packets/W08-MULTIROLE-SHORTLIST-AUTHZ-04Q-R1.yaml
+  - reports/reviews/W08/returns/W08-MULTIROLE-SHORTLIST-AUTHZ-04Q-R1.md
+  - orchestration/task_packets/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-SCOUT-BRIEF-AUTHZ-04P-R1.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/audit.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - services/api/w08_main.py
+  - scripts/run_w08_study.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/landing.html
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/entry.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - apps/web/templates/w08/error.html
+  - apps/web/static/w08/app.css
+  - tests/contracts/test_w08_workflow_contracts.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_workflow_access.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/integration/test_w08_workflow.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/integration/test_w08_study_harness.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/verification/W08/moderated-study-capture-template.yaml
+  - reports/verification/W08/moderated-study-summary-template.yaml
+  - reports/verification/W08/limitations.md
+  - reports/verification/W08/protected-output-boundary.md
+  - reports/verification/W08/representative-user-evidence-status.md
+allowed_paths:
+  - reports/reviews/W08/w08-independent-security-review-R4.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Fresh P0/P1/P2/P3 findings with exact path/line, preconditions, impact and required
+    correction; PASS only when no open security/confidentiality/authorisation/audit/
+    accessibility/evidence-honesty finding remains.
+  - Independently reproduce the R3 policy-true/route-404 case and prove route 200 for
+    the legitimate multi-role owner, without disclosing unassigned/former/private or
+    cross-tenant resources.
+  - Independently prove read union for analyst+scout owner TEAM/OWNER_ONLY and
+    approver+scout TEAM, plus ordinary-transition union for analyst+approver non-owner;
+    prove scout-only current/unassigned/former and foreign-tenant matrices.
+  - Inspect shared service/presentation action semantics for drift, special-target
+    approve/hold/reject isolation, replay-link assignment preservation and any other
+    role-presence action selector on the material W08 path.
+  - Re-run the complete corrected focused suite and Bandit, and explicitly reconfirm
+    every R1/R2/R3 closure, browser/accessibility automation, W06 wording, protected
+    non-access and the 0/5 genuine-user status.
+definition_of_done:
+  - The independent exact probes, complete focused suite and Bandit pass; the report
+    contains an explicit verdict and zero open findings required for PASS.
+focused_checks:
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/security/test_w08_auth_audit.py tests/security/test_w08_workflow_access.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/integration/test_w08_study_harness.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run bandit -q -r src/scouting/policy/r1.py src/scouting/audit/ledger.py src/scouting/workflow/r1.py src/scouting/observations/r1.py src/scouting/operations/evidence_export.py src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+stop_conditions:
+  - A protected W06 expected output would need to be opened or reconstructed.
+  - Review would mutate implementation, tests, config, orchestration, dependencies,
+    Git or an external system, or require a network/public service.
+  - Any Git command or repository/local-only/phase verifier would be required.
+mandatory_return:
+  - review/task ID and exact reviewed paths
+  - exact commands/exits/test counts and independent probe results
+  - findings ordered P0 through P3
+  - explicit R3 finding and earlier R1/R2 closure outcomes
+  - authn/authz, confidentiality/export, audit/concurrency/recovery,
+    browser/accessibility and W06/protected-boundary outcomes
+  - representative-user count/status
+  - final PASS/FAIL and required rework
+  - no Git/product/test/protected-output/external/participant-evidence confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

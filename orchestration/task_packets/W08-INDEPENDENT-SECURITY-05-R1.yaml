@@ -1,0 +1,144 @@
+schema_version: 1
+task_id: W08-INDEPENDENT-SECURITY-05
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Independently review the complete W08 implementation for functional correctness,
+  authorisation, confidentiality, audit/reversibility, recovery, accessibility and evidence honesty.
+depends_on:
+  - W08-AUTH-AUDIT-01:MASTER_ACCEPTED
+  - W08-WORKFLOW-02:MASTER_ACCEPTED
+  - W08-EXPORT-03:MASTER_ACCEPTED
+  - W08-WEB-E2E-04:MASTER_ACCEPTED
+assigned_role: independent_reviewer_gpt-5.6-sol_medium
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-AUTH-AUDIT-01-R1.yaml
+  - orchestration/task_packets/W08-AUTH-POLICY-INTEGRITY-01B-R1.yaml
+  - orchestration/task_packets/W08-WORKFLOW-02-R1.yaml
+  - orchestration/task_packets/W08-WORKFLOW-02-R2.yaml
+  - orchestration/task_packets/W08-WORKFLOW-INTEGRITY-02B-R1.yaml
+  - orchestration/task_packets/W08-WORKFLOW-INTEGRITY-02B-R2.yaml
+  - orchestration/task_packets/W08-EXPORT-03-R1.yaml
+  - orchestration/task_packets/W08-EXPORT-INTEGRITY-03B-R1.yaml
+  - orchestration/task_packets/W08-EXPORT-INTEGRITY-03B-R2.yaml
+  - orchestration/task_packets/W08-AUDIT-EXPORT-TAMPER-05A-R1.yaml
+  - orchestration/task_packets/W08-REPLAY-CONTRACT-02C-R1.yaml
+  - orchestration/task_packets/W08-WEB-E2E-04-R1.yaml
+  - orchestration/task_packets/W08-WEB-E2E-04-R2.yaml
+  - orchestration/task_packets/W08-WEB-WORKFLOW-04A-R2.yaml
+  - orchestration/task_packets/W08-WEB-BRIEF-04D-R2.yaml
+  - orchestration/task_packets/W08-WEB-BRIEF-HISTORY-04E-R2.yaml
+  - orchestration/task_packets/W08-WEB-BRIEF-WITNESS-04G-R1.yaml
+  - orchestration/task_packets/W08-WEB-REPLAY-GUARD-04F-R1.yaml
+  - orchestration/task_packets/W08-WEB-REPLAY-GUARD-04F-R2.yaml
+  - orchestration/task_packets/W08-WEB-EXPORT-04C-R1.yaml
+  - orchestration/task_packets/W08-WEB-EXPORT-04C-R2.yaml
+  - orchestration/task_packets/W08-WEB-EXPORT-UI-04I-R2.yaml
+  - orchestration/task_packets/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R2.yaml
+  - orchestration/task_packets/W08-WEB-EXPORT-SECURITY-04J-R1.yaml
+  - orchestration/task_packets/W08-BROWSER-A11Y-04B-R1.yaml
+  - orchestration/task_packets/W08-BROWSER-A11Y-04B-R2.yaml
+  - orchestration/task_packets/W08-BROWSER-OVERFLOW-04M-R1.yaml
+  - orchestration/task_packets/W08-STUDY-HARNESS-07A-R1.yaml
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - docs/architecture/threat-model.md
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W06/limitations.md
+  - reports/verification/W07/limitations.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - reports/reviews/W08/returns/W08-AUTH-POLICY-INTEGRITY-01B-R1.md
+  - reports/reviews/W08/returns/W08-WORKFLOW-INTEGRITY-02B-R2.md
+  - reports/reviews/W08/returns/W08-EXPORT-INTEGRITY-03B-R2.md
+  - reports/reviews/W08/returns/W08-AUDIT-EXPORT-TAMPER-05A-R1.md
+  - reports/reviews/W08/returns/W08-REPLAY-CONTRACT-02C-R1.md
+  - reports/reviews/W08/returns/W08-WEB-WORKFLOW-04A-R2.md
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-04D-R2.md
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-HISTORY-04E-R2.md
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-WITNESS-04G-R1.md
+  - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R1.md
+  - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R2.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R1.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R2.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-UI-04I-R2.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-JOURNEY-WITNESS-04L-R2.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-SECURITY-04J-R1.md
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R1.md
+  - reports/reviews/W08/returns/W08-BROWSER-A11Y-04B-R2.md
+  - reports/reviews/W08/returns/W08-BROWSER-OVERFLOW-04M-R1.md
+  - reports/reviews/W08/returns/W08-STUDY-HARNESS-07A-R1.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/contracts/audit.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - scripts/run_w08_study.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/entry.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/static/w08/app.css
+  - tests/contracts/test_w08_workflow_contracts.py
+  - tests/security/test_w08_auth_audit.py
+  - tests/security/test_w08_workflow_access.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/security/test_w08_web_security.py
+  - tests/integration/test_w08_workflow.py
+  - tests/integration/test_w08_evidence_export.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/integration/test_w08_study_harness.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+allowed_paths:
+  - reports/reviews/W08/w08-independent-security-review-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/**
+  - apps/**
+  - services/**
+  - scripts/**
+  - tests/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Code- and evidence-grounded P0/P1/P2/P3 findings with exact file/line references, exploit or failure preconditions, and required corrections.
+  - Independent adversarial review of IDOR/cross-object access, role/privilege escalation, session expiry/revocation/fixation/CSRF, private/team visibility and privileged export.
+  - Independent review of audit-chain integrity, transactional atomicity, tampering, replay/idempotency, optimistic concurrency, partial-failure recovery, sensitive-data leakage and path/file handling.
+  - Independent adversarial review of form media-type/body-size/UTF-8 handling, exact exemplar replay fidelity, candidate allowlisting and rejection/correction history.
+  - Independent review of semantic/keyboard/responsive accessibility evidence and every evidence-honest W06 boundary string.
+  - Explicit verdict PASS or FAIL; any P0/P1 in security, confidentiality, authorisation, accessibility, evidence honesty or audit integrity requires FAIL.
+  - Explicit statement that synthetic automation is not representative-user evidence and whether five genuine reviewed participant records exist.
+focused_checks:
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/security/test_w08_auth_audit.py tests/security/test_w08_workflow_access.py tests/security/test_w08_export_boundaries.py tests/security/test_w08_web_security.py tests/integration/test_w08_workflow.py tests/integration/test_w08_evidence_export.py tests/integration/test_w08_local_workflow_app.py tests/integration/test_w08_study_harness.py tests/e2e/test_w08_local_workflow_playwright.py
+  - uv run bandit -q -r src/scouting/policy/r1.py src/scouting/audit/ledger.py src/scouting/workflow/r1.py src/scouting/observations/r1.py src/scouting/operations/evidence_export.py src/scouting/web/w08.py scripts/run_w08_study.py
+stop_conditions:
+  - A protected W06 expected output would need to be opened or reconstructed.
+  - A review step would mutate product code, tests, shared configuration, dependency state, Git or an external system.
+  - A network service, remote, public endpoint, external identity/model/provider or destructive action would be required.
+mandatory_return:
+  - review ID and exact reviewed implementation/packet paths
+  - exact commands, exit statuses and concise results
+  - findings ordered P0 through P3 with precise evidence
+  - separate authn/authz, confidentiality/export, audit/concurrency/recovery, browser/accessibility and claim-boundary outcomes
+  - representative-user evidence status
+  - final PASS or FAIL verdict and required rework
+  - confirmations of no Git operations, no product/test edits and no protected-output access
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

@@ -1,0 +1,126 @@
+schema_version: 1
+task_id: W05-SERVING-REVIEW-01
+phase_id: W05
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently prove the W05 request/batch surface is one read-only serving core with
+  identical bytes, truthful evidence/confidence/explanations and no training/provider path.
+depends_on:
+  - W05-SERVING-01-R1:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-SERVING-01-R1.yaml
+  - reports/reviews/W05/returns/W05-SERVING-01-R1.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - src/scouting/serving/m0.py
+  - src/scouting/serving/__init__.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - docs/architecture/w03-synthetic-spine.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-serving-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Do request and batch thin entry points call one exact core, loader and scorer and return byte-identical canonical JSON/result_digest?
+  - Can serving import/call fitting/writing/provider/feature-source code, mutate artifacts or calculate a second scoring path?
+  - Are manifest/schema/taxonomy/config/fitting/candidate/lineage pins and strict cutoff checks exact and fail closed under substitution?
+  - Are filters, exclusions, query/exemplar signal and role restrictions deterministic, explicit and impossible to silently ignore?
+  - Does every candidate expose exactly six truthful states plus separate non-ranking data confidence, with W04/synthetic dimensional boundaries enforced?
+  - Are resemblance_only, no blended percentage/probability/outcome claim and deterministic closed reason codes preserved in the complete JSON?
+  - Do explanations exactly project shared scored feature values/contributions in artifact order and remain stable under repeated/permuted invocation?
+mandatory_fresh_attacks:
+  - >-
+    Hash all four selected artifact files before and after every review probe. Spy or
+    monkeypatch the accepted loader and LoadedM0Artifact.score to prove request and
+    batch enter the same M0ServingCore and invoke no copied distance/scaling/PCA logic.
+    Inspect imports and public methods for modeling, fitting, writing, provider, source,
+    Gold, network, clock and randomness paths.
+  - >-
+    Invoke request and batch repeatedly and after fresh core reload. Compare full
+    canonical JSON bytes and result_digest. Prove result/run UUIDs and generated/valid
+    times derive only from request plus artifact evidence. Exercise equal-distance UUID
+    ties and candidate/filter input permutation.
+  - >-
+    Re-sign or substitute each artifact, manifest, schema, taxonomy, configuration,
+    fitting population, candidate universe, lineage, model, index, resolved-query,
+    exclusion and shared-core pin independently. Attack missing/extra/symlinked roots
+    and ensure no fallback artifact or authority is admitted.
+  - >-
+    Exercise indexed and sorted-exemplar-mean requests; absent/both/unknown/excluded
+    signals; all supported constraint fields/operators; malformed numeric values;
+    unknown fields/operators; and filter-order permutations. No filter may be ignored.
+  - >-
+    Move dependency observed_at and available_at to exactly the cutoff and after it,
+    alter lineage order/digests, and prove temporal evidence fails closed. Confirm every
+    returned candidate binds the same exact result lineage and no provider read occurs.
+  - >-
+    Inspect every result JSON key/value/reason. Prove six dimensions are in canonical
+    order, absence uses zero sentinels, data confidence is separate/non-ranking, role
+    evidence is taxonomy/context bound, explanations exactly match scorer inputs, and
+    no match percentage/blended score/probability/outcome/value/recommendation or
+    production/provider/expert/W06 claim appears.
+  - >-
+    Specifically verify constructed synthetic-development confidence cannot claim
+    recommendation applicability without an explicit limitation; no-constraint
+    requests must not claim constraints were applied; and reason codes must describe
+    only actions/evidence that actually occurred.
+  - >-
+    Put an always-false supported constraint before an invalid field/operator/value and
+    permute the order. The invalid constraint must be rejected in every order rather
+    than silently short-circuited into an empty result.
+  - >-
+    Compare emitted snapshot_as_of, available_at_watermark and valid_from against both
+    dependency and feature-row observed_at/available_at evidence. The output must not
+    understate the latest admitted evidence time or fabricate artifact/model/index
+    availability.
+  - >-
+    Directly construct or model_construct a pinned request/resolved query retaining
+    carried digests while changing behavior-bearing values; every public serving
+    boundary must normally revalidate it. Also hold request/artifact IDs constant while
+    changing request version/requested_at and prove result/run IDs cannot collide for
+    different canonical request bytes.
+deliverables:
+  - Independent P0/P1/P2 verdict with spies/substitution/batch-request/artifact-hash evidence under the six W05 blocker tests.
+  - Exact shared-core/version/result/artifact identities and smallest bounded correction for blockers only.
+  - Complete mandatory return at the exact allowed path.
+definition_of_done:
+  - One-core parity, read-only boundary and all visible evidence/claim facts independently reproduce.
+  - No source/test/config/artifact/orchestration/dependency/Git/accepted predecessor changes.
+acceptance_checks:
+  - uv run pytest -q tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py tests/unit/test_w05_m0_models.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/serving/m0.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run mypy src/scouting/serving/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted predecessor conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

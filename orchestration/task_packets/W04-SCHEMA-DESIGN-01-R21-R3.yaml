@@ -1,0 +1,106 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R21-R3
+state: DISPATCHED
+objective: >-
+  Apply only the bounded review-successor correction required by failed R14:
+  preserve all R14 and predecessor evidence, designate fresh R15 as the active
+  independent review, retain the exact 30-resource roster, and preserve every
+  other accepted R21 contract byte-semantically.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R14:MASTER_REWORK
+assigned_role: bounded_r21_review_successor_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R14.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R14.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R14-master-verification.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R2.yaml
+  - reports/verification/W04/wyscout-schema-design-R21-R2-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+required_corrections:
+  - >-
+    Preserve R14, its return, its master review, and its master verification as
+    immutable failed control evidence. State that R14 is not an accepted R21
+    resource or implementation authority.
+  - >-
+    Replace the active fixed design review ID with
+    w04-wyscout-schema-design-independent-review-R15 and the active path with
+    reports/reviews/W04/wyscout-schema-design-independent-review-R15.md.
+    Replace the active master-review readback path with the R15 master
+    verification path.
+  - >-
+    Replace only resource-roster member 19 from R14 to R15. R14 is historical
+    control evidence outside the runtime local-resource roster. The resource
+    formula and cardinality remain exactly 30.
+  - >-
+    Replace only the active serial review packet and paths from R14 to
+    W04-SCHEMA-DESIGN-REVIEW-01-R15, its review, and its return. Packet
+    cardinality remains 16 and all write paths remain disjoint.
+  - >-
+    Replace the final-gate requirement for independent R14 with a passing fresh
+    independent R15 review. Retain the exact twelve repository commands and all
+    eighteen additive checks.
+  - >-
+    Preserve every other R21 clause: R20 binding, six-family merge, acyclic
+    preimages, physical-only R21 digest, v1 evidence, field/possession v2,
+    strict integer/no-coercion mapping, 36 predicates, 15 features, descriptor
+    preimages, 30 resources, five dependencies, three-packet cross-authority
+    separation, and no-product boundary.
+definition_of_done:
+  - R14 is preserved and cannot be mistaken for the active passing review.
+  - R15 is the only active design-review ID/path/resource/packet/gate reference.
+  - R21 remains bounded, acyclic, product-free, and cardinality-stable.
+  - The R3 return binds the final design bytes after the last edit.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    s=Path('reports/reviews/W04/wyscout-schema-design-R21.md').read_text();
+    assert 'w04-wyscout-schema-design-independent-review-R15' in s;
+    assert 'reports/reviews/W04/wyscout-schema-design-independent-review-R15.md' in s;
+    assert 'W04-SCHEMA-DESIGN-REVIEW-01-R15' in s;
+    assert 'R14 remains immutable failed control evidence' in s;
+    assert s.count('= 30') >= 1;
+    assert 'R14 independent review' not in s"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    The correction needs any architecture, product, source/provider/right,
+    project-root, dependency, storage, local-only, network, cloud, container,
+    endpoint, hosted CI, deployment, v1-evidence, feature-roster, or semantic
+    change.
+  - Any predecessor evidence must be edited or removed.
+  - Any edit outside the two allowed paths is required.
+  - Any inventory or local-only check fails.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

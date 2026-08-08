@@ -1,0 +1,99 @@
+schema_version: 1
+task_id: W06-EVAL-CORE-REVIEW-01
+phase_id: W06
+revision: R3
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-CORE-REVIEW-01-R2.yaml
+objective: >-
+  Perform the one fresh independent material review of W06-EVAL-CORE-01-R3 and the
+  master convergence counterexamples, deciding whether the contracts and metric core
+  fail closed for values, partitions, retained negative runs and protected claims.
+depends_on:
+  - W06-EVAL-CORE-01-R3:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-CORE-01-R3.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-CORE-01-R2.yaml
+  - reports/reviews/W06/evaluation-core-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-01-R3.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R3.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Does R3 close every R2 P0/P1 constructor, aggregate, metric, comparison and interval counterexample?
+  - Can a NO_GO gate immutably retain and bind an available negative evaluation bundle, access record and run, while still allowing an explicit missing-population decision?
+  - Can ACCEPT_CLAIM or NARROW_APPLICABILITY bind metrics from mixed or non-protected query memberships, or pass without the governed evidence required by the claimed population?
+  - Do MetricResult and BootstrapInterval reject negative sufficient statistics and out-of-unit-range bounds for unit metrics?
+  - Are metric, interval, slice, failure and comparison result identities canonical, unique and persistable without caller-supplied digest substitution?
+  - Do the focused tests reproduce all decision-affecting cases, and do the declared static checks pass?
+master_counterexamples:
+  - >-
+    MetricResult(metric=precision, k=1, value=0.5, numerator=-1.0,
+    denominator=-2.0, status=COMPUTED) validates with result digest
+    af706ff4f29d3a37b0b7689415e4d1735756059fb6b0f534a1e8857822f002dd.
+  - >-
+    GateDecision(decision=NO_GO, bundle=<valid bundle>, run=<valid linked run>)
+    is rejected because the validator forbids evaluation evidence on every NO_GO.
+  - >-
+    The declared ruff check reports unsorted imports in
+    src/scouting/contracts/__init__.py.
+deliverables:
+  - Fresh independent verdict with exact remaining P0/P1/P2 findings and executable counterexamples.
+  - R2 closure matrix plus explicit adjudication of every master counterexample above.
+  - Smallest bounded correction split if any decision-affecting defect survives.
+  - Complete mandatory return at reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R3.md.
+definition_of_done:
+  - Every claimed closure or surviving defect is independently reproduced rather than inferred from passing tests.
+  - Findings stay limited to values, partitions, intervals, leakage, retained evidence, protected decisions or claims.
+  - Review is report-only with no protected expected-output access.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run lint-imports
+  - test -s reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-CORE-REVIEW-01-R3.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and closure matrix with severities
+  - exact commands, exit statuses and concise results
+  - exact remaining counterexamples, formulas and identifiers
+  - residual leakage, schema, interval, applicability and claim risks
+  - smallest bounded corrections or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

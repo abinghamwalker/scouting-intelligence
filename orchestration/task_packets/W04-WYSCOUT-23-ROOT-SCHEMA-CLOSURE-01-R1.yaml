@@ -1,0 +1,211 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement only the in-memory exact 23-root implemented closed-schema exporter,
+  using the master-accepted logical-to-Arrow projection primitive for the existing
+  twelve Parquet roots and the explicit JSON-only projection state for the other
+  eleven roots. Emit no aggregate, product, manifest, receipt or publication byte.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R2:PASS
+  - W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-ACCEPT-01-R1:ACCEPTED
+  - W04-WYSCOUT-23-ROOT-SCHEMA-READINESS-AUDIT-01-R1:BOUNDED_GAP_RESOLVED
+assigned_role: w04_23_root_schema_closure_implementer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-23-root-schema-readiness-audit-R1.md
+  - reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-acceptance-v1.json
+  - reports/verification/W04/wyscout-logical-arrow-projection-implementation-R3-master-acceptance.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/**
+  - src/scouting/identity/**
+  - src/scouting/sources/**
+  - tests/unit/**
+  - tests/integration/**
+  - tests/security/**
+fixed_bindings:
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  r2_build_receipt_sha256: 77cf8dcb79d202b960553dfd6da631af039e5ec0a382a0e7c30be770045d0491
+  r4_build_receipt_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  readiness_audit_sha256: f9961082a27b949da6b9c1647b50f9ce18b6862c66fb8c104826c4b20ca746a0
+  projection_authority_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  projection_acceptance_sha256: 647ce58093485717a50037eeb6e46d09c2dfad88a8f60bdef7bce8d35f8d31c3
+  projection_implementation_acceptance_sha256: 6f0ed47f651472aa7aca0b1a8690612c7bc340f834c0f5a9d2b183f6413f09f2
+  formats_sha256: 309ee2821913022c3ce82b713a53e74dd4ac3190af0047a621ba4ab2cd0f7209
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  build_contract_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  data_test_sha256: 139683be6a9e6dc4d8be90cd81bb0827c1dbeea00b4ad01aebe3bdcaf9d5be9e
+  build_test_sha256: f39e34daac144369444e1701003efdec0c1a97f83ba5fb0beecaf844c21e4692
+root_contract:
+  role_order:
+    - BRONZE_KNOWN_RECORD
+    - BRONZE_REJECTED_RECORD
+    - BRONZE_REJECTED_FIELD
+    - SILVER_COMPETITION
+    - SILVER_TEAM
+    - SILVER_PLAYER
+    - SILVER_MATCH
+    - SILVER_ACTION
+    - SILVER_LINEUP_STINT
+    - SILVER_POSSESSION
+    - SILVER_PLAYER_MATCH_FACT
+    - GOLD_PLAYER_WINDOW
+    - LAYER_MANIFEST
+    - TEMPORAL_BOUNDARY_RECEIPT
+    - REBUILD_INVOCATION_RECEIPT
+    - ENTRYPOINT_SOURCE_RESULT
+    - COMPONENT_PROOF_RESULT
+    - PRE_BUILD_ADMISSION_RESULT
+    - REBUILD_RECEIPT_SUMMARY
+    - LAYER_MANIFEST_SUMMARY
+    - FINAL_RECHECK_RESULT
+    - POST_BUILD_ID_REBUILD_RESULT
+    - CHILD_RESULT_ENVELOPE
+  canonical_content_key_order:
+    - canonical_schema_id
+    - canonical_schema_version
+    - schema_language_version
+    - root_role
+    - root_definition_id
+    - definitions
+    - parquet_projection
+  implemented_row_key_order:
+    - canonical_schema_content_sha256
+    - canonical_schema_id
+    - canonical_schema_version
+    - closure_dependencies
+    - root_role
+    - surface_kind
+  surface_kind: IMPLEMENTED_CLOSED_SCHEMA
+  json_only_projection_state: NOT_APPLICABLE_JSON_ONLY
+  parquet_root_count: 12
+  json_only_root_count: 11
+  canonical_schema_id_rule: >-
+    For role R, exact ID is w04-wyscout- plus lower-case R with underscores
+    replaced by hyphens plus -implemented-closed-schema-v2.
+  canonical_schema_version: w04-wyscout-implemented-closed-schema-v2
+  schema_language_version: w04-closed-logical-schema-language-v1
+  root_definition_id_rule: >-
+    Exact owning runtime Pydantic class name for that role.
+  content_digest_rule: SHA256_OF_R20_CANONICAL_JSON_WITHOUT_TERMINAL_LF
+implementation_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - >-
+    Export exactly 23 canonical content objects and exactly 23 six-key rows in the
+    frozen order. Keep the earlier-only dependency graph exactly as listed by the
+    readiness audit, converting role references to the corresponding exact
+    canonical schema IDs in each row.
+  - >-
+    Each definitions closure must be deterministic, structured and complete for
+    the owning runtime model and its transitive support types: exact serialized
+    field order; required presence including defaulted fields; additional-field
+    prohibition; JSON types; literals/enums; unions; nullability; integer and
+    decimal bounds; UTC timestamp and NFC/digest/path grammars; homogeneous list
+    and heterogeneous fixed-tuple cardinality/order; and named support objects.
+    It must not use Python symbol names, source hashes, serializer hashes or prose
+    alone as substitutes for contract constraints.
+  - >-
+    Represent every applicable model/field/whole-object validator as a stable
+    declarative predicate object with exact operation, operands and constants.
+    Cover the readiness audit predicate roster, including exact one-lineup-row
+    semantics, rejected-field traversal, action/possession/player-match population
+    completeness, lineage/manifest/receipt equality, identifiers, clocks, cutoff,
+    censoring, per-90 suppression, ordering, uniqueness and aggregate
+    reconciliation. Do not invent product semantics or a new logical field.
+  - >-
+    For each of roots 1-12, include a complete WyscoutParquetProjectionDescriptor
+    equivalent descriptor in parquet_projection and export the runtime descriptor
+    and Arrow schema only from that accepted content. Reuse exactly the accepted
+    scalar/list/positional-struct/CanonicalJsonValue rules. Never infer from a row,
+    fixture, observed value or caller schema. Roots 13-23 carry the exact string
+    NOT_APPLICABLE_JSON_ONLY.
+  - >-
+    The public exporter must validate its own exact roster, key order, dependency
+    order, unique IDs, content canonicality, digest reproduction and descriptor
+    closure. Mutation, caller schema/digest/callback, 24th root, omitted root,
+    reorder, duplicate, forward edge, cycle, placeholder, metadata, width,
+    nullability, projection-kind or unrecognized-type substitution fails closed.
+  - >-
+    Gold must obtain its concrete Arrow schema only from the GOLD_PLAYER_WINDOW
+    content owned here. Do not edit or make the build receipt success path
+    executable yet; aggregate acceptance and later composition remain downstream.
+  - >-
+    Preserve all existing bytes outside allowed paths. Do not materialize a v2
+    aggregate or accepted bundle/product digest; do not create product/control/data
+    bytes, provider access, dependencies, cloud, containers, CI, deployment or
+    publication.
+focused_acceptance:
+  - Exact 23 role/order/row-key/content-key/ID/version/surface assertions.
+  - Every transitive definition reference resolves and every dependency is unique and strictly earlier.
+  - Every runtime serialized field appears exactly once in exact order for all 23 roots.
+  - Every runtime cross-field validator is represented by structured declarative predicates.
+  - Exact descriptor-generated Arrow schema for all twelve Parquet roots; metadata absent recursively.
+  - Two materially different values for every variant-bearing root yield the same descriptor/schema.
+  - CanonicalJsonValue and heterogeneous tuple/list nested round-trip tests use only the accepted projection path.
+  - Width/nullability/metadata/position/fixture-inference/caller-authority mutations fail closed.
+  - JSON-only roots reject null/omission/placeholder/projection descriptor substitution.
+  - Gold alternative schema input and any second schema authority fail closed.
+definition_of_done:
+  - Exact in-memory 23-root content and row export exists with no downstream bytes.
+  - Focused and frozen adjacent checks pass with zero warnings or unexpected writes.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - In-memory schema closure implementation.
+  - Focused closure and adversarial tests.
+  - Additive producer return using the repository template.
+stop_conditions:
+  - Need to change a root, logical field, semantic rule, projection rule, digest path,
+    feature, population, dependency, provider boundary, dependency policy or local-only boundary.
+  - Need to edit any file outside ownership, perform Git, access network/provider, or write product/aggregate/runtime artifacts.
+  - Any fixed binding drifts.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

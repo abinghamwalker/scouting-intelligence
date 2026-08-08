@@ -1,0 +1,93 @@
+schema_version: 1
+task_id: W08-WEB-REPLAY-GUARD-04F
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Prove and expose only exact deterministic local replay and replay-result candidate
+  selection after role-brief history is stable.
+depends_on:
+  - W08-WEB-BRIEF-HISTORY-04E:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  A replay link and longlist entry may persist only after two identical accepted local
+  W05/W07 replays match exactly, and the selected player belongs to that exact result.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-BRIEF-04D-R2.yaml
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-04D-R2.md
+  - orchestration/task_packets/W08-WEB-BRIEF-HISTORY-04E-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-BRIEF-HISTORY-04E-R1.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/workflow.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/web/w07.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - tests/e2e/test_w05_m0_retrieval.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/brief.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-REPLAY-GUARD-04F-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - src/scouting/serving/**
+  - src/scouting/web/w07.py
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Build with the approved brief's exact tenant, role-brief ID/version and retained trace_id (not a substitute), a deterministic request ID and requested_at no earlier than brief creation; run the identical fully validated PinnedM0ServingRequest twice before first persistence and compare request/trace IDs, resolved-query digest, wrapper result digest, retrieval result/run IDs, result order/identities, lineage, model/index/taxonomy and candidate-universe data identity; mismatch fails without link/audit rows.
+  - Idempotent repeat link POST returns the existing exact link and cannot add a second audit row; it does not silently accept a changed replay.
+  - Render exact player/exemplar query mode, exemplar IDs, request/result/run IDs, query/result/lineage digests, all version identities, ordered candidate IDs, applicability and all limitations.
+  - Shortlist page presents candidate choices only from the selected exact link's fresh replay result; POST recomputes and denies a player absent from that result before workflow mutation/audit.
+  - Negative injected replay mismatch, arbitrary UUID, other-link candidate, role/tenant/object/CSRF and replay failure leave link/entry/audit counts unchanged and give a generic recoverable error.
+  - Wording never calls the result validated, expert-approved, recommended, transferable, recruitment success, price/value or production-ready.
+definition_of_done:
+  - Exact double replay and candidate membership are independently asserted through HTTP and database witnesses without any W05/W07 or shared-service change.
+focused_checks:
+  - Exact two-call equality witness and mismatch rollback.
+  - Candidate dropdown/POST allowlist with one accepted exact result candidate and random/other-link denials.
+  - Rendered exact metadata and limitations agree with persisted row and fresh replay.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w05_m0_retrieval.py
+stop_conditions:
+  - A shared contract/service/policy/migration/dependency, W05/W07 or protected-output change is required.
+  - A network/provider/model call, fitting/training, Node/npm, container, destructive action or Git operation is required.
+  - Correctness would require accepting a non-result candidate, substituting query identity or weakening replay comparison.
+mandatory_return:
+  - task ID/revision and exact invariant
+  - exact changed-file list
+  - replay comparison and route-to-candidate map
+  - exact commands, exits and test counts
+  - mismatch, allowlist and negative atomicity witnesses
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

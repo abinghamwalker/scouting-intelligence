@@ -1,0 +1,34 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R9
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R9
+decision: MASTER_ACCEPTED
+producer_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.yaml
+producer_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.md
+independent_review_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.yaml
+independent_review: reports/reviews/W04/wyscout-runtime-control-independent-review-R9.md
+independent_review_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.md
+master_acceptance: reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+finding_counts:
+  p0: 0
+  p1: 0
+  p2: 0
+accepted_bindings:
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  producer_return_sha256: b814babcd6465e537d4d545b794ba2cc2b5037a60e18e08a0d00867527110ff5
+  independent_review_sha256: cf4d4df85c4960930fd02d653636358d705dd8b05e8b343e349480197561b02a
+  independent_review_return_sha256: 003f8c3fa0163a8e6c39deef63d58a9f4f336f6d013455bbd13a5f076dfe933e
+checks:
+  producer_exact_population: PASS
+  independent_exact_population: PASS
+  master_exact_population: PASS
+  startup_object_binding: PASS
+  builtin_frozen_shape_closure: PASS
+  metadata_only_pyc_closure: PASS
+  shell_pyc_pre_post: PASS
+  static_security_import_local_only: PASS
+git_operations: none
+real_root_publication: none

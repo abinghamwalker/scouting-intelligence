@@ -1,0 +1,109 @@
+schema_version: 1
+task_id: W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01
+phase_id: W04
+revision: R1
+state: REWORK_RETAINED
+objective: >-
+  Independently attack the exact additive season/lineup decision authority,
+  reproduce its source and UUID evidence, and issue PASS or REWORK without editing
+  the candidate, tests, implementation, data or any prior frozen byte.
+depends_on:
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_season_lineup_product_binding_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-season-lineup-correction-authorization-R1.md
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R1.md
+  - reports/verification/W04/wyscout-season-lineup-product-binding-decision-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+fixed_bindings:
+  authorization_sha256: 9802e4ae037593c62db2b52d38acd4133e5a3d50e59e5ad346c982ad8cca47bb
+  decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  decision_test_sha256: 0b5b933575f22451b5474323188619acec659c7291262c2e457086319fe93e29
+  producer_return_sha256: 6bb6f3c70d87034a22487362f688c9f513c22f2d66c2ba9fbae021be01584451
+  master_verification_sha256: d635d3836bf98e46c09d640c89ec1433992836d7951545b81ddd484ef632ffd6
+  prior_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  prior_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Reconstruct the canonical decision bytes and independently reproduce source,
+    season, match, team, player and lineup-stint UUIDv5 chains without relying on
+    constants from the candidate test.
+  - >-
+    Read the physical selected match member after checking source manifest/member
+    digest, size, row count and ordinal. Reproduce the raw-record digest, strict
+    seasonId, exact bench membership and sole minute-82 substitution-in evidence.
+  - >-
+    Attack string/Boolean/nonpositive season IDs, alternate namespace/name/UUID,
+    missing/additional/duplicated/reordered lineup rows, alternate ordinal,
+    inferred terminal/minutes/per90, cross-match/team/player substitution and stale
+    source/index/prior-authority bindings.
+  - >-
+    Prove that the existing authority_rows member is the only integration route,
+    the projection remains exactly 25 keys with one unchanged hash, and no identity
+    kind/root, schema root, feature, Gold row or wider population is introduced.
+  - >-
+    Confirm no runtime/schema/aggregate/product/manifest/receipt/build/data byte was
+    created and no provider/network/cloud/container/CI/remote/deployment action occurred.
+  - >-
+    Write one independent review with exactly one canonical machine-readable fence
+    matching the candidate lifecycle schema. Return PASS only with zero P0/P1/P2
+    findings; otherwise return REWORK with concrete findings. Do not self-approve.
+definition_of_done:
+  - Fresh independent review, executable attacks, exact findings and mandatory return.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run mypy tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review with canonical record and mandatory return.
+stop_conditions:
+  - Candidate/fixed hash drift or need to edit any forbidden byte.
+  - Any wider semantic, population, schema, feature, identity or architecture change is required.
+  - Any Git, dependency, provider/network or external-infrastructure action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

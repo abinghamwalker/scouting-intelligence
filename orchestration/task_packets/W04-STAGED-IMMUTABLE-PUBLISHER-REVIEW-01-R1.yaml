@@ -1,0 +1,107 @@
+schema_version: 1
+task_id: W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the corrected R2 staged immutable publisher against the
+  accepted R20 vertical-slice publication contract and all adversarial failure states.
+depends_on:
+  - W04-STAGED-IMMUTABLE-PUBLISHER-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_staged_immutable_publisher_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1.yaml
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.yaml
+  - orchestration/task_packets/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.yaml
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R1.md
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-01-R2.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - src/scouting/storage/wyscout_publication.py
+  - tests/unit/test_w04_staged_product_publisher.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-staged-product-publisher-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-STAGED-IMMUTABLE-PUBLISHER-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r1_packet_sha256: 99921ecc50e6a60bd5a482473cc1cdb051c0aced025f278decbff48e8a26d5fe
+  r2_packet_sha256: bab41bf6e8d7e9b01c2820f3f288ae92559d30cd4d8f0d3d290119afe0ed1a50
+  r1_return_sha256: 31f8cfef9726b24d4cea0b3efbc9adf804c1d4110fa7a1178c54d81e8f9a883e
+  r2_publisher_sha256: 9805dbad85cdcf7c49c50634e31eefda4c1eef7b3f22cc0d969e98f93b0c3a6f
+  r2_test_sha256: d509b04df48c9dfbeb6661e5bab9e32dd74ce9c8d2243b70b77f5a52b95681e5
+  r2_return_sha256: 916a5b7cffdb668eb0326b33290bcab4f4e3de2457b6ca86d0aede0069303cbe
+  complete_repository_gate_sha256: 22b0b73078d4d2f0cc7e5eed3920a5401fd3d0e02d9ee3c66d9c7af02f76f469
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  guarded_storage_sha256: 62a026560c4821d123d42afcd3438be18572ec0fef03f1747a0cbcfa97f030ef
+  parquet_encoder_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Independently prove the constructor and selection seam admit only a non-empty
+    subset of the exact names wyscout-working, wyscout-manifests and
+    w04-rebuild-runs. Attack every canonical-looking alias and non-string before write.
+  - >-
+    Audit every descriptor-relative open/stat/mkdir/read/link/unlink/fsync transition
+    for no-follow containment, directory/file modes, stable identity, regular-file
+    type, exact link count, full-byte read/write, immutable equal replay and no replacement.
+  - >-
+    Independently reproduce failures for absolute/dot/dot-dot/duplicate separator/
+    backslash/NUL/overlong/deep/partial tails; staged/final symlink, hardlink, FIFO,
+    directory, mode and link drift; nested symlink and parent/root rename; partial
+    write, reopen, validator, final recheck, link race, EXDEV and unlink failure.
+  - >-
+    Target the exact post-link final-parent fsync state and post-unlink staging-parent
+    fsync state without relying only on producer assertions. Confirm no success result,
+    exact retained final/staged inode/link state and no damage to unrelated final evidence.
+  - >-
+    Confirm no digest sidecar, chmod repair, GuardedStorage/encoder change, real
+    product/partial path, dependency, Git, provider/network, cloud/container/CI/
+    endpoint/deployment action occurred.
+definition_of_done:
+  - PASS with P0/P1/P2 equal 0/0/0, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run ruff check src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run mypy src/scouting/storage/wyscout_publication.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run pytest -q tests/unit/test_w04_staged_product_publisher.py tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/wyscout_publication.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review report and mandatory reviewer return with finding counts.
+stop_conditions:
+  - Candidate or fixed hash drift.
+  - Need to edit implementation/tests or any non-review path.
+  - Any Git, dependency, provider/network, product or external-infrastructure action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

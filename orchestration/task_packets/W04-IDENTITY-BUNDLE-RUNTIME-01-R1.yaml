@@ -1,0 +1,162 @@
+schema_version: 1
+task_id: W04-IDENTITY-BUNDLE-RUNTIME-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Implement, materialize, reopen and recursively verify the one exact source-complete
+  initial W04 Wyscout identity review queue and identity bundle required before build
+  authority. Do not create Bronze, Silver, Gold, build, receipt, code-manifest or
+  other product bytes.
+depends_on:
+  - W04-VERTICAL-SLICE-IDENTITY-BUNDLE-AUDIT-01-R1:MASTER_ACCEPTED_FOR_BOUNDED_RUNTIME_PACKET
+assigned_role: w04_identity_bundle_runtime_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.yaml
+  - reports/verification/W04/wyscout-vertical-slice-identity-bundle-audit-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-IDENTITY-BUNDLE-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-acceptance-v1.json
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_identity.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/identity/wyscout.py
+  - src/scouting/identity/__init__.py
+  - tests/contracts/test_w04_wyscout_identity_bundle.py
+  - tests/unit/test_wyscout_identity.py
+  - data/working/wyscout/v5/identity/review-queues/*.identity-review-queue.json
+  - data/working/wyscout/v5/identity/bundles/*.identity-bundle.json
+  - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - data/manifests/**
+  - data/source/**
+  - data/working/wyscout/v5/bronze/**
+  - data/working/wyscout/v5/silver/**
+  - data/working/wyscout/v5/gold/**
+fixed_bindings:
+  audit_return_sha256: 85cb5b344993d5c61cc20f0b3b67761385e66aec4b11ce5674b8e5f2680449c0
+  source_manifest_id: 4e16bdb5-afe7-5601-88ad-adc124cfce3b
+  source_manifest_sha256: 8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd
+  completion_manifest_sha256: 69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1
+  identity_ruleset_id: w04-wyscout-identity-ruleset-v1
+  identity_ruleset_physical_sha256: 8027321bda566188019850f9f9031e684d2d81d8df7851ba3c71b1685ae4f547
+  identity_ruleset_canonical_sha256: 9c34783214d084ce8fde42be771850e8f9332fa9fb9a1529b011a8600e34e87c
+  identity_acceptance_sha256: 37764392cdaf9626ffaff26e119fb142218d36489e87a8b1d55402e3e2dc7f86
+  current_row_count: 5594
+  resolved_competition_count: 7
+  resolved_team_count: 142
+  resolved_player_count: 3603
+  review_required_player_count: 15
+  rejected_player_count: 1
+  resolved_match_count: 1826
+  open_queue_item_count: 15
+  open_queue_source_occurrence_count: 23
+  rejected_zero_source_reference_count: 226041
+  target_match_source_id: 2499719
+  target_player_source_id: 285508
+frozen_serialization:
+  queue_namespace_name: urn:scouting-intelligence:w04:wyscout:identity-review-queue:v1
+  queue_namespace_algorithm: UUIDV5_NAMESPACE_URL
+  queue_item_algorithm: UUIDV5_CANONICAL_JSON_TEXT
+  queue_reason_family: NONZERO_ABSENT_MASTER
+  queue_reason_code: NONZERO_ABSENT_PLAYER_MASTER
+  queue_item_preimage_fields:
+    - entity_kind
+    - reason_family
+    - source_identity
+    - source_manifest_id
+    - tenant_id
+  queue_item_preimage_json: SORTED_KEYS_COMPACT_NFC_STRICT_NO_FLOAT_NO_NEWLINE
+requirements:
+  - >-
+    Reopen and verify exact completion/source manifests, the complete accepted identity
+    authority graph and every declared master/match/action source member needed to
+    recompute the full population. Use declared paths only; never scan, select newest,
+    follow an alias, access a provider/network or trust a digest/count witness alone.
+  - >-
+    Parse identity-bearing fields as strict JSON integers. Reject malformed, missing,
+    Boolean, float, string-integer, duplicate, zero under its distinct policy,
+    cross-kind and conflicting keys without name or label matching.
+  - >-
+    Build exactly 5,594 version-1 current rows and the exact 15-item queue. Recompute
+    all source references, aggregation, clocks, accepted authority edges, canonical
+    identities, evidence digests, row IDs, trace IDs, counts and ordering.
+  - >-
+    Apply the packet's frozen queue namespace, exact no-newline canonical JSON
+    preimage and sole absent-player reason token. Reject alternate separators,
+    namespace names, preimage fields, tokens or encodings.
+  - >-
+    Canonicalize the queue once, derive its address, persist only the exact sidecar-
+    free content-addressed queue path, reopen through nofollow access and compare exact
+    bytes/digest/semantics. Bind that path/digest into the initial bundle and perform
+    the same materialize/reopen/recursive-verification process for the bundle.
+  - >-
+    Equal existing bytes are idempotent. Unequal existing content, any adjacent
+    sidecar, partial, symlink, escape, stale queue/bundle, unreferenced extra identity
+    artifact or unexpected correction fails closed without cleaning or overwriting.
+  - >-
+    Expose the verified bundle SHA-256 and R20-derived identity-bundle UUID for later
+    build authority, but do not calculate a build ID or create product/receipt bytes.
+definition_of_done:
+  - Exact target IDs and all source-complete counts reproduce from verified source bytes.
+  - Exact queue and bundle bytes materialize once, reopen recursively, and are byte-idempotent.
+  - Focused positive/adversarial identity tests pass with no architecture or dependency change.
+acceptance_checks:
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check src/scouting/contracts/wyscout_identity.py src/scouting/contracts/__init__.py src/scouting/identity/wyscout.py src/scouting/identity/__init__.py tests/contracts/test_w04_wyscout_identity_bundle.py tests/unit/test_wyscout_identity.py
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check src/scouting/contracts/wyscout_identity.py src/scouting/contracts/__init__.py src/scouting/identity/wyscout.py src/scouting/identity/__init__.py tests/contracts/test_w04_wyscout_identity_bundle.py tests/unit/test_wyscout_identity.py
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync mypy src/scouting/contracts/wyscout_identity.py src/scouting/identity/wyscout.py
+  - uv run lint-imports
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q tests/contracts/test_w04_wyscout_identity_bundle.py tests/unit/test_wyscout_identity.py tests/contracts/test_w04_identity_ruleset_authority.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_identity.py src/scouting/identity/wyscout.py
+  - uv run python scripts/verify_local_only.py
+mandatory_tests:
+  - Exact target rows, ordinals, raw digests and canonical UUIDs.
+  - Exact 5,594 current-row counts and effective index.
+  - Exact 23-to-15 queue aggregation and eight substitution-zero exclusions.
+  - Exact 226,041 rejected-zero source references.
+  - Repeated byte-identical materialization and recursive readback.
+  - >-
+    Missing, additional, duplicate, reordered, stale, cross-kind, cross-source,
+    cross-tenant, string/Boolean/float, zero-resolution, queue/bundle omission,
+    digest-only witness, alternate preimage, wrong clock, wrong authority digest,
+    path scan, sidecar, symlink and immutable conflict rejection.
+master_only_checks:
+  - shasum -a 256 data/working/wyscout/v5/identity/review-queues/*.identity-review-queue.json data/working/wyscout/v5/identity/bundles/*.identity-bundle.json reports/reviews/W04/wyscout-schema-design-R20.md reports/reviews/W04/wyscout-schema-design-R21.md
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any new dependency, source/provider acquisition, correction, external identity, architecture/feature expansion or rights change.
+  - Any Bronze/Silver/Gold/build/receipt/code-manifest/product byte or remote/network/cloud/container/CI/endpoint/deployment action.
+  - Any need to change R20/R21 or another frozen authority byte.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,64 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Produce a bounded implementation design for canonical identities, Bronze/Silver
+  facts, derived possessions, temporal Gold state, reconciliation, and deterministic
+  rebuild from the frozen Wyscout v5 schema; write no implementation code and inspect
+  no real provider payload.
+depends_on:
+  - W04-SOURCE-AUTHORITY-01:VERIFIED
+assigned_role: data_architecture_reviewer
+risk: medium
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - configs/sources/w04-provider.yaml
+  - docs/dataset-cards/w04-source.md
+  - reports/phase-gates/W04/provider-rights-research-packet.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/storage/guarded.py
+  - src/scouting/sources/synthetic.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R1.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - tests/**
+  - data/**
+  - runs/**
+deliverables:
+  - Exact proposed Bronze object boundaries and lineage fields.
+  - Exact Silver match, player, team, lineup-stint, action, and possession schemas.
+  - Deterministic canonical-ID and ambiguity/review rules.
+  - Deterministic Wyscout possession derivation with explicit uncertainty/failure states.
+  - Temporal Gold/player-window boundary that never predates collection availability.
+  - Reconciliation, missingness, range, and deterministic-rebuild gates.
+  - Serial/parallel implementation dependency map with path-disjoint packet scopes.
+definition_of_done:
+  - Every design statement is grounded in controlling specs or frozen W04 authority.
+  - No current/live, women/youth, prospective, or commercial-provider parity claim appears.
+  - Unknown or unavailable provider semantics fail closed rather than being invented.
+  - The design is sufficiently exact for the master to issue implementation packets.
+acceptance_checks:
+  - uv run python -c "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-R1.md'); assert p.is_file() and p.stat().st_size > 5000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Real provider payload must be downloaded or inspected.
+  - Required work needs an architecture, dependency, migration, or authority change.
+  - Required work falls outside allowed paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

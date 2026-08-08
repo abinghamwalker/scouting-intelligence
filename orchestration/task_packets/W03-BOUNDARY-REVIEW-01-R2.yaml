@@ -1,0 +1,87 @@
+schema_version: 1
+task_id: W03-BOUNDARY-REVIEW-01
+phase_id: W03
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W03-BOUNDARY-REVIEW-01-R1.yaml
+objective: >-
+  Independently verify the R6 persisted-object correction, rerun the complete
+  W03 boundary audit, and issue a final ACCEPT or REWORK recommendation.
+depends_on:
+  - REVIEW-W03-BOUNDARY-REVIEW-01-R1:REWORK
+  - REVIEW-W03-VERTICAL-01-R6:ACCEPT
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W03-BOUNDARY-REVIEW-01-R2.yaml
+  - orchestration/reviews/REVIEW-W03-BOUNDARY-REVIEW-01-R1.yaml
+  - orchestration/reviews/REVIEW-W03-VERTICAL-01-R6.yaml
+  - reports/reviews/W03/boundary-audit.md
+  - reports/reviews/W03/returns/W03-VERTICAL-01-R6.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/threat-model.md
+  - src/scouting/workflow/service.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/security/test_w03_boundary_audit.py
+allowed_paths:
+  - tests/security/test_w03_boundary_audit.py
+  - reports/reviews/W03/boundary-audit-R2.md
+  - reports/reviews/W03/returns/W03-BOUNDARY-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - compose.yaml
+  - migrations/**
+  - orchestration/**
+  - src/**
+  - services/**
+  - apps/**
+  - scripts/**
+  - tests/fixtures/**
+  - tests/contracts/**
+  - tests/unit/**
+  - tests/integration/**
+  - tests/e2e/**
+  - tests/security/test_database_boundaries.py
+  - tests/security/test_application_authorization.py
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - >-
+    Retained independent role-brief collision proof plus independent shortlist and
+    shortlist-entry collision challenges, all requiring generic denial, unchanged
+    victim ownership and zero attacker material/audit effects.
+  - >-
+    Independent exact canonical replay and immutable-content mismatch challenges
+    across the conflict-aware workflow.
+  - Complete rerun of every R1 boundary and import-direction challenge.
+  - Updated W03.1–W03.6/G-W03/G1 evidence mapping with final recommendation.
+  - Complete mandatory R2 return; no implementation edits and no self-approval.
+definition_of_done:
+  - The retained R1 P1 reproduction passes unchanged.
+  - Shortlist and shortlist-entry same-tenant owner collisions independently fail closed.
+  - Same-owner immutable-content mismatch fails closed and exact replay is deterministic.
+  - All ten original boundary challenges and the additive R2 checks pass.
+  - No protected fixture or expected result is accessed.
+  - Every non-pass has concrete reproduction evidence and a bounded correction.
+  - The mandatory return confirms no Git operation.
+acceptance_checks:
+  - uv run pytest -q tests/security/test_w03_boundary_audit.py
+  - uv run ruff format --check tests/security/test_w03_boundary_audit.py
+  - uv run ruff check tests/security/test_w03_boundary_audit.py
+  - uv run lint-imports --no-cache
+  - >-
+    uv run python -c "from pathlib import Path;
+    text=Path('reports/reviews/W03/boundary-audit-R2.md').read_text();
+    assert all(term in text for term in
+    ['W03.1', 'W03.2', 'W03.3', 'W03.4', 'W03.5', 'W03.6', 'G-W03', 'G1'])"
+stop_conditions:
+  - The protected fixture has been accessed or its isolation cannot be maintained.
+  - Any requested correction requires implementation or a path outside allowed_paths.
+  - A Git command, Docker operation, dependency, external service, credential, public bind or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

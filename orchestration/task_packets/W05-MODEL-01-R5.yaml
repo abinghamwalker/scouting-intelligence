@@ -1,0 +1,198 @@
+schema_version: 1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R5
+state: DISPATCHED
+objective: >-
+  Close the exact R4 typed-authority, full-population pin, schema/contribution,
+  safe-runtime and adversarial-test P1 defects while preserving frozen fixture bytes,
+  numeric arrays and scores.
+depends_on:
+  - REVIEW-W05-MODEL-01-R4:REWORK
+assigned_role: m0_baseline_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R3.yaml
+  - orchestration/task_packets/W05-MODEL-01-R4.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R3.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R4.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R4.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/storage/formats.py
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/manifest.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/models/w05-m0-baselines-v1.json
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/artifact.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R5.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/roles/**
+  - data/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R4.md
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+  - tests/fixtures/**
+frozen_inputs:
+  candidate_fixture_logical_digest: 710c38554f33f8f650d814df1fee3c8bac7a8a2bc22804f93e3b9a8dfd1e50d9
+  candidate_fixture_physical_digest: 5c6f4c26c2f9c71bacb1b13e80d5872b556001f55462a9cc359bf24be06317fc
+  query_fixture_logical_digest: fb027563b3f99f563d43f1b909c535f860f3d04d2d8aa0ed44e902fd2a37e900
+  query_fixture_physical_digest: 1352ed759db30b4c430644893e558aa089e24153193f934cd124373cb6e29157
+  exact_array_payload_digests:
+    metadata_control: 19a29423c6ee03b0439e94950d344f854e0b54633682354d1433ee328790a5ee
+    raw_euclidean_control: 3915f96a1c494de7745e2a336576ce806e02b101ea9522e03a1ef1a154065d36
+    robust_scaled_cosine: ece7da1a9458a495ef3dbe7faaae2a5bd5684ae3eb617f85fe32edcf61da4bbc
+    weighted_cosine: c2bd7a9939e45e0217e891a9a80b2dcabd120106ad9d67e0d5fd831caaba4801
+    pca: 90e90a145282cd9f6b6374fd3df1b8db2d24616d3d54395484fd20d4e1538971
+    role_aware_restriction: c2bd7a9939e45e0217e891a9a80b2dcabd120106ad9d67e0d5fd831caaba4801
+  exact_scores:
+    metadata_control: 0.1111111111111111
+    raw_euclidean_control: 0.3333333333333333
+    robust_scaled_cosine: 1.0
+    weighted_cosine: 1.0
+    pca: 1.0
+    role_aware_restriction: 1.0
+requirements:
+  - >-
+    Do not edit either fixture byte. Do not change any feature vector, metadata, role,
+    dependency, query, label, candidate, k, seed, PCA count, weight, threshold, array
+    payload or score. No tuning, selection retry, subset or control change is allowed.
+  - >-
+    Replace M0Configuration.values with explicit frozen typed fields for every config
+    value, including tuple weights and immutable six-family digest map, plus one
+    canonical_mapping method used only internally. load_m0_configuration requires
+    exact canonical bytes, exact keys and strict non-boolean scalar/list/mapping/digest
+    types; validates every frozen value and full accepted ID/version/digest. No public
+    fit/load/check API accepts Mapping: each requires an M0Configuration instance and
+    revalidates it against the accepted source-pinned identity.
+  - >-
+    Compute candidate_population_projection_digest over the exact full ordered
+    candidate-universe candidate projection derived from the frozen fixture: UUID,
+    family-appropriate feature values, metadata, context, exact role distribution,
+    cutoff, full dependency identity and lineage hash. The selected config pins that
+    full selected-family projection; metadata family derives and validates its exact
+    family projection separately without weakening selected-population trust.
+  - >-
+    Add immutable typed M0DevelopmentCandidates and M0DevelopmentQueries authorities.
+    Loaders require the frozen physical/logical digests, exact canonical bytes plus
+    newline, exact root/row/nested keys/types/count/order and accepted registry/schema/
+    taxonomy/claim/cross pins. Reproduce features, roles, dependency identities and
+    query projection. fit/check APIs take these authorities, not loose rows, roles,
+    labels or peer-group mappings.
+  - >-
+    Candidate-universe root keys and every candidate/nested object are exact. Validate
+    all fixture/query/full-population pins, taxonomy, registry/family/schema, claim
+    flags, candidate feature values, metadata, role probabilities, cutoff and complete
+    dependency observed/available/lineage evidence against accepted config and
+    authorities. A re-signed universe with unchanged arrays must fail.
+  - >-
+    Manifest loading recomputes the family-specific expected feature names/schema hash,
+    exact fitting/candidate/full-population and lineage digests, canonical model/index
+    IDs/versions and deterministic artifact UUID derived from accepted family, config,
+    registry/schema, taxonomy, population, lineage and array payload. Re-signed field
+    or manifest substitutions fail even with valid self digests.
+  - >-
+    Metadata family uses the exact accepted metadata-control schema hash and numeric
+    encoded three-value feature/universe projection. Five six-feature families retain
+    the synthetic schema. Runtime loader chooses the expected schema by family and all
+    manifest/array/universe lengths agree.
+  - >-
+    PCA scoring returns exactly six original-feature contributions. Use a documented
+    deterministic symmetric projection of the PCA-space cosine bilinear form through
+    components so contributions sum to the negative similarity term and distance is
+    1+sum(contributions), within exact deterministic floating behavior. Indexed and
+    exemplar-mean modes use the same implementation.
+  - >-
+    _population admits exactly every ordered candidate from the typed authority and
+    fails on any feature/role/materialization/numeric/duplicate/order/cutoff error; no
+    continue/drop path remains. Preserve fitting/scaler population count/order/digest.
+  - >-
+    Before resolve, reject a root that is a symlink or whose absolute path differs from
+    its resolved path; reject every unsafe entry. Validate ZIP members before np.load:
+    exact names/order, no directories/encryption/extra/comment, stored compression,
+    fixed timestamp and expected safe file attributes/size. Retain allow_pickle=false,
+    exact dtype/shape/order/byte digests and read-only arrays.
+  - >-
+    Deep-freeze all nested loaded config/universe/membership state. Validate exclusions
+    and exemplars as unique UUID tuples, reject query/exemplar overlap with explicit
+    exclusions, and validate exact taxonomy role order/set with strict non-boolean
+    finite [0,1] probabilities and exact sum. Indexed/exemplar scoring remains one path.
+  - >-
+    Replace the two smoke tests with a complete dedicated adversarial suite. It must
+    directly prove typed authority rejection, frozen fixture reproduction, all six
+    builds, expected schemas/populations/arrays/scores/ranking digests, two-build exact
+    file bytes, reload distances/contributions/ties, PCA sign/tie/six contributions,
+    zero-IQR/norm, exemplar permutation, role restriction, temporal cutoff, symlink/
+    deep immutability, ZIP/object/dtype/shape/order/digest and fully re-signed config/
+    taxonomy/schema/universe/manifest/model attacks. Tests use production APIs and the
+    one runtime scorer, not a duplicate distance implementation.
+  - >-
+    Stage every R5 build in bounded temporary directories until config/source pins are
+    frozen. The master will move the current unaccepted R4 selected directory aside.
+    Then write the selected path once. R5 return lists exact fixture/config/all-family
+    artifact/ranking identities, exact commands and both R1 negative and R3/R5 positive
+    development-only evidence with every claim limitation.
+deliverables:
+  - Mandatory typed config/candidate/query authorities with no Mapping bypass.
+  - Fully validated family-specific artifacts, metadata schema and PCA explanations.
+  - Comprehensive adversarial model suite and byte-identical selected role-aware artifact.
+  - Complete mandatory R5 return with exact evidence and development-only boundary.
+definition_of_done:
+  - Frozen fixture/array/score facts remain exact and all R4 P1 attacks fail closed.
+  - Dedicated tests substantively exercise every family, parity, safety and substitution claim.
+  - Focused quality/import/local-only gates pass with no predecessor or dependency change.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen fixture, numeric array or exact score changes.
+  - Any accepted predecessor, contract, registry, taxonomy or dependency must change.
+  - Any tuning/selection/second scorer/control weakening or external/provider action is required.
+  - Required correction cannot stay within exact allowed paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,96 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-V2-ACCEPT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Materialize the master-owned canonical field-v2 acceptance record, bind the
+  corrected independent review and frozen candidate, verify progression, and
+  release only the possession-v2 decision packet.
+depends_on:
+  - W04-FIELD-SEMANTIC-V2-REVIEW-01-R2:MASTER_ACCEPTED
+assigned_role: master
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.md
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-V2-REVIEW-01-R2.yaml
+  - reports/verification/W04/wyscout-field-semantic-v2-review-R2-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - reports/verification/W04/wyscout-field-semantic-v2-acceptance-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-V2-ACCEPT-01-R1.md
+authority:
+  acceptance_id: w04-wyscout-field-semantic-acceptance-v2
+  acceptance_schema_version: w04-authority-acceptance-v1
+  accepted_at: "2026-07-30T21:21:23Z"
+  accepted_by: 4efe5691-8903-5148-8275-30d2e7e8aed0
+  candidate_id: w04-wyscout-field-registry-v2
+  candidate_physical_sha256: 15023556072f90b1e956277f255dc4a1df0bea78a5dcbb14b4863346ff9b5193
+  candidate_sha256: 93bc4592b9a5ee5eccdf7f4fbddec9e8bd3ac3dd9f597df278c108356cdc6959
+  decision_id: w04-wyscout-field-semantic-decisions-v2
+  decision_physical_sha256: cd4d51c0d7c365b73b0c23997716eb7755797889dca1fc545772263dc9924736
+  decision_sha256: cd4d51c0d7c365b73b0c23997716eb7755797889dca1fc545772263dc9924736
+  review_id: w04-wyscout-field-semantic-independent-review-v2-R1
+  review_physical_sha256: 76c4744d302b4c6d86f4d537498695e365f0d3c733211bfafcb1e5c2805c0886
+  review_record_sha256: 34ac364838495c12069e8ab1428bec4194f2ac6ba8ccdee21d356a04ced79712
+  review_recommendation: PASS
+  supersedes_acceptance_id: w04-wyscout-field-semantic-acceptance-v1
+requirements:
+  - >-
+    Write exactly one strict canonical UTF-8 JSON object plus one LF with the
+    fifteen closed `w04-authority-acceptance-v1` keys and exact values above.
+  - >-
+    Independently reconstruct decision/candidate physical and canonical
+    digests, the sole fenced review record and complete review physical digest,
+    PASS/empty findings, fixed actors, and decision <= review <= acceptance
+    clock order before materialization.
+  - >-
+    Require `supersedes_acceptance_id` to name the exact accepted field-v1
+    acceptance. Preserve every v1, candidate, test, review, and return byte.
+  - >-
+    With acceptance present, rerun the combined field-v2/v1 suite, local-only
+    verifier, exact canonical/digest checks, downstream/product absence, and
+    bytecode inventory comparison.
+  - >-
+    Write a complete master verification and master return. This acceptance
+    releases only the serial possession-v2 decision packet. It creates no
+    possession, feature, cross-authority, Bronze, Silver, Gold, manifest,
+    receipt, serializer, build, runtime, model, or product authority.
+  - >-
+    Perform no dependency/lock change, provider/network access, remote/cloud,
+    container, endpoint, hosted CI, deployment, or Git mutation.
+definition_of_done:
+  - Exact canonical acceptance and its digest are reproducible.
+  - Corrected review and field-v1 supersession are bound without substitution.
+  - Combined focused/local-only/inventory/path-absence checks pass.
+  - Master verification and return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Any bound digest, actor, clock, review, recommendation, or supersession differs.
+  - Any focused/local-only/inventory/path-absence check fails.
+  - A fourth output path or candidate/review edit is needed.
+  - >-
+    Work requires architecture, product, provider/right, root, dependency/lock,
+    storage, network, cloud, container, endpoint, hosted-CI, deployment, or
+    broader-scope change.
+delegation: forbidden
+git_operations: master_only_no_mutation_required
+self_approval: master_authority_required

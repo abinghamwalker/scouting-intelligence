@@ -1,0 +1,68 @@
+schema_version: 1
+task_id: W05-FEATURES-REVIEW-01
+phase_id: W05
+revision: R2
+state: IMPLEMENTED
+objective: >-
+  Independently replay every R1 fully re-signed identity, fabricated W04 Gold and false
+  claim attack after R2 while confirming the accepted feature positives remain exact.
+depends_on:
+  - W05-FEATURES-01-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-FEATURES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-FEATURES-01-R1.yaml
+  - reports/reviews/W05/w05-feature-registry-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-FEATURES-01-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/unit/test_w05_features.py
+  - docs/dataset-cards/w04-wyscout-transformed-v1.md
+  - data/manifests/wyscout/v5/gold/b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79.manifest.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-feature-registry-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-FEATURES-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+review_questions:
+  - Do fully re-signed root/family/schema/fixture identity and semantic substitutions fail against independent accepted W05 pins?
+  - Does the W04 bridge admit exactly the sole accepted research-only Gold row and reject fabricated product, manifest, player, count, clock, applicability and complete-lineage substitutions?
+  - Are every W04 dependency digest/kind/UUID/clock, lineage hash and strict cutoff mechanically exact without runtime provider/product reads?
+  - Are both families explicitly non-production and non-protected-evaluation, with no validation, expert or recruitment-fitness claim?
+  - Do exact-four closure, formulas, states, no-imputation, synthetic separation, deterministic bytes and focused checks remain green?
+deliverables:
+  - Independent P0/P1/P2 verdict with direct fully re-signed and fabricated-Gold probes.
+  - Complete mandatory R2 return at the exact allowed path.
+definition_of_done:
+  - Each accepted R1 P1 attack rejects for its intended reason without regression.
+  - No implementation/config/test/orchestration/dependency/Git/accepted W04 change.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_features.py tests/contracts/test_w05_m0_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run ruff check src/scouting/features tests/unit/test_w05_features.py
+  - uv run mypy src/scouting/features
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any authority conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

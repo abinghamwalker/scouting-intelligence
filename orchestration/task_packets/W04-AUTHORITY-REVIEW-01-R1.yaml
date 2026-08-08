@@ -1,0 +1,60 @@
+schema_version: 1
+task_id: W04-AUTHORITY-REVIEW-01
+phase_id: W04
+revision: R1
+state: READY
+objective: >-
+  Independently challenge the frozen Wyscout v5 source authority, local-only URL
+  exception, rights inheritance, five-competition boundary, temporal availability,
+  and claim restrictions without changing implementation or approving the phase.
+depends_on:
+  - W04-SOURCE-AUTHORITY-01:VERIFIED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - configs/sources/w04-provider.yaml
+  - configs/policies/data-rights.yaml
+  - docs/dataset-cards/w04-source.md
+  - reports/phase-gates/W04/provider-rights-decision-required.md
+  - scripts/verify_local_only.py
+  - tests/governance/test_w04_source_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/authority-boundary-audit-R1.md
+  - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Additive tests for exact URL, rights, archive-scope, temporal, and claim-boundary denial.
+  - Independent audit report with defects and ACCEPT-or-REWORK recommendation to master.
+  - Mandatory return; never self-approve the task or phase.
+definition_of_done:
+  - Unreviewed URL and path variants are rejected.
+  - Raw export/external paths remain denied despite the upstream CC BY grant.
+  - Availability cannot be moved earlier than collection release without test failure.
+  - Domestic scope cannot silently admit tournament or unknown partitions.
+acceptance_checks:
+  - uv run pytest -q tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff format --check tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff check tests/security/test_w04_source_authority_boundary.py
+  - uv run mypy tests/security/test_w04_source_authority_boundary.py
+stop_conditions:
+  - Review requires editing implementation or authority artifacts.
+  - Required evidence is missing or contradictory.
+  - Required work falls outside allowed paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

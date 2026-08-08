@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "phase_id": "W09",
+  "status": "PASS",
+  "decision": "ACCEPT_HISTORICAL_RESEARCH_WORKBENCH_ENGINEERING",
+  "verified_at_utc": "2026-08-05T00:00:00Z",
+  "claim_boundary": "historical resemblance research and reproducible engineering only; no football-relevance, recruitment-usefulness, recommendation, value, availability, fit or outcome claim",
+  "gates": [
+    {
+      "id": "G-RW1",
+      "status": "PASS",
+      "detail": "Reconciled, versioned and temporally bounded 1,975-row feature matrix over 1,965 eligible retained players; zero synthetic product rows."
+    },
+    {
+      "id": "G-RW2",
+      "status": "PASS",
+      "detail": "Deterministic 1,975-candidate retrieval with transparent explanations and identity, leakage, artifact and stale-version controls."
+    },
+    {
+      "id": "G-RW3",
+      "status": "PASS",
+      "detail": "One browser journey reaches exact comparison, content-addressed saved report and reproduced replay without role switching or terminal use."
+    },
+    {
+      "id": "G-RW4",
+      "status": "NOT_PERFORMED",
+      "detail": "No expert relevance labels exist; all positive football-relevance and recruitment-usefulness claims remain blocked."
+    }
+  ],
+  "source_universe": {
+    "competitions": 7,
+    "teams": 142,
+    "players": 3603,
+    "matches": 1826,
+    "actions": 3071395,
+    "canonical_appearances": 68864,
+    "identity_exclusions": 16
+  },
+  "accepted_identity": {
+    "canonical_build_id": "72969be11e9a13a3f2c87b92ccff0296e9ab026fdd531383ce67af074740fdb7",
+    "matrix_version": "w09-historical-player-window-v1-a31511705ac15a5d",
+    "matrix_digest": "428d25ed4f1fd5dec7df74f30905db875cd548270fc2824b431e1bc8a6447cc1",
+    "matrix_manifest_digest": "dda2588f7ad81443aac614a359fbda1fcb60e533ca0d56db5d59e4669a754692",
+    "index_id": "d362d87e-4d02-56a1-a5c8-446f5eaa72a3",
+    "index_manifest_digest": "30c2b6c1e0d65c8214860131f690b8b6cac05fe317ffa208a2785e11160eb0bc",
+    "evaluation_suite_digest": "1c922dafed2d7bdd773ad104ae2700330f0262da80a1e2e67327c5bcb6e8adc1",
+    "evaluation_result_digest": "835e31f1eb2ba0e7dc0456c3dca9a5918fb82c278567f00247aa26bf8a5da9c0"
+  },
+  "checks": [
+    {"id": "full-population-and-no-synthetic", "status": "PASS", "matrix_rows": 1975, "unique_players": 1965},
+    {"id": "frozen-retrieval-evaluation", "status": "PASS", "queries": 9, "scored_evaluations": 2841},
+    {"id": "retained-browser-save-replay", "status": "PASS"},
+    {"id": "provider-unicode-normalization", "status": "PASS", "literal_escapes_remaining": 0, "scoring_vectors_changed": false},
+    {"id": "w09-correction-regression", "status": "PASS", "passed": 126, "failed": 0},
+    {"id": "independent-review", "status": "PASS", "open_p0": 0, "open_p1": 0, "open_p2": 0, "open_p3": 0},
+    {"id": "complete-repository-tests", "status": "PASS", "passed": 2977, "failed": 0, "detail": "2,972 complete-run passes plus exact recovered 5/5 frozen-authority witnesses"},
+    {"id": "local-only-controls", "status": "PASS", "passed": 25, "failed": 0}
+  ],
+  "evidence": {
+    "acceptance_report": "reports/phase-gates/W09/acceptance-report.md",
+    "master_review": "reports/reviews/W09/master-review.md",
+    "independent_review": "reports/reviews/W09/independent-review.md",
+    "data_inventory": "reports/verification/W09/data-inventory-and-coverage.md",
+    "canonical_population": "reports/verification/W09/full-canonical-population.md",
+    "feature_matrix": "reports/verification/W09/full-feature-matrix.md",
+    "retrieval_evaluation": "reports/verification/W09/retrieval-evaluation.md",
+    "browser_journey": "reports/verification/W09/research-workbench-journey.md",
+    "unicode_correction": "reports/verification/W09/unicode-correction.md",
+    "unicode_correction_review": "reports/reviews/W09/unicode-correction-review.md",
+    "verification_report": "reports/verification/W09/verification-report.md"
+  },
+  "unresolved_implementation_findings": [],
+  "checkpoint_ready": true,
+  "next_phase_state": "PLANNED"
+}

@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W04-SOURCE-INGEST-01
+phase_id: W04
+revision: R3
+state: READY
+objective: >-
+  Close the independently reproduced oversized-expiry domain-error defect without
+  changing the accepted R2 redirect authority, source configuration, transport,
+  archive, completion, replay, storage, or local-only boundaries.
+depends_on:
+  - W04-SOURCE-INGEST-01-R2:IMPLEMENTED
+  - W04-SOURCE-INGEST-REVIEW-01-R2:REWORK
+assigned_role: source_implementer
+risk: medium
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-INGEST-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-INGEST-REVIEW-01-R2.yaml
+  - reports/reviews/W04/wyscout-ingest-review-R2.md
+  - tests/security/test_w04_wyscout_ingest_review.py
+  - src/scouting/sources/wyscout.py
+  - tests/unit/test_wyscout_source.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout.py
+  - tests/unit/test_wyscout_source.py
+  - reports/reviews/W04/returns/W04-SOURCE-INGEST-01-R3.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/storage/**
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+  - data/**
+  - runs/**
+  - tests/security/**
+  - tests/fixtures/synthetic/protected/**
+defects_to_close:
+  - id: W04-INGEST-EXPIRY-DOMAIN-01
+    severity: P2
+    detail: >-
+      str(int(expiry_text)) allows Python's integer-string conversion limit to
+      raise raw ValueError for a 5,000-digit provider-controlled value.
+required_corrections:
+  - >-
+    Lexically bound canonical ASCII decimal expiry text before integer conversion
+    so every malformed or oversized representation raises WyscoutDownloadError.
+  - >-
+    Retain the exact authorised canonical range 1..60 and do not broaden redirect
+    authority or accepted query representations.
+  - >-
+    Add a producer regression for an expiry longer than Python's default
+    integer-string conversion limit, proving WyscoutDownloadError before body read,
+    response closure, and complete temporary cleanup.
+  - Retain all R2 producer tests unchanged and green.
+definition_of_done:
+  - The retained independent oversized-expiry regression passes.
+  - All producer checks pass with no provider or real-payload access.
+acceptance_checks:
+  - >-
+    uv run pytest -q tests/unit/test_wyscout_source.py
+    tests/security/test_w04_wyscout_ingest_review.py::test_malformed_numeric_expiry_is_domain_error_before_body_read
+  - uv run ruff format --check src/scouting/sources/wyscout.py tests/unit/test_wyscout_source.py
+  - uv run ruff check src/scouting/sources/wyscout.py tests/unit/test_wyscout_source.py
+  - uv run mypy src/scouting/sources/wyscout.py
+  - uv run bandit -q src/scouting/sources/wyscout.py
+stop_conditions:
+  - A source configuration, dependency, contract, storage, data, or container change appears necessary.
+  - The correction requires provider access or changes any accepted redirect authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

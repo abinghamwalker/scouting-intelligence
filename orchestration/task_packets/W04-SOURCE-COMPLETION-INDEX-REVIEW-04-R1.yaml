@@ -1,0 +1,82 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-REVIEW-04
+phase_id: W04
+revision: R1
+state: INDEPENDENT_PASS_MASTER_ACCEPTED
+objective: >-
+  Freshly and independently review the exact R4 proof-graph candidate. Return PASS
+  only if exposed issuers or mutable registries cannot make incomplete, malformed,
+  detached, cyclic or cross-scope evidence pass checked consumption, and the exact
+  accepted source comparison remains executable authority.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-01-R4:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_proof_graph_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1.yaml
+  - reports/verification/W04/wyscout-source-completion-index-R4-master-verification.md
+  - reports/reviews/W04/wyscout-source-completion-index-capability-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R4.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R4.yaml
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-source-completion-index-proof-graph-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-04-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  source_implementation_sha256: e7778db8c977b8461bb590f7174e4b519d7a2ba0a4171d99aa1fd686a6cd5302
+  contract_implementation_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  source_test_sha256: 05593a0a0afda62af2b6a2c8753a4f83e78fcbd363b89788751dd2055ed6dfeb
+  contract_test_sha256: 139683be6a9e6dc4d8be90cd81bb0827c1dbeea00b4ad01aebe3bdcaf9d5be9e
+  producer_return_sha256: aa165fd8bc74d56e4e4e72da6d2cd7f11a2b65cc389f98efeafd3894b3c72a36
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - Inspect every completion/product proof record, verification context, registry getter/issuer, checked builder and require boundary.
+  - Independently challenge issuer extraction and direct registry mutation with false period-to-match, nonaccepted population, detached raw product, malformed kind/payload/dependencies, cycle and cross-scope evidence.
+  - Confirm a valid forged registry record can pass only when its complete retained evidence independently rederives exactly what the public checked path would authorize.
+  - Challenge memoization for stale record acceptance, identity reuse, incomplete recursion, wrong exact type and completion-scope drift.
+  - Reproduce the original fail-fast-reader bypass as closed and ensure no `model_construct` is credited.
+  - Verify normal match 2499719 checked construction and the one-verification-per-top-level-graph invariant.
+  - Confirm no product/dependency/provider/network/Git/cloud/container/CI/endpoint/remote/deployment action.
+definition_of_done:
+  - R3 capability-forgery P1 is independently reproduced closed with no new P0-P2 finding.
+  - Exact legitimate checked construction remains functional and source-bound.
+  - Review and return record PASS or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_identity_ruleset_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review with PASS or REWORK and exact P0/P1/P2 counts.
+  - Mandatory reviewer return.
+stop_conditions:
+  - Candidate hash drift or need to edit any implementation/test/data/frozen path.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

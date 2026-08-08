@@ -1,0 +1,57 @@
+{
+  "allow_pending_checkpoint": true,
+  "checks": [
+    {
+      "detail": "state: 'MASTER_REVIEW'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'MASTER_REVIEW'",
+      "id": "PHASE_GATE_READY",
+      "status": "FAIL"
+    },
+    {
+      "detail": "W07:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W08-AUTH-AUDIT-01:ACCEPTED:1 retained return(s), W08-AUTH-POLICY-INTEGRITY-01B:ACCEPTED:1 retained return(s), W08-WORKFLOW-02:ACCEPTED:2 retained return(s), W08-WORKFLOW-INTEGRITY-02B:ACCEPTED:2 retained return(s), W08-WEB-E2E-04:ACCEPTED:2 retained return(s), W08-WEB-WORKFLOW-04A:ACCEPTED:2 retained return(s), W08-WEB-EXPORT-04C:ACCEPTED:2 retained return(s), W08-WEB-EXPORT-UI-04I:ACCEPTED:2 retained return(s), W08-WEB-EXPORT-JOURNEY-04K:ACCEPTED:2 retained return(s), W08-WEB-EXPORT-JOURNEY-WITNESS-04L:ACCEPTED:2 retained return(s), W08-WEB-EXPORT-SECURITY-04J:ACCEPTED:1 retained return(s), W08-WEB-BRIEF-04D:ACCEPTED:2 retained return(s), W08-WEB-BRIEF-HISTORY-04E:ACCEPTED:2 retained return(s), W08-WEB-BRIEF-WITNESS-04G:ACCEPTED:1 retained return(s), W08-WEB-REPLAY-GUARD-04F:ACCEPTED:2 retained return(s), W08-REPLAY-CONTRACT-02C:ACCEPTED:1 retained return(s), W08-BROWSER-A11Y-04B:ACCEPTED:2 retained return(s), W08-BROWSER-OVERFLOW-04M:ACCEPTED:1 retained return(s), W08-STUDY-HARNESS-07A:ACCEPTED:1 retained return(s), W08-INDEPENDENT-SECURITY-05:ACCEPTED:3 retained return(s), W08-WEB-SCOUT-BRIEF-AUTHZ-04P:ACCEPTED:1 retained return(s), W08-MULTIROLE-SHORTLIST-AUTHZ-04Q:ACCEPTED:1 retained return(s), W08-MULTIROLE-AUTHZ-REVIEW-05D:ACCEPTED:1 retained return(s), W08-EXPORT-IMPORT-BOUNDARY-05E:ACCEPTED:1 retained return(s), W08-EXPORT-IMPORT-BOUNDARY-REVIEW-05F:ACCEPTED:1 retained return(s), W08-AUDIT-RECEIPT-BINDING-05B:ACCEPTED:1 retained return(s), W08-WEB-EVIDENCE-ORIGIN-04N:ACCEPTED:1 retained return(s), W08-EXPORT-BYTE-TAMPER-05C:ACCEPTED:1 retained return(s), W08-EXPORT-03:ACCEPTED:1 retained return(s), W08-EXPORT-INTEGRITY-03B:ACCEPTED:2 retained return(s), W08-AUDIT-EXPORT-TAMPER-05A:ACCEPTED:1 retained return(s)",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "PASS"
+    },
+    {
+      "detail": "reports/phase-gates/W08/gate-report.json, reports/phase-gates/W08/pilot-gate-report.json, reports/reviews/W08/master-review.md, reports/reviews/W08/w08-independent-security-review-R4.md, reports/reviews/W08/w08-export-import-boundary-review-R1.md, reports/verification/W08/verification-report.md, reports/verification/W08/authentication-authorization-report.md, reports/verification/W08/workflow-audit-export-recovery-report.md, reports/verification/W08/security-confidentiality-report.md, reports/verification/W08/browser-accessibility-report.md, reports/verification/W08/export-import-boundary-report.md, reports/verification/W08/limitations.md, reports/verification/W08/protected-output-boundary.md, reports/verification/W08/representative-user-evidence-status.md, reports/verification/W08/moderated-study-protocol.md, reports/verification/W08/morning-handoff.md, reports/verification/W08/pilot-user-guide.md, reports/verification/W08/phase-verifier-diagnostic.json, reports/verification/W08/clean-tree-report.md",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "automated-authentication-authorization:PASS, workflow-export-audit-concurrency-recovery:PASS, independent-security-confidentiality:PASS, export-import-boundary:PASS, browser-and-accessibility-mechanics:PASS, complete-repository-gate:PASS, local-only-controls:PASS, protected-output-boundary:PASS, moderated-study-protocol-prepared:PASS",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "PASS"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w08-start:39e4add04b61c8fa558f24342ad89829036f73ac",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [
+    {
+      "code": "PHASE_GATE_READY",
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'MASTER_REVIEW'"
+    }
+  ],
+  "phase_id": "W08",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "MASTER_REVIEW",
+  "status": "FAIL",
+  "validator": "verify_phase"
+}

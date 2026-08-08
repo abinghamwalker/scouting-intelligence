@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R5
+state: DISPATCHED
+objective: >-
+  Produce the final standalone W04 schema/rebuild design by correcting the four P1
+  defects independently returned against R4 while retaining every accepted R4/R3
+  closure and the approved architecture, rights, dependencies, migrations, and
+  local-only boundary.
+depends_on:
+  - W04-SCHEMA-DESIGN-REVIEW-01-R3:REWORK
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R4.yaml
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R3.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/retrieval.py
+  - docs/architecture/evaluation-contract.md
+  - docs/dataset-cards/w04-source.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R5.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Define an exact project identity-ruleset decision, separate independent review,
+    master acceptance, and truthful clocks. IdentityEvidence valid_from may be source
+    release, but available_at and the identity dependency availability must be the
+    later accepted-authority time; cutoff equality/later tests must fail.
+  - >-
+    Restore the complete W04.3 lifecycle: strict crosswalk schema for all four entity
+    kinds; exact deterministic confidence threshold/state machine; bundle schema,
+    ID/digest/path and dependency-ID relationship; immutable unresolved review queue;
+    reviewed correction/supersession artifacts; versioning; fail-closed consumers;
+    exact decision/review/acceptance/correction owners and tests.
+  - >-
+    Complete runtime/phase ownership: strict source-manifest output, identity bundle/
+    queue/corrections, data-health surface, transformed W04 dataset card, independent
+    card review, master verification, acceptance/gate reports, phase registry update,
+    and local checkpoint commit/tag as master-only post-acceptance work.
+  - >-
+    Extend content admission to exact selected lock artifact hash and environment
+    selector plus actual installed third-party runtime file bytes/RECORD verification.
+    Bind imported standard-library/interpreter identity sufficiently for the claimed
+    local reproducibility. Hash every allowed behavior-affecting local non-Python
+    resource or fail closed on its use; include resource/environment digests in build
+    identity and add negative tests.
+  - >-
+    Retain the clock-free semantic proof and truthful existing-contract adapter,
+    project-defined semantic authority route, exact 18-row strict manifest,
+    field-exact source coverage, source seam, neutral Gold grain, minute/per-90
+    suppression, Gold coverage, and player_match_fact.
+definition_of_done:
+  - All four R4 review defects close with exact schemas, paths, clocks, owners, and tests.
+  - All prior accepted closures remain intact.
+  - The standalone graph covers W04.1-W04.7/P2.1-P2.9 and G-W04 evidence.
+  - No guessed semantics or implementation-time owner/path decision remains.
+  - No architecture, rights, dependency, migration, provider, or local-only change is proposed.
+acceptance_checks:
+  - uv run python -c "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-R5.md'); assert p.is_file() and p.stat().st_size > 15000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - The identity lifecycle, executable/resource closure, or phase evidence cannot be designed locally without new architecture.
+  - A dependency, migration, source-rights, provider, network, or local-only change is required.
+  - Required work needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

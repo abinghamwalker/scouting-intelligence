@@ -1,0 +1,31 @@
+schema_version: 1
+record_type: w08_moderated_representative_user_summary
+status: TEMPLATE_ONLY_NO_PARTICIPANT_EVIDENCE
+protocol_path: reports/verification/W08/moderated-study-protocol.md
+protocol_sha256: null
+participant_capture_paths: []
+participant_capture_sha256: {}
+participant_count: 0
+distinct_authorised_representative_participant_count: 0
+responsibility_coverage:
+  analyst: 0
+  scout: 0
+  approver_or_meeting_decision: 0
+all_consented: false
+all_T1_to_T7_passed_unaided: false
+unsupported_inference_count: null
+p0_findings: []
+p1_findings: []
+lower_severity_findings: []
+workflow_identifiable_and_reversible_for_all_five: false
+protected_w06_outputs_opened_or_reconstructed: null
+independent_review:
+  reviewer_packet: null
+  reviewed_capture_checksums: false
+  verdict: NOT_REVIEWED
+gate:
+  g_w08b_representative_users: PENDING
+  legacy_g_w08_representative_users: PENDING
+  g4_g4b_five_representative_users: PENDING
+  decision: HUMAN_EVIDENCE_PENDING
+summary_sha256: null

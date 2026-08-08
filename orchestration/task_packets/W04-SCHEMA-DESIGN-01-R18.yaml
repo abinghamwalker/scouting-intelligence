@@ -1,0 +1,124 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R18
+state: DISPATCHED
+objective: >-
+  Correct only the three master-reproduced R17 regressions while preserving
+  every passing R17 standalone, host-normalized, field-roster, and downstream
+  authority closure.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R17:REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R17.yaml
+  - reports/verification/W04/wyscout-schema-design-R17-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R17.yaml
+  - reports/reviews/W04/wyscout-schema-design-R17.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R17.md
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - src/scouting/contracts/primitives.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R18.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R18.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Preserve R17 invariant 6 and use the existing
+    src/scouting/contracts/primitives.py authority exactly:
+    ActorId = StrictUuid. Remove the arbitrary ASCII actor grammar. Every
+    decided_by, reviewed_by, and accepted_by field in every semantic route is a
+    strict UUID ActorId and uses canonical lowercase RFC 4122 UUID JSON
+    spelling. Retain accepted_by == decided_by, reviewed_by != decided_by, and
+    every existing cross-artifact actor equality.
+  - >-
+    Restore the complete possession predicate schema authorized by R4/R5. Every
+    non-UNMAPPED predicate explicitly contains control_team_source,
+    opens_control, closes_control, dead_ball_attachment,
+    contested_attachment, rationale, and decided_by in addition to the
+    predicate selector and decision fields. Define the exact closed JSON
+    types/literals, non-null requirements, and valid combinations for all six
+    decisions. Define exact explicit values or null rules for every field on an
+    UNMAPPED row; no field may be silently omitted. Require every row decided_by
+    to equal the top-level possession decision decided_by and require the
+    taxonomy candidate to reproduce every row byte-for-byte under its parsed
+    canonical schema. Add fail-closed rejection tests for missing fields,
+    inconsistent actors, and invalid decision/attachment/control combinations.
+  - >-
+    Restore the exact approved field decision contract-test ownership path
+    tests/contracts/test_wyscout_field_registry_authority.py everywhere. Remove
+    every occurrence of the unauthorized alternate
+    tests/contracts/test_w04_field_semantic_authority.py. Do not rename any
+    other frozen artifact or packet path.
+  - >-
+    Retain without regression R17's exact 119 measured field-pair roster and
+    10/11/26/47/18/4/3 counts; exact field decision/registry/review/acceptance
+    schemas, IDs, digests, canonicalization, clocks, dependency, equality, and
+    ownership graph; and equally standalone possession, identity, and
+    supported-feature authority protocols.
+  - >-
+    Retain R17's host-independent stable uv roles/tokens and operational-only
+    actual path receipt, exact current-host admission, H1/H2 host-spelling
+    perturbation equality, v4/v2/v2/v14 versions, 16/8/10/25/25/20 schemas,
+    25-key acyclic projection, five dependencies, descriptor/result/race
+    closures, packaging/source/resource proofs, 17-resource authority, products,
+    gate, two-root proof, and two-commit ledger. Future scripts remain absent.
+  - >-
+    R17 was not accepted, so keep the corrected candidate schema identifiers at
+    w04-local-control-bootstrap-v4, w04-outer-environment-bootstrap-v2,
+    w04-child-environment-input-v2, and
+    w04-code-environment-admission-v14 unless the corresponding executable
+    canonical preimage schema itself must change. If one must change, version it
+    consistently and explain why in the return.
+  - >-
+    Produce one standalone replacement document; do not require an implementer
+    to consult R4, R5, R17, or this packet. Change exactly the two absolute R18
+    report paths, create no parent-workspace path, and return a complete truthful
+    handback. Do not perform Git-mutating operations.
+definition_of_done:
+  - Every actor field conforms to the existing strict UUID ActorId contract.
+  - The possession predicate row is complete and fail-closed for all decisions.
+  - The approved field contract-test path is restored and the alternate is absent.
+  - Every passing R17 closure remains intact in a standalone replacement design.
+  - No implementation, configuration, data, provider, network, or Git action occurs.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R18.md');
+    s=p.read_text(); assert p.stat().st_size > 220000;
+    assert 'tests/contracts/test_wyscout_field_registry_authority.py' in s;
+    assert 'tests/contracts/test_w04_field_semantic_authority.py' not in s"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    The correction requires changing the approved architecture, project root,
+    uv/Python dependency policy, provider/rights authority, storage decision,
+    local-only boundary, or any stable R17 launch/build closure.
+  - Exact existing ActorId compliance conflicts with a required authority route.
+  - The full possession row cannot coexist with the retained semantic policies.
+  - Work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

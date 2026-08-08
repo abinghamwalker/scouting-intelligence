@@ -1,0 +1,114 @@
+schema_version: 1
+task_id: W04-CONTROL-PREIMAGE-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent no-write review of both canonical R21 control
+  preimages and their focused test, and recommend PASS only if no P0-P2 defect
+  remains.
+depends_on:
+  - W04-CONTROL-PREIMAGE-01-R1:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_r21_control_preimage_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-CONTROL-PREIMAGE-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/verification/W04/wyscout-schema-design-R21-master-verification.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/returns/W04-CONTROL-PREIMAGE-01-R1.md
+  - orchestration/reviews/REVIEW-W04-CONTROL-PREIMAGE-01-R1.yaml
+  - reports/verification/W04/wyscout-r21-control-preimage-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-r21-control-preimage-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-CONTROL-PREIMAGE-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+preflight_postflight:
+  - >-
+    Before reading R20/R21 or invoking Python, create a shell-only inventory of
+    every existing repository/site pyc and cache directory with path, size,
+    mode, link, mtime, first bytes, and full SHA. Retain it in /tmp.
+  - >-
+    All Python/test commands set PYTHONDONTWRITEBYTECODE=1 before uv and use
+    `--locked --no-sync`; Python helpers invoke `python -B`, or `-S -B` where
+    packages are unnecessary. Do not sync, install, clean, repair, or purge.
+  - >-
+    After the final report edit and check, repeat the identical inventory.
+    Any difference invalidates review and must be reported without cleanup.
+review_requirements:
+  - >-
+    Read the complete immutable R20/R21 authorities, both complete one-line
+    preimages, all 569 focused-test lines, the complete producer return, and
+    master evidence. Review independently rather than adopting producer tests.
+  - >-
+    Reconstruct canonical bytes and physical/canonical hashes exactly as
+    0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+    and a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f.
+  - >-
+    Verify exact top-level/nested keys; 17 path rows; ten sorted owners and
+    once-only ownership; two primary keys; five manifest/receipt rows; 16
+    descriptors; identical dependency order; earlier-only edges; descriptor
+    literal; and typed null feature placeholder.
+  - >-
+    Prove the preimages are siblings with byte-equal authority links, neither
+    has a self/sibling/downstream/feature/runtime/product edge or value, and
+    either sibling-first topological presentation is valid.
+  - >-
+    Challenge test quality with positive and negative mutations, rerun focused
+    tests and local-only verification, and prove the seven destination roots are
+    absent. Confirm no field/possession/feature/data/product implementation.
+  - >-
+    Report all P0-P2 findings. PASS requires zero. State exact readback,
+    evidence, commands, inventory comparison, recommendation, residual risks,
+    and no self-acceptance.
+definition_of_done:
+  - Both exact preimages and test receive a fresh complete independent review.
+  - Canonical/DAG/cardinality/no-product claims are independently reproduced.
+  - Inventory is byte-identical.
+  - PASS has zero P0-P2 findings; otherwise REWORK is explicit.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-r21-control-preimage-independent-review-R1.md');
+    s=p.read_text(); assert p.is_file() and p.stat().st_size > 12000;
+    assert 'recommendation' in s.lower();
+    assert '0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293' in s;
+    assert 'a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f' in s;
+    assert 'P0' in s and 'P1' in s and 'P2' in s"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any pre/post inventory drift or unexpected write.
+  - A mandatory input is missing or differs from its accepted hash.
+  - >-
+    A finding requires architecture, product, source/provider/right, root,
+    dependency, storage, or local-only change.
+  - Review needs edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

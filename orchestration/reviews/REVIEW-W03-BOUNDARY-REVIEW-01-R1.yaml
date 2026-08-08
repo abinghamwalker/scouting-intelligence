@@ -1,0 +1,40 @@
+schema_version: 1
+review_id: REVIEW-W03-BOUNDARY-REVIEW-01-R1
+task_id: W03-BOUNDARY-REVIEW-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: FAIL
+verified_results:
+  reviewer_tests: 9_passed_1_failed
+  retained_failure: same_tenant_role_brief_owner_collision
+  ruff_format: PASS
+  ruff_lint: PASS
+  import_linter: PASS
+  requirement_mapping: PASS
+defects:
+  - severity: P1
+    code: PERSISTED_OBJECT_OWNERSHIP_COLLISION
+    evidence:
+      - tests/security/test_w03_boundary_audit.py
+      - reports/reviews/W03/boundary-audit.md
+    master_reproduction: >-
+      The master reran the isolated collision test against the approved loopback
+      PostgreSQL service. Analyst B received HTTP 200; the retained DB evidence
+      showed analyst A as persisted brief owner, analyst B's trace on the new
+      retrieval, and analyst B as the new audit actor.
+    affected_definition_of_done: >-
+      W03.5, G-W03 and G1 require deny-by-default object ownership and audit
+      integrity.
+    required_fix: >-
+      Make every material journey insert conflict-aware inside the existing
+      transaction. Only an exact canonical same-owner idempotent replay may be
+      accepted; deny owner or immutable-content mismatch before a successful
+      response, with transaction rollback proving no retrieval, shortlist or audit
+      side effect.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-VERTICAL-01-R6.yaml
+reviewer: master

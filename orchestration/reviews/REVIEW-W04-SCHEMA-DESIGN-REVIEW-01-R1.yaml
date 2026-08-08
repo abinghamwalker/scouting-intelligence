@@ -1,0 +1,26 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SCHEMA-DESIGN-01-R3
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R1.md
+checks:
+  - command: >-
+      uv run python -c "from pathlib import Path;
+      p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R1.md');
+      assert p.is_file() and p.stat().st_size > 4000"
+    result: PASS_11756_bytes
+  - command: uv run python scripts/verify_local_only.py
+    result: PASS_21_checks
+

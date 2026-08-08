@@ -1,0 +1,63 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R11
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: FAIL
+implementation_readback: PASS
+subagent_tests_reproduced: FAIL
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - id: W04-R11-REVIEWER-BYTECODE-MUTATION-01
+    severity: P1
+    status: master_reproduced
+decision: REWORK
+next_packet: W04-SCHEMA-DESIGN-01-R19
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R11.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R11.md
+  - reports/reviews/W04/wyscout-schema-design-R18.md
+  - reports/verification/W04/wyscout-schema-design-independent-review-R11-master-verification.md
+checks:
+  - command: >-
+      read complete independent R11 review and return
+    result: PASS_819_REVIEW_LINES_118_RETURN_LINES
+  - command: >-
+      enumerate packaging __pycache__ path, size, mode, link count, mtime,
+      magic, source sibling, and SHA-256 with read-only shell tools
+    result: FAIL_EXACT_11_REVIEWER_CREATED_MAPPED_NORMAL_PYCS
+  - command: >-
+      count site and repository pycs before and after fresh locked all-groups sync
+    result: PASS_SITE_1086_UNCHANGED_REPOSITORY_58_UNCHANGED
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED_ZERO_CENSUS_CHANGE
+  - command: >-
+      uv run --locked --no-sync python -B -c
+      "reproduce report size/recommendation and assert bytecode denial"
+    result: PASS_38008_BYTES_DONT_WRITE_BYTECODE_TRUE
+  - command: uv run --locked --no-sync python -B scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read the complete 819-line R11 review and 118-line return. R11
+    truthfully issued no R18 merits verdict and disclosed its process failure.
+  - >-
+    The master independently confirmed exactly eleven new regular mode-0644
+    current-magic packaging pycs with present source siblings, one shared
+    modification second, and the exact reported digests. Site count is 1,086;
+    repository count remains 58. No cleanup or repair was performed.
+  - >-
+    The eleven files are operational and classifiable, so stable source
+    authority and architecture do not change. R19 must refresh the exact
+    observed census, make later cardinality an operational preflight result, and
+    close a bytecode-denying review harness before another independent review.
+  - >-
+    R11 cannot approve or reject R18 on its merits because it changed evidence
+    outside its two-report ownership before completing the required census.
+    Product implementation and provider acquisition remain blocked.

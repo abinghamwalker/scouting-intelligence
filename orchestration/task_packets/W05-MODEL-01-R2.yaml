@@ -1,0 +1,199 @@
+schema_version: 1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Complete the deterministic transparent M0 implementation using one additive,
+  preregistered synthetic model-development fixture, preserving the failed R1
+  comparison and every accepted predecessor byte.
+depends_on:
+  - REVIEW-W05-MODEL-01-R1:REWORK
+assigned_role: m0_baseline_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R1.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - orchestration/reviews/REVIEW-W05-ROLES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-ROLES-REVIEW-01-R2.yaml
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/baselines.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/models/w05-m0-baselines-v1.json
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/artifact.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/roles/**
+  - data/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+requirements:
+  - >-
+    Retain all sound R1 runtime/trainer work, but treat it as partial and unaccepted.
+    Implement exactly metadata control, raw Euclidean control, robust-scaled cosine,
+    weighted cosine, PCA and simple role-aware restriction behind one typed interface.
+    Do not add learned ranking, metric learning, clustering, outcome/value/price,
+    transfer-success or W06 protected-evaluation behavior.
+  - >-
+    Preserve every accepted W04, W05 feature and W05 role authority/config/fixture byte.
+    Do not reinterpret the R1 failure. The accepted feature fixture remains the feature
+    materialization/state/lineage proof and is not relabelled as a successful model
+    comparison. The R1 exact scores and finite-search result must be quoted in the R2
+    return and later limitations inputs.
+  - >-
+    Add a distinct canonical self-verifying m0-development-candidates-v1 fixture. It
+    must declare synthetic_development=true, development_only=true, protected=false,
+    recruitment_outcome=false, external_expert_label=false, production_claim=false,
+    provider_source=NONE and claim=constructed_W05_M0_development_only. It must pin
+    the accepted feature registry/family/schema and role taxonomy identities and have
+    its own canonical digest excluding only that digest.
+  - >-
+    Freeze exactly 18 candidate rows: three football-responsibility archetypes with
+    six candidates each. Use the accepted six-feature materializer and accepted role
+    membership implementation. Archetypes must be progression, chance creation and
+    defensive disruption, defined in football language and through declared feature
+    numerator patterns plus declared taxonomy responsibility evidence. Candidate IDs,
+    timestamps, dependency identities, raw numerators, expected ordered FeatureValues,
+    source-label priors and expected role distributions must all be explicit.
+  - >-
+    Cross-balance metadata by repeating the exact same six-item sequence of synthetic
+    position, age and elapsed-minutes combinations inside every archetype, so metadata
+    is not a peer-group proxy. Include one declared high-variance aerial-involvement
+    nuisance sequence repeated identically within every archetype while the other
+    action-rate patterns encode the responsibility archetype. State this construction
+    visibly in the fixture. Do not make any feature unavailable, missing, suppressed
+    or imputed in the admitted 18-row model population.
+  - >-
+    Add a separate canonical self-verifying query fixture over all 18 candidates. It
+    declares each candidate once as a leave-one-query-out query, its constructed
+    archetype as the only relevance definition, self exclusion and fixed k=3. It pins
+    the candidate fixture digest and repeats the same development-only/non-protected/
+    no-outcome/no-expert/no-production claim boundary. No query may carry a per-query
+    weight, threshold or hidden relevance input.
+  - >-
+    Preregister one global configuration before the first R2 score: seed 20260803,
+    PCA components=3, weighted-cosine weights=[2.0,2.0,2.0,2.0,1.0,0.1] in accepted
+    feature order, and role-aware minimum overlap=0.75. Recompute the canonical config
+    digest. These values are semantic fixed M0 settings, not learned parameters. Run
+    exactly one R2 comparison with this configuration. Do not search, adjust, retry or
+    select a subset after observing scores.
+  - >-
+    Role evidence must make the three archetypes genuinely responsibility-distinct
+    under the accepted taxonomy. The role-aware family uses the exact weighted-cosine
+    distance and only the fixed overlap restriction. It may not read constructed peer
+    labels, use a query-specific eligibility rule or replace the taxonomy with an
+    exemplar. Exemplar similarity remains optional and is not needed for this gate.
+  - >-
+    The metadata control uses only position, age and elapsed minutes; the raw control
+    uses the raw six-feature Euclidean distance. Robust cosine uses fitting-population
+    median/IQR with deterministic zero-IQR handling. Weighted cosine uses that same
+    transform and the fixed positive weights. PCA uses that transform and canonical
+    sign/tie orientation. No control may be intentionally degraded or receive a
+    different candidate/query population.
+  - >-
+    Use only the locked NumPy/scikit-learn stack and standard library. Bind the exact
+    sorted fitting population, candidate population, feature order/schema, taxonomy,
+    config, fixture/query, temporal and dependency-lineage identities. Reject duplicate
+    IDs, incomplete numeric state, W04/synthetic substitution, cutoff violations,
+    population order/digest mismatch and claim-bearing fixture substitution.
+  - >-
+    The normal validated RoleTaxonomy or FootballResponsibilityTaxonomy object is the
+    sole source of taxonomy pins. The runtime loader requires that authority plus the
+    exact loaded feature registry and config. Fully re-signed arbitrary taxonomy,
+    schema, config, candidate, query or manifest substitutions fail closed.
+  - >-
+    Keep pure loading/scoring in scouting.m0 and fit/write only in scouting.modeling.
+    Both development and later serving must call the one runtime scorer. Runtime code
+    exposes no fit/write/mutation/provider access and modeling is never imported by
+    the runtime.
+  - >-
+    Serialize deterministic non-executable NPZ with allow_pickle=false, exact member
+    names/order and fixed ZIP metadata; arrays are little-endian float64 C-contiguous
+    or uint8 UUID rows. JSON is strict canonical. Reject pickle/object arrays, unsafe
+    names/paths, extra/missing/duplicate entries, dtype/shape/order/digest drift and
+    root escape. Loaded state is immutable/read-only.
+  - >-
+    Build all six families in bounded test directories and materialize the selected
+    role-aware restriction baseline only at runs/w05/m0-baseline-v1 with exactly
+    arrays.npz, manifest.json, configuration.json and candidate-universe.json. Two
+    clean builds must be byte-identical. Exact reload reproduces arrays, distances,
+    contributions, stable UUID tie order, rankings and ranking/result digests.
+  - >-
+    The single R2 comparison reports per-family mean constructed-archetype precision@3
+    over all 18 leave-one-out queries and stable ranking digests. The selected
+    role-aware baseline must strictly exceed both metadata and raw controls. This is a
+    deliberately constructed synthetic development-readiness fact only, not model
+    validation, recruitment effectiveness, expert evidence, protected evaluation,
+    robustness evidence or transfer evidence.
+  - >-
+    Tests cover all six families, exact feature order/hash, exact fitting/scaler and
+    candidate/query populations, fixture claim/digest validation, zero-IQR/zero-norm,
+    filters/restrictions, UUID ties, PCA orientation/tied variance, two-build bytes,
+    exact reload, all authority/array/manifest substitutions, R1 retained failure
+    evidence and strict R2 control improvement. Do not add a second scorer in tests.
+deliverables:
+  - Preregistered global M0 config plus canonical synthetic candidate and query fixtures.
+  - Pure shared runtime scorer/loader and separate deterministic trainer/writer.
+  - Reloadable selected local role-aware baseline under the exact allowed run path.
+  - Focused adversarial tests and mandatory R2 return with exact identities/digests/scores and R1 limitation.
+definition_of_done:
+  - All six M0 families fit, reload and retrieve deterministically behind one interface.
+  - One no-retry preregistered R2 synthetic check strictly clears both controls.
+  - All substitutions fail closed and no production/W06 claim is made.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted W04/W05 contract, registry, taxonomy or predecessor fixture byte would need to change.
+  - The single preregistered R2 comparison does not strictly clear both controls.
+  - Any label-responsive retry, weight/threshold search, query subset selection or control degradation would be required.
+  - Any learned/outcome/value/W06/provider/external/dependency/destructive/out-of-scope action is required.
+  - Required work falls outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

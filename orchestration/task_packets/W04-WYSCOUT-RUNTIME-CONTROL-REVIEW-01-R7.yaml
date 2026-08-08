@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R7
+state: DISPATCHED
+objective: >-
+  Freshly and independently adjudicate the R7 admitted-parent, exact-owner and
+  pre-guard file-backed-module-census correction for W04-RUNTIME-R6-P1-01,
+  including the disclosed pre-baseline operational-PYC rewrite, without editing
+  any producer byte or publishing to real roots.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R7:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r7_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R7.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R6.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R7.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R7.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R7.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: 7f49b838dd9298997dceb298f40c02a7a647f0373b56b1e3784f28b2633d36be
+  runtime_tests_sha256: 9ff4b47bd00c963652140ede0474e388d8b553234e5269b892e0cf84b9336927
+  producer_return_sha256: 44566dba6acb7506bbf31d9714f2f4cda58a113c8b15c773196df3940172cd17
+  producer_packet_sha256: db313fecc2389d34bfd387b6649ed3d919c6497610d475853fd3704e985ed05b
+  r6_review_sha256: 6ba86ce454aee332b66bde6db0a1141511a33404054910996e521745ea8200bf
+  disclosed_operational_pyc_sha256: b1c8fbd8e5de10d6251995b9dc0fbbcb7457ba0bdaffd669e6e58c86d280b52e
+requirements:
+  - Verify every fixed binding first and keep all producer, PYC, source and real-root bytes read-only.
+  - >-
+    Independently trace the first executable launcher path using only the
+    resident built-in/frozen capabilities available before guard installation.
+    Prove the exact file-backed sys.modules census is the three distinct admitted
+    encoding rows plus no alias/duplicate/extra file-backed entry, and that all
+    other resident entries are the exact permitted built-in/frozen or __main__
+    cases.
+  - >-
+    Independently challenge the retained descriptor walk from / through the
+    admitted stdlib root and encodings parent. Require every component to be a
+    real descriptor-relative no-follow directory with safe mode, permitted owner
+    transition and stable path/fstat identity; require exact current UID/GID and
+    mode 0755 at stdlib/encodings; require each leaf relative-only, UID/GID,
+    regular 0644, link one, exact bytes/size/digest/EOF and stable pre/post parent
+    and leaf snapshots. Reject absolute/path fallback, links, escape, replacement,
+    owner drift and identity drift.
+  - >-
+    Reproduce and extend the direct exact-uv attacks for fourth file-backed
+    module, duplicate module object, accepted-origin alias, parent link and
+    replacement, leaf replacement and owner drift. Confirm all R6 tuple/env/argv/
+    FD/prefix/chronology/product predicates and exact admission-child bytes remain
+    unchanged.
+  - >-
+    Adjudicate the disclosed accidental pre-baseline rewrite of the existing
+    untracked launcher PYC as a process/scope defect. Do not clean, restore or
+    rewrite it. Confirm it remains classified operational-only, excluded from
+    stable identity and never read by a Python role; freeze the actual complete
+    review preflight immediately before review gates and require byte-identical
+    postflight. PASS is available only if the incident does not weaken any R20
+    guarantee and all later evidence is exact and fully disclosed.
+  - >-
+    Rerun the exact 244-test final-hash gate and all static/security/local-only
+    checks. PASS only with P0/P1/P2 exactly 0/0/0; otherwise return bounded REWORK
+    with exact evidence and make no producer edit or real-root write.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent R7 merits/incident review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer, PYC or real-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,111 @@
+schema_version: 1
+task_id: W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Close only independent-review finding W04-LAP-IMPL-R1-P1-01 by strictly
+  revalidating raw direct and nested CanonicalJsonValue runtime state before any
+  serialization, coercion, semantic hashing or Parquet write.
+depends_on:
+  - W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1:REWORK_P1_EXACT_TYPED_WRITER_BYPASS
+assigned_role: w04_logical_arrow_projection_typed_writer_reworker
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3.yaml
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R1.yaml
+  - orchestration/task_packets/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R2.yaml
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-logical-arrow-projection-acceptance-v1.json
+  - reports/reviews/W04/wyscout-logical-arrow-projection-implementation-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-logical-arrow-projection-implementation-R2-master-verification.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-LOGICAL-ARROW-PROJECTION-IMPLEMENTATION-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/**
+  - tests/contracts/**
+fixed_bindings:
+  authority_decision_sha256: 460f06833e87d6304f6e638588a64981b62f6c8c73d999d7da462629b4e69ef1
+  authority_acceptance_sha256: 647ce58093485717a50037eeb6e46d09c2dfad88a8f60bdef7bce8d35f8d31c3
+  failed_review_packet_sha256: f4afbf9ae5996e76d79fafb7c8a9744955f4daa5da77ac0c4c6cb2d040500856
+  failed_review_sha256: 8b40285f742be1434670fecca743c9d94c3513b1edc7e583ab073d913c9db9eb
+  failed_review_return_sha256: 1a7db7673711a6fa3e824661ccb9a748c06daf62e769f328142c7f170b2eba32
+  formats_r2_sha256: d1827127ce36a67dc49993f5cdb4cd18a5ab5bc62f3b753808529f66dba9f2c9
+  formats_test_r2_sha256: b5fe5aa5831755abe83cd8fd812538dbfbb091190a42430fb09c9141d7e33cce
+  build_contract_frozen_sha256: c71f2746b285d6ecadd5a2a2eef8333f5f66df491b23f966640cbc4994a76b16
+  build_contract_test_frozen_sha256: f39e34daac144369444e1701003efdec0c1a97f83ba5fb0beecaf844c21e4692
+  implementation_r1_return_sha256: 197bb99e4fe6a6328a709f4af946166429e97aa8fed5858df2b6b954806e8372
+  implementation_r2_return_sha256: 4f8cde34645c8cc5c9ab19cf05a1c9a3c5b50290615df352e551bda5b8caa934
+rework_requirements:
+  - Verify every fixed hash before editing and stop on drift.
+  - >-
+    Do not trust an existing Pydantic union-member instance merely because its
+    class matches one CanonicalJsonValue arm. Before any JSON-mode dump or
+    canonical encoding, recover its raw Python field state without coercion and
+    strictly revalidate that state as a fresh exact discriminated union value.
+  - >-
+    The accepted writer must reject direct and recursively nested bypassed state
+    created with both `model_copy(update=...)` and `model_construct`, including at
+    minimum Boolean-as-integer, float-as-integer, string-as-integer,
+    integer-as-Boolean, list-versus-tuple, bare-dict-versus-typed-child, wrong
+    discriminator, extra member state, duplicate/unsorted object-member keys,
+    non-finite Decimal, non-NFC text and surrogate text.
+  - >-
+    Revalidation must occur before Pydantic JSON serialization can warn, coerce or
+    normalize invalid state. Invalid writer input raises FormatError and cannot
+    produce tagged text.
+  - >-
+    Add end-to-end zero-write tripwires showing copied/constructed invalid values
+    cannot reach semantic hashing or `pq.write_table`, while all seven valid
+    variants and nested mixed values still round-trip exactly.
+  - >-
+    Preserve exact descriptor API, physical schema, semantic framing, build
+    contract, build tests, authority bytes and R2 rejected-sentinel correction.
+    Preserve the accepted physical and semantic identity golden digests.
+  - >-
+    Do not edit CanonicalJsonValue contract models, add revalidation config there,
+    introduce a new type/field/root/digest/version/dependency, or create schema or
+    product bytes outside in-memory tests.
+definition_of_done:
+  - The exact P1 reproduction and the complete expanded bypass matrix fail closed.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected serializer, focused tests and additive R3 return only.
+stop_conditions:
+  - Need to change a contract model, descriptor/schema/root, semantic preimage,
+    build behavior, product boundary or any file outside ownership.
+  - Any fixed binding drifts.
+  - Need for Git, dependency, provider/network or external action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

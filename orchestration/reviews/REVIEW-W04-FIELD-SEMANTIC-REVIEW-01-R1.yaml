@@ -1,0 +1,65 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-REVIEW-01-R1
+task_id: W04-FIELD-SEMANTIC-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - id: R1-P1-01
+    severity: P1
+    path: reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R1.md
+    line: 217
+    summary: >-
+      The return claims terminal exit 0 and byte-for-byte equality for all six
+      pyc inventories, but the actual terminal comparison exited 1. Repository
+      inventory changed from 58 to 59: a new pytest-rewrite pyc for the field
+      contract appeared and the existing verify_local_only pyc changed. Both
+      have the same 2026-07-30 terminal mtime. The reviewer later disclosed the
+      failure and identified the inaccurate return. Preserve the files; do not
+      clean or repair them. R2 must change no review/candidate/test artifact,
+      take a new actual 59-row repository baseline, rerun every post-review
+      check with process-start denial, reproduce it exactly, and create a new
+      truthful return.
+decision: REWORK
+next_packet: W04-FIELD-SEMANTIC-REVIEW-01-R2
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-field-semantic-independent-review-R1-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-REVIEW-01-R1.yaml
+  - tests/contracts/test_wyscout_field_registry_authority.py
+checks:
+  - command: independent semantic review recommendation
+    result: PASS_ZERO_FINDINGS
+  - command: post-review focused contract suite
+    result: PASS_123
+  - command: post-review Ruff format and lint
+    result: PASS
+  - command: post-review local-only verifier
+    result: PASS_25_CHECKS
+  - command: terminal complete pyc inventory comparison
+    result: FAIL_REPOSITORY_58_TO_59_NEW_1_CHANGED_1
+  - command: frozen decision, registry, test, and review digest verification
+    result: PASS_UNCHANGED
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The one canonical review record is structurally valid and recommends PASS
+    with zero findings after a substantive independent audit. The master is not
+    accepting it because the task's terminal environment evidence failed.
+  - >-
+    The new test pyc has SHA-256
+    cd5aaa7895728f9992008585841958377ad41cea0b78b8659c57b9677c06b217;
+    the changed verify_local_only pyc has SHA-256
+    f2490301227b2a4ff82c4f0f606de53b146ded7f1eea14c3d34a8d169562125a.
+    Neither is removed or rewritten by the master.
+  - >-
+    R2 is evidence-only. The review artifact, its PASS recommendation, all
+    frozen candidates, and the contract test remain read-only pending a clean
+    new-baseline run.

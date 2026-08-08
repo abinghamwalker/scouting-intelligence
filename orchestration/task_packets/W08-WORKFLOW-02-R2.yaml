@@ -1,0 +1,83 @@
+schema_version: 1
+task_id: W08-WORKFLOW-02
+phase_id: W08
+revision: R2
+state: MASTER_REVIEW_WITH_INTEGRITY_FINDINGS
+objective: >-
+  Complete the R1 workflow under the narrowed reconsideration invariant: a rejected
+  candidate is reconsidered only by appending a new immutable revision to the same entry.
+depends_on:
+  - W08-WORKFLOW-02-R1:STOPPED_SCHEMA_INTERPRETATION
+  - W08-AUTH-AUDIT-01:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-WORKFLOW-02-R1.yaml
+  - reports/reviews/W08/returns/W08-WORKFLOW-02-R1.md
+  - docs/architecture/workflow-state-machines.md
+  - docs/architecture/product-claim.md
+  - reports/verification/W06/limitations.md
+  - reports/verification/W07/limitations.md
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+allowed_paths:
+  - src/scouting/workflow/r1.py
+  - src/scouting/workflow/__init__.py
+  - src/scouting/observations/r1.py
+  - src/scouting/observations/__init__.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - reports/reviews/W08/returns/W08-WORKFLOW-02-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Retain every complete R1 deliverable from R1 for immutable role briefs, approved-version retrieval links, shortlists/comments and versioned observations.
+  - Permit `rejected -> longlist` only as revision `N+1` on the same shortlist_entry_id, same shortlist/player/brief/retrieval-link/owner identity and matching optimistic lock.
+  - Preserve the rejected revision and controlled reason unchanged; require a non-empty reconsideration reason and attributable changed_by actor on the new longlist revision.
+  - Continue to reject a second shortlist entry for the same shortlist/player and every attempt to rewrite pinned identity or evidence.
+  - Prove stale reconsideration, illegal duplicate creation and audit failure produce no partial revision, container update or receipt; retry appends exactly one revision and receipt.
+definition_of_done:
+  - The complete packet suite passes and no shared contract/migration change is needed.
+  - Synthetic fixtures remain synthetic_automated_test and the mandatory return is complete.
+focused_checks:
+  - Rejected-to-longlist same-entry revision history, identity preservation and reason attribution.
+  - Duplicate, stale, audit-failure rollback and idempotent recovery witnesses plus the complete R1 workflow suite.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run ruff check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run mypy src/scouting/workflow/r1.py src/scouting/observations/r1.py
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/security/test_w08_auth_audit.py
+stop_conditions:
+  - The narrowed same-entry revision invariant still cannot be represented without a shared contract or migration change.
+  - A dependency, external service/model, protected-output access, destructive action or forbidden-path edit is required.
+  - A correction would weaken history, pinned identity, deny-by-default access, audit atomicity or evidence honesty.
+mandatory_return:
+  - task ID/revision and one-sentence narrowed objective
+  - exact changed-file list
+  - behaviour and invariant proof
+  - exact commands, exit statuses and concise results
+  - evidence paths and identifiers
+  - residual risks and follow-ups
+  - confirmations of no Git operations, no dependency/lock change and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

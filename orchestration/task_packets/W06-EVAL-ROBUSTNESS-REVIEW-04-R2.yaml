@@ -1,0 +1,111 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-REVIEW-04
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R1.yaml
+objective: >-
+  Freshly verify the R2 seven-P1 correction and challenge whether transformed stress
+  evidence, controls, fixture authority and applicability remain fully lineage-bound
+  under normal constructors.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-04-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R2.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - src/scouting/evaluation/__init__.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-robustness-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+master_counterexamples:
+  - >-
+    Stress digest 5edc056a4aa5d317642b1efd22e490eac2ff4a849b3f51d770babaa75f91d3f8
+    is a normal-constructor split result whose two cohorts retain the correct split
+    observation IDs but foreign rolling-window metric/interval children, candidate roster
+    digest bb...bb and comparison common-candidate digest cc...cc.
+  - >-
+    Control digest a2fc46a61a5b5408bc1d2bc1e4cf53aec4adbf8cab202b7fb30b17ccdddb97fa
+    is a normal-constructor metadata control with arbitrary input_digest bb...bb and
+    otherwise unchanged children.
+  - >-
+    Pair-null digest 96da14ddc305f67058a90a095b399ac428900a2b95d95fee129b420c6b861776
+    uses one locally fabricated GOVERNED_HUMAN_EXPERT reviewer/pair, retains permutation
+    queryone|pair|pair and baseline=null=1.0.
+  - >-
+    The public robustness JSON has no observation rows, scores, labels, pair outcomes or
+    kind-specific baseline inputs; the executable objects are independently hard-coded
+    in tests and are not derived from the fixture bytes.
+review_questions:
+  - Can any StressCohort metric/interval/candidate roster or StressComparison rank/common-candidate child be substituted while retaining expected observation IDs and normal-constructor validity?
+  - Does each persisted stress cohort embed or cryptographically derive the exact ranked rows needed to reproduce its metric, interval and comparison inputs?
+  - Does each control embed its exact ranking/label/pair inputs and kind-specific baseline authority so input_digest, metric children, permutation and comparisons are recomputable and nonsubstitutable?
+  - Are metadata, raw Euclidean and coverage-only controls distinguishable by governed baseline identity rather than caller enum alone?
+  - Does shuffled-pair behavior avoid fabricated human evidence, fail closed on an insufficient/identity permutation, and expose missing governed pair evidence to applicability?
+  - Are supported population, exclusions, non-claims and every unsupported reason exactly derived by the applicability constructor?
+  - Is the public fixture the actual executable input to the tests, with its exact bytes driving every pinned identity?
+  - Is time walk-forward the smallest declared real walk-forward population rather than an unjustified earliest/latest sample, and do all R1 witnesses remain closed?
+deliverables:
+  - One fresh report-only ACCEPT or REWORK verdict with exact P0/P1 counts and bounded R1/R2 constructor, execution and fixture-lineage matrices.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.md.
+definition_of_done:
+  - Every R1 P1 and master R2 witness is independently closed or retained with exact severity and counterexample.
+  - Any new finding demonstrably changes a stress/control value, population, null, applicability or later gate input.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/evaluation-robustness-independent-review-R2.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R2.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and exact severity counts
+  - exact R1 closure and R2 master-counterexample matrices
+  - exact commands, exit statuses and concise results
+  - remaining result/population/null/fixture/applicability/claim risks
+  - smallest bounded correction or none
+  - confirmation of no Git operations, dependency changes, protected expected-output access and edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

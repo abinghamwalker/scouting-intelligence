@@ -1,0 +1,140 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R12
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent merits review of the complete standalone R19
+  design under an exact no-write preflight/postflight harness, and issue PASS
+  only if no candidate P0-P2 defect remains.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R19:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R11:INVALID_REWORK
+assigned_role: fresh_independent_data_architecture_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R12.yaml
+  - reports/reviews/W04/wyscout-schema-design-R19.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R19.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R19.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R19.yaml
+  - reports/verification/W04/wyscout-schema-design-R19-master-verification.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R11.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R11-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R11.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R12.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R12.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+preflight_postflight:
+  - >-
+    Read AGENTS.md and this packet with shell tools first. Before reading the
+    candidate or running any Python/importing helper, take a read-only shell
+    census and complete site/repository pyc inventory binding path, size, mode,
+    link count, mtime, first four magic bytes, and complete SHA-256. Record the
+    exact counts and inventory digests in the review.
+  - >-
+    Every Python helper uses the repository root uv exactly with --locked and
+    --no-sync, sets PYTHONDONTWRITEBYTECODE=1 before uv starts, and invokes
+    python -B. Use python -S -B when installed packages are unnecessary.
+    Installed-package helpers must assert sys.dont_write_bytecode is true and
+    the environment value is exactly 1 at their first instruction before other
+    file-backed imports.
+  - >-
+    After the final review command, repeat the identical shell census and
+    complete inventory. Counts, metadata inventory, and content inventory must
+    equal preflight exactly. Any write or drift invalidates the review; stop,
+    preserve evidence, and do not clean, repair, sync, purge, or recreate.
+review_requirements:
+  - >-
+    Read all 4,357 R19 lines and independently evaluate it as the sole
+    implementation authority. Do not rely on producer/master/R11 conclusions.
+    Report every P0, P1, and P2 candidate defect; recommendation PASS requires
+    none. R11's invalid run is incident evidence only, never merits authority.
+  - >-
+    Reproduce the exact eleven incident rows and the current 1,086/58
+    decomposition. Confirm every new Packaging file maps to an admitted source
+    and grants no stable authority. Confirm future actual cardinality is a
+    preflight operational value, every present file must classify, postflight is
+    byte-identical, and cleanup cannot recover a failed run.
+  - >-
+    Parse the exact ordered 119-pair field roster against the accepted profile
+    and reproduce 10/11/26/47/18/4/3. Inspect the complete field decision,
+    registry, review, acceptance, digest, clock, dependency, equality, rejection,
+    and packet-ownership graph.
+  - >-
+    Reproduce existing ActorId behavior and all four route actor rules. Parse
+    all 12 possession predicate fields, six decisions, explicit UNMAPPED,
+    control/attachment/null combinations, row/top-level actor equality, taxonomy
+    equality, and negative closure. Confirm only the approved field test path.
+  - >-
+    Independently inspect every source, rights, temporal, identity, product,
+    coverage, quarantine, serializer, environment, packaging, executable, alias,
+    bytecode, resource, result, path, ownership, two-root, gate, and ledger
+    closure. Find contradictions, ambiguity, incomplete schemas, circular
+    preimages, host leakage, or unverifiable exact facts.
+  - >-
+    Reproduce current-host uv admission, exact outer 29 and both child 32 maps,
+    root-independent stable roles, H1/H2 equalities, v4/v2/v2/v14 versions,
+    16/8/10/25/25/20 cardinalities, 24-key projection intersection, exact
+    packaging/lock/installed/executable/alias/resource closure, and future-script
+    absence.
+  - >-
+    Confirm R19 and the review are design/report only: no implementation,
+    provider/network, configuration/data, Git, cloud, container, public endpoint,
+    parent-workspace report, or deployment action.
+  - >-
+    The independent report must state complete readback, pre/post inventory
+    evidence, exact checks/results, P0-P2 findings, recommendation PASS or
+    REWORK, and residual risks. The return truthfully lists only the two owned
+    paths.
+definition_of_done:
+  - R19 receives a fresh complete independent merits review.
+  - The no-write harness passes with byte-identical pre/post inventories.
+  - Every master claim is independently reproduced or rejected.
+  - PASS has zero P0-P2 findings; otherwise REWORK is explicit.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "import os,sys; from pathlib import Path;
+    assert sys.dont_write_bytecode and os.environ.get('PYTHONDONTWRITEBYTECODE') == '1';
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R12.md');
+    s=p.read_text(); assert p.is_file() and p.stat().st_size > 35000;
+    assert 'recommendation' in s.lower()"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any preflight/postflight inventory drift or unexpected filesystem write occurs.
+  - A finding requires changing approved architecture, project root, dependency policy,
+    provider/rights authority, or local-only boundary.
+  - A mandatory input is missing or unreadable.
+  - Review requires edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

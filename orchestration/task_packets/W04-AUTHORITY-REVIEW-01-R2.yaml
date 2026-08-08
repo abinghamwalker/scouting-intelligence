@@ -1,0 +1,60 @@
+schema_version: 1
+task_id: W04-AUTHORITY-REVIEW-01
+phase_id: W04
+revision: R2
+state: READY
+objective: >-
+  Independently rerun the W04 authority boundary after the master bound the approved
+  URL exception to literal absolute path equality; retain all R1 challenges and
+  recommend ACCEPT or further REWORK.
+depends_on:
+  - W04-AUTHORITY-REVIEW-01-R1:REWORK
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-AUTHORITY-REVIEW-01-R1.yaml
+  - orchestration/reviews/REVIEW-W04-AUTHORITY-REVIEW-01-R1.yaml
+  - scripts/verify_local_only.py
+  - tests/governance/test_w04_source_authority.py
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/authority-boundary-audit-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/security/test_w04_source_authority_boundary.py
+  - reports/reviews/W04/authority-boundary-audit-R2.md
+  - reports/reviews/W04/returns/W04-AUTHORITY-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/fixtures/synthetic/protected/**
+deliverables:
+  - Reproduce the literal canonical path as allowed.
+  - Prove parent-segment and symlink aliases now reject.
+  - Retain and rerun every R1 URL, rights, archive, temporal, and claim challenge.
+  - Write R2 audit, mandatory return, and recommendation without self-approval.
+definition_of_done:
+  - The complete producer plus independent authority suite passes.
+  - No R1 boundary challenge is removed or weakened.
+  - No implementation, authority, data, dependency, or Git path is changed.
+acceptance_checks:
+  - uv run pytest -q tests/governance/test_w04_source_authority.py tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff format --check tests/security/test_w04_source_authority_boundary.py
+  - uv run ruff check tests/security/test_w04_source_authority_boundary.py
+  - uv run mypy tests/security/test_w04_source_authority_boundary.py
+stop_conditions:
+  - Any R1 defect remains reproducible.
+  - Review requires editing a forbidden implementation or authority path.
+  - A new P0-P2 boundary defect is reproduced.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+

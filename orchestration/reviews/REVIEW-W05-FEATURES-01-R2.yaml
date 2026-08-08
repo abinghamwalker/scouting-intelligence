@@ -1,0 +1,32 @@
+schema_version: 1
+review_id: REVIEW-W05-FEATURES-01-R2
+task_id: W05-FEATURES-01
+phase_id: W05
+revision: R2
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - severity: P1
+    blocker_tests: [1, 6]
+    evidence: >-
+      The public W04 projection compares gold_row_count with ordinary equality, so JSON
+      true and JSON 1.0 both equal the accepted integer 1 and are admitted.
+    required_fix: >-
+      Require a non-boolean exact integer gold_row_count equal to 1 before generic
+      projection comparison and directly test integer, boolean and float boundaries.
+convergence_audit:
+  attempts_reviewed: [R1, R2]
+  classification: LOCALIZED_PRODUCT_DEFECT
+  scope_decision: RETAIN_SINGLE_PACKET
+  rationale: >-
+    All R1 P1 classes now reject; the only remaining defect is one strict JSON scalar
+    type check that changes accepted identity admission. The smallest safe action is a
+    bounded R3 source/test correction, with no split, new authority or hardening scope.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-FEATURES-01-R3.yaml
+reviewer: master

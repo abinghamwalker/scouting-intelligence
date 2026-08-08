@@ -1,0 +1,61 @@
+schema_version: 1
+task_id: W05-CONTRACTS-TRUTH-REVIEW-03
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently confirm all R1 truth contradictions now fail for exact state,
+  W04-family and fitting/PCA reasons without regression.
+depends_on:
+  - W05-CONTRACTS-TRUTH-03-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-CONTRACTS-TRUTH-03-R2.yaml
+  - reports/reviews/W05/w05-m0-contract-truth-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-03-R2.md
+  - src/scouting/contracts/m0.py
+  - tests/contracts/test_w05_m0_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-contract-truth-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-CONTRACTS-TRUTH-REVIEW-03-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - Do MEASURED-zero, MEASURED/ZERO reason drift and DATA_CONFIDENCE state/reason contradictions fail after result re-digest?
+  - Are exactly four W04-compatible families admitted and metadata/role-aware families rejected, while synthetic retains all six?
+  - Does FEATURE_MATRIX bind fitting_population_count independently of candidate index rows?
+  - Are PCA components bounded by both fitting samples and feature count with all prior shape/orientation requirements retained?
+  - Do exact explanations, taxonomy/content, W04 identities, negative zero, query/result identity and distance/UUID ties remain closed?
+deliverables:
+  - Independent PASS/REWORK P0/P1/P2 verdict with every R1 probe outcome.
+  - Complete mandatory R2 return.
+definition_of_done:
+  - All three R1 P1 classes are closed or the smallest residual is reproduced.
+  - No source/test/config/orchestration/dependency/Git/accepted predecessor changes.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w05_m0_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_supported_feature_authority.py
+  - uv run ruff check src/scouting/contracts/m0.py tests/contracts/test_w05_m0_contracts.py
+  - uv run mypy src/scouting/contracts/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

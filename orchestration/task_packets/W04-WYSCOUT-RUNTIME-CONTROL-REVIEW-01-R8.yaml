@@ -1,0 +1,109 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R8
+state: DISPATCHED
+objective: >-
+  Freshly and independently adjudicate the R8 authenticated resident-module
+  roster and metadata-only in-process PYC closure, including constructive
+  present-PYC control flow under unconditional denial and the frozen disclosed
+  operational-PYC incident, without producer edits or real-root publication.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R8:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r8_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R8.yaml
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R7.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R8.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R8.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: e7cf10d5f11871bc48911a5dc9ea8b58ce9a6477e6df0935475f053874b6e2d5
+  runtime_tests_sha256: 01007463ac8cb52d67bdfb2b6784f36fab9cdf7a8ddf35c24a9149512d3707e0
+  producer_return_sha256: 40a877805b20e4ca9cdd6d8489c3b1074e81de19efbc3c8975abbebf4ef01446
+  producer_packet_sha256: 6a16ff130a802dafe924a4a47011bc08b6e1eed3f7c7e6b30ebf4df32f8c00d8
+  r7_review_sha256: d6ef3e0d3930dd212f53cee51ad33802279707f3fc828e52e776822388913ea1
+  disclosed_operational_pyc_sha256: b1c8fbd8e5de10d6251995b9dc0fbbcb7457ba0bdaffd669e6e58c86d280b52e
+requirements:
+  - Verify every fixed binding first and keep all producer, PYC, source and real-root bytes read-only.
+  - >-
+    Independently trace the first executable branch and authenticate the exact
+    ordered 23-row resident roster without importing another module. For every
+    built-in/frozen/source-backed/__main__ case, challenge name registration,
+    importer/loader identity, spec name/origin/location/parent, file/cache/package
+    shape and object uniqueness. Attack disguised built-in with and without a
+    file, forged frozen, registered-name and unregistered aliases, loader/spec/
+    file/cache substitution, row reorder/add/delete and duplicate objects.
+  - >-
+    Prove the launcher PYC collector is structurally and operationally byte-read-
+    free: no open/read/pread/hash/header/magic access occurs for a PYC. Independently
+    compare its complete cache-directory and PYC metadata rows byte-for-byte with
+    the frozen admission-child collector for site, repository, mapped and orphan
+    fixtures, including device/inode/size/mtime/ctime and source/class mappings.
+    Retain complete byte/header/hash authority exclusively in shell pre/post
+    inventories.
+  - >-
+    Reproduce the audit-subprocess and exact-uv present-PYC positive path with at
+    least one classified site row and a read-only temp copy of the disclosed
+    repository row. Require zero PYC opens, active unconditional denial and
+    control flow after the metadata census. Attack any attempted Python PYC read,
+    row creation/deletion/mode/link/identity/clock/content/header drift and
+    metadata-equality substitution. Do not weaken the documented transient
+    replace-and-restore residual or shell evidence requirement.
+  - >-
+    Confirm every R7 retained parent/owner/source/tuple/env/argv/FD/prefix/
+    chronology/product predicate, the byte-identical admission child and the
+    frozen disclosed PYC. Rerun the exact 257-test final-hash gate and all static/
+    security/local-only checks with a fresh complete shell PYC pre/post inventory.
+    PASS only with P0/P1/P2 exactly 0/0/0; otherwise return bounded REWORK without
+    producer, PYC or real-root edits.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent R8 merits/incident review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer, PYC or real-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

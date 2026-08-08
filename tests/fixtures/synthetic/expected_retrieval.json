@@ -1,0 +1,338 @@
+{
+  "manifest": {
+    "schema_version": 1,
+    "fixture_id": "w03-synthetic-development-v1",
+    "partition": "development",
+    "classification": "w03_synthetic_generated",
+    "content_digest": "f0948134aa0b02595e2974ff6ca264496db401c68d937bf8b8d594561f57e0e9"
+  },
+  "payload": {
+    "source_manifest": {
+      "schema_version": 1,
+      "manifest_id": "90000000-0000-4000-8000-000000000101",
+      "tenant_context": {
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "club_id": "20000000-0000-4000-8000-000000000101"
+      },
+      "trace_id": "a0000000-0000-4000-8000-000000000101",
+      "provider": "w03-synthetic-provider",
+      "provider_schema_version": "w03-development-v1",
+      "classification": {
+        "use_class": "internal",
+        "derived_data_allowed": true,
+        "internal_review_allowed": true,
+        "export_allowed": false,
+        "attribution_required": false,
+        "attribution_text": null
+      },
+      "acquired_at": "2026-02-12T08:00:00Z",
+      "available_at": "2026-02-12T08:30:00Z",
+      "files": [
+        {
+          "object_path": "tests/fixtures/synthetic/domain.json",
+          "sha256": "03972808bd6628dd4ffb66a975108bb15f649a0b778e493c85874ef107953e2a",
+          "size_bytes": 7291,
+          "row_count": 6
+        }
+      ],
+      "coverage": {
+        "overall": 0.6667,
+        "dimensions": [
+          {
+            "name": "temporally_eligible_facts",
+            "coverage": 0.6667,
+            "observed_count": 4,
+            "expected_count": 6
+          },
+          {
+            "name": "resolved_identities",
+            "coverage": 0.5,
+            "observed_count": 1,
+            "expected_count": 2
+          }
+        ],
+        "missing_dimensions": [
+          "ambiguous_provider_identity",
+          "post_cutoff_fact",
+          "missing_availability_fact"
+        ]
+      }
+    },
+    "role_brief": {
+      "schema_version": 1,
+      "role_brief_id": "b0000000-0000-4000-8000-000000000101",
+      "tenant_context": {
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "club_id": "20000000-0000-4000-8000-000000000101"
+      },
+      "version": 1,
+      "trace_id": "a0000000-0000-4000-8000-000000000101",
+      "owner_id": "60000000-0000-4000-8000-000000000101",
+      "title": "Synthetic progressive wide forward",
+      "taxonomy_version": "w03-role-taxonomy-v1",
+      "status": "approved",
+      "created_at": "2026-02-24T09:00:00Z",
+      "approved_at": "2026-02-25T09:00:00Z",
+      "team_id": "20000000-0000-4000-8000-000000000101",
+      "responsibilities": [
+        "Progress possession through wide areas",
+        "Support high regains"
+      ],
+      "hard_constraints": [
+        {
+          "field": "position",
+          "operator": "equals",
+          "value": "wide_forward"
+        }
+      ],
+      "preferences": [
+        {
+          "dimension": "style_resemblance",
+          "weight": 0.7
+        },
+        {
+          "dimension": "data_confidence",
+          "weight": 0.3
+        }
+      ],
+      "exemplar_player_ids": [
+        "30000000-0000-4000-8000-000000000104"
+      ]
+    },
+    "retrieval_request": {
+      "schema_version": 1,
+      "retrieval_request_id": "c0000000-0000-4000-8000-000000000101",
+      "tenant_context": {
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "club_id": "20000000-0000-4000-8000-000000000101"
+      },
+      "version": 1,
+      "trace_id": "a0000000-0000-4000-8000-000000000101",
+      "role_brief_id": "b0000000-0000-4000-8000-000000000101",
+      "role_brief_version": 1,
+      "requested_at": "2026-03-02T10:00:00Z",
+      "feature_cutoff_ts": "2026-03-01T00:00:00Z",
+      "limit": 3,
+      "excluded_player_ids": [],
+      "claim_boundary": "resemblance_only"
+    },
+    "retrieval_result": {
+      "schema_version": 1,
+      "retrieval_result_id": "d0000000-0000-4000-8000-000000000101",
+      "retrieval_request_id": "c0000000-0000-4000-8000-000000000101",
+      "retrieval_run_id": "e0000000-0000-4000-8000-000000000101",
+      "tenant_context": {
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "club_id": "20000000-0000-4000-8000-000000000101"
+      },
+      "version": 1,
+      "trace_id": "a0000000-0000-4000-8000-000000000101",
+      "role_brief_id": "b0000000-0000-4000-8000-000000000101",
+      "role_brief_version": 1,
+      "model_version": "w03-synthetic-deterministic-retrieval-v1",
+      "index_version": "w03-development-index-v1",
+      "generated_at": "2026-03-02T10:00:01Z",
+      "temporal_evidence": {
+        "schema_version": 1,
+        "snapshot_as_of_ts": "2026-02-28T23:59:59Z",
+        "available_at_watermark": "2026-02-20T12:00:00Z",
+        "valid_from_ts": "2026-02-28T23:59:59Z",
+        "generated_at_ts": "2026-03-02T10:00:01Z",
+        "feature_cutoff_ts": "2026-03-01T00:00:00Z",
+        "source_manifest_ids": [
+          "90000000-0000-4000-8000-000000000101"
+        ],
+        "feature_schema_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+        "dependency_lineage_hash": "b846117e9714163c58eecefe236df0bae94ee039da746b6ed14ff3d360f2c8b8",
+        "dependency_lineage": {
+          "lineage_hash": "b846117e9714163c58eecefe236df0bae94ee039da746b6ed14ff3d360f2c8b8",
+          "dependencies": [
+            {
+              "kind": "source_manifest",
+              "dependency_id": "90000000-0000-4000-8000-000000000101",
+              "digest": "03972808bd6628dd4ffb66a975108bb15f649a0b778e493c85874ef107953e2a",
+              "observed_at": "2026-02-12T08:00:00Z",
+              "available_at": "2026-02-12T08:30:00Z"
+            },
+            {
+              "kind": "feature_schema",
+              "dependency_id": "90000000-0000-4000-8000-000000000102",
+              "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+              "observed_at": "2026-01-01T00:00:00Z",
+              "available_at": "2026-01-01T00:00:00Z"
+            },
+            {
+              "kind": "model_artifact",
+              "dependency_id": "90000000-0000-4000-8000-000000000103",
+              "digest": "2222222222222222222222222222222222222222222222222222222222222222",
+              "observed_at": "2026-02-20T10:00:00Z",
+              "available_at": "2026-02-20T10:00:00Z"
+            },
+            {
+              "kind": "retrieval_index",
+              "dependency_id": "90000000-0000-4000-8000-000000000104",
+              "digest": "3333333333333333333333333333333333333333333333333333333333333333",
+              "observed_at": "2026-02-20T11:00:00Z",
+              "available_at": "2026-02-20T12:00:00Z"
+            }
+          ]
+        }
+      },
+      "candidates": [
+        {
+          "player_id": "30000000-0000-4000-8000-000000000101",
+          "rank": 1,
+          "evidence_dimensions": [
+            {
+              "name": "style_resemblance",
+              "score": 0.82,
+              "confidence": 0.8,
+              "reason_codes": [
+                "synthetic_progressive_actions_match"
+              ]
+            },
+            {
+              "name": "role_compatibility",
+              "score": 0.9,
+              "confidence": 1.0,
+              "reason_codes": [
+                "synthetic_position_constraint_met"
+              ]
+            },
+            {
+              "name": "impact",
+              "score": 0.6,
+              "confidence": 0.5,
+              "reason_codes": [
+                "synthetic_impact_evidence_limited"
+              ]
+            },
+            {
+              "name": "trajectory",
+              "score": 0.5,
+              "confidence": 0.4,
+              "reason_codes": [
+                "synthetic_trajectory_evidence_limited"
+              ]
+            },
+            {
+              "name": "transfer_risk",
+              "score": 0.5,
+              "confidence": 0.2,
+              "reason_codes": [
+                "synthetic_transfer_data_unavailable"
+              ]
+            },
+            {
+              "name": "data_confidence",
+              "score": 0.67,
+              "confidence": 1.0,
+              "reason_codes": [
+                "synthetic_temporal_coverage_partial"
+              ]
+            }
+          ],
+          "confidence": {
+            "score": 0.67,
+            "applicability": "limited",
+            "limitations": [
+              "Synthetic W03 contract evidence only",
+              "No expert relevance or model-performance claim"
+            ]
+          },
+          "coverage": {
+            "overall": 0.6667,
+            "dimensions": [
+              {
+                "name": "temporally_eligible_facts",
+                "coverage": 0.6667,
+                "observed_count": 4,
+                "expected_count": 6
+              }
+            ],
+            "missing_dimensions": [
+              "real_provider_evidence",
+              "expert_labels"
+            ]
+          },
+          "lineage": {
+            "lineage_hash": "b846117e9714163c58eecefe236df0bae94ee039da746b6ed14ff3d360f2c8b8",
+            "dependencies": [
+              {
+                "kind": "source_manifest",
+                "dependency_id": "90000000-0000-4000-8000-000000000101",
+                "digest": "03972808bd6628dd4ffb66a975108bb15f649a0b778e493c85874ef107953e2a",
+                "observed_at": "2026-02-12T08:00:00Z",
+                "available_at": "2026-02-12T08:30:00Z"
+              },
+              {
+                "kind": "feature_schema",
+                "dependency_id": "90000000-0000-4000-8000-000000000102",
+                "digest": "1111111111111111111111111111111111111111111111111111111111111111",
+                "observed_at": "2026-01-01T00:00:00Z",
+                "available_at": "2026-01-01T00:00:00Z"
+              },
+              {
+                "kind": "model_artifact",
+                "dependency_id": "90000000-0000-4000-8000-000000000103",
+                "digest": "2222222222222222222222222222222222222222222222222222222222222222",
+                "observed_at": "2026-02-20T10:00:00Z",
+                "available_at": "2026-02-20T10:00:00Z"
+              },
+              {
+                "kind": "retrieval_index",
+                "dependency_id": "90000000-0000-4000-8000-000000000104",
+                "digest": "3333333333333333333333333333333333333333333333333333333333333333",
+                "observed_at": "2026-02-20T11:00:00Z",
+                "available_at": "2026-02-20T12:00:00Z"
+              }
+            ]
+          },
+          "reason_codes": [
+            "synthetic_progressive_wide_role_match",
+            "resemblance_only"
+          ],
+          "claim_boundary": "resemblance_only"
+        }
+      ],
+      "claim_boundary": "resemblance_only"
+    },
+    "explanations": [
+      {
+        "player_id": "30000000-0000-4000-8000-000000000101",
+        "claim_boundary": "resemblance_only",
+        "reason_codes": [
+          "synthetic_progressive_wide_role_match",
+          "synthetic_temporal_coverage_partial"
+        ],
+        "summary": "Synthetic Player Alder resembles the synthetic brief on declared progressive-action evidence; this is not a prediction of recruitment success."
+      }
+    ],
+    "shortlist_entry": {
+      "schema_version": 1,
+      "shortlist_entry_id": "f0000000-0000-4000-8000-000000000101",
+      "shortlist_id": "f1000000-0000-4000-8000-000000000101",
+      "tenant_context": {
+        "tenant_id": "70000000-0000-4000-8000-000000000101",
+        "club_id": "20000000-0000-4000-8000-000000000101"
+      },
+      "version": 1,
+      "trace_id": "a0000000-0000-4000-8000-000000000101",
+      "player_id": "30000000-0000-4000-8000-000000000101",
+      "state": "shortlist",
+      "owner_id": "60000000-0000-4000-8000-000000000101",
+      "rationale": "Synthetic W03 shortlist target for deterministic journey verification only",
+      "created_at": "2026-03-02T10:02:00Z",
+      "updated_at": "2026-03-02T10:02:00Z",
+      "retrieval_run_id": "e0000000-0000-4000-8000-000000000101",
+      "rank_at_addition": 1,
+      "model_version_at_addition": "w03-synthetic-deterministic-retrieval-v1"
+    },
+    "expected_audit_actions": [
+      "role_brief.approved",
+      "retrieval.executed",
+      "evidence.viewed",
+      "shortlist.entry_created"
+    ]
+  }
+}

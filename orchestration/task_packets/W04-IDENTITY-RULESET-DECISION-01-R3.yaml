@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W04-IDENTITY-RULESET-DECISION-01
+phase_id: W04
+revision: R3
+state: ACCEPTED
+objective: >-
+  Correct only the independently reproduced master-key strict-type coercion in
+  the identity focused-contract resolution oracle. Preserve all candidate,
+  upstream, R21, R1/R2 correction, and archived review bytes. Create no review,
+  acceptance, or product path.
+depends_on:
+  - W04-IDENTITY-RULESET-REVIEW-01-R2:REWORK
+assigned_role: identity_master_key_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-RULESET-DECISION-01-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/archive/wyscout-identity-ruleset-independent-review-R2-rework-30c94d15.md
+  - reports/reviews/W04/archive/W04-IDENTITY-RULESET-REVIEW-01-R2-rework-f20ecbd9.md
+  - reports/reviews/W04/authorities/wyscout-identity-ruleset-decisions-v1.json
+  - configs/schema/wyscout-v5-identity-ruleset-v1.yaml
+  - tests/contracts/test_w04_identity_ruleset_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R2.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_identity_ruleset_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-IDENTITY-RULESET-DECISION-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+fixed_bindings:
+  decision_sha256: 6df848be8462af0747d4be4469a07ecca75c0e3d83c497eeddc0a764452b6192
+  ruleset_physical_sha256: 8027321bda566188019850f9f9031e684d2d81d8df7851ba3c71b1685ae4f547
+  ruleset_canonical_sha256: 9c34783214d084ce8fde42be771850e8f9332fa9fb9a1529b011a8600e34e87c
+  corrected_r2_contract_sha256: 760bac798093a9e3072b4de608610a71ae6638dacac08d11e6c0a5b84a57c4b0
+  failed_r2_review_sha256: 30c94d15dbce34315d2af5df3cebbd50ce863e7e865db509130b3a09e6e080f5
+  failed_r2_return_sha256: f20ecbd992fcec36ffe44375b2af9acf78b6e1ee4b552b81d51a1e27e37a7931
+requirements:
+  - >-
+    Validate master-table identity keys with exact strict integer semantics
+    before equality can authorize resolution. Python boolean/integer and
+    float/integer equality must never resolve an identity; strings and
+    numeric-looking strings remain uncoerced.
+  - >-
+    Preserve deterministic resolution only for exactly one valid strict
+    positive integer master key equal to the strict positive reference key.
+    Duplicate valid equal keys remain REVIEW_REQUIRED; player zero remains
+    REJECT; every malformed or absent applicable match remains REVIEW_REQUIRED.
+  - >-
+    Add direct regression cases for boolean, integral-float, non-integral-float,
+    string, numeric-looking-string, negative, zero, duplicate, mixed-valid, and
+    unique-valid master-key inputs, proving no implicit equality/coercion route.
+  - >-
+    Preserve all R2 truthful-clock, six-fraction UTC, and lifecycle fixes and
+    every non-owned byte. Do not create a fresh review or acceptance.
+definition_of_done:
+  - Master-side key coercion is impossible and directly regression-tested.
+  - Candidate and archived failed-evidence digests remain exact.
+  - Exact focused and static checks pass.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync mypy
+    tests/contracts/test_w04_identity_ruleset_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_identity_ruleset_authority.py
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+stop_conditions:
+  - Any candidate, upstream, R21, R2 correction, or archived-evidence byte must change.
+  - Correctness requires an authority semantic or path change.
+  - >-
+    Correctness requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

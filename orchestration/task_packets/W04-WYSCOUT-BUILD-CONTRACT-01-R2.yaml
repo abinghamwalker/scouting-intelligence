@@ -1,0 +1,157 @@
+schema_version: 1
+task_id: W04-WYSCOUT-BUILD-CONTRACT-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct the bounded R1 build contract so the v15 admission proof is bound to the
+  decoded stable component values, the Gold path is the exact authorized competition,
+  and receipt completion requires all-three complete-manifest physical/semantic and
+  parent-chain closure before Gold population selection.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R1:MASTER_REWORK_REQUIRED
+assigned_role: bounded_w04_wyscout_build_contract_r2_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R1.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R2.yaml
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R1.md
+  - src/scouting/contracts/__init__.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_identity.py
+  - src/scouting/sources/**
+  - src/scouting/storage/**
+fixed_bindings:
+  r1_packet_sha256: 9a5fc908d8ad8686df70eb61952eda52eca11cb447064d992d3cf29aa6f1e538
+  r1_contract_sha256: 70cd74bae74ce16431d88567372d8839c383a7bf3ad94838e9dd624c9d0eb03b
+  r1_test_sha256: 8f90074f3ca597e7d13dfdcf1829492dff627c80f06ee82a423fc7e797811630
+  r1_return_sha256: 3d6b6f017d1974620024bd32507b600340b65ef16f3c6a75aab738acbe3cd5c8
+  complete_repository_gate_sha256: 22b0b73078d4d2f0cc7e5eed3920a5401fd3d0e02d9ee3c66d9c7af02f76f469
+  build_authority_decision_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  build_authority_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  season_lineup_decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  season_lineup_acceptance_sha256: 6cbf2cd2aea87489854eee208ee4cbb3f7d3dc2c603d32aa306515418863c27e
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  wyscout_data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+findings:
+  - id: W04-BUILD-R1-P1-ADMISSION-PROOF-NONBINDING
+    priority: P1
+    evidence: >-
+      R1's positive fixture decodes only schema_version, repository_code_sha256 and
+      environment_digest. The model accepts that three-key object, never requires
+      the exact twenty stable environment-component values, never derives
+      environment_digest from them, and never compares each component proof's
+      value_json_sha256 to the decoded component value. This contradicts R20
+      Sections 8.0.6 and 8.9.
+  - id: W04-BUILD-R1-P1-GOLD-COMPETITION-WIDENING
+    priority: P1
+    evidence: >-
+      R1 admits any UUIDv5 competition in a Gold path and its positive fixture uses
+      11111111-1111-5111-8111-111111111111. The authorized exact product path fixes
+      competition_id cb5c5317-fa4a-571e-93dc-ef6ce482eab7.
+  - id: W04-BUILD-R1-P1-MANIFEST-CLOSURE-OMISSION
+    priority: P1
+    evidence: >-
+      R1 validates boundary physical bytes but can declare COMPLETE without receiving
+      the three complete manifest physical readbacks, reproducing each summary's
+      physical and sole two-key semantic digest, reconciling Bronze<-Silver<-Gold
+      parents, or deriving the one Gold boundary population from the accepted Gold
+      manifest. The standalone helper test does not compose those authorities.
+requirements:
+  - Verify every fixed hash and stop on drift before editing.
+  - >-
+    Preserve the exact existing five-window, season, five-authority, five-dependency,
+    25/25 one-hash inverse, 15/9 receipt, and eight result-root field rosters. Add no
+    ninth result role, schema root, aggregate, writer or public export.
+  - >-
+    Close the decoded w04-code-environment-admission-v15 stable manifest at the
+    build-contract boundary using the exact R20 stable fields. Its environment
+    component is exactly the twenty COMPONENT_KEYS values, with selector as the
+    closed canonical value, uv_version as the exact canonical string, and every
+    digest-valued component as lowercase SHA-256. Recompute environment_digest from
+    the exact twenty-key canonical component object; reject missing, additional,
+    reordered, mistyped, null, operational-only, stale-version or noncanonical data.
+    This may use internal/helper models but must not create a ninth result/root role.
+  - >-
+    For every component proof, recompute value_json_sha256 from the corresponding
+    decoded component value and require exact equality in the fixed twenty-row order.
+    Keep the exact proof-array digest and bounded evidence-row-count grammar; expose
+    a pure validation seam for independently recounted expected row counts if those
+    counts are not derivable from the stable component value itself. Caller-supplied
+    proof values alone are insufficient.
+  - >-
+    Replace the generic Gold competition UUIDv5 path segment with the sole exact
+    competition_id cb5c5317-fa4a-571e-93dc-ef6ce482eab7. Reject every other UUID,
+    including the former R1 fixture, while preserving the exact build/window/cutoff path.
+  - >-
+    Extend pure receipt closure to require exactly three Bronze/Silver/Gold complete
+    manifest physical byte streams and their already closed-schema-validated parsed
+    objects. For each, require canonical JSON plus exactly one terminal LF, parsed
+    byte equality, physical SHA-256/size equality, exact layer/build/path/completion
+    bindings, and the sole R4 two-key complete-manifest semantic equality. Do not
+    implement a second schema or semantic derivation.
+  - >-
+    Reconcile exact parents after all three manifests pass: Bronze none; Silver one
+    exact Bronze physical parent; Gold one exact Silver physical parent. Derive the
+    exact one-entry GOLD_PLAYER_WINDOW relative-path sequence from the validated Gold
+    manifest in manifest order and require exact sequence-and-set equality with the
+    one boundary summary and receipt. No sort, filter, dedup, caller population
+    witness, fallback or recovery is permitted.
+  - >-
+    Add composability tests that mutate each of the twenty decoded component values,
+    each proof digest/order/count, all three summary physical/semantic values, each
+    parent field/order/cardinality, Gold manifest entry role/path/cardinality, exact
+    competition UUID, and downstream receipt/child hashes. Every substitution must
+    fail at its earliest authority boundary even after downstream rehash.
+  - >-
+    Keep the module standard-library plus Pydantic only and side-effect free. Preserve
+    every frozen input and R1 evidence byte. Add no product/control/data/run write,
+    dependency, Git, provider/network or external-infrastructure action.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Corrected composed build/admission/manifest contract, exhaustive tests and mandatory R2 return.
+stop_conditions:
+  - R20 does not unambiguously identify the stable manifest component object or accepted manifest fields needed for this correction.
+  - A second semantic derivation, schema/root expansion, product/population expansion or fixed-byte change is required.
+  - Any dependency, Git, provider/network, product write or external-infrastructure action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,87 @@
+schema_version: 1
+task_id: W04-PARQUET-SEMANTIC-ENCODER-01
+phase_id: W04
+revision: R1
+state: SUPERSEDED_BY_R2
+objective: >-
+  Add an R20-specific deterministic Wyscout product Parquet encoder and semantic
+  digest function while preserving the existing generic storage format APIs and
+  bytes. This packet writes no product, manifest or receipt artifact.
+depends_on:
+  - W04-VERTICAL-SLICE-PUBLISHER-AUDIT-01-R1:MASTER_REVIEW
+assigned_role: w04_exact_parquet_encoder_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PARQUET-SEMANTIC-ENCODER-01-R1.yaml
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-PUBLISHER-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/storage/formats.py
+  - tests/unit/test_guarded_storage.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/storage/formats.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-PARQUET-SEMANTIC-ENCODER-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/scouting/contracts/**
+  - src/scouting/sources/**
+  - src/scouting/data_products/**
+  - src/scouting/storage/guarded.py
+requirements:
+  - Preserve canonical_json_bytes, canonical_jsonl_bytes, parquet_bytes and all existing caller bytes/behavior.
+  - >-
+    Add an explicit-schema Wyscout product encoder using Parquet 2.6, row groups
+    65536, zstd level 9, data page 2.0, dictionary false, byte-stream split false,
+    statistics true, page index false, coerce timestamps to microseconds with no
+    truncation, and stored Arrow schema. Reject empty rows and schema inference.
+  - >-
+    Require one closed pa.Schema, homogeneous exact fields, exact Arrow types and
+    nullability, no extra/missing values, no coercion, and caller-supplied primary-key
+    tuples. Reject duplicates and any row order differing from canonical key order.
+  - >-
+    Add the domain-separated w04-wyscout-parquet-semantic-v1 SHA-256 described by
+    the accepted publisher audit: exact canonical schema descriptor, uint64
+    length-framed canonical contract row bytes, and sorted-unique framed exact
+    parent paths. Bronze permits zero parents. Reject unsafe/non-NFC parent paths,
+    counts beyond uint64 and row/schema/key mismatch.
+  - >-
+    Use serializer_version w04-wyscout-parquet-v1 and expose enough immutable result
+    metadata for product owners to bind physical bytes/digest/size, semantic digest,
+    row count and exact schema descriptor without reparsing ambiguous inputs.
+definition_of_done:
+  - 65535, 65536 and 65537 row tests prove exact row-group behavior.
+  - Fixed physical and semantic vectors repeat byte-for-byte and change for every controlled mutation.
+  - Existing generic serializer tests remain unchanged and pass.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/unit/test_guarded_storage.py
+  - uv run bandit -q -r src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Exact R20 controls cannot be implemented additively without changing existing generic bytes or dependencies.
+  - Any product/control write, contract/preimage change, Git, provider/network, cloud/container/CI/endpoint/remote/deployment action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,78 @@
+schema_version: 1
+record_type: w08_moderated_representative_user_capture
+status: TEMPLATE_ONLY_NO_PARTICIPANT_EVIDENCE
+participant:
+  participant_code: null
+  representative_responsibilities: []
+  qualification_confirmed_by_authorised_study_owner: false
+  consent_obtained: false
+  participant_reviewed_deidentified_record: false
+session:
+  study_runtime_commit: null
+  protocol_path: reports/verification/W08/moderated-study-protocol.md
+  protocol_sha256: null
+  local_database_receipt_sha256: null
+  local_export_root_receipt_sha256: null
+  started_at_utc: null
+  completed_at_utc: null
+  moderator_code: null
+  loopback_only_confirmed: false
+  non_loopback_requests_observed: null
+tasks:
+  T1_role_brief:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+  T2_approval_and_retrieval_boundary:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+  T3_scout_review_disagreement_amendment:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+  T4_shortlist_meeting_history:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+  T5_export_and_audit:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+  T6_expiry_conflict_failure_recovery:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+  T7_keyboard_mobile_interpretation:
+    outcome: NOT_RUN
+    elapsed_seconds: null
+    assistance_count: 0
+    retained_identifiers: []
+    deidentified_observation: null
+measures:
+  evidence_boundary_interpretation: null
+  access_denial_disclosed_object_existence: null
+  material_history_identifiable_and_reversible: null
+  keyboard_blocker: null
+  missing_label_landmark_or_visible_focus: null
+  horizontal_overflow: null
+  unrecoverable_state: null
+  unaided_confidence_1_to_5: null
+findings: []
+attestation:
+  no_name_contact_password_real_player_judgement_or_sensitive_data_recorded: false
+  no_automated_persona_or_moderator_substituted_for_participant: false
+  no_protected_w06_output_opened_or_reconstructed: false
+  record_sha256: null

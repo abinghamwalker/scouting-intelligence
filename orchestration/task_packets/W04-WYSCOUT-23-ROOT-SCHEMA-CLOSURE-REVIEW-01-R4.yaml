@@ -1,0 +1,105 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01
+phase_id: W04
+revision: R4
+state: DISPATCHED
+objective: >-
+  Perform a fresh, independent, report-only review of the frozen R4 23-root
+  schema-closure candidate. Re-test all four returned P1 families: predicate
+  operands/composition, frozen constants, valid/adversarial test coverage and
+  canonical-Decimal serialization. Do not repair implementation.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4:MASTER_PRE_REVIEW_PASS
+assigned_role: w04_23_root_schema_closure_independent_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R4.yaml
+  - reports/verification/W04/wyscout-23-root-schema-closure-R4-master-pre-review.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R3-master-verification.md
+  - reports/reviews/W04/wyscout-schema-closure-R3-acceptance-oracle-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/verification/W04/wyscout-canonical-decimal-arrow-authorization-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/formats.py
+  - src/scouting/contracts/wyscout_schema.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  producer_packet_sha256: cee64adaf94f540e17402dd1c8cc0dc0ec79b7d91c613fe90a7f9de94d518e20
+  master_pre_review_sha256: 0c392d21c29d529e6545bcdadf4a4914c74b7e14b50d360215633662a2ca172a
+  acceptance_oracle_sha256: de4a4119cf1a1158156d55f49f26bae8c1c08b46d36f93bb6c6afe102fdd145f
+  r3_master_rework_sha256: 8f123e5b23057155b8dd2e544c9284df0ba01da8a295882399f17052fefa305d
+  formats_sha256: 84c04be89c6d726ab9129326e7815dda2331bf30ade2f8d41852120e2b6d144c
+  formats_test_sha256: 8e68548967293b28e694359509667106951bdc5ba8e1636a541f81f7c3773e1a
+  schema_sha256: 67b29d6f13228f8e9ba87468545457961c6fdf808831aa1d2ae08ef12d2b7c3b
+  schema_test_sha256: c6ae3c4c469c0fec819a18ee3d929ec9cd291f386ff8dae2fb44394173fa7c42
+  producer_return_sha256: be45bfef87e8ad0429434ecef1315eea3db393417764369112eaf02275aeb95e
+review_requirements:
+  - Verify every fixed binding before analysis and again before return.
+  - >-
+    Derive the reachable runtime-validator inventory independently from the frozen
+    Pydantic contract owners and compare exact owner/validator coverage, operations,
+    operands and material constants. Do not accept candidate self-counts alone.
+  - >-
+    Independently load both accepted authority JSON files and require deep equality
+    for all nine emitted subobjects. Verify all E1-E8 authority source hashes and
+    exact separation of guarded-reader, build, manifest, receipt and schema gates.
+  - >-
+    Attack the accepted raw digest, 13-key/eight-requirement completion binding,
+    25-key acyclic build inverse, complete LayerManifest two-key semantic,
+    substitution roster, clock relations and season/lineup one-row population.
+  - >-
+    Inspect and execute the 29-row valid Pydantic model matrix. Reject descriptor
+    pseudo-values, model_construct acceptance, row/fixture schema inference, a
+    second semantic authority or failure to exercise every required variant.
+  - >-
+    Verify CANONICAL_DECIMAL_UTF8 is owned only by
+    GoldCoverageDimension.coverage and GoldCoverage.coverage_overall, with exact
+    finite fixed-point forward encoding and strict canonical inverse before any
+    semantic hash or write. Verify event seconds, coordinates and possession-order
+    positions remain decimal128(22,18).
+  - >-
+    Add reviewer-owned executable probes where useful and run the focused and
+    authority suites. Record P0/P1/P2 findings individually. Any finding yields
+    REWORK; zero findings yields PASS_FOR_MASTER_ACCEPTANCE, never self-acceptance.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run ruff check src/scouting/storage/formats.py tests/unit/test_w04_wyscout_product_formats.py src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/storage/formats.py src/scouting/contracts/wyscout_schema.py tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R4.md
+stop_conditions:
+  - Any fixed binding drifts.
+  - Review would require implementation repair or a change to a frozen boundary.
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden
+return_template: orchestration/templates/subagent_return.md

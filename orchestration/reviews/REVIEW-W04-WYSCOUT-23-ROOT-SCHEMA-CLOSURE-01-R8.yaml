@@ -1,0 +1,15 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01
+phase_id: W04
+revision: R8
+verdict: ACCEPTED
+findings: []
+next_packet: W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01-R1
+evidence:
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R8.yaml
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R8.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R8.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R8-master-acceptance.md

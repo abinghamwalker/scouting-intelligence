@@ -1,0 +1,57 @@
+schema_version: 1
+task_id: W04-VERTICAL-SLICE-SOURCE-AUDIT-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce a read-only audit of the existing frozen Wyscout source and accepted
+  completion-index APIs for the smallest real one-match, one-player vertical slice.
+  Determine the exact guarded extraction route, source/member/index bindings,
+  population reconciliation, target identity, and deterministic input facts. Do not
+  perform provider acquisition or modify product, test, data, run, or control bytes.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-REVIEW-05-R1:INDEPENDENT_PASS_MASTER_ACCEPTED
+assigned_role: independent_real_source_analyst
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-VERTICAL-SLICE-SOURCE-AUDIT-01-R1.yaml
+  - data/manifests/wyscout/v5/source/4e16bdb5-afe7-5601-88ad-adc124cfce3b.source-snapshot-manifest.json
+  - data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/sources/wyscout_completion_index.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-SOURCE-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Verify and report the exact source manifest, source-member and completion-index bindings without changing them.
+  - Identify the bounded streaming/guarded route that verifies the whole source before extracting match 2499719.
+  - Report exact match-period populations, selected player identity/actions, causal possession rows and four expected Gold feature values.
+  - Identify reusable production helpers and test-only helpers that must not be imported by production.
+  - Flag any contradiction requiring architecture, dependency, feature, provider, cloud/container or deployment expansion.
+deliverables:
+  - One concise audit with code references, exact expected values and PASS/BLOCKED verdict.
+stop_conditions:
+  - Any write outside the single allowed return path is needed.
+  - The analysis would require provider/network access, source mutation, Git, dependency, cloud, container, endpoint, CI, remote or deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

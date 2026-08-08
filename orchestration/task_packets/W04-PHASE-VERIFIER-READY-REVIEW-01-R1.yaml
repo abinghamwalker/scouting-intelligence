@@ -1,0 +1,64 @@
+schema_version: 1
+task_id: W04-PHASE-VERIFIER-READY-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the bounded READY/master-owned-return verifier correction
+  and issue a PASS or REWORK recommendation without changing implementation.
+depends_on:
+  - W04-PHASE-VERIFIER-READY-01-R2:ACCEPTED_FOR_INDEPENDENT_REVIEW
+assigned_role: independent_orchestration_control_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R1.yaml
+  - orchestration/task_packets/W04-PHASE-VERIFIER-READY-01-R2.yaml
+  - scripts/verify_phase.py
+  - scripts/verify_task_return.py
+  - tests/unit/test_orchestration_controls.py
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R1.md
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-01-R2.md
+  - reports/verification/W04/wyscout-r21-full-repository-gate-R2-control-failure.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-phase-verifier-ready-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-PHASE-VERIFIER-READY-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - scripts/**
+  - tests/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/phase_registry.yaml
+  - orchestration/master_plan.yaml
+  - configs/**
+  - src/**
+  - data/**
+review_bindings:
+  verifier_physical_sha256: 07e989a0bc454b6d45c671d5cc7dafecf9ac92fed86ce13fefb0be85c1ba2953
+  tests_physical_sha256: 14045e33e0e34778706cb2395d8257b9e47c0deec3d84e8c5b136deca8c5ac8a
+  r1_return_physical_sha256: 2f50887ae1ae07e6103d974a7617ae7671e45aef402a10ddab68ffde296036a0
+  r2_return_physical_sha256: d7cf4fc9ddf653c86ed3ba117cd9384d33063f1f343d23f58ec8cd9174d3483c
+deliverables:
+  - A review that verifies all four physical bindings before analysis.
+  - Independent reasoning about READY lifecycle safety and master-return exemption fail-closed behavior.
+  - Independent reproduction of all four producer checks plus adversarial borrowed-packet and delegated-return cases.
+  - A PASS or REWORK recommendation with concrete findings.
+  - A complete Markdown handback using orchestration/templates/subagent_return.md.
+definition_of_done:
+  - No implementation path is edited.
+  - PASS is allowed only if READY does not bypass any other gate and empty returns remain impossible for delegated, mixed, absent, invalid, or task-mismatched packet evidence.
+  - The review distinguishes correction acceptance from R21 gate acceptance and from product authorization.
+acceptance_checks:
+  - uv run ruff format --check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run ruff check scripts/verify_phase.py tests/unit/test_orchestration_controls.py
+  - uv run mypy scripts/verify_phase.py
+  - uv run pytest -q tests/unit/test_orchestration_controls.py
+stop_conditions:
+  - Any physical binding differs.
+  - A finding requires implementation changes outside the bounded correction.
+  - A secret, external account, deployment, destructive action, dependency change, or Git operation is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

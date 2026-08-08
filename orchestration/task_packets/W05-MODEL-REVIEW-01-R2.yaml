@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W05-MODEL-REVIEW-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently verify that R6 closes the four reproduced R5 P1 classes while every
+  frozen M0 artifact, ranking and synthetic-development score remains exact.
+depends_on:
+  - W05-MODEL-01-R6:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R5.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R5.yaml
+  - orchestration/task_packets/W05-MODEL-REVIEW-01-R1.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R1.md
+  - orchestration/task_packets/W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R6.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/arrays.npz
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - src/**
+  - tests/**
+review_questions:
+  - >-
+    Do direct dataclass config, registry, candidate and query substitutions retaining
+    accepted IDs/digests now fail at every fit/load/check public boundary before any
+    artifact read/write, including threshold, selected-family, schema name/hash, role
+    probability and pre-cutoff lineage attacks?
+  - >-
+    Does an exactly tied PCA subspace now canonicalize to the same components and
+    transformed index under valid sign, permutation and orthonormal-basis rotation,
+    while the frozen non-tied PCA and all other family payload bytes remain exact?
+  - >-
+    Do pretty/reordered/noncanonical and duplicate-key manifest bytes fail before
+    contract validation, while the exact selected manifest still reloads?
+  - >-
+    Does fitting reject root and ancestor symlinks before mkdir/write and leave the
+    symlink target unchanged, while ordinary bounded roots still reproduce exactly?
+  - >-
+    Are the full all-six four-file bytes, artifact UUIDs, manifests, array payloads,
+    complete ranking lists, distances/contributions and exact six scores unchanged?
+  - >-
+    Does the expanded producer suite directly prove the correction without duplicate
+    scoring logic, accepted-authority edits, tuning, selection retry or W06 behavior?
+non_blocking_boundary:
+  - >-
+    List collection acceptance and redundant query/exclusion overlap were classified
+    P2 in R1. Do not fail R2 or broaden rework for those unchanged representations
+    unless a new direct blocker-test ranking/result/authority effect reproduces.
+deliverables:
+  - Independent PASS/REWORK verdict with fresh attacks for exactly the four R1 P1 classes.
+  - Exact frozen family/artifact/ranking/score identity comparison before and after R6.
+  - Complete mandatory R2 return at the exact allowed path.
+definition_of_done:
+  - All four R1 P1s independently fail closed and no new W05 P0/P1 reproduces.
+  - No source/test/config/artifact/orchestration/dependency/Git/accepted predecessor changes.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted predecessor conflict or external/dependency/destructive/out-of-scope action is required.
+  - Any frozen artifact/ranking/score drift appears; report it immediately without repair.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

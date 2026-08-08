@@ -1,0 +1,99 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R1
+state: REWORK
+objective: >-
+  Independently review the exact local-only W04 admission child and sole launcher
+  control plane through immutable code-manifest readback, the single 25-key
+  pre-build hash, strict inverse invocation, frozen launch plan, and generic
+  post-build rebuild-child validation boundary.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R1:COMPLETE
+assigned_role: independent_w04_runtime_control_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-v2-aggregate-materialization-R1-master-acceptance.md
+  - reports/verification/W04/wyscout-build-contract-R4-master-acceptance.md
+  - reports/verification/W04/wyscout-staged-immutable-publisher-R3-master-acceptance.md
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/storage/wyscout_publication.py
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R1.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  admission_child_sha256: dc162985e6bccaa4ea4161d22ddf89c2b2017968c4703e65dc1c37645e78602a
+  launcher_sha256: 4e97bb9828453c184dca14c78c71e2659df628d6aec6b459e41faf5e5da719a1
+  runtime_tests_sha256: f596c5f353f162f16bc9e43cc0cb43e2c8d9553271ccb979075e98613e750422
+  producer_return_sha256: 7f7782368b5191119372bab4cee70632518944387ab67aac82797cda026c030b
+  aggregate_master_acceptance_sha256: 3b9cd3810aa453c3d6470ce5ee4d54f6ea0d4f825fb95812af9f5fbac66f005e
+  schema_bundle_v2_logical_sha256: ba5db90f2b130af450fba609520984f6e07c255be4fbddc3f933f94149ef63be
+  product_contract_v2_logical_sha256: fe68e8f31b7dd6f6fb9e8eb3a025de3e78d8825eabeeeea72327481101489fc0
+requirements:
+  - Verify every fixed binding before review and never edit producer bytes.
+  - >-
+    Independently reconstruct the explicit repository/runtime/resource rosters,
+    exact ordered twenty component values and positive evidence counts, stable
+    v15 canonical manifest, environment/repository/proof digests, UUIDv5 and
+    content-addressed path without trusting producer test fixtures.
+  - >-
+    Run at least two actual locked/no-sync no-site admission subprocesses under
+    distinct isolated exact roots and operational UUIDs. Require byte-identical
+    manifests, build IDs and invocations, safe immutable replay, no real-root
+    writes, and no rebuild execution.
+  - >-
+    Independently prove the launcher guard-reads only accepted v2 logical config
+    digests, publishes and reopens only the code manifest, calculates build_id
+    only through build_id_for_projection(), constructs only through
+    invocation_from_projection(), and requires projection_from_invocation()
+    strict equality before rendering the frozen plan.
+  - >-
+    Attack canonical input/frame/result/environment/argv/descriptor/repository/
+    lock/resource/component/proof/config/manifest/publisher/projection/inverse/
+    run/path substitutions, symlink/hardlink/mode/race/unequal-existing cases,
+    early rebuild-prefix creation and any product/layer/receipt/run write. Audit
+    the generic REBUILD_ARGV executor without inventing or executing an absent
+    rebuild child. Return PASS only with P0/P1/P2=0/0/0; otherwise bounded REWORK.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent runtime-control review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without editing producer bytes.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

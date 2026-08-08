@@ -1,0 +1,50 @@
+schema_version: 1
+review_id: REVIEW-W04-WYSCOUT-RUNTIME-CONTROL-01-R12
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R12
+decision: MASTER_ACCEPTED
+terminal_runtime_cycle: true
+producer_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.yaml
+producer_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.md
+independent_review_packet: orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R12.yaml
+independent_review: reports/reviews/W04/wyscout-runtime-control-independent-review-R12.md
+independent_review_return: reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R12.md
+master_acceptance: reports/verification/W04/wyscout-runtime-control-R12-master-acceptance.md
+finding_counts:
+  p0: 0
+  p1: 0
+  p2: 0
+accepted_bindings:
+  producer_packet_sha256: 35281e769533fed6b042c66c7d6d0c8a87a4916a459c1ffd2d4847b2d8a26e9a
+  producer_return_sha256: 7d71f33382f1ae5433def1741c446da59524448d82344bfbdc9ce70d6b109774
+  independent_review_packet_sha256: 92b7e265793bbfe72c04ea5daa911f447e4d83e9cde267db27404974abd6fcaf
+  independent_review_sha256: 7c37979f3e57701907363513376d269e6f0e9edca37b0e8d991324549b132597
+  independent_review_return_sha256: acb5b91ce87b2c7f0545da2040639c214f909038780ef2e984da700f39711fb2
+  master_acceptance_sha256: 50b3f5d79751834d2db5767761949a355740fc98d776a610ddd0566459d6626d
+  admission_child_sha256: db6ffbada5e271310b2b2495b264475d0ace27dfe0e4a0b35077a471fbde5be0
+  launcher_sha256: 827714c8baefbf37fe2f216972d00027d8931df45ba95e48002fee5a168a1353
+  runtime_tests_sha256: 8083ea75b0ddfe3939b9fad306bbb612ce0e95da7be40a9dc8ee10fe3a1d4392
+  schema_v2_physical_sha256: c760710eacbb6575b4af46b31ae5f69c1b16ef702d14630c84597a118a40911e
+  product_v2_physical_sha256: 465a2abf9e72eb25cc6717cfc656304ae9bb208e4ed0e08d54a46420e3db23ce
+  closure_steer_sha256: 86ae128ff4208dae98c8077429848621cc468b53bffa29a91ffe0565f405ea6c
+  w10_deferred_backlog_sha256: 58cc966f4e7ff2877649bcaff2288161f18d9e4cc33f3f745c7a51d3a2601407
+checks:
+  demonstrated_six_failures_closed: PASS
+  exact_foreign_cache_zero_read_denial: PASS
+  denied_row_grants_no_authority: PASS
+  dual_collector_adversarial_matrix: PASS
+  mechanical_v2_aggregate_reconstruction: PASS
+  product_to_schema_body_binding: PASS
+  darwin_directory_identity_and_false_evidence_rejection: PASS
+  controlling_five_blocker_adjudication: PASS
+  terminal_independent_static_and_focused_suite: PASS
+  retained_incident_and_failed_gate_evidence: PASS
+  r11_and_real_root_r3_minimum_baseline: PASS
+  no_r13_or_additional_runtime_authority: PASS
+git_operations: none
+real_root_publication: none
+deferred_non_blocking_work:
+  target_phase: W10
+  task_id: W10-RUNTIME-HOST-STATE-HARDENING-01
+  evidence: reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md

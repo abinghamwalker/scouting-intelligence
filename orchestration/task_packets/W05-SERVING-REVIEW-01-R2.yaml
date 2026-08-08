@@ -1,0 +1,137 @@
+schema_version: 1
+task_id: W05-SERVING-REVIEW-01
+phase_id: W05
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently prove or reject the bounded W05 serving R2 correction under the
+  original six blocker tests and every reproduced R1 P1 attack.
+depends_on:
+  - W05-SERVING-01-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-SERVING-01-R1.yaml
+  - orchestration/task_packets/W05-SERVING-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-SERVING-01-R1.yaml
+  - orchestration/task_packets/W05-SERVING-REVIEW-01-R1.yaml
+  - reports/reviews/W05/w05-m0-serving-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R1.md
+  - reports/reviews/W05/returns/W05-SERVING-01-R2.md
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R6.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R2.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/contracts/evidence.py
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - src/scouting/serving/m0.py
+  - src/scouting/serving/__init__.py
+  - tests/integration/test_w05_m0_serving.py
+  - tests/e2e/test_w05_m0_retrieval.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W05/w05-m0-serving-independent-review-R2.md
+  - reports/reviews/W05/returns/W05-SERVING-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - src/**
+  - tests/**
+review_questions:
+  - Does every public request/batch item undergo complete normal nested revalidation before any loader/scorer call, including recomputed query and exclusion digests?
+  - Are all three UUIDs domain-separated and collision-free across every distinct canonical validated pinned request while same-request replay remains byte-identical?
+  - Are all constraints validated before scanning, invalid members rejected in every order and equivalent valid plans semantically identical without mutating the accepted query digest contract?
+  - Are reasons action-truthful and synthetic-development confidence LIMITED with exact limitations and no recommendation applicability or claim?
+  - Do temporal watermarks include every explicit feature-row/source clock, with truthful feature-row lineage and no fabricated derived availability?
+  - Do single/batch/fresh-core calls still share one loader/scorer, preserve rankings, explanations, six states, resemblance_only and immutable artifact bytes?
+mandatory_fresh_attacks:
+  - >-
+    Independently hash arrays.npz, manifest.json, configuration.json and
+    candidate-universe.json before and after every probe. Spy on the accepted loader and
+    LoadedM0Artifact.score through public single and batch APIs. Rejected boundary
+    requests must call neither; accepted single/batch calls must use the same core,
+    loader and score implementation with no fit/write/provider/second-scoring path.
+  - >-
+    Use model_copy and model_construct to retain carried outer/nested digests while
+    mutating every behavior-bearing request/query field, including query player,
+    exemplars, responsibilities, hard constraints, limit, cutoff, exclusions, artifact
+    pins, shared core, tie policy and claim boundary. Every stale mutation must fail
+    before loading/scoring. Confirm ordinary typed and mapping inputs have one explicit
+    public boundary behavior.
+  - >-
+    Build normally valid requests that hold request/artifact/query identities constant
+    while changing each remaining canonical request field, including version,
+    requested_at, trace/tenant/role-brief metadata and expected pins. Prove any distinct
+    admitted canonical request bytes cannot collide on retrieval_result_id,
+    retrieval_run_id or m0_result_id. Prove repeated same-request and fresh-core JSON
+    bytes and result_digest are exact.
+  - >-
+    Put an always-false valid constraint before every invalid field/operator/value and
+    permute order; all invalid requests must reject. Exercise every supported operator,
+    unavailable row evidence and equivalent valid permutations. Equivalent plans must
+    return identical candidate identities/order, distances, scores, dimension states and
+    explanations. Distinct order-sensitive accepted request bytes may truthfully retain
+    distinct request-bound IDs/digests; do not require or implement a contract change.
+  - >-
+    Exercise query-player, sorted-exemplar-mean, absent/both/unknown/excluded signals,
+    role responsibilities/thresholds and exclusions. Re-sign/substitute every artifact,
+    schema, taxonomy, configuration, fitting, candidate, lineage, model and index pin,
+    plus missing/extra/symlink roots. All substitution and fallback attacks fail closed.
+  - >-
+    Move each admitted feature-row and raw source dependency observed_at and available_at
+    independently to exactly the cutoff and after it. Verify strict rejection. For the
+    accepted result prove snapshot=max explicit observations,
+    availability watermark=max explicit availability, valid_from=max of both, exact
+    per-row FEATURE_SCHEMA plus SOURCE_MANIFEST lineage, consistent lineage hash, and no
+    fabricated MODEL_ARTIFACT/RETRIEVAL_INDEX/taxonomy timestamps.
+  - >-
+    Inspect the entire canonical result JSON. With no constraints, no
+    hard_constraints_applied reason may occur. Synthetic evidence must carry
+    applicability=limited, exact deterministic synthetic_development_only and
+    no_recommendation_evidence limitations across candidate, confidence, legacy and state
+    projections. Six dimensions, zero-sentinel absence, nonranking confidence,
+    scorer-exact explanations, closed reason order and resemblance_only must hold. Reject
+    any blended percentage, probability, value, outcome, recommendation, provider,
+    expert, W06 or production claim.
+  - >-
+    Compare accepted R2 scoring identities/order/distances/contributions with the frozen
+    accepted model artifact and R1 results. Corrected serving IDs, limitations, reasons,
+    temporal lineage and result digest may change; ranking geometry, selected model and
+    artifact bytes may not.
+deliverables:
+  - Independent PASS/REWORK verdict under the six W05 blocker tests with exact fresh evidence.
+  - Exact serving/core/result/model/artifact identities and smallest corrections for P0/P1 only.
+  - Complete report and mandatory return at the exact allowed paths.
+definition_of_done:
+  - Every R1 P1 reproduction and complete positive boundary matrix is independently adjudicated.
+  - No source/test/config/artifact/orchestration/dependency/Git/predecessor changes.
+acceptance_checks:
+  - uv run pytest -q tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py tests/unit/test_w05_m0_models.py tests/contracts/test_w05_m0_contracts.py
+  - uv run ruff check src/scouting/serving/m0.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run mypy src/scouting/serving/m0.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted predecessor conflict or external/dependency/destructive/out-of-scope action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

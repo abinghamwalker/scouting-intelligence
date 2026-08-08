@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W08-WEB-WORKFLOW-04A
+phase_id: W08
+revision: R1
+state: DISPATCHED
+objective: >-
+  Compose and test only the shortlist, assignment, comment and versioned scout-observation
+  HTTP journeys over the accepted W08 workflow services.
+depends_on:
+  - W08-WEB-E2E-04:R2_REWORK
+  - W08-WORKFLOW-INTEGRITY-02B:MASTER_ACCEPTED
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Every shortlist or observation read is tenant-scoped and policy-filtered, and every
+  write delegates to the accepted domain service with authenticated-actor attribution,
+  submitted CSRF, immutable history and optimistic locking.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-E2E-04-R1.yaml
+  - orchestration/task_packets/W08-WEB-E2E-04-R2.yaml
+  - reports/reviews/W08/returns/W08-WEB-E2E-04-R2.md
+  - reports/verification/W08/moderated-study-protocol.md
+  - configs/policies/w08-authorization.yaml
+  - src/scouting/contracts/workflow.py
+  - src/scouting/policy/r1.py
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/queue.html
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/queue.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/entry.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-WORKFLOW-04A-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - configs/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - src/scouting/operations/evidence_export.py
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Analyst route/form to create a shortlist pinned to an approved immutable brief version and an explicitly selected existing replayable retrieval link.
+  - Analyst route/form to add an immutable longlist entry whose player, brief, retrieval link and owner identity remain pinned.
+  - Policy-filtered shortlist and entry detail/history views for analyst, assigned scout and approver, with indistinguishable 404 for unauthorised or foreign objects.
+  - Analyst/approver routes for valid assignments and state transitions, including controlled rejection/hold reasons, next action and owner, and explicit rejected-to-longlist reconsideration on the same entry revision chain.
+  - Append-only attributable comment route with selectable OWNER_ONLY/TEAM visibility and HUMAN_ENTERED_LOCAL for submitted UI actions.
+  - Assigned-scout create/amend routes for complete structured rubric dimensions, confidence, local-only clip/note references, private/team visibility, disagreement/reason, next action and immutable version history.
+  - Stale lock/version returns HTTP 409 with a visible winning-revision message and reload/retry link; malformed/denied requests are generic and do not partially mutate entries, observations or audit receipts.
+  - Queue/detail controls shown only when the current principal can actually perform them; server-side policy remains authoritative regardless of rendered controls.
+  - Focused tests using separate actor clients for authorised workflow, assignment, private/team visibility, cross-tenant/object denial, stale concurrency and recovery. Automated test fixtures must remain labelled synthetic and are not participant evidence.
+definition_of_done:
+  - The precise shortlist-to-scout-observation portion of moderated tasks T3 through T5 is mechanically reachable and test-covered without export or real-browser scope.
+  - No direct HTTP mutation bypasses R1WorkflowService or ScoutObservationService.
+  - The W06 NO_GO/resemblance_only/synthetic_development_only/LIMITED/no_recommendation_evidence boundary is visible on every relevant view.
+focused_checks:
+  - Approved brief and retrieval link to shortlist and entry; assignment to the enabled same-tenant scout; comment and full observation history.
+  - Private observation denial for unassigned scout/analyst as policy requires, TEAM visibility for granted roles, and foreign-ID indistinguishable denial.
+  - Stale entry and observation writes produce 409 and preserve database/audit winning state.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+stop_conditions:
+  - A named journey requires changing an accepted service, contract, migration, configuration or dependency.
+  - A network/external service, model call, Node/npm, container, protected-output access, destructive action or Git operation would be required.
+  - The invariant cannot be proved without widening access, weakening audit/recovery, or inventing human/model evidence.
+mandatory_return:
+  - task ID and exact invariant
+  - exact changed-file list
+  - route-to-domain-service and read-policy map
+  - exact commands, exit statuses and test counts
+  - concurrency, recovery and private/team visibility results
+  - residual risks/follow-ups
+  - confirmations of no Git, dependency/lock, protected-output or out-of-scope edits
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

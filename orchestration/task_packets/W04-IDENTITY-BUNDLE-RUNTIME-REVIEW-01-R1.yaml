@@ -1,0 +1,97 @@
+schema_version: 1
+task_id: W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01
+phase_id: W04
+revision: R1
+state: REWORK_REVIEW_CHAIN_INVALIDATED
+objective: >-
+  Independently review and reproduce the exact source-complete initial W04 identity
+  queue/bundle implementation, additive namespace binding, content addresses,
+  recursive readback and fail-closed local persistence. Review only.
+depends_on:
+  - W04-IDENTITY-BUNDLE-RUNTIME-01-R1:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_identity_bundle_security_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1.yaml
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.yaml
+  - orchestration/task_packets/W04-IDENTITY-BUNDLE-RUNTIME-01-R1-ADDENDUM-01.yaml
+  - reports/verification/W04/wyscout-identity-bundle-runtime-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-01-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-IDENTITY-BUNDLE-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - src/scouting/contracts/wyscout_identity.py
+  - src/scouting/identity/wyscout.py
+  - tests/contracts/test_w04_wyscout_identity_bundle.py
+  - tests/unit/test_wyscout_identity.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-identity-bundle-runtime-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-IDENTITY-BUNDLE-RUNTIME-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  contracts_sha256: 8040279c825fc246900a07b257bab71b9ead3ff9850c4e7994501bd9d13d272f
+  runtime_sha256: a9bc386ec759252464e5d6b4b14b95082a3a4218a9a48cbea97ffbcbd11b95cd
+  contract_test_sha256: 13ce12bb54ccd0880ab0865e3b33982bba1b0cfeb4fc59f070bde710e5dbc030
+  runtime_test_sha256: 47e4f4aa0868e987fdc5961e6960b85456edcfa1a394b634664dff587225ae60
+  producer_return_sha256: 813b83bc5641f7a6322a529d3e513e284eca02302e3bfec5f6b2b20bac4e70b5
+  addendum_sha256: d28e808a91864156b479aa02647859aea8e08ad55b36e9b726192cd9413c84dd
+  queue_sha256: e868d4376f18e7e191c8735ab17814c277f2d0ef1b29dd735c01eb84319e0b51
+  queue_size_bytes: 17412
+  bundle_sha256: 4127705ab1a66145576439e520351587d817c48a71a572bb2c0cefc291fd1e80
+  bundle_size_bytes: 91420676
+  identity_bundle_id: 31638732-5b25-57db-9eb4-8e943a47a387
+review_requirements:
+  - Verify every fixed hash/size/mode and stop on candidate drift.
+  - >-
+    Independently invoke exact-address source recomputation and recursive bundle
+    loading. Reproduce 5,594 rows, exact per-kind states, 23-to-15 queue aggregation,
+    226,041 zero references, both artifact addresses and derived dependency UUID.
+  - >-
+    Reproduce all five target row ordinals/raw digests/canonical UUIDs and independently
+    inspect the exact target match formation identity needed for the later [82,83)
+    right-censored stint. Do not implement that product.
+  - >-
+    Validate the queue/crosswalk UUIDv5 namespace and no-newline preimages against the
+    addendum. Probe alternate namespace, separator, case, newline and reason token.
+  - >-
+    Inspect streaming whole-file verification for truncation/addition/duplicate/
+    coercion/TOCTOU bypasses and persistence for partial, sidecar, symlink, unsafe-mode,
+    stale/extra, unequal and digest-only acceptance. Use temporary paths only for probes.
+  - >-
+    Decide whether directory inventory is reject-only exact-address enforcement or a
+    forbidden selection scan. Return P1 REWORK if any reader selects/discovers an
+    authority rather than starting from the supplied exact address.
+  - Confirm no build ID, Bronze/Silver/Gold, receipt, provider/network, Git, cloud/container/CI/remote/deployment action.
+definition_of_done:
+  - Exact candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q tests/contracts/test_w04_wyscout_identity_bundle.py tests/unit/test_wyscout_identity.py tests/contracts/test_w04_identity_ruleset_authority.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent review and mandatory return with exact finding counts.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data or frozen authority.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

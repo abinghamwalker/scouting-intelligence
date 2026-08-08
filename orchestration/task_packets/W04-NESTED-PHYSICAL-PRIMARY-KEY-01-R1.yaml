@@ -1,0 +1,107 @@
+schema_version: 1
+task_id: W04-NESTED-PHYSICAL-PRIMARY-KEY-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Correct the bounded W04 Parquet encoder/physical-key mismatch by adding exact
+  descriptor-owned nested struct primary-key paths, without changing any logical
+  model, row population, Arrow field, digest meaning or serializer formula.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R8:ACCEPTED
+  - W04-PARQUET-SEMANTIC-ENCODER-01-R4:ACCEPTED
+assigned_role: w04_nested_physical_primary_key_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-VERTICAL-SLICE-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R8.md
+  - reports/verification/W04/wyscout-parquet-semantic-encoder-R4-master-acceptance.md
+  - configs/schema/wyscout-v5-product-contract-preimage-v2.json
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - reports/reviews/W04/returns/W04-NESTED-PHYSICAL-PRIMARY-KEY-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - scripts/**
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_aggregates.py
+  - src/scouting/data_products/**
+  - tests/e2e/**
+  - tests/security/**
+fixed_bindings:
+  formats_sha256: 2dfdf3675a47f6c2b53478857de1af27aebecb85def8f0701e6ef86c65fafcc9
+  schema_runtime_sha256: 8ff15eb36e588806d3768e7a3769d7e5cad9a95ea994f676f5930bc63205d0f4
+  formats_tests_sha256: ba38c5a66f41aee8ef2b998f4622c71ec30f3b8861d7ef07d8540d001b0bee89
+  schema_tests_sha256: 5daaa32082cc0f82ed9b8b0b61cc06fe9d2db633cb15ed9c9837e491f2b9a5b8
+  product_contract_v2_sha256: 7034fa9d88b11eccc84ee37dfaa722b1a130a97a1a34cecafbe549bd6974e1af
+  schema_bundle_v2_sha256: 8426726dd9a21da81b37e34860d9b38949b7c15243eecbee5d7df85a788b0d45
+requirements:
+  - Verify every fixed binding and preserve all logical/Arrow schema content and aggregate bytes.
+  - >-
+    Add an exported exact role-to-physical-primary-key-path function for every W04
+    serialized product role. A path is a nonempty tuple of canonical field-name
+    segments and may descend only through fixed named STRUCT children, never lists,
+    indices, wildcards, aliases, null children or inference.
+  - >-
+    Freeze at minimum: Bronze known source-row identity; Bronze rejected-field
+    source-row identity plus json_path; Action action_id; Lineup lineup_stint_id;
+    Possession possession_id; Fact tenant_context.tenant_id plus the accepted
+    top-level logical key fields; and Gold tenant_context.tenant_id plus the
+    accepted top-level logical key fields. Require every path exists in the exact
+    accepted projection and ends at a non-null scalar str/int field.
+  - >-
+    Extend encode_w04_wyscout_product_parquet so primary_key_fields accepts exact
+    dotted physical struct paths (retaining simple top-level compatibility),
+    validates each path against the explicit descriptor/Arrow schema, resolves the
+    same path in projected canonical contract rows, and compares exact type/value
+    with supplied scalar keys. Preserve key arity, type homogeneity, uniqueness,
+    canonical ordering and every semantic/physical digest formula.
+  - >-
+    Reject malformed/empty/double-dot/list/nullable/non-scalar/missing paths,
+    top-level fallback for an absent nested key, booleans, nulls, type drift,
+    duplicate paths, duplicate keys and row/key reordering. Prove the exact
+    repeated rejected-field population can be uniquely ordered only by the frozen
+    source-row/json-path key and that fact/Gold nested tenant keys encode/read back.
+  - >-
+    Rerun schema aggregate/materialization and require byte-for-byte equality of
+    both accepted v2 preimages and digests; this correction must not alter schema
+    root content or logical product-contract primary-key labels.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_schema.py src/scouting/storage/formats.py tests/contracts/test_w04_wyscout_schema_closure.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py src/scouting/storage/formats.py tests/contracts/test_w04_wyscout_schema_closure.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py src/scouting/storage/formats.py tests/contracts/test_w04_wyscout_schema_closure.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/unit/test_w04_wyscout_product_formats.py tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_schema.py src/scouting/storage/formats.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact nested physical-key support, frozen role paths, adversarial tests and producer return.
+stop_conditions:
+  - None for bounded defects; preserve logical/aggregate bytes and continue rework.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

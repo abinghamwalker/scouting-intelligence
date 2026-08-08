@@ -1,0 +1,156 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R14
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent merits review of immutable R20 plus the bounded
+  additive R21 correction, and recommend PASS only if the merged authority is
+  acyclic, exact, conservative, evidence-preserving, implementation-ready
+  within R21 scope, and has no P0, P1, or P2 defect.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R21-R2:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_r21_data_contract_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R14.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R21-R2.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21.yaml
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R21-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R1.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R21-R2.yaml
+  - reports/verification/W04/wyscout-schema-design-R21-R1-master-verification.md
+  - reports/verification/W04/wyscout-schema-design-R21-R2-master-verification.md
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R14.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R14.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+preflight_postflight:
+  - >-
+    Before reading either design or invoking Python, take a read-only shell
+    inventory of every existing repository and site-packages pyc, binding path,
+    size, mode, link count, mtime, first sixteen bytes, and complete SHA-256;
+    also count cache directories. Preserve the inventory in /tmp only.
+  - >-
+    Every Python helper sets PYTHONDONTWRITEBYTECODE=1 before uv starts and uses
+    repository-root `uv run --locked --no-sync python -B`; use `-S -B` whenever
+    installed packages are unnecessary. Do not sync, install, import a helper
+    before the preflight, clean, repair, purge, or recreate bytecode.
+  - >-
+    After the final review edit and command, repeat the identical shell
+    inventory. Any pre/post difference invalidates the review and must be
+    reported without cleanup.
+review_requirements:
+  - >-
+    Read all 4,516 R20 lines and all 1,242 R21 lines. Evaluate the exact merged
+    authority independently; producer and master conclusions are evidence, not
+    a substitute for review.
+  - >-
+    Verify R21 replaces only its six declared R20 clause families, binds exact
+    R20 SHA-256
+    8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047,
+    preserves all v1 evidence, and introduces no broader architecture,
+    dependency, storage, rights, provider, root, network, cloud, container,
+    endpoint, hosted CI, deployment, or product change.
+  - >-
+    Reconstruct the digest/preimage graph and canonicalization algorithms.
+    Prove both preimages are siblings after R21, neither binds itself, the
+    sibling, downstream authorities, feature hash, build/run/runtime state, or
+    output bytes, and both converge on field v2 without a cycle.
+  - >-
+    Validate the closed seventeen-key prior-authority objects in Unicode lexical
+    order against the actual accepted v1 field and possession artifacts,
+    including physical/canonical hashes, IDs, actors, clocks, recommendation,
+    and null supersession.
+  - >-
+    Reconstruct the immutable 119-row field order and prove only action
+    `$.subEventId` changes. Confirm strict JSON-integer-only pair admission,
+    explicit bool rejection, no numeric-string/name/label coercion, exact
+    reason-code outcomes, and preservation/quarantine of all strings, other
+    types, and unknown integers.
+  - >-
+    Confirm possession v2 preserves all 36 v1 predicates and can consume only
+    the four canonical field-v2 selectors. Missing/mistyped/unmapped event or
+    subevent and missing mandatory team/tag state must fail closed without raw
+    or label fallback.
+  - >-
+    Reconstruct the exact sorted fifteen-feature roster, including the four
+    supported rows and their exact inputs/aggregation/applicability/denominator/
+    output, four suppressed rows, seven unavailable rows, closed policy object,
+    and absence of a hidden or sixteenth feature.
+  - >-
+    Validate the exact two descriptor-only preimage schemas, 17 product path
+    descriptors, 16 schema descriptors, typed unresolved feature placeholder,
+    exact 30-resource roster, exact five dependencies, and no claim that a
+    product schema, serializer, output, manifest, or receipt exists.
+  - >-
+    Confirm the exact sixteen serial packets have disjoint write ownership;
+    cross-authority test production, fixed fresh review, and master gate are
+    separate; the review does not change the 30-resource roster; and all twelve
+    AGENTS.md repository commands plus additive checks are explicit.
+  - >-
+    Evaluate cross-authority composability and the positive/negative test
+    requirements, including no v1/v2 hybrid, no digest substitution, no
+    noncanonical prior-key order, no sibling edge, no unsupported feature use,
+    and no product path before the complete R21 gate.
+  - >-
+    Report every P0, P1, and P2 candidate defect. PASS requires zero such
+    findings. State exact readback, checks, pre/post inventory evidence,
+    recommendation, residual risks, and that the review neither implements nor
+    self-accepts R21.
+definition_of_done:
+  - The merged R20 plus R21 authority receives a fresh complete merits review.
+  - The no-write inventory harness passes exactly.
+  - Every bounded R21 closure is independently reproduced or rejected.
+  - PASS has zero P0, P1, or P2 findings; otherwise REWORK is explicit.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -S -B -c
+    "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R14.md');
+    s=p.read_text(); assert p.is_file() and p.stat().st_size > 15000;
+    assert 'recommendation' in s.lower();
+    assert '08f64de257d32dafc0e47030025a22644acb1ab793e34a443bca34d18d154969' in s;
+    assert 'P0' in s and 'P1' in s and 'P2' in s"
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any preflight/postflight inventory drift or unexpected filesystem write.
+  - A mandatory input is absent, unreadable, or differs from its frozen digest.
+  - >-
+    A finding requires changing approved architecture, project root, dependency
+    policy, provider/rights authority, storage, or local-only boundary.
+  - Review requires edits outside the two allowed report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

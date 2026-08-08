@@ -1,0 +1,137 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R12
+state: DISPATCHED
+objective: >-
+  Perform the one terminal fresh independent review of the frozen R12 six-failure
+  correction under the controlling 2026-08-03 closure steer, without opening a
+  further W04 runtime revision or editing producer, retained, product or evidence
+  authority bytes.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R12:COMPLETE
+assigned_role: terminal_independent_w04_runtime_control_r12_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.yaml
+  - reports/verification/W04/wyscout-runtime-loaded-subset-correction-authorization-R1.md
+  - reports/verification/W04/wyscout-runtime-foreign-pyc-and-derived-preimage-correction-authorization-R1.md
+  - reports/verification/W04/wyscout-derived-v2-preimage-correction-R1-master-verification.md
+  - reports/verification/W04/w04-closure-steer-2026-08-03.md
+  - reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md
+  - reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md
+  - reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v2.json
+  - configs/schema/wyscout-v5-product-contract-preimage-v2.json
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R12.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R12.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R12.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  producer_packet_sha256: 35281e769533fed6b042c66c7d6d0c8a87a4916a459c1ffd2d4847b2d8a26e9a
+  producer_return_sha256: 7d71f33382f1ae5433def1741c446da59524448d82344bfbdc9ce70d6b109774
+  foreign_pyc_correction_authorization_sha256: 7a53b093388567947154c04969c0c40e314360ac87c3bfd8ba9459f651eef41c
+  derived_preimage_master_verification_sha256: 5fd5259ea305d348909760e5f1cd3778b0bc9400697b926a0b6f25dadcf6faf2
+  closure_steer_sha256: 86ae128ff4208dae98c8077429848621cc468b53bffa29a91ffe0565f405ea6c
+  w10_deferred_backlog_sha256: 58cc966f4e7ff2877649bcaff2288161f18d9e4cc33f3f745c7a51d3a2601407
+  r11_master_acceptance_sha256: fbc120702b8c58526da4a43d9727a0645f856fc15e325813756b71bb5082164e
+  real_root_r3_master_acceptance_sha256: 54c52d0b260225df1d7ec9b213fcca781ac13aa534f5d3596b2455b0f68f4cc6
+  candidate_admission_child_sha256: db6ffbada5e271310b2b2495b264475d0ace27dfe0e4a0b35077a471fbde5be0
+  candidate_launcher_sha256: 827714c8baefbf37fe2f216972d00027d8931df45ba95e48002fee5a168a1353
+  candidate_rebuild_child_sha256: 5bc93975adff9cd78e5ac215ff13dba7726e925a6fe3e21a92670817062a58ed
+  candidate_build_contract_sha256: fca15a585d928c17999fb606df06f5de370f20ea273f164485ed26dc8a57cdd6
+  candidate_build_tests_sha256: d5269ca57e9a5b4e386c9891aa6aa472850363fa72ab61ecc9744de13a47bc9d
+  candidate_runtime_tests_sha256: 8083ea75b0ddfe3939b9fad306bbb612ce0e95da7be40a9dc8ee10fe3a1d4392
+  candidate_security_tests_sha256: a854ada3588af9540a7e00a35d545d7092b3e66b6504676d317c5b6886668c64
+  candidate_e2e_tests_sha256: 5ce8de532124869eb7e88c55a5504db4d153222525cfa46eb897dc9232a4b83c
+  schema_v2_physical_sha256: c760710eacbb6575b4af46b31ae5f69c1b16ef702d14630c84597a118a40911e
+  product_v2_physical_sha256: 465a2abf9e72eb25cc6717cfc656304ae9bb208e4ed0e08d54a46420e3db23ce
+  schema_v2_body_sha256: a0daa1a22619bf2719ff67d1a22f4495a8de0ea8884f53bb5f05276c9b71ddc0
+  product_v2_body_sha256: a50dd67b5ab989c783d67cda3cc0fe15229b6991de342d74bbdc3c40a465c832
+  retained_site_pyc_sha256: bd0b8036ffff7542a4216db800622c9379e953d7cbd38b45ab464636ca4001dd
+  retained_repository_pyc_sha256: d3f27229f8b43fd3fc1aba948462b6fb8a872790f4def522e494090ff444ff8d
+  retained_data_runs_sha256: c7edcc0341628b7224069cf4fc3cf3f1ef3bce4994f5bcf2ece904c313b1627c
+requirements:
+  - >-
+    Verify every fixed binding before final judgment. Keep producer code/tests,
+    configs, PYC, data, runs, staging, products, manifests, receipts and real-root
+    evidence read-only. Perform no cleanup, Git, real-root run, publication,
+    dependency or external-system action.
+  - >-
+    Independently prove the exact retained cpython-314 path is classified only by
+    safe contained lstat metadata under unconditional zero-read/use denial, binds
+    one exact stable repository source prerequisite, emits no owner/digest/source
+    authority, and rejects the complete predicate/source/path/tag/mode/size/link/
+    symlink/open/read/use adversarial matrix in both collectors.
+  - >-
+    Independently reproduce both canonical v2 aggregate preimages from accepted
+    builders and unchanged v1 inputs. Require exact 23-root ordering and DAG,
+    exact physical/body hashes above, exact product-to-schema body binding, and
+    the same refreshed body constants in launcher/tests. Reject any logical,
+    roster, source/right, product-population or digest-meaning change.
+  - >-
+    Verify the real Darwin empty prefix directory observation is mode 0700,
+    link-count 2 and byte-identical before/after; the validator retains all
+    emptiness, identity, transport, descriptor, frame, exit, timeout and cross-
+    field checks; and coherent file-style link-count 1 evidence is rejected. This
+    is the terminal bounded physical correction, not a new authority.
+  - >-
+    Apply the controlling closure steer. PASS unless a reproducible P0/P1 shows
+    executable/authority substitution, incorrect product/manifest/receipt/digest
+    bytes, source/rights/temporal/local-only bypass, or false successful evidence
+    after failed execution. Preserve every lesser host-state concern explicitly
+    as W10 backlog and do not request R13 or another W04 runtime revision.
+  - >-
+    Use accepted R11 and retained real-root R3 as the minimum W04 operational
+    baseline. Reproduce focused/static evidence sufficient for independent R12
+    adjudication; the one complete-repository/W04 phase gate belongs to the master
+    after this review and must not be duplicated here.
+acceptance_checks:
+  - .venv/bin/ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - .venv/bin/ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - MYPY_CACHE_DIR=/private/tmp/w04-r12-review-mypy .venv/bin/mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/security/test_w04_wyscout_vertical_slice_publication.py tests/e2e/test_w04_wyscout_vertical_slice.py
+  - PYTHONDONTWRITEBYTECODE=1 .venv/bin/pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py -k 'foreign_cache_tag or child_process_evidence_rejects_file_style_link_count'
+  - PYTHONDONTWRITEBYTECODE=1 .venv/bin/pytest -q -p no:cacheprovider tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - git diff --check
+  - git remote
+deliverables:
+  - One terminal independent R12 review with blocker-test adjudication and return.
+stop_conditions:
+  - >-
+    Return REWORK only for a newly reproduced P0/P1 in the five controlling
+    blocker classes. Otherwise return PASS, record any lesser platform assurance
+    as non-blocking W10 backlog, and do not open another runtime revision.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

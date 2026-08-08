@@ -1,0 +1,30 @@
+schema_version: 1
+review_id: REVIEW-W06-EVAL-ROBUSTNESS-04-R1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R1
+reviewed_commit_base: 518e91a20f440768003d6cc089f5fec9107b5539
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    evidence: All eight computed stress kinds bootstrap the unchanged full population and retain no transformed cohort or comparison.
+  - severity: P1
+    evidence: Two providers with zero candidate intersection return a computed source-comparison result.
+  - severity: P1
+    evidence: Controls reject valid rank order and shuffled-label/pair controls shuffle candidate order rather than evidence.
+  - severity: P1
+    evidence: Stress specifications/results do not strictly bind protocol roster, declared k, inventory or child lineage.
+  - severity: P1
+    evidence: Failure register digest 31f5ab91dafe4377b5ec94b837a2cb01634e4d0883405ed25d39ee90abb99056 accepts a false total of 100 from ten supplied cases.
+  - severity: P1
+    evidence: Applicability digest ed497952ab334aeac02d2f0f7e513e78fa31137a458583353cdade96b5ca31e2 suppresses a missing transfer population via caller boolean.
+  - severity: P1
+    evidence: Public robustness fixture/tests do not execute stress or control branches.
+decision: REWORK
+next_packet: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R2.yaml
+reviewer: master

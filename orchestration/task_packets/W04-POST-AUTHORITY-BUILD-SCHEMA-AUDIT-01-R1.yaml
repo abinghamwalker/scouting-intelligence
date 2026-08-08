@@ -1,0 +1,61 @@
+schema_version: 1
+task_id: W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01
+phase_id: W04
+revision: R1
+state: COMPLETE_PASS_TO_PACKET_CONDITIONAL_AUTHORITY_ACCEPTANCE
+objective: >-
+  Audit the current repository after the accepted identity and Parquet work and
+  return the smallest exact path-disjoint implementation packets for build contract,
+  23-root schema closure and v2 aggregate materialization after authority acceptance.
+depends_on:
+  - W04-BUILD-PRODUCT-AUTHORITY-DECISION-01-R1:IN_PROGRESS_NO_PRODUCT_WRITES
+assigned_role: read_only_w04_build_schema_packet_analyst
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.yaml
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-BUILD-AUTHORITY-AUDIT-01-R1.md
+  - reports/reviews/W04/returns/W04-VERTICAL-SLICE-CONTRACT-AUDIT-01-R1.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - src/scouting/identity/wyscout.py
+allowed_paths:
+  - reports/reviews/W04/returns/W04-POST-AUTHORITY-BUILD-SCHEMA-AUDIT-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  data_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  parquet_encoder_sha256: bd849dda61b570378697ce703719c2058fc9c450e298a88a9f1e5f95ad0a7ff4
+  identity_runtime_sha256: a9bc386ec759252464e5d6b4b14b95082a3a4218a9a48cbea97ffbcbd11b95cd
+requirements:
+  - Verify every fixed binding and stop on drift.
+  - Inventory exact existing versus absent build/projection/invocation/receipt/schema-exporter surfaces.
+  - Reconcile all 23 required roots to existing contract models and identify only genuine missing closed schemas.
+  - Propose the shortest serial/path-disjoint producer and reviewer packets with exact owned files and acceptance commands.
+  - Separate decision authority from later v2 aggregate instances; no placeholder digest or product byte.
+  - Use read-only inspection/tests only; do not edit implementation or authority.
+deliverables:
+  - One bounded PASS_TO_PACKET or BLOCKED report with exact path ownership and dependency graph.
+stop_conditions:
+  - Architecture, dependency, frozen binding, scope or local-only change appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

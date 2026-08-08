@@ -1,0 +1,185 @@
+schema_version: 1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R6
+state: DISPATCHED
+objective: >-
+  Close the bounded R5 source-pinned typed-authority and adversarial-proof defects,
+  without changing any frozen fixture, configuration, selected artifact, numeric
+  array, retrieval geometry or development score.
+depends_on:
+  - REVIEW-W05-MODEL-01-R5:REWORK
+  - W05-MODEL-REVIEW-01-R1:REVIEWED
+assigned_role: m0_authority_and_determinism_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R5.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R5.yaml
+  - orchestration/task_packets/W05-MODEL-REVIEW-01-R1.yaml
+  - reports/reviews/W05/w05-m0-model-independent-review-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-REVIEW-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R5.md
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/arrays.npz
+  - runs/w05/m0-baseline-v1/manifest.json
+  - runs/w05/m0-baseline-v1/configuration.json
+  - runs/w05/m0-baseline-v1/candidate-universe.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - tests/unit/test_w05_m0_models.py
+  - reports/reviews/W05/returns/W05-MODEL-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - tests/fixtures/**
+  - runs/**
+  - data/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R4.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R5.md
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+frozen_inputs:
+  accepted_configuration_digest: 5f847a5b57393dd1a0bb9007c7e89f38305fc5d4be9bfbe3a12285b6783e382a
+  accepted_registry_digest: c12217c2daeec97059928f9085d397b2cf56433c8eb66185ab28926f95646644
+  accepted_taxonomy_digest: 59688694131370f42b24a0dd00b609d08254ec945df2ba4352055c8391983097
+  selected_population_projection_digest: 60c5a45f5bec8bed911f708cadaed4532759bcfc883b28e91d5d19195301a086
+  metadata_population_projection_digest: b5efb54c2c30524ae5483a5082d32c391cff68be398e02a54506772b4b29fe21
+  query_projection_digest: 1726816886fdd2ab7fefcf6ec661a24f944770bda5853d1ede5f6b9b7e766e5c
+  selected_artifact_id: 9a0d43c6-d177-51be-8280-3bf02bedbc99
+  selected_manifest_logical_digest: 2ed113a19acec3a3bbd80038ecc0b639a4a587111b35af2d4d7b0edd651c8fa9
+  selected_file_sha256:
+    arrays.npz: 73374ba529e2628112b7886e549e2b570883781544cd65478ea96a838975dfc6
+    manifest.json: c88f101211d8e26c06622021a4d9333ce1c0e9217999a100aee71812446f443a
+    configuration.json: d4d6839382267f3eb1cb8d767e01f833e106332e314ead886e9f08997681c006
+    candidate-universe.json: 2a8bd89b9715e2a0349e2aaba22f890333139a5142b931ae4e844aaa9bc5807e
+  exact_array_payload_digests:
+    metadata_control: 19a29423c6ee03b0439e94950d344f854e0b54633682354d1433ee328790a5ee
+    raw_euclidean_control: 3915f96a1c494de7745e2a336576ce806e02b101ea9522e03a1ef1a154065d36
+    robust_scaled_cosine: ece7da1a9458a495ef3dbe7faaae2a5bd5684ae3eb617f85fe32edcf61da4bbc
+    weighted_cosine: c2bd7a9939e45e0217e891a9a80b2dcabd120106ad9d67e0d5fd831caaba4801
+    pca: 90e90a145282cd9f6b6374fd3df1b8db2d24616d3d54395484fd20d4e1538971
+    role_aware_restriction: c2bd7a9939e45e0217e891a9a80b2dcabd120106ad9d67e0d5fd831caaba4801
+  exact_scores:
+    metadata_control: 0.1111111111111111
+    raw_euclidean_control: 0.3333333333333333
+    robust_scaled_cosine: 1.0
+    weighted_cosine: 1.0
+    pca: 1.0
+    role_aware_restriction: 1.0
+requirements:
+  - >-
+    Do not edit any fixture, config, accepted registry/taxonomy/contract, selected
+    artifact byte or dependency. Do not tune, select, refit or change a frozen array,
+    score, ranking, family, k, weight, threshold, seed, PCA count or control.
+  - >-
+    Add one normal source-authority revalidation path for M0Configuration. Every
+    fit/load/development-check boundary must recompute its complete canonical mapping
+    and self digest, enforce exact strict field types, and compare every scalar/list/
+    map/ID/version/digest to the accepted source-pinned authority. A dataclass replace
+    that retains the accepted digest but changes any value must fail before reading or
+    writing artifact content.
+  - >-
+    Add one normal complete semantic revalidation path for FeatureRegistry instances.
+    Explicitly reconstruct the full nested canonical registry projection from the
+    immutable typed fields and recompute the accepted root digest, thereby binding all
+    family/schema/definition/control/W04-bridge values as well as IDs and carried
+    digests. Do not modify or weaken the accepted feature registry module or bytes.
+  - >-
+    Revalidate RoleTaxonomy wrapper claim/expert/exemplar fields plus its complete
+    normally validated contract. Revalidate typed candidate and query authorities:
+    exact accepted identity/count/order/keys, reproduced materialized features/roles,
+    cutoff/dependency evidence, full selected or metadata projection pin, exact query
+    projection and peer_groups derived from candidate rows. No class-only trust or
+    caller-supplied relevance substitution remains.
+  - >-
+    Manifest load must require exact canonical JSON bytes and compare every evidence-
+    or behavior-bearing field to the family-specific accepted authority, including
+    both registry digests, descriptor digest, evidence class, population/universe IDs
+    and counts, seed, serialization, PCA policies and each descriptor's exact semantic
+    role, name, dtype, family shape, little endianness and C order. Self-consistent
+    re-signing must not create a new accepted authority.
+  - >-
+    Fitting must inspect the destination and each existing ancestor before mkdir/write
+    and reject destination or ancestor symlinks/resolve drift. Preserve immutable
+    create-only writes. This is the only serializer-path hardening admitted in R6.
+  - >-
+    Canonicalize an exactly tied PCA eigenspace independently of an arbitrary valid
+    sign, component order or orthonormal rotation within that eigenspace. Use a
+    deterministic projector/standard-axis basis policy only for tied groups, retain
+    the existing non-tied R5 selected PCA bytes exactly, and recompute transformed
+    vectors from the final components. Document and directly test the invariant.
+  - >-
+    Expand the dedicated suite into parameterized attacks that directly assert exact
+    complete all-six ranking-digest lists; two-build four-file bytes for every family;
+    exact distances/contributions/reload; typed config/registry/taxonomy/candidate/query
+    forgeries; fully re-signed manifest/universe substitutions; ZIP/object/dtype/shape/
+    order/digest/metadata corruption; fit/load symlinks; zero-IQR/norm; PCA sign/tied
+    basis/six-feature contribution sums; UUID ties; role restriction; temporal cutoff;
+    exemplar permutations and deep immutability. Use the production fit/load/score
+    paths and no duplicate scoring implementation.
+  - >-
+    The R6 return must list exact frozen input and output physical/logical identities,
+    full ranking digest lists, exact commands/results and the unchanged development-
+    only claim. It must explicitly state that this is not W06 evaluation, validation,
+    expert evidence, provider evidence or a recruitment-outcome claim.
+deliverables:
+  - Normally revalidated source-pinned typed authorities at every M0 boundary.
+  - Exact family-specific manifest/array interpretation and safe fitting destination.
+  - Tied-eigenspace canonical PCA policy that preserves all frozen R5 bytes.
+  - Comprehensive dedicated executable attack suite and mandatory R6 return.
+definition_of_done:
+  - Both master-reproduced R5 typed config and forged feature-name attacks fail closed.
+  - Every independent-review P0/P1 is closed without any frozen identity or score drift.
+  - Focused quality/import/local-only checks pass and selected artifact file SHAs remain exact.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+stop_conditions:
+  - Any frozen fixture/config/registry/taxonomy/contract/artifact byte, numeric array, ranking or exact score would change.
+  - Any accepted predecessor, dependency, serving path or W06 behavior must change.
+  - Any selection retry, tuning, external/provider access or second scorer is proposed.
+  - Required correction cannot remain within the exact allowed paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

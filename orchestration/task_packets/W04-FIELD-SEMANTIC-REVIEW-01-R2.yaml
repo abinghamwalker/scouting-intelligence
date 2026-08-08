@@ -1,0 +1,107 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Produce truthful evidence for the already complete zero-finding independent
+  field-semantic review from a new actual post-incident pyc baseline. Change no
+  review, candidate, test, or implementation artifact.
+depends_on:
+  - W04-FIELD-SEMANTIC-REVIEW-01-R1:MASTER_REWORK
+assigned_role: independent_field_semantic_review_evidence_reworker
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-REVIEW-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-field-semantic-independent-review-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R1.md
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-REVIEW-01-R2.md"
+frozen_artifacts:
+  decision_physical_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  registry_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  registry_canonical_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  contract_test_physical_sha256: d8616b4afd9b9b83fccc0fbd52e387713c08b6d3904a956d271ef0bfe3a5f7b3
+  review_physical_sha256: e2e983c99ed06eb2043c1f3f9a4eac8e4f4c6d69da97fe55bfc9a27745ade861
+  review_record_sha256: 8beb747f71f43586c4a57125fae405e90db8af2bd8b6b408346b38b64d7e7fa0
+requirements:
+  - >-
+    Change no decision, registry, test, source, implementation, configuration,
+    review Markdown, or prior return. The sole write is the new R2 return after
+    verification.
+  - >-
+    Take a fresh actual shell-only complete site/repository pyc preflight at the
+    start of R2. The repository is expected to be observed, not forced, at 59
+    entries after R1. Record complete, metadata, and content projections and
+    classify every current row. Do not reuse the R1 preflight or clean/repair
+    the new/changed pycs.
+  - >-
+    Before Python, verify every frozen hash above, the exact PASS/zero-findings
+    review record, absence of acceptance and all 13 downstream paths, and the
+    current review presence.
+  - >-
+    Run the 123-test focused suite, Ruff format/lint, local-only verifier, and a
+    strict review/canonical digest verifier. Use only root uv,
+    `--locked --no-sync`, and process-start
+    `PYTHONDONTWRITEBYTECODE=1 ... python -B` for every Python process. Do not
+    run any helper through bare `python3`.
+  - >-
+    Write the R2 return with a truthful account of the R1 terminal failure and
+    inaccurate R1 return. Do not state that the R1 inventory comparison passed.
+  - >-
+    After the return is written, run the exact same shell-only inventory once.
+    Every count and complete/metadata/content row must equal the actual R2
+    preflight byte-for-byte. If any value differs, report the exact discrepancy
+    and do not issue PASS.
+  - >-
+    Do not run Git, sync, delegate, self-approve, access provider/network data,
+    or create acceptance, dependency, Bronze, Silver, Gold, product, runtime,
+    cloud, container, endpoint, or deployment work.
+definition_of_done:
+  - R2 return is the sole changed path and truthfully corrects R1 evidence.
+  - Frozen artifacts and the zero-finding PASS review are unchanged.
+  - All checks pass and terminal inventory exactly equals fresh R2 preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen hash differs or review record no longer validates.
+  - Acceptance or a downstream path exists.
+  - Any check fails or actual R2 preflight/postflight inventory differs.
+  - Work requires an edit outside the sole return path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

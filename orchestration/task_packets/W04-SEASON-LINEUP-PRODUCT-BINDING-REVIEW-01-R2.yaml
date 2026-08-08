@@ -1,0 +1,109 @@
+schema_version: 1
+task_id: W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01
+phase_id: W04
+revision: R2
+state: ACCEPTED
+objective: >-
+  Freshly review the bounded progression-test correction and the unchanged exact
+  season/lineup authority, using the frozen lifecycle's R1 review path and ID while
+  preserving the failed R1 review byte-identically in archive evidence.
+depends_on:
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_season_lineup_r2_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R2.yaml
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2.md
+  - reports/verification/W04/wyscout-season-lineup-product-binding-R2-master-verification.md
+  - reports/reviews/W04/archive/wyscout-season-lineup-product-binding-independent-review-R1-rework-431e0cfb.md
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-POST-CORRECTION-PROGRESSION-AUDIT-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+fixed_bindings:
+  decision_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  season_lineup_test_sha256: 3a4ed66082d16cf55a87921a742aea30f5600ad538f2664d0a65fe5be2b9e21f
+  build_authority_test_sha256: 12d7379b7594caaea2aed508fd1444cfa307d1911d8d12fb52222d050c0fc73b
+  r21_control_preimages_test_sha256: 6ae725e379a33cd0785b346fe4ddcdca3fdc296ff24a1f78697202834e7d0df6
+  producer_return_sha256: 98cc732eeb79341fc7d58885825c808bae9fa3a1ac1beeedcafdb7e3cb885e74
+  master_verification_sha256: e573d849afcac3734c894d5f073871fd0eaf14ce7b3d7916e8c4b177053f6a2a
+  archived_failed_review_sha256: 431e0cfb98c6bbd94b6baf3cb6878c551028e894770fb02ada771be989fc31ba
+  archived_failed_review_record_sha256: b1708640631732f304f6c07455ee1530ae0ef800a70276d29fd34b46fc484e3d
+  failed_reviewer_return_sha256: 8218de5bb7e38114204d8c5a82586ff0718887c3ec3a2a682b216f367d91b547
+  progression_audit_sha256: 4fe4b72dc17b50e360453836eb291d02cd0ab3574c59a2ca5e6a19e9bad27cdc
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Re-review the unchanged canonical authority and independently reproduce the
+    authorized source/UUID/one-row population/25-key projection claims; do not
+    rely only on the prior review's conclusion.
+  - >-
+    Inspect all three corrected modules. Prove authority/preimage reads are
+    writer-free and destination-state preserving for absent, existing-file,
+    existing-directory and mixed simulated product states without touching real
+    product roots.
+  - >-
+    Attack attempts to reintroduce an unconditional repository absence gate,
+    skip/xfail/environment bypass, placeholder future gate/task marker, actual
+    product creation, mutable lifecycle semantics or authority-byte changes.
+  - >-
+    Confirm the archived failed review is byte-identical and remains REWORK while
+    the new active review uses exactly the frozen lifecycle path, review ID
+    w04-wyscout-season-lineup-product-binding-independent-review-R1 and schema
+    w04-season-lineup-product-binding-independent-review-v1.
+  - >-
+    Write exactly one canonical machine-readable review fence at the active R1
+    path. Return PASS only with zero P0/P1/P2 findings; otherwise REWORK. The R2
+    return is additive and must not overwrite the retained R1 failed return.
+  - Confirm no authority/runtime/schema/product/data/dependency/Git/external action.
+definition_of_done:
+  - Fresh full review of the unchanged authority plus R2 progression correction.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py
+  - uv run mypy tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh active R1 lifecycle review and mandatory additive R2 return.
+stop_conditions:
+  - Any fixed hash drifts or failed evidence cannot remain preserved.
+  - Any authority or wider implementation byte must change.
+  - Any Git, dependency, provider/network or external action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,90 @@
+schema_version: 1
+task_id: W04-BUILD-RECEIPT-CLOSURE-AUDIT-01
+phase_id: W04
+revision: R2
+state: DISPATCHED_BOUNDED_REPORT_REWORK
+objective: >-
+  Correct only the four R1 recommendation defects established by the independent
+  review, producing an exact sufficient user-decision surface without implementing
+  code, authority, receipt, product or data bytes.
+depends_on:
+  - W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R1:REWORK
+assigned_role: bounded_w04_build_receipt_closure_report_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R2.yaml
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R1.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-R4.md
+  - reports/reviews/W04/wyscout-schema-design-R5.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r1_audit_sha256: 2d0fd4c6a797c6f04879772075d068560ccbca23456cc559160eb259c5d7ef18
+  r1_independent_review_sha256: b3c6009cf3ad826bddabfbd6b722f89dcbffb11bf7755bbe60d4df68b67c9a09
+  r1_reviewer_return_sha256: 79a829d7c147a39b05b25495e1ff8a68604d625afebb3ae9ee21e24974a9efce
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+requirements:
+  - Verify every fixed binding before analysis and stop on drift.
+  - >-
+    Replace source-acquisition snapshot with the retained exact selected-match start
+    `2017-08-11T18:45:00Z`; retain `valid_from_ts=max(snapshot_as_of_ts,
+    dependency_watermark)` and the strict `2026-08-01T00:00:00Z` cutoff.
+  - >-
+    Specify an acyclic product-authorized v2 schema-bundle preimage that retains the
+    immutable descriptor-only v1 digest and binds canonical closed schema IDs and
+    content digests for every actually implemented R20 Bronze, Silver, Gold,
+    layer-manifest, result and receipt surface before final publication. Do not
+    pretend absent future schemas already have digests and do not alter 25 keys.
+  - >-
+    Require the invocation reader to reopen every summarized boundary receipt and
+    enforce `started_at <= checked_at <= completed_at` alongside exact path/hash/size
+    equality before writing the invocation receipt.
+  - >-
+    Freeze the exact five-key window UUID object in code-point order: `match_id`,
+    `source_manifest_id`, `window_end_utc`, `window_schema_version`,
+    `window_start_utc`; state exact JSON string values and canonical encoding, then
+    define the UUIDv5 name as `single-match-poc:` plus its SHA-256. The completion
+    index remains identified by its accepted address/path/digest, not a new ID.
+  - >-
+    Preserve the sound R1 portions: one-day window, one authentic match, accepted
+    index/source/member/901/867 bindings, exact R20 25-key one-hash projection,
+    complete receipt key sets, non-recursive Gold path hash and acyclic publication
+    graph. State the shortest serial packet chain after user authorization.
+  - >-
+    Use read-only shell inspection only. Do not run Python, uv or any command that
+    may create or mutate repository bytecode while the Parquet review is active.
+deliverables:
+  - Corrected R2 audit and mandatory return with a concise exact user authorization question.
+stop_conditions:
+  - Any implementation, authority/data/product/receipt byte or external action is needed.
+  - Any broader architecture, dependency, project-root, provider or local-only change is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

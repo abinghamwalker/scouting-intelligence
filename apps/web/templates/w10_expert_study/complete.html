@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block body %}
+  <section id="study-content" class="panel completion" aria-labelledby="complete-title">
+    <p class="section-kicker">{% if pilot %}Mechanics pilot{% else %}Formal response capture{% endif %}</p>
+    <h2 id="complete-title">{% if pilot %}Pilot complete — not formal relevance evidence{% else %}Complete — pending independent evaluation{% endif %}</h2>
+    <p>The response capture is sealed locally. This page does not show expected answers, candidate provenance, a score, a threshold result or a relevance verdict.</p>
+    {% if pilot %}<p class="pilot-note">This capture cannot enter formal tables, formal files, study metrics or a G-RW4 decision.</p>{% elif test_only %}<p class="pilot-note">TEST_ONLY formal mechanics capture — never evaluator-compatible evidence.</p><dl class="authority-list"><dt>Test capture ID</dt><dd><code>{{ completion.capture_id }}</code></dd><dt>Test capture digest</dt><dd><code>{{ completion.capture_digest }}</code></dd></dl>{% else %}<dl class="authority-list"><dt>Local receipt ID</dt><dd><code>{{ completion.receipt_id }}</code></dd><dt>Response receipt digest</dt><dd><code>{{ completion.receipt_digest }}</code></dd></dl>{% endif %}
+    <form method="post" action="/w10/detach">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <button class="button secondary" type="submit">Finish and prepare next participant</button>
+    </form>
+  </section>
+{% endblock %}

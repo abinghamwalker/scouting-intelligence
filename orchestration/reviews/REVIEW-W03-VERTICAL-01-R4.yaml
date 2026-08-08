@@ -1,0 +1,35 @@
+schema_version: 1
+review_id: REVIEW-W03-VERTICAL-01-R4
+task_id: W03-VERTICAL-01
+reviewed_commit_base: 8e40321fc6d87bbd8adac4ba3efc85eee41554c5
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: PASS
+security_temporal_review: PASS
+verified_results:
+  database_backed_e2e_tests: 33_passed
+  immutable_presentation_profile: PASS
+  protected_exact_result_digest: PASS
+  protected_exact_explanation: FAIL
+  ruff_format: PASS
+  ruff_lint: PASS
+  mypy_strict: PASS
+  bandit: PASS
+defects:
+  - severity: P0
+    code: MASTER_TEMPLATE_CONSTRAINT_EXCLUDES_FROZEN_GENERIC_EXPLANATION
+    evidence: reports/verification/W03/protected-gate-attempt-R3.json
+    affected_definition_of_done: >-
+      The already-frozen protected explanation is a bounded generic statement,
+      while the R4 master packet required every explanation to interpolate the
+      candidate display name.
+    required_fix: >-
+      Accept either a bounded static explanation with no format fields or a
+      template containing exactly one plain candidate_display_name field.
+      Continue rejecting every other field, traversal, conversion, format
+      specification, malformed template and multiple placeholder.
+decision: REWORK
+next_packet: orchestration/task_packets/W03-VERTICAL-01-R5.yaml
+reviewer: master

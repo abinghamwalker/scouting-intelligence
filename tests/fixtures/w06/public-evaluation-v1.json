@@ -1,0 +1,9 @@
+{
+  "fixture_id": "w06-public-evaluation-v1",
+  "evidence_class": "IMPLEMENTATION_FIXTURE_ONLY",
+  "claim_notice": "Labels and outputs prove deterministic implementation behaviour only; they are not human-expert, protected, calibration, prospective, or claim evidence.",
+  "rows": [
+    {"query_id": "q_a", "ranking": ["a", "b", "c"], "relevant": ["a", "c"], "partial": [], "abstained": false},
+    {"query_id": "q_b", "ranking": ["d", "e", "f"], "relevant": ["e"], "partial": ["d"], "abstained": false}
+  ]
+}

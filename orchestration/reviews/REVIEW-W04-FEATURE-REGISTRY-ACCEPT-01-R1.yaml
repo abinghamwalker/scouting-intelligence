@@ -1,0 +1,21 @@
+schema_version: 1
+review_id: REVIEW-W04-FEATURE-REGISTRY-ACCEPT-01-R1
+task_id: W04-FEATURE-REGISTRY-ACCEPT-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: NOT_APPLICABLE_MASTER_OWNED
+integration_checks: PENDING_POST_MATERIALIZATION
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: MATERIALIZED_PENDING_POST_VERIFICATION
+next_packet: W04-R21-CROSS-AUTHORITY-TEST-01-R1
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-supported-feature-registry-acceptance-v1.json
+  - reports/verification/W04/wyscout-supported-feature-registry-acceptance-R1-master-verification.md
+  - reports/reviews/W04/returns/W04-FEATURE-REGISTRY-ACCEPT-01-R1.md
+decision_notes:
+  - Post-materialization focused/local-only/canonical verification remains mandatory.
+  - Cross-authority dispatch waits for that verification.

@@ -1,0 +1,66 @@
+schema_version: 1
+review_id: REVIEW-W04-SCHEMA-DESIGN-01-R15
+task_id: W04-SCHEMA-DESIGN-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-SCHEMA-DESIGN-REVIEW-01-R9
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-schema-design-R15.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R15.md
+  - reports/verification/W04/wyscout-schema-design-R15-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R15.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R14.yaml
+  - reports/verification/W04/wyscout-schema-design-R14-master-verification.md
+  - src/scouting/contracts/evidence.py
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: >-
+      read complete R15 design, return, and R14-to-R15 unified diff
+    result: PASS_3234_DESIGN_LINES_110_RETURN_LINES_510_DIFF_LINES
+  - command: >-
+      parse exact stable projection and post-hash rebuild-invocation key sets
+    result: PASS_25_EACH_24_COMMON_PROJECTION_ONLY_SCHEMA_VERSION_INVOCATION_ONLY_BUILD_ID
+  - command: >-
+      uv run --locked --no-sync python -c
+      "reproduce EvidenceDependency canonical JSON model and forbidden-alias rejection"
+    result: PASS_EXACT_5_FIELDS_CANONICAL_JSON_ALIASES_FORBIDDEN
+  - command: >-
+      parse R15 markdown child input schema tables and assert exact key counts
+    result: PASS_16_COMMON_8_ADMISSION_10_REBUILD_25_INVOCATION
+  - command: >-
+      search R15 for stale version, recursive build input, dependency aliases,
+      and false accepted-R13/R14 lineage
+    result: PASS_ONLY_EXPLICITLY_RETIRED_OR_FORBIDDEN_REFERENCES
+  - command: >-
+      uv run --locked --no-sync python -c
+      "parse all orchestration YAML and assert registry task IDs are unique"
+    result: PASS_133_ORCHESTRATION_YAML_23_TASKS_ZERO_DUPLICATES
+  - command: uv run --locked --no-sync python scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The master read all 3,234 R15 design lines, the complete 110-line return, and
+    the full 510-line R14-to-R15 delta. The producer changed exactly its two
+    assigned report paths and created no implementation or parent-workspace path.
+  - >-
+    The pre-build projection and completed invocation are closed 25-key objects
+    sharing exactly 24 stable values. Replacing projection schema_version with
+    the computed build_id after the one projection hash removes the R14 cycle
+    while retaining deterministic child recomputation and equality checks.
+  - >-
+    R15 is accepted only as the master's candidate. Product implementation and
+    provider acquisition remain blocked until a separate independent reviewer
+    accepts the complete design and the master reproduces that review.

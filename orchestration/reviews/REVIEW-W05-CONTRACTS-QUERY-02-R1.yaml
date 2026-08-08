@@ -1,0 +1,25 @@
+schema_version: 1
+review_id: REVIEW-W05-CONTRACTS-QUERY-02-R1
+task_id: W05-CONTRACTS-QUERY-02
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - severity: P1
+    blocker_tests: [1, 2, 3, 4, 6]
+    evidence: >-
+      The full typed resolved query self-verifies only against a digest carried inside
+      the same substitutable object. Semantic responsibilities and weights can change
+      under the same brief ID/version after recomputing the nested and outer digests.
+    required_fix: >-
+      Retain an independent expected resolved-query digest in the pinned serving
+      request and require exact equality with the nested verified query digest.
+decision: REWORK
+next_packet: orchestration/task_packets/W05-CONTRACTS-QUERY-02-R2.yaml
+reviewer: master

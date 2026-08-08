@@ -1,0 +1,85 @@
+schema_version: 1
+task_id: W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01
+phase_id: W04
+revision: R4
+state: PASS_TO_USER_QUESTION
+objective: >-
+  Independently challenge the exact R4 complete-LayerManifest semantic derivation,
+  all-three-summary binding and complete incorporated R2/R3 authorization surface.
+depends_on:
+  - W04-BUILD-RECEIPT-CLOSURE-AUDIT-01-R4:USER_CLARIFICATION_REQUIRED
+assigned_role: fresh_independent_w04_build_receipt_r4_semantic_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R4.yaml
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R3.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R3.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - src/scouting/contracts/wyscout_data.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-independent-review-R4.md
+  - reports/reviews/W04/returns/W04-BUILD-RECEIPT-CLOSURE-AUDIT-REVIEW-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  r4_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r4_return_sha256: a06fb74741f77f6a157418ce776a9a936ee037432866a81be1a142b45125c030
+  r3_audit_sha256: 0cf86df75af1276b3703083d3137de9ef345e2125a08a4e819617bbfd6100435
+  r3_review_sha256: 658cfeb2d504b4124467861391acfdc25643d0c5a1faf2afbf538eeb7c652074
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+  completion_index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Prove the exact two-key preimage has one unambiguous JSON value for every valid
+    complete closed-schema LayerManifest; check exact key order, types, nested arrays,
+    explicit null/default requirements, R20 canonical UTF-8 bytes and no terminal LF.
+  - >-
+    Prove the complete manifest contains no derived digest/summary self-reference and
+    that the derivation rule in the v2 product contract creates no build, schema,
+    manifest, summary, receipt or aggregate cycle.
+  - >-
+    For Bronze, Silver and Gold, trace guard-read physical path/hash/size/canonical
+    bytes/schema/build then independent semantic derivation. Attack isolated values,
+    entry/physical/other-layer copies, swaps and downstream wrapper rehashes.
+  - >-
+    Verify Gold→Silver and Silver→Bronze parent path/physical identities reconcile to
+    exactly the corresponding already-validated R20 summary rows without inventing a
+    semantic or size parent field.
+  - >-
+    Re-execute incorporated R3 manifest-derived population, product/boundary readback,
+    omission/addition/reorder/cross-scope/clock attacks and incorporated R2 window,
+    UUID, index, 23-root aggregates, receipt keys and unchanged 25-key build checks.
+  - >-
+    Return PASS_TO_USER_QUESTION only if R4 Section 7 is exact and sufficient and no
+    accepted-byte-only route exists. Otherwise bounded REWORK with executable proof.
+  - Confirm no implementation/data/authority/product/receipt/Git/provider/network/cloud/container/CI/remote/deployment action.
+definition_of_done:
+  - Independent verdict with P0/P1/P2 counts and exact user decision surface.
+stop_conditions:
+  - Any implementation, data/authority byte, architecture/dependency/local-only change or external action is needed.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

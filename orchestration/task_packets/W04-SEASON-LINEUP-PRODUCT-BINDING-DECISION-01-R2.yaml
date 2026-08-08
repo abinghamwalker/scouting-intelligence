@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01
+phase_id: W04
+revision: R2
+state: ACCEPTED
+objective: >-
+  Correct only the three stale permanent product-absence tests so authority and
+  preimage evaluation remains side-effect-free in both pre-product and later
+  authorized product states, preserving every frozen authority byte.
+depends_on:
+  - W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1:REWORK_P1
+assigned_role: bounded_w04_progression_test_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2.yaml
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-REVIEW-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-season-lineup-product-binding-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - tests/contracts/test_w04_wyscout_build_product_authority.py
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/returns/W04-SEASON-LINEUP-PRODUCT-BINDING-DECISION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - src/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+fixed_bindings:
+  correction_authority_sha256: 3afdb2817f0c275e66c4c261310c936e4ad896cd3ef967b136e9686822c5bf9e
+  build_authority_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  failed_review_sha256: 431e0cfb98c6bbd94b6baf3cb6878c551028e894770fb02ada771be989fc31ba
+  failed_review_record_sha256: b1708640631732f304f6c07455ee1530ae0ef800a70276d29fd34b46fc484e3d
+  failed_reviewer_return_sha256: 8218de5bb7e38114204d8c5a82586ff0718887c3ec3a2a682b216f367d91b547
+  correction_test_before_sha256: 0b5b933575f22451b5474323188619acec659c7291262c2e457086319fe93e29
+  build_authority_test_before_sha256: 94cafedb2c4d0e50aecebb8a52ffc6666f2f37607d14d7155f25a0d5aea18ed8
+  r21_control_preimages_test_before_sha256: b2bccb03e59c60a8d61439ea938e2da0fbb8a2bba2dcf77ff3549f2aabb54e53
+requirements:
+  - Verify every fixed binding before editing and stop on drift.
+  - >-
+    Modify no authority, review, config, runtime, data or product byte. Preserve
+    the live REWORK review so the authority lifecycle continues to parse it.
+  - >-
+    In both authority test modules, replace the unconditional assertion that all
+    repository Bronze/Silver/Gold/manifest/rebuild paths are absent with a test
+    that snapshots destination state, loads/validates the exact authority, and
+    proves the read changes no destination state whether paths are absent or
+    already exist. Include an isolated tmp_path progression case with at least
+    one pre-existing simulated product root. Never create a real product root.
+  - >-
+    In test_w04_r21_control_preimages.py, replace the unconditional repository
+    destination-absence assertion with equivalent side-effect-free preimage-load
+    checks for both absent and pre-existing simulated destinations.
+  - >-
+    Retain and test the semantic claims that each authority/preimage remains
+    control-plane-only, grants no product permission itself, performs no writer
+    call, and cannot create, delete or alter a destination. Do not make authority
+    lifecycle state depend on product existence.
+  - >-
+    Product existence after a separately accepted downstream gate must not cause
+    any of the three permanent modules to fail. Do not introduce a placeholder
+    gate path, future task ID, environment flag, skip, xfail or conditional that
+    silently disables validation.
+  - >-
+    Retain pre-implementation no-product evidence in the existing producer,
+    master-verification and failed-review reports; do not rewrite those reports.
+  - Add no dependency and perform no Git, provider, network or external action.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py
+  - uv run ruff check tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py
+  - uv run mypy tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_control_preimages.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Three corrected progression-safe tests and mandatory R2 return with before/after hashes.
+stop_conditions:
+  - Any frozen authority/config/review byte must change.
+  - Safe post-product progression cannot be tested without a placeholder or wider implementation change.
+  - Any dependency, Git, provider/network or external-infrastructure action is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

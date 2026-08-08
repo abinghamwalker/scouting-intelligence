@@ -1,0 +1,143 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-REVIEW-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Perform a fresh independent review of the corrected possession-v2 authority,
+  fixed-route progression, and complete executable semantics against frozen
+  R20/R21. PASS requires zero P0-P2 findings.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: fresh_independent_possession_semantic_v2_r3_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R4-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R1-master-verification.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R2-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v2.json
+review_authority:
+  review_id: w04-wyscout-possession-semantic-independent-review-v2-R1
+  review_schema_version: w04-authority-independent-review-v1
+  independent_actor_id: b4b3e91b-d13b-53c4-95d4-a6019f6faa98
+  candidate_id: w04-wyscout-possession-taxonomy-v2
+  candidate_physical_sha256: 24223b25b5faa1521691f55a3258f28e186a3ed7cb6ebd0d5d8ed421286b0187
+  candidate_sha256: 3a3c7cdb0e6ce441d3514e4f415bb5117ebc53f2d18b753206a6ca8d7fcdd881
+  decision_id: w04-wyscout-possession-semantic-decisions-v2
+  decision_physical_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+  decision_sha256: 8d59c06f0bc555572fbb07d67eecbda9a7d4d5615aaf716d6c3cd9e72e0b7425
+  focused_contract_sha256: dd4167747b71203390ba04d7c0899dc98099e203368ba5b3c3942b1b9a6e3116
+historical_control:
+  archive_locations_supplied_out_of_band: true
+  failed_r1_review_sha256: 71f4bdb25b0e2b3903abbede25afa5b2f62fd1763b54276899dd8ad4364feb8a
+  failed_r1_return_sha256: fc167434bf5da53e39b702d7fcc634222c53c84330cd05767eca1a3b52f98b90
+  failed_r2_review_sha256: 609a4e0bc42fd611cb63d9483ae4ef262e2633472c3a8c32f4f99a4caf88b37a
+  failed_r2_return_sha256: 974d8418a7408eca3be338b0f8ae9211fb5df37eb9827c70251843051d404a23
+requirements:
+  - >-
+    Read every input completely and independently reconstruct canonical bytes,
+    digests, clocks, actors, five inputs, 17-key predecessor, 36 predicates,
+    selector/sequence behavior, and progression state.
+  - >-
+    Verify both exact failed review generations and their returns at the
+    master-supplied operational archive locations before overwriting the fixed
+    path. Do not put those locations in repository files.
+  - >-
+    Prove the fixed current review ID/path is the sole R21 route; both known
+    failed hashes are historical non-authority; unknown invalid bytes fail
+    closed; and valid fixed-path PASS/REWORK reviews use normal strict
+    progression.
+  - >-
+    Independently challenge all strict selector type/tag/team/raw/name/label
+    cases and all R20 sequence cases, including multi-scope order invariance
+    and exactly-one deterministic assignment.
+  - >-
+    Challenge review/acceptance clocks, UUIDv5 actors, digests, supersession,
+    malformed fences, later-authority blocking, and absence of every product
+    path.
+  - >-
+    Replace the fixed review Markdown with exactly one canonical review fence,
+    truthful fresh clock, the exact UUIDv5 actor, current digests, and every
+    P0-P2 finding. PASS requires findings=[]; REWORK requires findings.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory; run only
+    root uv with --locked --no-sync and bytecode disabled; reproduce the exact
+    inventory after the final return. Do not sync, install, clean, or repair.
+  - >-
+    Use apply_patch only with the two exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, edit candidate/test/dependencies, access
+    provider/network data, or begin acceptance, feature, cross-authority,
+    Bronze, Silver, Gold, build, model, product, cloud, container, endpoint,
+    hosted CI, or deployment work.
+definition_of_done:
+  - Complete independent review reports all P0-P2 findings.
+  - Decision, candidate, focused test, v1 bytes, and failed evidence are unchanged.
+  - Current review is canonical, exact, truthful, UUIDv5, and independently authored.
+  - Focused/Ruff/local-only/inventory checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any candidate, test, v1, failed-evidence byte changes or third output is required.
+  - Any mandatory input, check, or terminal inventory differs.
+  - Reviewer cannot resolve a sequence rule from frozen R20/R21.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

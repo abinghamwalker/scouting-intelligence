@@ -1,0 +1,81 @@
+schema_version: 1
+task_id: W03-VERTICAL-01
+phase_id: W03
+revision: R6
+state: DISPATCHED
+supersedes: orchestration/task_packets/W03-VERTICAL-01-R5.yaml
+objective: >-
+  Correct the independently reproduced same-tenant persisted-object ownership
+  collision without changing retrieval, eligibility, temporal, lineage, protected
+  gate or presentation behaviour.
+depends_on:
+  - REVIEW-W03-BOUNDARY-REVIEW-01-R1:REWORK
+assigned_role: vertical_journey_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W03-VERTICAL-01-R6.yaml
+  - orchestration/reviews/REVIEW-W03-BOUNDARY-REVIEW-01-R1.yaml
+  - reports/reviews/W03/boundary-audit.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/threat-model.md
+  - src/scouting/workflow/service.py
+  - src/scouting/web/app.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - tests/security/test_w03_boundary_audit.py
+allowed_paths:
+  - src/scouting/workflow/service.py
+  - tests/e2e/test_w03_vertical_journey.py
+  - reports/reviews/W03/returns/W03-VERTICAL-01-R6.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - reports/verification/W03/**
+  - reports/reviews/W03/boundary-audit.md
+  - tests/security/**
+  - src/scouting/contracts/**
+  - src/scouting/web/**
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/synthetic/protected/expected_retrieval.json
+  - tests/fixtures/synthetic/expected_retrieval.json
+deliverables:
+  - >-
+    Conflict-aware transactional persistence for role brief, retrieval, candidate,
+    shortlist and shortlist-entry records currently using silent conflict handling.
+  - >-
+    Two-analyst same-tenant role-brief, shortlist and shortlist-entry collision
+    regressions proving generic denial and zero attacker material/audit writes.
+  - Exact same-owner, same-content idempotent replay behaviour or explicit safe denial.
+  - Complete R6 mandatory return.
+definition_of_done:
+  - Persisted tenant and owner are authoritative; inbound payload ownership never overrides them.
+  - >-
+    Every current ON CONFLICT DO NOTHING in the material journey path either inserts
+    a new row or proves that the persisted row is an exact canonical immutable match.
+  - Any owner, tenant, trace, relationship or immutable-content mismatch raises a generic denial.
+  - A collision cannot retain retrieval, candidate, shortlist, entry or audit side effects.
+  - The independently retained role-brief collision test passes unchanged.
+  - Existing happy path, rollback, denial, development oracle and protected-independent behaviour remain unchanged.
+  - No protected fixture or expected output is accessed.
+acceptance_checks:
+  - >-
+    SCOUTING_DATABASE_URL=<master-supplied-loopback-url>
+    uv run pytest -q tests/e2e/test_w03_vertical_journey.py
+    tests/security/test_w03_boundary_audit.py
+  - uv run ruff format --check src/scouting/workflow tests/e2e/test_w03_vertical_journey.py
+  - uv run ruff check src/scouting/workflow tests/e2e/test_w03_vertical_journey.py
+  - uv run mypy src/scouting/workflow
+  - uv run bandit -q -r src/scouting/workflow
+  - "! rg -n \"expected_retrieval\\\\.json\" src/scouting/workflow"
+stop_conditions:
+  - A protected fixture or protected expected output has been accessed.
+  - Any path outside allowed_paths must change.
+  - >-
+    Correctness requires a migration, policy/contract change, API response expansion,
+    dependency, Git, Docker, external service, public bind or destructive action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

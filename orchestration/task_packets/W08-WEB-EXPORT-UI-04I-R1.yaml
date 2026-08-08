@@ -1,0 +1,95 @@
+schema_version: 1
+task_id: W08-WEB-EXPORT-UI-04I
+phase_id: W08
+revision: R1
+state: DISPATCHED
+objective: >-
+  Complete only the reachable, role-correct local export inventory/create/read/revoke
+  presentation left after W08-WEB-EXPORT-04C-R2.
+depends_on:
+  - W08-WEB-EXPORT-04C:R2_PARTIAL_CORE_COMPLETE
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  Every rendered export control uses a server-verified exact object chain and is shown
+  only to a principal the unchanged policy/exporter can authorise.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-EXPORT-04C-R1.yaml
+  - orchestration/task_packets/W08-WEB-EXPORT-04C-R2.yaml
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R1.md
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R2.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - src/scouting/policy/r1.py
+  - src/scouting/audit/ledger.py
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-UI-04I-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Verified shortlist detail derives export permission from `evidence_export.create` and its exact R1Resource; only an authorised analyst owner or approver sees a create form with hidden exact brief ID/version, verified replay-link ID and shortlist ID. Scout/admin/unauthorised owner-only principals see no form.
+  - Base navigation exposes the inventory only on authenticated analyst/approver pages; GET inventory remains audit-verified and policy-filtered (analyst own, approver same tenant) with classification, SHA-256, generated actor/time, active/revoked status/reason/time and limitations only.
+  - Verified pack page renders classification, claim/model evidence/applicability, brief/retrieval IDs and versions, model/data/taxonomy versions, underlying checksum, receipt ID/digest/sequence and limitations without raw private evidence; authorised user gets one revoke-reason form.
+  - Revoke redirects to inventory. Revoked inventory rows are non-clickable or clearly unavailable; active verified rows link locally. No external/public destination appears.
+  - Focused TestClient reachability witness navigates analyst and approver through shortlist -> create -> verified read -> inventory -> revoke -> revoked inventory, and asserts scout/admin have no controls and receive denial on direct routes.
+definition_of_done:
+  - The moderated export/audit UI journey is reachable without free-form object identifiers; route adversarial/atomicity depth remains explicitly assigned to 04J.
+focused_checks:
+  - Analyst/approver visible controls and correct hidden exact object tuple.
+  - Scout/admin absent controls and direct denial.
+  - Pack and inventory rendering has complete safe metadata and honest wording.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+stop_conditions:
+  - A shared exporter/audit/policy/contract/schema/dependency or protected-output change is required.
+  - A network/external destination, Node/npm, container, destructive action or Git operation is required.
+  - Reachability requires exposing private values, editable object IDs or bypassing verification.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - role/control and route/template maps
+  - exact commands/exits/test counts
+  - reachable journey and absent-control witnesses
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/out-of-scope confirmations
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

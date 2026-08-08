@@ -1,0 +1,66 @@
+schema_version: 1
+task_id: W02-SYNTH-01
+phase_id: W02
+revision: R2
+state: READY
+supersedes: orchestration/task_packets/W02-SYNTH-01-R1.yaml
+objective: >-
+  Correct only the recorded structured-return type defect and provide the
+  matching R2 Markdown handback.
+depends_on:
+  - REVIEW-W02-SYNTH-01-R1:REWORK
+assigned_role: fixture_implementer
+risk: low
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W02-SYNTH-01-R2.yaml
+  - orchestration/task_packets/W02-SYNTH-01-R1.yaml
+  - orchestration/reviews/REVIEW-W02-SYNTH-01-R1.yaml
+  - orchestration/templates/subagent_return.md
+defects:
+  - severity: P1
+    code: RETURN_GIT_OPERATIONS_PERFORMED_TYPE
+    evidence: reports/verification/W02/synthetic-return-R1-failure.json
+    affected_definition_of_done: >-
+      The structured return must represent every scope confirmation as a
+      machine-readable Boolean.
+    required_fix: >-
+      Change scope_confirmation.git_operations_performed from the quoted string
+      "false" to the Boolean false.
+allowed_paths:
+  - tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml
+  - orchestration/reviews/W02-SYNTH-01-return-R2.md
+forbidden_paths:
+  - .git/**
+  - AGENTS.md
+  - pyproject.toml
+  - uv.lock
+  - migrations/**
+  - src/**
+  - scripts/**
+  - orchestration/master_plan.yaml
+  - orchestration/phase_registry.yaml
+  - orchestration/ownership.yaml
+  - orchestration/templates/**
+  - orchestration/reviews/W02-SYNTH-01-return-R1.md
+deliverables:
+  - tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml
+  - orchestration/reviews/W02-SYNTH-01-return-R2.md
+definition_of_done:
+  - scope_confirmation.git_operations_performed is the Boolean false.
+  - files_changed and artifacts_evidence identify exactly the two R2 allowed paths.
+  - The R2 Markdown handback contains every mandatory return heading.
+  - No other content or path is changed.
+  - No Git command is run.
+acceptance_checks:
+  - >-
+    uv run python scripts/verify_task_return.py
+    --packet orchestration/task_packets/W02-SYNTH-01-R2.yaml
+    --structured-return tests/fixtures/orchestration/W02-SYNTH-01-subagent-return.yaml
+    --handback orchestration/reviews/W02-SYNTH-01-return-R2.md
+stop_conditions:
+  - The correction requires any path not listed in allowed_paths.
+  - A Git command, dependency change, external service, or destructive action appears necessary.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

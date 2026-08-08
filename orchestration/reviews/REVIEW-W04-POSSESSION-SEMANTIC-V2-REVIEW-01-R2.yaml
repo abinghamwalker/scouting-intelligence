@@ -1,0 +1,59 @@
+schema_version: 1
+review_id: REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2
+task_id: W04-POSSESSION-SEMANTIC-V2-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: FAIL_POST_FIXED_PATH_REPLACEMENT
+integration_checks: FAIL_REVIEW_ROUTE_AND_LOCAL_ONLY
+artifact_lineage: FAIL_INVALID_REVIEW_ACTOR
+security_temporal_review: FAIL_P1
+defects:
+  - code: REVIEW_ID_PATH_DRIFT
+    severity: P1
+    required_fix: >-
+      Use only the R21-fixed v2-R1 review ID/path and treat exact archived
+      failed bytes as historical evidence, never as a second current route.
+  - code: OUTSIDE_ROOT_PACKET_CONFIG
+    severity: P1
+    required_fix: >-
+      Remove the operational archive absolute path from repository YAML while
+      retaining verified hashes and the audit narrative.
+  - code: REVIEW_ACTOR_NOT_UUIDV5
+    severity: P1
+    required_fix: >-
+      Use a fresh canonical RFC 4122 UUIDv5 actor distinct from the decision
+      actor in the next independent review.
+decision: REWORK
+next_packet: W04-POSSESSION-SEMANTIC-V2-DECISION-01-R4
+reviewer: master
+evidence:
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R2-master-verification.md
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R2.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete R2 review and return readback
+    result: PASS_191_REVIEW_LINES_153_RETURN_LINES
+  - command: R2 review physical and record digests
+    result: PASS_609A4E0B_DE522739
+  - command: focused suite after fixed-path review replacement
+    result: FAIL_327_PASS_1_STALE_HISTORICAL_HASH_ASSERTION
+  - command: local-only verifier against pre-correction packet
+    result: FAIL_24_PASS_1_OUTSIDE_ROOT_CONFIG
+  - command: strict actor version reconstruction
+    result: FAIL_R2_REVIEW_ACTOR_UUIDV4_NOT_UUIDV5
+  - command: independent selector and sequence reconstruction
+    result: PASS_NO_SEMANTIC_FINDING
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    All three findings are bounded control/test defects; no R20/R21
+    architecture or product change is required.
+  - >-
+    The pre-correction packet digest and both failed review generations are
+    preserved before any bounded correction.

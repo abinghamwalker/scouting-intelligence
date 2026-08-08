@@ -1,0 +1,35 @@
+schema_version: 1
+review_id: REVIEW-W05-CLOSURE-EVIDENCE-01-R1
+task_id: W05-CLOSURE-EVIDENCE-01
+phase_id: W05
+revision: R1
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: REWORK
+subagent_tests_reproduced: PASS
+integration_checks: NOT_RUN
+artifact_lineage: PASS
+security_temporal_review: PASS
+findings:
+  - severity: P1
+    blocking: true
+    path: reports/verification/W05/limitations.md
+    detail: >-
+      The report omits the accepted model-side P2 list-collection and redundant
+      query/exclusion-overlap representation boundary, despite the packet requiring all
+      accepted P2 residuals.
+  - severity: P1
+    blocking: true
+    path: reports/verification/W05/limitations.md
+    detail: >-
+      The W04 bridge paragraph does not explicitly name accepted elapsed minutes and
+      per-90 suppression, which is mandatory W05 truth and must not be weakened into a
+      generic rates statement.
+  - severity: P2
+    blocking: true
+    path: reports/verification/W05/training-serving-parity-report.md
+    detail: >-
+      UUID e77948a1-2987-514d-a585-cd54015e2152 must be labelled exactly m0_result_id,
+      rather than the ambiguous result ID, beside retrieval_result_id and retrieval_run_id.
+decision: REWORK
+reviewer: master

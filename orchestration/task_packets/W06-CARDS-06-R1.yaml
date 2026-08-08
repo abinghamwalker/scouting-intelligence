@@ -1,0 +1,115 @@
+schema_version: 1
+task_id: W06-CARDS-06
+phase_id: W06
+revision: R1
+state: DISPATCHED
+objective: >-
+  Produce the factual W06 evaluation cards, comparison/robustness/null/failure reports,
+  applicability contract and limitations from the accepted implementations and the
+  retained one-use missing-population NO_GO outputs, without creating phase-gate,
+  master-review, checkpoint or orchestration authority.
+depends_on:
+  - W06-EVAL-CORE-REVIEW-01:ACCEPTED
+  - W06-EVAL-ROBUSTNESS-04:ACCEPTED
+  - W06-PROTECTED-NO-GO-REVIEW-05:ACCEPTED
+  - W06-PROTECTED-BROKER:NO_GO_RETAINED
+assigned_role: evidence_report_producer
+risk: medium
+read_first:
+  - AGENTS.md
+  - docs/architecture/evaluation-contract.md
+  - docs/architecture/product-claim.md
+  - reports/readiness/W06/evaluation-readiness.md
+  - configs/evaluation/w06-protected-preregistration-v1.json
+  - reports/evaluation/W06/protected-access-outcome.json
+  - reports/evaluation/W06/protected-gate-decision.json
+  - reports/evaluation/W06/protected-execution-receipt.json
+  - reports/reviews/W06/evaluation-core-independent-review-R3.md
+  - reports/reviews/W06/evaluation-robustness-independent-review-R6.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R7.md
+  - reports/reviews/W06/protected-no-go-independent-review-R2.md
+  - reports/verification/W05/model-baseline-evidence.md
+  - reports/verification/W05/training-serving-parity-report.md
+  - reports/verification/W05/limitations.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - src/scouting/evaluation/gate.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - tests/fixtures/w06/public-robustness-v1.json
+  - tests/fixtures/w06/public-missing-population-gate-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/evaluation/W06/evaluation-protocol-card.md
+  - reports/evaluation/W06/evaluation-evidence-card.md
+  - reports/evaluation/W06/m0-model-evaluation-card.md
+  - reports/evaluation/W06/baseline-comparison-report.md
+  - reports/evaluation/W06/robustness-transfer-report.md
+  - reports/evaluation/W06/null-control-report.md
+  - reports/evaluation/W06/failure-case-register.md
+  - reports/evaluation/W06/protected-access-record.md
+  - reports/evaluation/W06/protected-comparison-report.md
+  - reports/evaluation/W06/applicability-contract.md
+  - reports/verification/W06/limitations.md
+  - reports/reviews/W06/returns/W06-CARDS-06-R1.md
+forbidden_paths:
+  - reports/evaluation/W06/*.json
+  - reports/phase-gates/**
+  - reports/reviews/W06/master-review.md
+  - reports/verification/W06/verification-report.md
+  - reports/verification/W06/clean-tree-report.md
+  - orchestration/**
+  - src/**
+  - tests/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - scripts/**
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+deliverables:
+  - Evaluation protocol card describing the frozen roster, rubric/evidence boundary, partitions, supported k, metrics, intervals, baselines, nulls and exact stop algorithm.
+  - Missing-evidence card that records zero governed human reviewers, judgements, pairs and protected queries and names the evidence needed for a future rerun.
+  - Updated M0 evaluation card preserving the accepted W05 identity and resemblance_only, synthetic_development_only, LIMITED claim ceiling.
+  - Baseline comparison report that states the preregistered metadata/raw-Euclidean comparisons were not computed because the protected population was absent.
+  - Robustness/transfer and null-control reports separating deterministic fixture implementation evidence from unavailable empirical evidence and retaining every exact unsupported population.
+  - Failure-case register retaining all available materially limited examples and explicitly recording any shortfall from ten without inventing cases.
+  - Protected access and comparison reports bound to the exact one-use output identities and NO_GO reason.
+  - Applicability contract and limitations that keep W07 PLANNED and unauthorised and name only the smallest governed-evidence follow-up.
+definition_of_done:
+  - Every claim is traceable to a read_first source and no expert, protected, transfer, calibration, prospective, production, recommendation, outcome or value evidence is invented.
+  - Public deterministic fixtures are described only as implementation/rejection witnesses, never empirical relevance evidence.
+  - The protected result is exactly NO_GO with sole reason MISSING_EXPERT_RELEVANCE_EVIDENCE, bundle/run absent and protected expected labels/results unopened; the three retained broker result files are authorised read-only closure evidence.
+  - All three retained output file hashes plus their object digests and frozen candidate/protocol/inventory/preregistration identities are transcribed exactly.
+  - Unsupported k=25 and unavailable group/time/provider/competition/team populations remain explicit.
+acceptance_checks:
+  - test -s reports/evaluation/W06/evaluation-protocol-card.md
+  - test -s reports/evaluation/W06/evaluation-evidence-card.md
+  - test -s reports/evaluation/W06/m0-model-evaluation-card.md
+  - test -s reports/evaluation/W06/baseline-comparison-report.md
+  - test -s reports/evaluation/W06/robustness-transfer-report.md
+  - test -s reports/evaluation/W06/null-control-report.md
+  - test -s reports/evaluation/W06/failure-case-register.md
+  - test -s reports/evaluation/W06/protected-access-record.md
+  - test -s reports/evaluation/W06/protected-comparison-report.md
+  - test -s reports/evaluation/W06/applicability-contract.md
+  - test -s reports/verification/W06/limitations.md
+  - test -s reports/reviews/W06/returns/W06-CARDS-06-R1.md
+stop_conditions:
+  - A source conflict can change the retained gate decision, protected-access truth, partition identity, metric meaning, interval meaning or claim boundary.
+  - Work would require protected expected outputs, external/provider access, a new dependency, W05 mutation, orchestration mutation or any write outside allowed_paths.
+mandatory_return_requirements:
+  - exact files written
+  - exact protected decision, sole reason and retained output identities
+  - exact evidence/claim boundaries and unsupported populations recorded
+  - acceptance-check results
+  - remaining P0/P1 evidence risk or none
+  - no Git/dependency/protected-output/external/orchestration/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

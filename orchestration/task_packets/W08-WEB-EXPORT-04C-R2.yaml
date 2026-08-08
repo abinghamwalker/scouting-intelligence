@@ -1,0 +1,95 @@
+schema_version: 1
+task_id: W08-WEB-EXPORT-04C
+phase_id: W08
+revision: R2
+state: DISPATCHED
+objective: >-
+  Close the R1 web-export residual with reachable inventory/create/revoke UI,
+  streaming request bounds and route-level denial/tamper/recovery witnesses.
+depends_on:
+  - W08-WEB-EXPORT-04C:R1_CORE_ROUTES_COMPLETE
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: high
+invariant: >-
+  No HTTP request may expose or mutate a pack outside exporter policy, verified bytes
+  and append-only audit state; malformed/oversized input fails before side effects.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W08-WEB-EXPORT-04C-R1.yaml
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R1.md
+  - configs/policies/w08-authorization.yaml
+  - configs/policies/w08-export.yaml
+  - src/scouting/audit/ledger.py
+  - src/scouting/operations/evidence_export.py
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - tests/integration/test_w08_evidence_export.py
+  - tests/security/test_w08_export_boundaries.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - apps/web/templates/w08/base.html
+  - apps/web/templates/w08/shortlist.html
+  - apps/web/templates/w08/audit.html
+  - apps/web/templates/w08/export.html
+  - apps/web/templates/w08/exports.html
+  - apps/web/static/w08/app.css
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - reports/reviews/W08/returns/W08-WEB-EXPORT-04C-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - services/**
+  - scripts/**
+  - tests/e2e/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - GET `/w08/exports` inventory for analyst/approver only; analyst sees only own packs, approver sees same-tenant packs, scout/admin/foreign see generic denial. Verify the tenant audit chain before query and show only ID, classification, checksum, generated actor/time, status/revocation reason/time, limitations and safe local links.
+  - Shortlist page offers exporter-backed create form only when current principal is analyst/approver and the exact approved brief/version, verified replay link and shortlist are already authorised; no user-editable object IDs.
+  - Use one opaque deterministic server-generated pack identity including tenant, actor and exact object tuple so a repeat POST is idempotent; derive opaque trace/request IDs server-side. Valid repeat retains one row/file/export receipt.
+  - Verified pack page renders classification, checksum, underlying model/data/taxonomy versions, limitations and audit receipt, plus authorised revoke form. Revoked/tampered read fails generic without payload; revoke redirects to inventory and repeat revoke fails without a second revocation/receipt.
+  - Replace full `request.body()` buffering with incremental `request.stream()` accumulation capped at 64 KiB; accept only expected URL-encoded media type and valid decimal content length, reject declared/actual over-limit, malformed UTF-8 and wrong media type generically without echo.
+  - Route-level TestClient witnesses for analyst and approver create/read/revoke, scout/admin/foreign/IDOR/CSRF denials, own-versus-team inventory, deterministic repeat, bytes/database/audit tamper and injected storage/database/audit failure atomicity.
+  - Boundary-input tests record database/audit/export-file counts before and after wrong type, malformed UTF-8, invalid/oversized content-length and streamed actual over-limit; all remain unchanged.
+definition_of_done:
+  - Moderated export/audit journey is fully reachable and every packet HTTP witness passes; core exporter/audit/policy code remains unchanged.
+focused_checks:
+  - Reachable authorised create/inventory/read/revoke and deterministic repeat.
+  - Cross-role/tenant/object/private boundaries and tamper fail closed.
+  - Storage/database/audit and request-boundary failures are atomic.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run ruff check src/scouting/web/w08.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py
+  - uv run mypy src/scouting/web/w08.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/integration/test_w08_evidence_export.py tests/security/test_w08_export_boundaries.py
+stop_conditions:
+  - A contract/schema/exporter/audit/policy/dependency or protected-output change is required.
+  - A network/external destination, Node/npm, container, destructive repository action or Git operation is required.
+  - Passing requires exposing private content, bypassing exporter/audit verification or buffering unbounded input.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files
+  - route/policy/inventory and form-boundary maps
+  - exact commands/exits/test counts
+  - idempotency, denial, tamper, failure and unchanged-count witnesses
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/out-of-scope confirmations
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

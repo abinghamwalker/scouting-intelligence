@@ -1,0 +1,32 @@
+schema_version: 1
+review_id: REVIEW-W05-CLOSURE-EVIDENCE-01-R2
+task_id: W05-CLOSURE-EVIDENCE-01
+phase_id: W05
+revision: R2
+reviewed_commit_base: c2e9b9f3632f4d8ddf3f664e1884b5d4f948dec4
+changed_paths_scope: PASS
+implementation_readback: REWORK
+subagent_tests_reproduced: PASS
+integration_checks: NOT_RUN
+artifact_lineage: PASS
+security_temporal_review: PASS
+closed_findings:
+  - model_side_P2_is_present
+  - serving_UUID_labels_are_exact
+findings:
+  - severity: P1
+    blocking: true
+    path: reports/verification/W05/limitations.md
+    detail: >-
+      Accepted W04 elapsed minutes, rates and per-90 values must be stated as
+      suppressed because no accepted elapsed-minutes denominator exists. The phrase
+      suppressed or unavailable conflates distinct states. Unsupported roles, outcomes
+      and value may separately be described as unavailable.
+  - severity: P1
+    blocking: true
+    path: reports/verification/W05/limitations.md
+    detail: >-
+      The source list must cite REVIEW-W05-MODEL-01-R6.yaml or the R2 independent model
+      review for the model-side P2 statement it now contains.
+decision: REWORK
+reviewer: master

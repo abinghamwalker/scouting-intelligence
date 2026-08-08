@@ -1,0 +1,100 @@
+schema_version: 1
+task_id: W04-R21-CROSS-AUTHORITY-TEST-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Correct only the final producer-return binding so the independent review of
+  the lifecycle-corrected test binds the final R3 handback that actually
+  describes those final test bytes.
+depends_on:
+  - W04-R21-CROSS-AUTHORITY-TEST-01-R2:MASTER_REWORK
+assigned_role: r21_cross_authority_test_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R3.yaml
+  - orchestration/task_packets/W04-R21-CROSS-AUTHORITY-TEST-01-R2.yaml
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R1.md
+  - reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R2.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_r21_cross_authority_composability.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-R21-CROSS-AUTHORITY-TEST-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-*
+  - reports/verification/**
+  - reports/phase-gates/**
+retained_preflight_inventory:
+  pyc_files: 1150
+  pyc_path_list_sha256: 7953ff36ecd0721d414d637085d0f2331dac35cafc160745e9bf35280f8a4f44
+  cache_directories: 150
+  cache_path_list_sha256: 79250878e3cfb60a3b0131857ca7b0dc79878c5165725132223d95e32f7f9fd6
+defect:
+  code: FINAL_TEST_BINDS_SUPERSEDED_RETURN
+  severity: P1
+  evidence: >-
+    RETURN_PATH and the future review validator bind the immutable R1 return,
+    whose own evidence identifies the superseded R1 test digest
+    9db63adc...f7c2. The final review must instead bind the final R3 return that
+    truthfully describes the final lifecycle-corrected test bytes.
+requirements:
+  - >-
+    Change the review-bound producer-return path from R1 to the final R3 return.
+    Read its bytes dynamically; do not embed its digest in the test. Preserve
+    both prior returns byte-for-byte.
+  - >-
+    Preserve every R2 lifecycle and semantic assertion. Update only the
+    binding-specific names/assertions necessary for the final R3 return.
+  - >-
+    Add the R3 handback after the test bytes are final. The handback must record
+    the final test digest but must not attempt to embed its own digest. This is
+    acyclic: the test names only the fixed R3 return path, and the later review
+    binds the complete final bytes of both artifacts.
+  - >-
+    Use root uv --locked --no-sync, PYTHONDONTWRITEBYTECODE=1, and Python -B.
+    Preserve retained inventory. Do not run Git, delegate, self-approve, or
+    change any other path.
+definition_of_done:
+  - Future review validation binds the final test and final R3 producer return.
+  - Both R1 and R2 return bytes remain unchanged.
+  - Complete focused suite, Ruff, and local-only checks pass.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+    tests/contracts/test_w04_supported_feature_authority.py
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+    tests/contracts/test_w04_r21_control_preimages.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_r21_cross_authority_composability.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - The correction requires any authority, architecture, product, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

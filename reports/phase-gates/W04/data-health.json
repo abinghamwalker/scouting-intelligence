@@ -1,0 +1,335 @@
+{
+  "schema_version": "w04-data-health-v1",
+  "status": "PASS",
+  "phase_id": "W04",
+  "as_of_date": "2026-08-03",
+  "closure_basis": {
+    "policy": "terminal-r12-closure-steer-2026-08-03",
+    "runtime_operational_baseline": {
+      "authority": "accepted-runtime-R11",
+      "evidence_path": "reports/verification/W04/wyscout-runtime-control-R11-master-acceptance.md",
+      "evidence_sha256": "fbc120702b8c58526da4a43d9727a0645f856fc15e325813756b71bb5082164e"
+    },
+    "product_operational_baseline": {
+      "authority": "retained-real-root-R3",
+      "evidence_path": "reports/verification/W04/wyscout-real-root-invocation-R3-master-acceptance.md",
+      "evidence_sha256": "54c52d0b260225df1d7ec9b213fcca781ac13aa534f5d3596b2455b0f68f4cc6"
+    },
+    "terminal_runtime_revision": "R12",
+    "new_real_root_run_required": false,
+    "new_runtime_revision_permitted": false
+  },
+  "source": {
+    "provider": "Wyscout",
+    "collection": "figshare-v5",
+    "source_manifest_id": "4e16bdb5-afe7-5601-88ad-adc124cfce3b",
+    "source_manifest_sha256": "8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd",
+    "source_completion_index_sha256": "46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df",
+    "completion_manifest_sha256": "69b8f9c1bde77545983ddffac5d2e1ba40b823f5081b464177b28b0f1d4a3cb1",
+    "available_at": "2020-01-28T14:24:27Z",
+    "acquired_at": "2026-07-29T15:51:08.598589Z",
+    "admitted_partitions": 5,
+    "matches": 1826,
+    "actions": 3071395,
+    "teams": 142,
+    "players": 3603,
+    "duplicate_action_ids": 0,
+    "partition_match_set_equalities": 5
+  },
+  "source_coverage": {
+    "coverage_overall": "1",
+    "missing_dimensions": [],
+    "dimensions": [
+      {
+        "name": "source_object_integrity",
+        "observed_count": 7,
+        "expected_count": 7,
+        "coverage": "1"
+      },
+      {
+        "name": "admitted_member_integrity",
+        "observed_count": 10,
+        "expected_count": 10,
+        "coverage": "1"
+      },
+      {
+        "name": "match_partition_presence",
+        "observed_count": 5,
+        "expected_count": 5,
+        "coverage": "1"
+      },
+      {
+        "name": "event_partition_presence",
+        "observed_count": 5,
+        "expected_count": 5,
+        "coverage": "1"
+      },
+      {
+        "name": "partition_match_id_alignment",
+        "observed_count": 5,
+        "expected_count": 5,
+        "coverage": "1"
+      },
+      {
+        "name": "scope_exclusion_directory_only",
+        "observed_count": 4,
+        "expected_count": 4,
+        "coverage": "1"
+      }
+    ]
+  },
+  "source_quality": {
+    "matches_with_team_count_other_than_two": 0,
+    "team_key_id_conflicts": 0,
+    "event_team_outside_match": 0,
+    "event_partition_match_conflicts": 0,
+    "zero_actor_actions": 226038,
+    "unresolved_bench_player_references": 23,
+    "unresolved_substitution_in_references": 8,
+    "unresolved_substitution_out_references": 0,
+    "unknown_or_invalid_subevent_references": 7821,
+    "lineup_rows": 40172,
+    "bench_rows": 28715,
+    "substitution_rows": 10423,
+    "out_of_range_coordinate_values": 3,
+    "exact_minutes_supported": false,
+    "per_90_supported": false,
+    "identity_collision_status": "ZERO_REPRODUCED_BY_ACCEPTED_AUTHORITY_AND_TESTS"
+  },
+  "rights_and_temporal": {
+    "licence": "CC-BY-4.0",
+    "attribution_required": true,
+    "derived_data_allowed": true,
+    "internal_review_allowed": true,
+    "export_allowed": false,
+    "use_class": "restricted",
+    "historical_knowability_floor": "2020-01-28T14:24:27Z",
+    "feature_cutoff_ts": "2026-08-01T00:00:00Z",
+    "temporal_boundary_verification": "STRICT_BEFORE_CUTOFF_PASS",
+    "external_publication": false
+  },
+  "build": {
+    "build_id": "b1f1a9135e307b115fd1d00f19dae7951993765ee5ac1fb5d5afeb245fdc7b79",
+    "code_manifest_sha256": "c94e650146a982174820ba694a2dcd1b20dc6648426527213bf2e6de09861c2c",
+    "source_manifest_sha256": "8fb6eb54ccca7656d66f53affb79e38abfef88d449d6903593ede4bf34fd89bd",
+    "source_completion_index_sha256": "46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df",
+    "layer_manifests": {
+      "bronze": "abdc5d89fdac08638f4877f9a44dceb9356d789741bd93981cce4a9b6825d9c1",
+      "silver": "089673ff01edd7de7b6e5777958d19cbaffaa9f429b042ab4986746d80a7c36a",
+      "gold": "08de1349a532c3f455d792ee56aafc3d8c587828bc9934dc7f77a58a71c90068"
+    },
+    "complete_layer_chain": true,
+    "two_verified_real_root_runs": true,
+    "verified_run_ids": [
+      "d39ee14e-e1ff-4235-ae73-9169308a2b28",
+      "5a802af6-6187-4374-ab8a-1bf64b8669ab"
+    ]
+  },
+  "products": [
+    {
+      "role": "BRONZE_KNOWN_RECORD",
+      "row_count": 1768,
+      "physical_sha256": "e48b203df0d2b83d53af9340cc76ec42a0bb138b5e9608284718d9f6854e9aaf",
+      "semantic_sha256": "4186f51a8694be1ca4699baf0f3c77e24b2206cc63f18bb7954074cc186d76ca",
+      "logical_bytes_sha256": "749e51f850372dfd610ffaf2037c8520e94282bca2eeac20f7ef582181cc7faa"
+    },
+    {
+      "role": "BRONZE_REJECTED_FIELD",
+      "row_count": 3544,
+      "physical_sha256": "b2dc4e9265edb79402b19b739be2167dd2bdcaea9afdf9c1b9304953d9f2278e",
+      "semantic_sha256": "2d0d05c88e00aa2484215f691f9ce7233324e8f0dbd9ea98e86e16e385c08825",
+      "logical_bytes_sha256": "7f0a9a567ee81cbfe652422d09208679de8bc2a2f80a699b198a920c0d979384"
+    },
+    {
+      "role": "SILVER_ACTION",
+      "row_count": 13,
+      "physical_sha256": "89e9645d9715fc155f09a5dae14ac261233aa7599b8266cbcef6a0b5eb86f53a",
+      "semantic_sha256": "9d98a59a82a45bf077e72dfdb26545d24f3e718d3c8266b085ec95a03bba22d3",
+      "logical_bytes_sha256": "e6d7e2d1abcd6cc4595b0453797ccd5bb22577c3ed384231eacc5aface27f3b9"
+    },
+    {
+      "role": "SILVER_LINEUP_STINT",
+      "row_count": 1,
+      "physical_sha256": "b05e1573cfee6cb3d2a44b675e72917dac70562af17e85494e2948934d15bda2",
+      "semantic_sha256": "d5a83d1a820ec5197e18709b2ed966824c6edf836926cd8faddeab8617145c08",
+      "logical_bytes_sha256": "dbfb8c0befb5633d00191fd7680d90bd7af28c9df617ba1cc76442c2c0baac7b"
+    },
+    {
+      "role": "SILVER_POSSESSION",
+      "row_count": 2,
+      "physical_sha256": "a65461738eb21211cb9695af5bbdad9a28ea5f1280de2a3ae79559a555978878",
+      "semantic_sha256": "bf1114a1d1b2b6325e3656aed297d5f3f7ec872b1485b47c65cb5c47a617417a",
+      "logical_bytes_sha256": "681f027ed5406f0e39b7c80bf25d5f093c64e111ef0df1fd62e4a717f30d9d5f"
+    },
+    {
+      "role": "SILVER_PLAYER_MATCH_FACT",
+      "row_count": 1,
+      "physical_sha256": "5b8bb0d0dcc1caf9709a1706041110ebadfd3ac14a590fefc4622cc5c41fa1da",
+      "semantic_sha256": "a8db5735a2f0ec1ee37d46e9dc2985bb4d20b2ef08fc70acfc4e4eec38af5a0f",
+      "logical_bytes_sha256": "bd7c92d470bfb036a44057e014acd79d55aef4ed430086edb654e767327fb913"
+    },
+    {
+      "role": "GOLD_PLAYER_WINDOW",
+      "row_count": 1,
+      "physical_sha256": "6e49b4322c766352fdc427b8d35d73ddaed036d0bd19f1d65435fe3a72edcd17",
+      "semantic_sha256": "f1751b4f1ff7911ad339fa1954cd5c88483fc09c733547dba87d7aa301c1bffa",
+      "logical_bytes_sha256": "ef6a57e33a9702f48496570a05fba7f70b7478eb25a30902b75bc9ad4b594cc6"
+    }
+  ],
+  "gold": {
+    "population_scope": "ONE_MATCH_FOUR_FEATURE_LOCAL_POC",
+    "row_count": 1,
+    "source_rows": 868,
+    "contributing_player_match_facts": 1,
+    "features": {
+      "action_count": 2,
+      "coordinate_known_action_count": 2,
+      "match_count": 1,
+      "resolved_possession_action_count": 2
+    },
+    "coverage": {
+      "coverage_overall": "1",
+      "missing_dimensions": [],
+      "dimensions": [
+        {
+          "name": "identity",
+          "numerator": 3,
+          "denominator": 3,
+          "coverage": "1",
+          "state": "complete"
+        },
+        {
+          "name": "lineup",
+          "numerator": 1,
+          "denominator": 1,
+          "coverage": "1",
+          "state": "complete"
+        },
+        {
+          "name": "action",
+          "numerator": 2,
+          "denominator": 2,
+          "coverage": "1",
+          "state": "complete"
+        },
+        {
+          "name": "coordinate",
+          "numerator": 2,
+          "denominator": 2,
+          "coverage": "1",
+          "state": "complete"
+        },
+        {
+          "name": "possession",
+          "numerator": 2,
+          "denominator": 2,
+          "coverage": "1",
+          "state": "complete"
+        },
+        {
+          "name": "temporal",
+          "numerator": 8,
+          "denominator": 8,
+          "coverage": "1",
+          "state": "complete"
+        }
+      ]
+    },
+    "applicability_state": "research_only",
+    "applicability_reasons": [
+      "RIGHT_CENSORED_OR_UNCERTAIN"
+    ]
+  },
+  "decimal_projection": {
+    "non_coverage_decimal_paths": 30,
+    "representation": {
+      "value": "decimal128(22,18)",
+      "exponent": "int8",
+      "negative_zero": "bool"
+    },
+    "forward_projection": "LOSSLESS_NO_ROUNDING",
+    "inverse_reconstruction": "STRICT_EXACT_EXPONENT_AND_SIGNED_ZERO",
+    "reject_negative_zero_for_nonzero": true,
+    "coverage_decimal_paths": 6,
+    "coverage_representation": "CANONICAL_DECIMAL_UTF8",
+    "logical_json_byte_reproduction": "PASS"
+  },
+  "runtime": {
+    "python": "3.12.12",
+    "operational_manifest_schema": "w04-code-environment-admission-v15",
+    "environment_digest": "95e33417dd3beb40da4958d96238335a12c65181284bce94abf80c5dd23768b0",
+    "selected_lock_closure_digest": "71e19fea7a508cfe462c047775e494509813ce7612c16a98d46af57f254d8bfd",
+    "extracted_runtime_digest_L": "e785af59b5e1d364535b7205b4707d75e767b5b66241ee1a52514a3c04e2805b",
+    "installed_record_runtime_digest_I": "73c9aaea089238ea3fef228d075ad0adce9c8697467fdebb7b6d24139cd010ca",
+    "L_equals_I_semantics": "PASS_BY_ACCEPTED_WHEEL_RECORD_PROJECTION",
+    "executable_census_rows": 35,
+    "executable_census_digest": "3378e7407967128fe37b8569f6e90ecb7b0a3762078fd6156f435f695f6debb3",
+    "executable_classes": {
+      "extracted": 33,
+      "python_script": 1,
+      "wrapper": 1
+    },
+    "interpreter_aliases": 3,
+    "interpreter_digest": "a1615a856f4eb624574467fb7678b0f87944e4483411e30fbe7e543bd76af1fb",
+    "packaging_tag_algorithm": "w04-packaging-tag-bootstrap-v1",
+    "packaging_ordered_tag_count": 1230,
+    "editable_root_digest": "4aa637625c8755064403539c8e63cd973f93d69167e83131b7a1dda1e65b48be",
+    "pyc_policy_source_map_digest": "3fde9f2174c08d33c1b85f2f52337ce9e4da52ea55adcfa6507187f034deaffd",
+    "r11_exact_resource_count": 30,
+    "r11_resource_detail_digest": "29d8a7cf4c4acab8a52d6008fc5f8975509cc445f5680e45e5974687e65c7bfb",
+    "r12_loaded_subset_algorithm": "w04-normalized-runtime-subset-observations-v1",
+    "r12_loaded_subset_status": "VERIFIED_BY_TERMINAL_RUNTIME_AND_COMPLETE_REPOSITORY_TESTS",
+    "real_root_r3_runtime_subset_status": "RETAINED_PRE_R12_OBSERVATION_NOT_RELABELED",
+    "closure_steer_baseline_pair_status": "ACCEPTED",
+    "retained_inventories": {
+      "site_pyc_rows": 1218,
+      "site_pyc_sha256": "bd0b8036ffff7542a4216db800622c9379e953d7cbd38b45ab464636ca4001dd",
+      "repository_pyc_rows": 133,
+      "repository_pyc_sha256": "d3f27229f8b43fd3fc1aba948462b6fb8a872790f4def522e494090ff444ff8d",
+      "data_and_runs_rows": 272,
+      "data_and_runs_sha256": "c7edcc0341628b7224069cf4fc3cf3f1ef3bce4994f5bcf2ece904c313b1627c"
+    },
+    "local_only": true,
+    "zero_git_remotes": true,
+    "forbidden_selector_and_alias_regressions": "PASS",
+    "process_frame_timeout_eof_cross_field_regressions": "PASS"
+  },
+  "receipts": {
+    "verified_run_1": {
+      "rebuild_receipt_sha256": "63b645423ca72edcb2055814293a0024d549bd01e45005136ff3730416530f10",
+      "boundary_receipt_sha256": "a077a8a5385c633d1a6911717b843e2b7d60f5a6ac025136057ae810d9c595c2",
+      "result": "COMPLETE"
+    },
+    "verified_run_2": {
+      "rebuild_receipt_sha256": "db8501cf9c644644ca5ba614e87fea43d3d3c0568fcad405e028fb6d2ceace18",
+      "boundary_receipt_sha256": "16488eb7ad9d6021e4f442455427a6c2d16e3db21a336a60f515cfbd5b08ab00",
+      "result": "COMPLETE"
+    },
+    "cross_run_product_equality": true,
+    "truthful_completion_evidence": "PASS"
+  },
+  "gate": {
+    "complete_repository_tests_passed": 2618,
+    "complete_repository_tests_failed": 0,
+    "complete_repository_warnings": 1,
+    "security_scan": "PASS",
+    "local_only_verifier": "PASS",
+    "phase_verifier": "PASS",
+    "git_diff_check": "PASS"
+  },
+  "deferred": [
+    {
+      "phase": "W10",
+      "task_id": "W10-RUNTIME-HOST-STATE-HARDENING-01",
+      "scope": "host-specific pyc/cache-tag/inode/link-count/empty-directory/temp-path/timestamp and equivalent filesystem assurance",
+      "evidence": "reports/verification/W04/w10-deferred-runtime-host-state-hardening-backlog-R1.md",
+      "w04_blocking": false
+    }
+  ],
+  "residual_risks": [
+    "The source is historical male senior football and does not establish current scouting value or other populations.",
+    "Exact minutes and per-90 denominators are unsupported and remain suppressed.",
+    "The Gold population is one match and four count features, is right-censored or uncertain, and is research-only.",
+    "R11/R12 runtime corrections are terminal test-verified hardening layered on retained real-root R3; the closure steer explicitly forbids another non-blocking runtime cycle."
+  ]
+}

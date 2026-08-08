@@ -1,0 +1,34 @@
+schema_version: 1
+review_id: REVIEW-W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1
+task_id: W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: COMPLETE_R21_AND_REPOSITORY_GATE
+reviewer: master
+evidence:
+  - reports/reviews/W04/wyscout-security-authority-fixture-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SECURITY-AUTHORITY-FIXTURE-REVIEW-01-R1.md
+  - reports/verification/W04/security-authority-fixture-review-R1-master-verification.md
+checks:
+  - command: review UUIDv5, recommendation, findings, and digest reconstruction
+    result: PASS_ZERO_FINDINGS
+  - command: >-
+      focused source-authority security file plus redirect config and
+      credential-alias challenges
+    result: PASS_102_TESTS
+  - command: local-only verifier
+    result: PASS_25_CHECKS
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - The stale expected fixture is corrected without runtime/config change.
+  - Downstream implementation remains blocked on complete R21 and repository gates.

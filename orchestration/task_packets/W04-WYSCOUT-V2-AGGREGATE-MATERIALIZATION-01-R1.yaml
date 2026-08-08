@@ -1,0 +1,103 @@
+schema_version: 1
+task_id: W04-WYSCOUT-V2-AGGREGATE-MATERIALIZATION-01
+phase_id: W04
+revision: R1
+state: ACCEPTED
+objective: >-
+  Master-materialize the exact acyclic eight-key implemented-schema-bundle v2
+  preimage and then the ten-key product-contract v2 preimage from accepted schema
+  and build/product authorities, with deterministic write/check and no product or
+  run output.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R8:MASTER_ACCEPTED
+assigned_role: master
+risk: critical
+read_first:
+  - AGENTS.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-decisions-v1.json
+  - reports/reviews/W04/authorities/wyscout-build-product-authority-acceptance-v1.json
+  - reports/verification/W04/wyscout-23-root-schema-closure-R8-master-acceptance.md
+  - src/scouting/contracts/wyscout_schema.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/wyscout_aggregates.py
+  - scripts/materialize_wyscout_v5_contracts.py
+  - tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v2.json
+  - configs/schema/wyscout-v5-product-contract-preimage-v2.json
+  - reports/verification/W04/wyscout-v2-aggregate-materialization-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/**
+  - src/scouting/sources/**
+fixed_bindings:
+  schema_master_acceptance_sha256: ff075ba6dcfed4bb1f9a10047bad0125ace3391edf5b885f3cde127feaf5f3e3
+  accepted_schema_sha256: 8ff15eb36e588806d3768e7a3769d7e5cad9a95ea994f676f5930bc63205d0f4
+  accepted_schema_test_sha256: 5daaa32082cc0f82ed9b8b0b61cc06fe9d2db633cb15ed9c9837e491f2b9a5b8
+  schema_independent_review_sha256: abdbe28dd2d7c57abc32a310db741e12af52c22172cd0039a6b9b16fa6dbcd35
+  build_product_authority_sha256: 3da3baa03190dfc711d81e7b65f7fdb22ca4f9b5b6f14784b03f94be2be9dd6d
+  build_product_acceptance_sha256: 9bcd9ef6f61b06f443a4d8f0d590db74559ee739976f285c41127da5ff1f5921
+  schema_bundle_v1_sha256: a37b426ee20dc3f63f5186ab97495511433eca7c7649098b439d01eddd8b916f
+  product_contract_v1_sha256: 0003daf8ea7b4a40841fc4a29c6e2191f8b0850287fa38dcbdf4a68ab3dc6293
+requirements:
+  - Verify all fixed bindings before implementation.
+  - >-
+    Build the exact eight-key schema-bundle v2 object in canonical key order from
+    export_w04_implemented_schema_rows(), exact 23 required roles and fixed R2
+    values. Validate every content digest from exported canonical root bytes,
+    unique IDs, exact order and earlier-only dependency edges. Hash only R20
+    canonical UTF-8 JSON without LF.
+  - >-
+    Only after the schema digest exists, build the exact ten-key product-contract
+    v2 object with actual schema_bundle_preimage_v2_sha256, exact completion-index
+    binding, feature cutoff, publication order, window authority and receipt
+    composition. receipt_contracts must include both exact receipt schemas plus the
+    sole R4 two-key complete-LayerManifest semantic derivation, all-three summary
+    reconciliation, parent chain, one-Gold/one-boundary population and substitution
+    rejection. Hash only the canonical no-LF object.
+  - >-
+    Physical config files are canonical compact UTF-8 JSON plus exactly one LF.
+    Implement deterministic write and --check. Check must reject absent, malformed,
+    unequal, duplicate-key, wrong-order, placeholder, swapped digest, v1 digest,
+    self-reference, forward/cycle or terminal-byte drift. Write must fail on an
+    existing unequal file and idempotently accept exact bytes; it may create only
+    the two owned config files.
+  - >-
+    Do not scan, infer, write or advertise product/data/run/manifest/receipt/build
+    instances. Preserve the unchanged 25-key build projection and digest meanings.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run ruff check src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run mypy src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py
+  - uv run python scripts/materialize_wyscout_v5_contracts.py --check
+  - uv run pytest -q tests/contracts/test_w04_wyscout_v2_aggregates.py tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_aggregates.py scripts/materialize_wyscout_v5_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact aggregate implementation, deterministic materializer, adversarial tests and two v2 preimage files.
+  - Master verification report with both accepted aggregate digests and gates.
+stop_conditions:
+  - Any need to change aggregate key shapes/order, schema root roster, logical model, feature, product population, authority, digest meaning/formula, 25-key build surface, dependency or local-only boundary.
+  - Any provider/network, dependency, external service, cloud, container, CI, deployment, publication, cost, destructive action or product/data/run write.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

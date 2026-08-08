@@ -1,0 +1,106 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R16
+state: DISPATCHED
+objective: >-
+  Retain every passing R15 and independent R9 closure while correcting the exact
+  uv launch-path value in all closed outer and child environment contracts.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R15:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R9:REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R9.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R9-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R9.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R9.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R9.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R15.yaml
+  - reports/verification/W04/wyscout-schema-design-R15-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R15.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R15.md
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R16.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R16.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Preserve normal resolution of the exact visible literal uv token through
+    PATH. Define the current outer and child actual value as exactly
+    UV=/opt/homebrew/bin/uv, not the physical Cellar spelling, and use one
+    truthfully named stable token such as <W04_UV_LOGICAL_LAUNCH_PATH> in every
+    outer/child normalized base digest. The exact input maps must supply the
+    logical value and uv 0.9.21 must reproduce it after the depth/PATH transform.
+  - >-
+    Separately admit and bind /opt/homebrew/bin/uv as one exact symlink: lstat
+    symlink, raw target ../Cellar/uv/0.9.21/bin/uv, one contained resolution hop,
+    and final equality with the already admitted regular physical uv executable
+    at /opt/homebrew/Cellar/uv/0.9.21/bin/uv. Retain physical mode 0o555, size
+    41617552, SHA-256
+    4f0c0c002bb4702c1bd6792edc15f7ae3948b5f19509c8d73cd5c9a26298097f,
+    and version uv 0.9.21 (Homebrew 2025-12-30).
+  - >-
+    Update the outer launch, both child launches, exact input-to-Python
+    transformations, E_outer_base, both E_child_base maps, operational
+    substitutions, fixed/base/complete environment digests, bootstrap tuple,
+    child envelopes, first/final comparisons, stable environment-values and
+    process-launch components, health evidence, two-root equality, and required
+    positive/negative tests consistently. The exact visible argv remain
+    unchanged.
+  - >-
+    Require normal PATH resolution to select only /opt/homebrew/bin/uv and reject
+    a missing or non-symlink logical entry, raw-link drift, extra hop, cycle,
+    escape, alternate logical path, direct physical exec-target launch, accepting
+    either spelling, post-hoc realpath normalization, physical byte/version/mode/
+    size drift, unknown environment value, or outer/child disagreement.
+  - >-
+    Retain without regression R15's exact acyclic 25-key stable projection and
+    post-hash invocation, five accepted EvidenceDependency fields, 16/8/10/25
+    envelopes, unique manifest/build/prefix chronology, source/descriptors/race/
+    result-v2 closures, exact three argv and roles, L==I, 35 executables, three
+    aliases, three denied .pth classes, 58/19 repository pycs with all four
+    optional predicates, 17 resources, source/rights/temporal/identity/products,
+    two-root proof, full gate, and two-commit ledger. Future scripts stay absent.
+  - >-
+    Change exactly the two absolute project-root R16 report paths, create no
+    parent-workspace path, and return a complete truthful handback. Do not
+    perform Git-mutating operations; describe read-only checks accurately.
+definition_of_done:
+  - All three normal PATH-resolved uv roles expect and reproduce the exact logical UV value.
+  - The logical launch symlink is constructively bound to the admitted physical uv bytes.
+  - Every environment digest/equality/test/two-root reference is internally consistent.
+  - Every other passing R15/R9 closure remains intact and no implementation file is created.
+acceptance_checks:
+  - >-
+    uv run --locked --no-sync python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-R16.md');
+    assert p.is_file() and p.stat().st_size > 26000"
+  - uv run --locked --no-sync python scripts/verify_local_only.py
+stop_conditions:
+  - Correcting the actual UV spelling requires changing visible argv, uv/Python dependency policy, architecture, project root, or local-only boundary.
+  - Exact logical-to-physical link authority cannot be proven or any passing R15/R9 closure would regress.
+  - Work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

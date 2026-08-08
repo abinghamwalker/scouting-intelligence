@@ -1,0 +1,52 @@
+{
+  "allow_pending_checkpoint": false,
+  "checks": [
+    {
+      "detail": "state: 'VERIFIED'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'READY', 'VERIFIED'], got 'VERIFIED'",
+      "id": "PHASE_GATE_READY",
+      "status": "PASS"
+    },
+    {
+      "detail": "W06:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W07-APPLICATION-01:ACCEPTED:2 retained return(s), W07-DOMAIN-02:ACCEPTED:2 retained return(s), W07-PRESENTATION-03:ACCEPTED:1 retained return(s), W07-EVIDENCE-TEST-04:ACCEPTED:1 retained return(s), W07-INDEPENDENT-REVIEW-05:ACCEPTED:1 retained return(s)",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "PASS"
+    },
+    {
+      "detail": "reports/phase-gates/W07/acceptance-report.md, reports/phase-gates/W07/gate-report.json, reports/reviews/W07/master-review.md, reports/reviews/W07/w07-application-independent-review-R1.md, reports/verification/W07/verification-report.md, reports/verification/W07/browser-accessibility-report.md, reports/verification/W07/scoring-parity-report.md, reports/verification/W07/limitations.md, reports/verification/W07/protected-output-boundary.md, reports/verification/W07/phase-verifier-candidate.json",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "G-W07:PASS, single-accepted-scorer-and-parity:PASS, browser-and-accessibility:PASS, protected-output-boundary:PASS, complete-repository-gate:PASS, local-only-controls:PASS, phase-state-and-evidence:PASS",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "PASS"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w07-start:35606e6209b1b7e05165bbd54591b4765b3e6cec",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "phase_id": "W07",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "VERIFIED",
+  "status": "PASS",
+  "validator": "verify_phase"
+}

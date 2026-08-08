@@ -1,0 +1,78 @@
+schema_version: 1
+review_id: REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R2
+task_id: W04-FIELD-SEMANTIC-DECISION-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: FAIL
+security_temporal_review: PASS
+defects:
+  - id: R2-P1-01
+    severity: P1
+    path: reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R2.md
+    line: 47
+    summary: >-
+      The return labels the R1 pyc inventory as the R2 preflight and claims an
+      identical terminal postflight. That baseline predates the master's
+      mandatory fresh sync and cannot have been the actual post-dispatch
+      filesystem state: the real R2-era repository/site metadata hashes are
+      37051613... and a2b5cd43..., while the return claims 222dee4c... and
+      3d5c4aab.... Counts and all content hashes are unchanged, and the master
+      independently proved the implementation against an identical real
+      pre/post inventory, but the producer evidence is not truthful enough to
+      accept. R3 must change no implementation and must capture a new actual
+      shell preflight, rerun the exact checks, reproduce it at terminal
+      postflight, and create a new truthful return.
+decision: REWORK
+next_packet: W04-FIELD-SEMANTIC-DECISION-01-R3
+reviewer: master
+evidence:
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R2.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - reports/verification/W04/wyscout-field-semantic-decision-R2-master-verification.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R2.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete readback of the 1,869-line R2 contract test and R2 return
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest
+      -q tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS_123
+  - command: >-
+      uv run --locked --no-sync ruff format --check
+      tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS
+  - command: >-
+      uv run --locked --no-sync ruff check
+      tests/contracts/test_wyscout_field_registry_authority.py
+    result: PASS
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: complete master post-sync shell pyc inventory before and after suite
+    result: PASS_IDENTICAL_1086_SITE_58_REPOSITORY
+  - command: frozen decision and registry digest verification
+    result: PASS_UNCHANGED
+  - command: git remote
+    result: PASS_EMPTY
+decision_notes:
+  - >-
+    The R2 implementation closes R1-P1-01. It validates the exact future review
+    and acceptance authority graph when present and blocks downstream paths
+    without a fully valid acceptance, while allowing the correct staged
+    sequence to remain green.
+  - >-
+    The master found no implementation defect in the R2 code or its 123-test
+    focused suite. R3 is evidence-only and must not edit the implementation or
+    frozen candidates.
+  - >-
+    The producer itself ultimately reported the stale-baseline discrepancy and
+    refused to treat it as a valid PASS. The stale R2 return is preserved as
+    audit evidence and is not accepted.

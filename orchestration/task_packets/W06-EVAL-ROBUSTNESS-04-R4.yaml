@@ -1,0 +1,153 @@
+schema_version: 1
+task_id: W06-EVAL-ROBUSTNESS-04
+phase_id: W06
+revision: R4
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R3.yaml
+objective: >-
+  Surgically close only the four final independently reproduced P1 classes by making
+  stress/control child derivation single-source and constructor-enforced, representing
+  aggregation deficits, and pinning fixture-driven computed/unsupported identities.
+depends_on:
+  - W06-EVAL-ROBUSTNESS-REVIEW-04-R3:ACCEPTED_REWORK_VERDICT
+assigned_role: implementation_engineer
+risk: high
+bounded_scope:
+  retained_without_reopening:
+    - stress roster, transformation and cutoff policy
+    - protocol, metric, k and inventory identities
+    - source intersection and per-unit minima
+    - pair-evidence unsupported decision
+    - applicability static claim boundary
+    - complete failure-source policy
+    - accepted W06 metric and gate core
+  exact_open_classes:
+    - stress observation-to-row/metric/comparison lineage
+    - control authority/input-to-child lineage
+    - fixture unsupported and literal identity authority
+    - typed incoherent-label/common-candidate deficits
+  convergence_rule: >-
+    Do not introduce a new architecture layer. Put pure canonical derivation helpers in
+    the contract module and call those same helpers from the executor and validators.
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-04-R3.yaml
+  - orchestration/task_packets/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-04-R3.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-ROBUSTNESS-REVIEW-04-R3.yaml
+  - reports/reviews/W06/evaluation-robustness-independent-review-R3.md
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-REVIEW-04-R3.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/robustness.py
+  - tests/contracts/test_w06_robustness_contracts.py
+  - tests/unit/test_w06_robustness.py
+  - tests/fixtures/w06/public-robustness-v1.json
+  - reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R4.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+required_changes:
+  - >-
+    Add pure canonical contract helpers that derive each expected cohort's aggregate
+    RankedObservation rows from the specification inventory and exact observation IDs.
+    Use the same helpers in the executor and StressTestResult validator. Require every
+    cohort ranked_rows to equal the derived rows exactly. Derive and validate every
+    per-query MetricResult.input_digest from its embedded row and k, and derive the
+    aggregate MetricResult.input_digest from embedded per-query result digests, rows,
+    metric and k using the accepted core canonical payload.
+  - >-
+    In StressTestResult, map each StressComparison endpoint to its named cohort/query.
+    Require left_ranking/right_ranking to equal those cohort rows in canonical digest
+    orientation, derive common candidates, and require comparison left/right input
+    digests to equal the canonical ordered rankings. Fix executor orientation if needed.
+    Exact stress witness 013da049ef32c63d7bf5d40e825b7d377000cca70fe8b6c86fb2becb05797598
+    and equivalent stale/foreign child substitutions must reject.
+  - >-
+    Replace ControlInput bare authority_kind+digest with an embedded
+    ControlBaselineAuthority object binding kind, implementation/governed evidence
+    class, authority ID, source artifact digest, method/definition digest and exact
+    baseline ranking digests. ControlInput must validate exact authority-to-control and
+    authority-to-row relations.
+  - >-
+    Persist the exact derived null rows plus per-query baseline/null results in computed
+    DeterministicControlResult. Use shared canonical helpers to derive label shuffles,
+    per-query and aggregate input identities, exact comparison roster and rank input
+    digests from ControlInput, protocol seed and k. Normal construction must reject exact
+    control witness 75b2bc182bbd1e72816de51ce7516e1cf1ee2475328aa49cbabca80485699e1b,
+    arbitrary authority fd55e1eeaf2c977f0aa38156af350fb98f1b56a8b77d50aca10681cec86a74ba
+    and all equivalent stale child substitutions.
+  - >-
+    Add typed INCOHERENT_LABEL_EVIDENCE and INSUFFICIENT_COMMON_CANDIDATES deficit kinds.
+    Derive them from every expected cohort and required cohort comparison before
+    execution. Otherwise sufficient incoherent/common-candidate specifications must
+    return a valid exact unsupported StressTestResult, never raise an empty-deficit
+    validation error. Pin the R3 reviewer specifications as rejecting/unsupported
+    semantic regressions.
+  - >-
+    Extend public-robustness-v1.json with an exact sparse unsupported population, the
+    pair-absence authority, content-addressed typed control authority objects, failure
+    cases and an expected-identities block. Tests must parse every field, execute both
+    computed and unsupported stress/control/applicability paths, and assert literal
+    fixture SHA plus exact stress/control/pair/deficit/failure/applicability identities.
+    A material observation/authority mutation must change the corresponding identity or
+    fail validation.
+  - >-
+    Add direct normal-constructor regressions for all R2/R3 exact witnesses and child
+    substitutions. Preserve every retained closed behavior and existing focused W06
+    contract/metric test unchanged.
+deliverables:
+  - Narrow contract/executor lineage correction and typed deficits.
+  - Fully authoritative computed-plus-unsupported public fixture and exact regressions.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R4.md.
+definition_of_done:
+  - Exact R3 stress/control witnesses reject under normal construction.
+  - All computed metric/comparison children are input-reproducible from the same persisted object.
+  - Incoherent/common-candidate evidence returns exact typed unsupported state.
+  - Fixture bytes drive and pin every required identity without fabricated human evidence.
+  - Focused accepted W06 checks remain green.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py tests/contracts/test_w06_robustness_contracts.py tests/unit/test_w06_robustness.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - shasum -a 256 tests/fixtures/w06/public-robustness-v1.json
+  - test -s reports/reviews/W06/returns/W06-EVAL-ROBUSTNESS-04-R4.md
+stop_conditions:
+  - Closing one of the four exact classes requires a new dependency, protected output, external/provider access, model tuning, W05 mutation or change to accepted metric formulas.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and exact changed-file list
+  - exact four-P1 closure matrix
+  - exact computed/unsupported/fixture identities
+  - exact constructor witness outcomes
+  - exact focused commands/statuses/results
+  - remaining P0/P1 risk or none
+  - implementation-only/no-fabricated-expert boundary confirmation
+  - no Git/dependency/protected/external/tuning/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

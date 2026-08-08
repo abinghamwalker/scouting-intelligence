@@ -1,0 +1,112 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R10
+state: DISPATCHED
+objective: >-
+  Freshly and independently adjudicate the bounded R10 canonical-JSON tuple
+  reconstruction correction that closes the retained first-real-root failure,
+  without editing producer, product, manifest, staging, PYC, or real-root bytes.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R10:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r10_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.yaml
+  - reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/rebuild_wyscout_v5.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R10.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R10.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  producer_packet_sha256: d6c0872b86928dc1a53ed0476f26be7ae9ace500bdaae3e25c8a535e5356748f
+  prior_rebuild_child_sha256: 82d7a22cc9d48bca19e0f4a6d05f60995f7486df829585fa7bf0b9ab7434ba99
+  candidate_rebuild_child_sha256: fff279d4d4a6a1c76ea6ee2cc9c7a88a4d5fd2c56ca677984a1dcce765ef9339
+  candidate_security_tests_sha256: 5907b945fa61855ff1104a2e03dd13057a76863251258b8a53088e322b44d18d
+  producer_return_sha256: 56004852a1868b89579d65ee781b5ef9a26b922451f25dbbe61f1b94aaa55854
+  r9_admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  r9_launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  r9_runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  r9_master_acceptance_sha256: b120ad2b0c942d939cef10b8a914187c85b1a2647ac37c328296c1152fe4d618
+  retained_unaccepted_code_manifest_sha256: fb1bcca5772d71a0de2c116cd2539d1d2cd757554df8791dad8e0d952cf67083
+  retained_data_runs_census_sha256: e62878d96c76cc67a0fc0690fed674c1c61c2b82981a472b21649ffd981a686b
+  disclosed_operational_pyc_sha256: b1c8fbd8e5de10d6251995b9dc0fbbcb7457ba0bdaffd669e6e58c86d280b52e
+  shell_pyc_census_helper_sha256: 2702b38453c95e428e9289cfc0bd6a9d0f1a748aeb33f1bad1e1c7033eaf4a6d
+requirements:
+  - >-
+    Verify every fixed binding first. Keep all producer, PYC, product, manifest,
+    data, run, staging and retained failed-attempt bytes read-only. Perform no
+    cleanup, Git operation, code-manifest derivation, publication, or real-root
+    retry.
+  - >-
+    Independently prove that the boundary accepts only one exact built-in dict
+    with the ordered 25-key post-hash roster and only exact built-in lists for
+    authority_rows and dependency_rows. Prove it constructs a new ordered dict,
+    changes only those two outer containers to tuples, and preserves all nested
+    object identities plus all other values without coercion, copying, filtering,
+    sorting, defaulting or mutation.
+  - >-
+    Reconstruct the accepted RebuildInvocation through the same canonical JSON
+    decoder used by the child. Require strict model validation, exact five-row
+    authorities/dependencies, exact projection/invocation inverse, unchanged
+    canonical logical JSON bytes and unchanged build-ID/digest formula. Prove the
+    helper roster equals POST_HASH_INVOCATION_KEYS and the model field order.
+  - >-
+    Additive read-only harnesses must reject dict/list subclasses, tuple in either
+    individual tuple field, missing/extra/reordered keys, non-array fields, row
+    add/remove/reorder/value/type changes, nested extra/mistyped rows, top-level
+    type drift, invalid build identity and any Pydantic validation failure. Trace
+    that rejection precedes _publication_roots and all product/manifest/receipt
+    writes in the real child.
+  - >-
+    Reproduce the exact 286-test six-file population and every static, security,
+    import-boundary and local-only check with a fresh complete shell-only retained-
+    root and PYC pre/post inventory. PASS only with P0/P1/P2 exactly 0/0/0;
+    otherwise return bounded REWORK without producer or root edits.
+acceptance_checks:
+  - uv run ruff format --check scripts/rebuild_wyscout_v5.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run ruff check scripts/rebuild_wyscout_v5.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run mypy scripts/rebuild_wyscout_v5.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run pytest -q -p no:cacheprovider tests/security/test_w04_wyscout_vertical_slice_publication.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/unit/test_w04_staged_product_publisher.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent R10 JSON-boundary review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer, PYC, product, manifest, staging, or real-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

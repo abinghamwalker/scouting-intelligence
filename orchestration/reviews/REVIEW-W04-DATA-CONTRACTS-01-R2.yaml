@@ -1,0 +1,39 @@
+schema_version: 1
+review_id: REVIEW-W04-DATA-CONTRACTS-01-R2
+task_id: W04-DATA-CONTRACTS-01
+reviewed_commit_base: 82a9f05b0db176dd55cbd4fa6b4388ec2b0a1906
+changed_paths_scope: PASS
+implementation_readback: FAIL
+subagent_tests_reproduced: PASS
+integration_checks: FAIL
+artifact_lineage: FAIL
+security_temporal_review: FAIL
+defects:
+  - {id: W04DCR2-P1-001, severity: P1, status: returned_for_rework}
+  - {id: W04DCR2-P1-002, severity: P1, status: returned_for_rework}
+  - {id: W04DCR2-P1-003, severity: P1, status: returned_for_rework}
+  - {id: W04DCR2-P1-004, severity: P1, status: returned_for_rework}
+  - {id: W04DCR2-P1-005, severity: P1, status: returned_for_rework}
+  - {id: W04DCR2-P1-006, severity: P1, status: returned_for_rework}
+  - {id: W04DCR2-P1-007, severity: P1, status: returned_for_rework}
+  - {id: W04DCM-P1-011, severity: P1, status: returned_for_rework}
+  - {id: W04DCM-P1-012, severity: P1, status: returned_for_rework}
+decision: REWORK
+next_packet: W04-DATA-CONTRACTS-01-R3
+reviewer: master
+evidence:
+  - src/scouting/contracts/wyscout_data.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-01-R2.md
+  - reports/reviews/W04/wyscout-data-contracts-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-DATA-CONTRACTS-REVIEW-01-R2.md
+  - reports/verification/W04/wyscout-data-contracts-R2-master-verification.md
+checks:
+  - command: exact R2 static security focused and local-only suite
+    result: PASS_370_TESTS_25_LOCAL_ONLY
+  - command: master validated public-constructor probes
+    result: FAIL_OPEN_NINE_FINDING_FAMILIES_REPRODUCED
+  - command: git diff --check
+    result: PASS
+  - command: git remote
+    result: PASS_EMPTY

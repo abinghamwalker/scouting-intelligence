@@ -1,0 +1,87 @@
+schema_version: 1
+task_id: W06-EVAL-VALUE-IDENTITY-REVIEW-03
+phase_id: W06
+revision: R2
+state: DISPATCHED
+supersedes: orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.yaml
+objective: >-
+  Independently verify that the single R1 computed-Spearman completeness defect is
+  closed without changing accepted metric values, identities, unavailable forms,
+  population lineage, protected-decision behavior or claims.
+depends_on:
+  - W06-EVAL-VALUE-IDENTITY-03-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.yaml
+  - orchestration/task_packets/W06-EVAL-VALUE-IDENTITY-03-R2.yaml
+  - orchestration/reviews/REVIEW-W06-EVAL-VALUE-IDENTITY-03-R1.yaml
+  - reports/reviews/W06/evaluation-value-identity-independent-review-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R1.md
+  - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-03-R2.md
+  - src/scouting/contracts/evaluation.py
+  - src/scouting/contracts/__init__.py
+  - src/scouting/evaluation/__init__.py
+  - src/scouting/evaluation/core.py
+  - tests/contracts/test_w06_evaluation_contracts.py
+  - tests/unit/test_w06_evaluation_metrics.py
+  - tests/fixtures/w06/public-evaluation-v1.json
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W06/evaluation-value-identity-independent-review-R2.md
+  - reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.md
+forbidden_paths:
+  - tests/fixtures/synthetic/protected/**
+  - reports/verification/W03/protected-gate-attempt-*.json
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - docs/**
+  - src/**
+  - tests/**
+  - reports/readiness/**
+  - reports/phase-gates/**
+  - reports/verification/**
+review_questions:
+  - Does exact digest 54cb89310bf9d6feaa7d15cc608f6262adc947f762ddb23d49cfbffe21322231 now reject because computed Spearman requires the complete set-metric quartet?
+  - Do both declared unavailable forms remain valid: insufficient correlation with set metrics and candidate universe smaller than k without them?
+  - Are the accepted pair, agreement, rank-comparison, direct MetricResult and BootstrapInterval identities unchanged?
+  - Does a bounded rerun of the R1 formula, constructor, lineage and gate-population matrix reveal any new P0 or P1 defect?
+deliverables:
+  - One fresh report-only ACCEPT or REWORK verdict with the exact R1 P1 witness and bounded regression matrix.
+  - Mandatory return at reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.md.
+definition_of_done:
+  - The sole R1 P1 is independently reproduced as closed or retained with exact severity and counterexample.
+  - Any new finding demonstrably changes a metric value, interval, persisted identity, population lineage or gate input.
+  - Review remains public-only and does not access protected expected outputs.
+acceptance_checks:
+  - uv run --no-sync pytest -p no:cacheprovider -q tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync ruff check src/scouting/contracts/evaluation.py src/scouting/contracts/__init__.py src/scouting/evaluation tests/contracts/test_w06_evaluation_contracts.py tests/unit/test_w06_evaluation_metrics.py
+  - uv run --no-sync mypy src/scouting/contracts/evaluation.py src/scouting/evaluation
+  - uv run --no-sync lint-imports
+  - test -s reports/reviews/W06/evaluation-value-identity-independent-review-R2.md
+  - test -s reports/reviews/W06/returns/W06-EVAL-VALUE-IDENTITY-REVIEW-03-R2.md
+stop_conditions:
+  - A required check needs protected expected-output, external/provider, credential or new-dependency access.
+  - A required write falls outside allowed_paths or overlaps unexpected user work.
+  - A secret, restricted datum or destructive action is encountered.
+mandatory_return_requirements:
+  - task ID and one-sentence objective
+  - exact changed-file list
+  - fresh verdict and exact P1 closure evidence
+  - bounded formula, identity, constructor, lineage and gate-population regression matrix with severities
+  - exact commands, exit statuses and concise results
+  - exact remaining counterexamples and identities or explicit closure
+  - residual metric, interval, identity, population, applicability and claim risks
+  - smallest bounded correction or none
+  - confirmation of no Git operations, no dependency changes, no protected expected-output access and no edits outside allowed_paths
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

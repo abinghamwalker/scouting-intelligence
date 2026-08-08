@@ -1,0 +1,35 @@
+task_id: W09-RESEARCH-CONTRACTS-02A-REVIEW
+revision: R4
+owner: subagent
+objective: >-
+  Independently verify the two R3 P1 corrections, rerun all former adversarial
+  contract/scorer probes, search for adjacent P1/P2 contradictions, and issue the
+  final shared-boundary accept/rework recommendation.
+read_first:
+  - AGENTS.md
+  - docs/architecture/research-workbench-pivot.md
+  - reports/verification/W09/data-inventory-and-coverage.md
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R3.md
+  - src/scouting/contracts/research.py
+  - src/scouting/contracts/__init__.py
+  - tests/contracts/test_w09_research_contracts.py
+  - src/scouting/m0/scoring.py
+  - src/scouting/m0/core.py
+  - tests/unit/test_w09_scoring_kernel.py
+allowed_paths:
+  - reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R4.md
+deliverables:
+  - Exact executable disposition of both R3 P1s and all seven former R2 cases.
+  - Fresh contradiction search with severity-ranked findings and explicit ACCEPT/REWORK.
+  - Explicit W05 parity, strict-numeric interoperability and W09 claim-boundary conclusions.
+checks:
+  - uv run ruff check src/scouting/contracts/research.py src/scouting/contracts/__init__.py tests/contracts/test_w09_research_contracts.py src/scouting/m0/scoring.py src/scouting/m0/core.py tests/unit/test_w09_scoring_kernel.py
+  - uv run mypy src/scouting/contracts/research.py src/scouting/m0/scoring.py src/scouting/m0/core.py
+  - uv run pytest -q tests/contracts/test_w09_research_contracts.py tests/unit/test_w09_scoring_kernel.py tests/unit/test_w05_m0_models.py tests/integration/test_w05_m0_serving.py
+  - test -s reports/reviews/W09/returns/W09-RESEARCH-CONTRACTS-02A-REVIEW-R4.md
+stop_conditions:
+  - Any need for implementation, test, orchestration, dependency, or Git changes.
+constraints:
+  - Report-only; no Git, dependencies, implementation, tests or orchestration edits.
+  - Reconstruct attacks independently rather than relying only on committed tests.
+  - Use apply_patch for the one allowed report.

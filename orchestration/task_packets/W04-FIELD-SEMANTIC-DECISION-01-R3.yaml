@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-DECISION-01
+phase_id: W04
+revision: R3
+state: DISPATCHED
+objective: >-
+  Produce truthful terminal evidence for the already master-verified R2
+  progression-safe implementation. Change no implementation or frozen candidate.
+depends_on:
+  - W04-FIELD-SEMANTIC-DECISION-01-R2:MASTER_REWORK
+assigned_role: field_semantic_evidence_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-FIELD-SEMANTIC-DECISION-01-R3.yaml
+  - orchestration/reviews/REVIEW-W04-FIELD-SEMANTIC-DECISION-01-R2.yaml
+  - reports/verification/W04/wyscout-field-semantic-decision-R2-master-verification.md
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R2.md
+  - tests/contracts/test_wyscout_field_registry_authority.py
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v1.json
+  - configs/schema/wyscout-v5-field-registry-v1.yaml
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - configs/**
+  - tests/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/returns/**
+  - "!reports/reviews/W04/returns/W04-FIELD-SEMANTIC-DECISION-01-R3.md"
+frozen_artifacts:
+  decision_physical_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  registry_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  registry_canonical_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  contract_test_physical_sha256: d8616b4afd9b9b83fccc0fbd52e387713c08b6d3904a956d271ef0bfe3a5f7b3
+requirements:
+  - >-
+    Change no implementation, candidate, test, configuration, source, data, or
+    orchestration file. The sole write is the new R3 return after verification.
+  - >-
+    At the actual start of this R3 run, execute the exact shell-only complete
+    repository/site pyc inventory algorithm from R2. Record the real counts,
+    metadata hashes, and content hashes produced now. Do not reuse or relabel
+    any R1/R2 report value.
+  - >-
+    Do not sync. Verify all four frozen hashes above before Python. Confirm the
+    exact review and acceptance artifacts and all downstream paths named by the
+    test are absent.
+  - >-
+    Run the exact four acceptance checks below using root uv, locked/no-sync,
+    and process-start bytecode denial for every Python process.
+  - >-
+    Write the R3 return with exact commands/results and a transparent note that
+    R2 was rejected because its return reused stale R1 metadata. Do not claim
+    that either interrupted/nonresponsive R2 metadata attempt completed.
+  - >-
+    After the return is written, rerun the exact same complete shell-only pyc
+    inventory once. Every count, metadata hash, and content hash must equal the
+    actual R3 preflight byte-for-byte. If anything differs, report the exact
+    discrepancy and do not issue a PASS return.
+  - >-
+    Do not run Git, delegate, self-approve, access network/provider data, or
+    create review, acceptance, dependency, Bronze, Silver, Gold, product,
+    runtime, cloud, container, endpoint, or deployment artifacts.
+definition_of_done:
+  - The R3 return is the sole changed path.
+  - Frozen artifacts are unchanged and all four checks pass.
+  - Actual R3 preflight and terminal postflight are exactly identical.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen artifact hash differs.
+  - Any review, acceptance, or downstream path already exists.
+  - Any check fails or actual R3 preflight/postflight inventory differs.
+  - Work requires an implementation edit or a second output path.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

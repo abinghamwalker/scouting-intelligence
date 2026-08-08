@@ -1,0 +1,91 @@
+schema_version: 1
+task_id: W08-WEB-EVIDENCE-ORIGIN-04N
+phase_id: W08
+revision: R1
+state: PLANNED
+objective: >-
+  Correct independent-review P1 by making workflow evidence origin an explicit,
+  server-controlled runtime choice and labelling every automated app action synthetic.
+depends_on:
+  - W08-INDEPENDENT-SECURITY-05:R1_FAIL_P1_SYNTHETIC_AS_HUMAN
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+invariant: >-
+  Every application constructor must explicitly select one server-controlled origin;
+  automated fixtures persist synthetic_automated_test and only the genuine moderated
+  local study/service runtime may persist human_entered_local, never from form data.
+read_first:
+  - AGENTS.md
+  - reports/reviews/W08/w08-independent-security-review-R1.md
+  - src/scouting/contracts/workflow.py
+  - src/scouting/web/w08.py
+  - services/api/w08_main.py
+  - scripts/run_w08_study.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - tests/integration/test_w08_study_harness.py
+allowed_paths:
+  - src/scouting/web/w08.py
+  - services/api/w08_main.py
+  - scripts/run_w08_study.py
+  - tests/integration/test_w08_local_workflow_app.py
+  - tests/security/test_w08_web_security.py
+  - tests/e2e/test_w08_local_workflow_playwright.py
+  - tests/integration/test_w08_study_harness.py
+  - reports/reviews/W08/returns/W08-WEB-EVIDENCE-ORIGIN-04N-R1.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - orchestration/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/workflow/**
+  - src/scouting/observations/**
+  - src/scouting/operations/**
+  - apps/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - Require an explicit WorkflowEvidenceOrigin parameter at every create_w08_app call;
+    store it only in server closure/state and never accept it from any form/header.
+  - Use that origin for new comments and observations; amendments must preserve the
+    persisted origin. Service and moderated-study harness explicitly select
+    human_entered_local; every unit/integration/security/browser test app explicitly
+    selects synthetic_automated_test.
+  - Add synthetic-mode database, rendered history, audit-event digest and exported
+    workflow_action_origins witnesses, and a separate human-mode mechanical witness;
+    neither mode may create or imply participant results.
+  - Correct the prior integration assertion that celebrated synthetic content as
+    human_entered_local and retain fixed W06 evidence-honest wording.
+definition_of_done:
+  - Automated comments/observations/export metadata are structurally synthetic,
+    explicit study-mode actions are structurally human-entered, and no client can
+    choose or override the origin.
+focused_checks:
+  - uv run ruff format --check src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_study_harness.py
+  - uv run ruff check src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_study_harness.py
+  - uv run mypy src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+  - uv run pytest -q tests/integration/test_w08_local_workflow_app.py tests/security/test_w08_web_security.py tests/e2e/test_w08_local_workflow_playwright.py tests/integration/test_w08_study_harness.py tests/integration/test_w08_evidence_export.py
+  - uv run bandit -q src/scouting/web/w08.py services/api/w08_main.py scripts/run_w08_study.py
+stop_conditions:
+  - A contract/schema/migration/policy/dependency, audit/exporter core, protected
+    output, external service/network, container, Node/npm, destructive action or Git
+    command is required.
+  - Evidence origin would remain implicit, client-controlled or inferred from seeded
+    accounts/personas.
+mandatory_return:
+  - task/revision and invariant
+  - exact changed files and explicit constructor call map
+  - synthetic/human database/render/audit/export origin witnesses
+  - exact commands/exits/test counts
+  - client non-overridability outcome
+  - residual risks/follow-ups
+  - no Git/dependency/protected-output/participant-result/out-of-scope confirmation
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

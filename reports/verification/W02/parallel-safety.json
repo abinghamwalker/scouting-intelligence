@@ -1,0 +1,80 @@
+{
+  "scenarios": [
+    {
+      "decision": "ALLOW",
+      "expected": "ALLOW",
+      "id": "disjoint-fixture-and-readme",
+      "left": [
+        "tests/fixtures/orchestration/parallel/a/**"
+      ],
+      "reasons": [],
+      "right": [
+        "docs/architecture/parallel-b/**"
+      ],
+      "status": "PASS"
+    },
+    {
+      "decision": "DENY",
+      "expected": "DENY",
+      "id": "dependency-lock-is-serial",
+      "left": [
+        "uv.lock"
+      ],
+      "reasons": [
+        "serial path: uv.lock"
+      ],
+      "right": [
+        "tests/fixtures/orchestration/parallel/b/**"
+      ],
+      "status": "PASS"
+    },
+    {
+      "decision": "DENY",
+      "expected": "DENY",
+      "id": "contracts-are-serial",
+      "left": [
+        "src/scouting/contracts/**"
+      ],
+      "reasons": [
+        "serial path: src/scouting/contracts/**"
+      ],
+      "right": [
+        "docs/architecture/parallel-c/**"
+      ],
+      "status": "PASS"
+    },
+    {
+      "decision": "DENY",
+      "expected": "DENY",
+      "id": "migrations-are-serial",
+      "left": [
+        "migrations/**"
+      ],
+      "reasons": [
+        "serial path: migrations/**"
+      ],
+      "right": [
+        "tests/fixtures/orchestration/parallel/d/**"
+      ],
+      "status": "PASS"
+    },
+    {
+      "decision": "DENY",
+      "expected": "DENY",
+      "id": "overlapping-scopes-are-serial",
+      "left": [
+        "tests/fixtures/orchestration/shared/**"
+      ],
+      "reasons": [
+        "overlap: tests/fixtures/orchestration/shared/** <> tests/fixtures/orchestration/shared/result.yaml"
+      ],
+      "right": [
+        "tests/fixtures/orchestration/shared/result.yaml"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "schema_version": 1,
+  "status": "PASS",
+  "validator": "verify_parallel_safety"
+}

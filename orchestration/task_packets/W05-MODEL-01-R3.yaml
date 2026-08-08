@@ -1,0 +1,298 @@
+schema_version: 1
+task_id: W05-MODEL-01
+phase_id: W05
+revision: R3
+state: DISPATCHED
+objective: >-
+  Complete and test the six transparent deterministic M0 families and selected
+  role-aware artifact using the exact master-preregistered synthetic construction,
+  with no score-responsive change and no accepted predecessor mutation.
+depends_on:
+  - REVIEW-W05-MODEL-01-R2:REWORK
+assigned_role: m0_baseline_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W05-MODEL-01-R1.yaml
+  - orchestration/task_packets/W05-MODEL-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R1.yaml
+  - orchestration/reviews/REVIEW-W05-MODEL-01-R2.yaml
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - orchestration/reviews/REVIEW-W05-ROLES-01-R2.yaml
+  - orchestration/reviews/REVIEW-W05-ROLES-REVIEW-01-R2.yaml
+  - src/scouting/contracts/m0.py
+  - src/scouting/features/registry.py
+  - src/scouting/roles/taxonomy.py
+  - src/scouting/storage/formats.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/baselines.py
+  - configs/features/w05-m0-feature-registry-v1.json
+  - configs/roles/w05-football-responsibility-taxonomy-v1.json
+  - configs/models/w05-m0-baselines-v1.json
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+  - docs/architecture/evaluation-contract.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - configs/models/w05-m0-baselines-v1.json
+  - src/scouting/m0/__init__.py
+  - src/scouting/m0/artifact.py
+  - src/scouting/m0/core.py
+  - src/scouting/modeling/__init__.py
+  - src/scouting/modeling/baselines.py
+  - tests/fixtures/w05/m0-development-candidates-v1.json
+  - tests/fixtures/w05/m0-development-queries-v1.json
+  - tests/unit/test_w05_m0_models.py
+  - runs/w05/m0-baseline-v1/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R3.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/features/**
+  - configs/roles/**
+  - data/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/returns/W05-MODEL-01-R1.md
+  - reports/reviews/W05/returns/W05-MODEL-01-R2.md
+  - src/scouting/contracts/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - src/scouting/serving/**
+  - src/scouting/sources/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/integration/**
+  - tests/fixtures/w05/synthetic-development-features-v1.json
+  - tests/fixtures/w05/synthetic-development-roles-v1.json
+preregistered_construction:
+  identities:
+    candidate_fixture_id: w05-m0-development-candidates-v1
+    candidate_fixture_version: v1
+    query_fixture_id: w05-m0-development-queries-v1
+    query_fixture_version: v1
+    context_id: w05-m0-development-window-2026-08-01
+    feature_cutoff_ts: "2026-08-01T00:00:00Z"
+    observed_at: "2025-01-01T00:00:00Z"
+    dependency_available_at: "2025-01-02T00:00:00Z"
+    row_observed_at: "2025-01-03T00:00:00Z"
+    row_available_at: "2025-01-04T00:00:00Z"
+  candidate_ids:
+    progression:
+      - 20000000-0000-4000-8000-000000000001
+      - 20000000-0000-4000-8000-000000000002
+      - 20000000-0000-4000-8000-000000000003
+      - 20000000-0000-4000-8000-000000000004
+      - 20000000-0000-4000-8000-000000000005
+      - 20000000-0000-4000-8000-000000000006
+    chance_creation:
+      - 20000000-0000-4000-8000-000000000007
+      - 20000000-0000-4000-8000-000000000008
+      - 20000000-0000-4000-8000-000000000009
+      - 20000000-0000-4000-8000-000000000010
+      - 20000000-0000-4000-8000-000000000011
+      - 20000000-0000-4000-8000-000000000012
+    defensive_disruption:
+      - 20000000-0000-4000-8000-000000000013
+      - 20000000-0000-4000-8000-000000000014
+      - 20000000-0000-4000-8000-000000000015
+      - 20000000-0000-4000-8000-000000000016
+      - 20000000-0000-4000-8000-000000000017
+      - 20000000-0000-4000-8000-000000000018
+  dependency_ids:
+    rule: >-
+      For candidate ordinal N from 001 through 018 use UUID
+      30000000-0000-4000-8000-000000000NNN.
+    dependency_digest_rule: >-
+      Lowercase SHA-256 of UTF-8 ASCII
+      "w05-m0-development-dependency-v1|<candidate-player-uuid>".
+    lineage_hash_rule: >-
+      Lowercase SHA-256 of the existing compact sorted-key canonical JSON bytes of the
+      one-item dependency list containing dependency_id, dependency digest,
+      observed_at=2025-01-01T00:00:00Z and available_at=2025-01-02T00:00:00Z.
+  metadata_sequence:
+    - {position: CENTRAL, age: 18, elapsed_minutes: 900, multiplier: 10}
+    - {position: DEFENSIVE, age: 19, elapsed_minutes: 990, multiplier: 11}
+    - {position: WIDE, age: 20, elapsed_minutes: 1080, multiplier: 12}
+    - {position: CENTRAL, age: 21, elapsed_minutes: 1170, multiplier: 13}
+    - {position: DEFENSIVE, age: 22, elapsed_minutes: 1260, multiplier: 14}
+    - {position: WIDE, age: 23, elapsed_minutes: 1350, multiplier: 15}
+  aerial_nuisance_per_90_sequence: [0, 100, 200, 300, 400, 500]
+  archetypes:
+    progression:
+      peer_group: constructed_progression_archetype
+      ordered_expected_feature_values: [8.0, 6.0, 2.0, 2.0, 0.8, AERIAL_SEQUENCE_VALUE]
+      per_90_numerator_rates: {progression: 8, final_third: 6, chance_creation: 2, defensive_disruption: 2}
+      attempts: 100
+      retained_attempts: 80
+      source_label_prior: CENTRAL_MIDFIELD
+      responsibility_evidence: {advance_play_final_third: 4, progress_through_pressure: 4, retain_recycle_possession: 2}
+      ordered_expected_role_probabilities:
+        - {role_code: ball_progressing_centre_back, probability: 0.1818181818181818}
+        - {role_code: chance_creating_midfielder, probability: 0.1818181818181818}
+        - {role_code: defensive_midfield_screen, probability: 0.0606060606060606}
+        - {role_code: penalty_area_forward, probability: 0.0}
+        - {role_code: progressive_central_midfielder, probability: 0.3333333333333333}
+        - {role_code: wide_progressor, probability: 0.2424242424242425}
+    chance_creation:
+      peer_group: constructed_chance_creation_archetype
+      ordered_expected_feature_values: [2.0, 6.0, 8.0, 2.0, 0.8, AERIAL_SEQUENCE_VALUE]
+      per_90_numerator_rates: {progression: 2, final_third: 6, chance_creation: 8, defensive_disruption: 2}
+      attempts: 100
+      retained_attempts: 80
+      source_label_prior: ATTACKING_MIDFIELD
+      responsibility_evidence: {advance_play_final_third: 4, create_chances: 4, retain_recycle_possession: 2}
+      ordered_expected_role_probabilities:
+        - {role_code: ball_progressing_centre_back, probability: 0.0606060606060606}
+        - {role_code: chance_creating_midfielder, probability: 0.3333333333333333}
+        - {role_code: defensive_midfield_screen, probability: 0.0606060606060606}
+        - {role_code: penalty_area_forward, probability: 0.1212121212121212}
+        - {role_code: progressive_central_midfielder, probability: 0.1818181818181818}
+        - {role_code: wide_progressor, probability: 0.2424242424242425}
+    defensive_disruption:
+      peer_group: constructed_defensive_disruption_archetype
+      ordered_expected_feature_values: [2.0, 2.0, 2.0, 8.0, 0.8, AERIAL_SEQUENCE_VALUE]
+      per_90_numerator_rates: {progression: 2, final_third: 2, chance_creation: 2, defensive_disruption: 8}
+      attempts: 100
+      retained_attempts: 80
+      source_label_prior: DEFENSIVE_MIDFIELD
+      responsibility_evidence: {protect_central_space: 4, regain_possession: 4, retain_recycle_possession: 2, secure_first_contact: 4}
+      ordered_expected_role_probabilities:
+        - {role_code: ball_progressing_centre_back, probability: 0.24}
+        - {role_code: chance_creating_midfielder, probability: 0.08}
+        - {role_code: defensive_midfield_screen, probability: 0.44}
+        - {role_code: penalty_area_forward, probability: 0.16}
+        - {role_code: progressive_central_midfielder, probability: 0.08}
+        - {role_code: wide_progressor, probability: 0.0}
+  raw_numerator_rule: >-
+    For each archetype and metadata-sequence element, multiply each declared per-90
+    rate and that element's aerial nuisance per-90 value by its integer multiplier to
+    obtain exact integer progression, final-third, chance-creation, defensive and
+    aerial numerator counts. Attempts and retained attempts remain 100 and 80.
+  query_rule: >-
+    Query order is the exact ascending candidate UUID order. Each player appears once,
+    self_excluded=true, k=3, and relevant_peer_group equals only its declared
+    archetype peer_group. No other field influences relevance.
+  claim_boundary:
+    evidence_class: synthetic_development
+    development_only: true
+    protected: false
+    recruitment_outcome: false
+    external_expert_label: false
+    production_claim: false
+    provider_source: NONE
+    claim: constructed_W05_M0_development_only
+  digest_rule: >-
+    Candidate and query fixtures are compact sorted-key canonical JSON plus one final
+    newline. Each self digest is lowercase SHA-256 over its canonical mapping after
+    excluding exactly its own fixture_digest. No other field is excluded.
+preregistered_configuration:
+  configuration_id: w05-m0-baselines-v1
+  configuration_version: v1
+  deterministic_seed: 20260803
+  weighted_cosine_weights: [2.0, 2.0, 2.0, 2.0, 1.0, 0.1]
+  pca_component_count: 3
+  role_aware_minimum_overlap: 0.75
+  selected_model_family: role_aware_restriction
+  comparison_k: 3
+requirements:
+  - >-
+    Apply every R2 requirement not superseded by this exact construction. Preserve all
+    accepted W04/W05 predecessor bytes and both R1/R2 returns. Build the candidate and
+    query fixtures exactly from preregistered_construction; do not add discretionary
+    values, labels, samples or alternative constructions.
+  - >-
+    Candidate rows use the existing exact synthetic feature-row shape with empty state
+    overrides. An aerial value of zero is an admitted observed ZERO, not missing or
+    suppressed. All other values are complete numeric VALUE states. Embed explicit
+    football-language archetype and nuisance notices in the candidate fixture root.
+  - >-
+    Candidate and query fixture loaders must use exact-key, strict-scalar, canonical
+    byte and self-digest validation. They must reproduce every expected FeatureValue,
+    contextual role distribution, dependency lineage, peer group and query projection.
+    Unknown keys, boolean-as-number, duplicates, reordered populations and claim/pin
+    substitutions fail closed.
+  - >-
+    Extend the canonical M0 configuration to pin candidate/query fixture IDs and
+    digests, their exact ordered population projection digests, the selected family,
+    k, and the expected per-family numeric array-payload digests. Arrays depend only on
+    the preregistered semantic settings, so these expected payload digests are computed
+    before the configuration self-digest and do not form a cycle. Load the config as a
+    normally validated typed authority with exact keys and a source-pinned accepted
+    ID/version/digest; arbitrary self-re-signed mappings are not accepted.
+  - >-
+    Artifact candidate-universe JSON must carry and validate the exact fixture/query
+    pins and ordered population projection bound by the accepted typed config. The
+    manifest must use canonical exact model/index IDs and an artifact ID derived from
+    all immutable family/config/population/array inputs. Runtime loading requires the
+    accepted typed config, registry and taxonomy authorities and rejects re-signed
+    model, manifest, array, candidate or config substitution.
+  - >-
+    Correct R1 implementation gaps while completing the packet: metadata controls use
+    the metadata-control feature names/schema/matrix consistently; all other families
+    use the six-feature schema; malformed admitted candidate rows fail rather than
+    silently disappear; the runtime rejects a symlinked artifact root; loaded nested
+    config/candidate state is immutable; and a caller cannot override the artifact's
+    pinned role threshold during scoring.
+  - >-
+    Keep one runtime distance implementation. Every family returns a contribution
+    vector aligned exactly to its manifest feature_names. PCA contributions must be
+    deterministically projected to the original six feature positions, not returned
+    as three unlabeled component terms. Distances, contribution bytes and UUID tie
+    order must reproduce exactly after reload.
+  - >-
+    Canonical PCA orientation is lowest-index maximum-absolute pivot non-negative;
+    tied components order by explained variance descending then canonical component
+    bytes. Apply the same order/sign to components and index vectors. Direct tests must
+    cover sign flips, tied variance and two independent fits.
+  - >-
+    Run exactly one R3 development comparison over all 18 ordered leave-one-out queries
+    after fixture/config digests are frozen. Report all six exact precision@3 values
+    and stable ranking digests. Do not search, adjust, retry, subset or degrade a
+    control after observing the result. Stop if selected role-aware precision is not
+    strictly greater than both metadata and raw Euclidean controls.
+  - >-
+    Materialize each family in bounded temporary tests and selected role-aware only at
+    runs/w05/m0-baseline-v1 with exactly arrays.npz, manifest.json,
+    configuration.json and candidate-universe.json. Use safe deterministic NPZ/JSON,
+    allow_pickle=false, little-endian float64 C arrays, uint8 UUID rows, fixed ZIP
+    metadata and immutable exact reload. Reject unsafe names/paths, object/pickle,
+    extra/missing/duplicate entries and all dtype/shape/order/digest drift.
+  - >-
+    Retain and quote R1's negative scores and finite-search evidence in the R3 return.
+    The positive R3 fact is only a deliberately constructed synthetic development
+    readiness check. It is not validation, protected evidence, expert review,
+    recruitment effectiveness, robustness, transfer, Wyscout or production evidence.
+deliverables:
+  - Exact canonical candidate/query fixtures and typed source-pinned M0 configuration.
+  - Complete pure runtime scorer/loader and separate deterministic trainer/writer.
+  - All six deterministic family artifacts in tests and selected role-aware local artifact.
+  - Focused adversarial tests and complete R3 return with every exact identity/digest/score/limitation.
+definition_of_done:
+  - All six families fit, load, score and explain deterministically behind one interface.
+  - The one no-retry R3 check strictly clears both controls and selected bytes reload exactly.
+  - Authority and serialization substitutions fail closed with no production/W06 claim.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run ruff check src/scouting/m0 src/scouting/modeling tests/unit/test_w05_m0_models.py
+  - uv run mypy src/scouting/m0 src/scouting/modeling
+  - uv run pytest -q tests/unit/test_w05_m0_models.py tests/unit/test_w05_features.py tests/unit/test_w05_roles.py tests/contracts/test_w05_m0_contracts.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any accepted W04/W05 contract, registry, taxonomy or predecessor fixture byte would need to change.
+  - The exact preregistered construction is ambiguous or cannot reproduce through accepted materializers.
+  - The single preregistered R3 comparison does not strictly clear both controls.
+  - Any retry, search, query subset, label-responsive change, learned behavior or control degradation would be required.
+  - Any external/provider/dependency/destructive/out-of-scope action or path is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

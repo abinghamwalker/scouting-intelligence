@@ -1,0 +1,79 @@
+schema_version: 1
+task_id: W10-RELEVANCE-EVALUATION-04A
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Implement deterministic, protocol-driven W10 expert-relevance metrics, exact authority and
+  denominator validation, tri-state gating, immutable negative-result retention, deterministic
+  reports, and an exclusive one-use formal evaluation runner.
+depends_on:
+  - W10-EVALUATION-REUSE-SURVEY-00A:R1
+  - W10-EXPERT-RELEVANCE-PROTOCOL-01:FROZEN_DRAFT
+assigned_role: protected_evaluation_implementer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W10-RELEVANCE-EVALUATION-04A-R1.yaml
+  - reports/reviews/W10/returns/W10-EVALUATION-REUSE-SURVEY-00A-R1.md
+  - src/scouting/contracts/expert_relevance.py
+  - configs/evaluation/w10-expert-relevance-protocol-v1.json
+  - configs/evaluation/w10-frozen-query-pack-v1.json
+  - src/scouting/contracts/evaluation_calculations.py
+  - src/scouting/evaluation/core.py
+  - src/scouting/evaluation/gate.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/evaluation/expert_relevance.py
+  - scripts/evaluate_w10_expert_relevance.py
+  - tests/unit/test_w10_expert_relevance_evaluation.py
+  - tests/integration/test_w10_expert_relevance_evaluation_integration.py
+  - reports/reviews/W10/returns/W10-RELEVANCE-EVALUATION-04A-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - src/scouting/contracts/**
+  - src/scouting/web/**
+  - src/scouting/storage/**
+  - services/**
+  - apps/**
+  - migrations/**
+  - configs/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Treat the frozen protocol and query pack as the only metric and threshold authority.
+  - Validate exact protocol, query-pack, approval, W09 pins, session, eligibility, consent, submission, presentation and judgement bindings before metrics.
+  - Exclude the two repeats from relevance denominators and include them only in consistency metrics.
+  - Compute candidate mean 0-4 gains, macro query retrieved/control NDCG@5 against the pooled ideal top five, macro retrieved precision@5, overall retrieved-control relevant-rate lift, the exact paired query bootstrap interval, mean pairwise ordinal agreement, repeat MAD/within-one, coverage, missingness, subgroups, confidence and failure categories.
+  - Use the exact protocol aggregation and denominator policies; unsupported required metrics make evidence insufficient, never zero.
+  - Apply terminal ordering: integrity/access failure FAIL; absent/incomplete authority or denominators INSUFFICIENT_EVIDENCE; complete threshold miss FAIL; all mandatory requirements PASS.
+  - Retain complete negative evidence and deterministic content-addressed reports.
+  - Formal runner must claim one exact invocation exclusively before protected input, reject any replay/partial-output collision, write canonical JSON exclusively, never overwrite, and emit no row-level labels or free text in reports.
+  - An absent-approval/evidence status route must accept no protected input and create no run/result artifact.
+  - Never fabricate participants, labels, metrics, outcomes, or protected evidence.
+deliverables:
+  - src/scouting/evaluation/expert_relevance.py
+  - scripts/evaluate_w10_expert_relevance.py
+  - tests/unit/test_w10_expert_relevance_evaluation.py
+  - tests/integration/test_w10_expert_relevance_evaluation_integration.py
+  - reports/reviews/W10/returns/W10-RELEVANCE-EVALUATION-04A-R1.md
+definition_of_done:
+  - Synthetic fixtures prove metric arithmetic and PASS/FAIL/INSUFFICIENT_EVIDENCE implementation behaviour without creating formal evidence.
+  - Replay, concurrency, stale authority, incomplete denominators, immutable negative results, deterministic reports and one-use controls are covered.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_w10_expert_relevance_evaluation.py
+  - uv run pytest -q tests/integration/test_w10_expert_relevance_evaluation_integration.py
+  - uv run ruff format --check src/scouting/evaluation/expert_relevance.py scripts/evaluate_w10_expert_relevance.py tests/unit/test_w10_expert_relevance_evaluation.py tests/integration/test_w10_expert_relevance_evaluation_integration.py
+  - uv run ruff check src/scouting/evaluation/expert_relevance.py scripts/evaluate_w10_expert_relevance.py tests/unit/test_w10_expert_relevance_evaluation.py tests/integration/test_w10_expert_relevance_evaluation_integration.py
+  - uv run mypy src/scouting/evaluation/expert_relevance.py scripts/evaluate_w10_expert_relevance.py
+stop_conditions:
+  - Any need for real participant evidence, protocol/threshold mutation, protected-label tuning, Git, dependency changes, or edits outside allowed_paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,104 @@
+schema_version: 1
+task_id: W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01
+phase_id: W04
+revision: R6
+state: DISPATCHED
+objective: >-
+  Freshly and independently verify the complete R6 23-root closure, including the
+  preserved R5 predicate/constants/29-row corrections and exact adoption of the
+  accepted reversible Decimal struct only for non-coverage fields.
+depends_on:
+  - W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6:IMPLEMENTED
+assigned_role: independent_w04_23_root_schema_r6_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.yaml
+  - orchestration/task_packets/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R6.yaml
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-01-R6.md
+  - reports/reviews/W04/wyscout-schema-closure-R5-acceptance-oracle-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-SCHEMA-CLOSURE-R5-ACCEPTANCE-ORACLE-01-R1.md
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R4.md
+  - reports/verification/W04/wyscout-23-root-schema-closure-R4-master-verification.md
+  - reports/verification/W04/wyscout-exact-decimal128-with-exponent-R2-master-acceptance.md
+  - reports/reviews/W04/wyscout-exact-decimal128-with-exponent-independent-review-R2.md
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_schema.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_schema_closure.py
+  - tests/unit/test_w04_wyscout_product_formats.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-23-root-schema-closure-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-23-ROOT-SCHEMA-CLOSURE-REVIEW-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r6_schema_sha256: bbef5823bf1635d08362a3ee0a0876e2ac1ec04c2c502d4e67c61a4350ee7a71
+  r6_test_sha256: dd8d66a1831ff7dfbd4a90c745607572a8c00358af4770d85e3e7ca115f3e500
+  r6_producer_return_sha256: e62b644ded21677e22fda2d389f12256e95a84fb9ad04dd3a456f51493efa796
+  accepted_formats_sha256: 2dfdf3675a47f6c2b53478857de1af27aebecb85def8f0701e6ef86c65fafcc9
+  accepted_formats_test_sha256: ba38c5a66f41aee8ef2b998f4622c71ec30f3b8861d7ef07d8540d001b0bee89
+  r5_acceptance_oracle_sha256: a3f15f92a14ff342efd0f5b2848b60eab4898ea79eb69c7fd6f09e6946077efa
+  r5_oracle_return_sha256: b09297fb45eb7a16f431959f7e7840b8ae930902928094079fd7e26b1ba79116
+requirements:
+  - Verify every fixed hash before review and immediately before rendering.
+  - >-
+    Independently regenerate all 23 canonical root-content byte streams and digests,
+    exact role/order/six-key rows, earlier-only closure graph, 12 descriptor and 11
+    JSON-only states, nine authorities and E1-E8. Compare every digest to the
+    producer return; reject placeholder, candidate-derived-only or circular evidence.
+  - >-
+    Independently audit all 56 reachable runtime validator bindings against actual
+    validator field reads and composed decisions. Require the exact oracle operation,
+    ordered operand and material constant ledger, zero omissions, and exactly eight
+    external predicates. Attack omission, broad all-field advertising, alias and
+    constant substitution.
+  - >-
+    Independently construct the exact 29-row matrix and frozen cardinality vector,
+    distinct Bronze shapes/all tagged arms/five raw-kind states, SilverAction 0/1/2
+    positions, source scales 0/18 and null-unmapped state. Require strict fresh
+    validation and descriptor-led exact logical JSON-byte round trips.
+  - >-
+    Census every logical Decimal path. Require exactly 30 non-coverage logical paths
+    on exact outer structs and 30 decimal128(22,18) value children, exactly six
+    reachable coverage paths on CANONICAL_DECIMAL_UTF8, and no scalar non-coverage
+    decimal projection. Independently challenge scale 0/18, positive exponent,
+    trailing zeros, signed zero, rounding, descriptor/schema/metadata drift and
+    exact-row aliasing with zero semantic-hash/write calls on invalid paths.
+  - Re-run R1-R4 authority, projection, composition, build, season-lineup and adversarial regressions.
+  - Report exact P0/P1/P2 counts and PASS only with all zero.
+acceptance_checks:
+  - uv run pytest -q tests/contracts/test_w04_wyscout_schema_closure.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_wyscout_data_contracts.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_w04_logical_arrow_projection_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py
+  - uv run ruff check src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run mypy src/scouting/contracts/wyscout_schema.py tests/contracts/test_w04_wyscout_schema_closure.py
+  - uv run bandit -q -r src/scouting/contracts/wyscout_schema.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Fresh independent R6 review with exact digest/ledger/matrix/projection evidence and finding counts.
+  - Mandatory reviewer return.
+stop_conditions:
+  - Fixed candidate drift, need to edit outside report paths, or correction outside standing authority.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

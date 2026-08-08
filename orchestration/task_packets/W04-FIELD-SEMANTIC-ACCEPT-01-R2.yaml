@@ -1,0 +1,48 @@
+schema_version: 1
+task_id: W04-FIELD-SEMANTIC-ACCEPT-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct the master-owned acceptance to exact canonical JSON with a newly
+  sampled truthful accepted_at, then verify the complete accepted authority.
+depends_on:
+  - W04-FIELD-SEMANTIC-ACCEPT-01-R1:MASTER_REWORK
+assigned_role: master_field_semantic_acceptor
+risk: high
+allowed_paths:
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v1.json
+  - reports/reviews/W04/returns/W04-FIELD-SEMANTIC-ACCEPT-01-R2.md
+frozen_authority:
+  decision_physical_sha256: e09d6c66249209752df2bea5fcf34496bb7cf697d1cf1085e4bded844b856999
+  candidate_physical_sha256: 805fccd142b1a2b379a18cfc5eb1755dd467c5363b0044f1c2cfe19a248481f2
+  candidate_sha256: fb133df629ec8797c280ff3eb67f509221884bf7f4c379ab8c0a1205bbc31034
+  review_physical_sha256: e2e983c99ed06eb2043c1f3f9a4eac8e4f4c6d69da97fe55bfc9a27745ade861
+  review_record_sha256: 8beb747f71f43586c4a57125fae405e90db8af2bd8b6b408346b38b64d7e7fa0
+requirements:
+  - Render exactly the R20 acceptance object in canonical sorted-key JSON.
+  - Use the newly sampled truthful accepted_at `2026-07-30T15:45:59Z`.
+  - Preserve all frozen IDs, digests, actors, PASS recommendation, and null supersession.
+  - Run the complete focused acceptance-present suite, Ruff, and local-only checks.
+  - Keep all downstream paths absent and reproduce current pyc pre/post exactly.
+  - Change exactly the two owned paths; do not run Git, delegate, or begin downstream work.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -m pytest -q
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff format --check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    uv run --locked --no-sync ruff check
+    tests/contracts/test_wyscout_field_registry_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen authority edge or check fails.
+  - Any downstream path exists or inventory differs.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

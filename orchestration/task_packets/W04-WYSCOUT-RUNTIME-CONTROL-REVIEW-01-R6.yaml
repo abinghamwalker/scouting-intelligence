@@ -1,0 +1,101 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01
+phase_id: W04
+revision: R6
+state: DISPATCHED
+objective: >-
+  Freshly and independently challenge the complete R6 outer W04_LOCAL_CONTROL
+  bootstrap, retained launcher-source descriptor, closed v4 tuple/environment,
+  whole-launch PYC equality, exact child chronology and canonical completion
+  without editing any producer byte or publishing to the real roots.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-01-R6:COMPLETE
+assigned_role: fresh_independent_w04_runtime_control_r6_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R6.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/verification/W04/wyscout-runtime-control-R5-master-acceptance.md
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - scripts/rebuild_wyscout_v5.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - tests/e2e/test_w04_wyscout_vertical_slice.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R6.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-runtime-control-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  launcher_sha256: ecfb3b1714b7a6caf607d9ae4393b3130e04045c717f5965207a804356b580f7
+  runtime_tests_sha256: ad6027133eccb451fd9ab9d7135e60ccab50335d7acfdd25b008565bba323116
+  producer_return_sha256: 092421174a1c19bc9ccb4ca2fbc5bb610d2c237c318940b516ddbf92aa7edc54
+  producer_packet_sha256: 6a900a2232443006b62580a4f815e476c941181ca0ad1e0d83021603cade87a5
+  r5_admission_child_sha256: cba67d6a143951cbeefa2e63063f5f09aab73f6ec435a1378fb2451d59950cb5
+  r5_launcher_sha256: d3ac8c84995c8475b0a4df983899ebf6b364f047dcbba45c411d55b62c808740
+  r5_runtime_tests_sha256: 61f1d770d1b662df0f30c6d4bc54aace9f0fa1069d32501c7d466be908b66fb4
+requirements:
+  - Verify every fixed binding first and keep all producer, source and real-root bytes read-only.
+  - >-
+    Inspect the first executed launcher path and independently prove that only
+    resident built-in/frozen capabilities precede the complete bootstrap verifier;
+    the exact three encoding sources, source descriptor, FD census, cwd/argv,
+    closed outer environment, 34-field v4 tuple, control-prefix identity and audit
+    transition must fail closed without a path-reopen fallback.
+  - >-
+    Independently reconstruct the child and launcher tuple/environment digests and
+    attack missing/extra/reordered argv, source-descriptor offset/inheritability/
+    identity/extra FD, environment/tuple mutation, prefix replacement/content,
+    UUID/root substitution, child failure, final-status malleability and retained
+    launcher/PYC drift. Require all R5 predicates and accepted product bytes to stay
+    unchanged.
+  - >-
+    Reproduce the complete isolated outer chronology and exact uv bootstrap path.
+    Confirm explicitly that producer evidence does not overclaim an unmocked full
+    completion: the later master-owned two-real-run packet remains the sole
+    authority for real publication. Require no producer test write beneath real
+    code/manifest/product/run roots.
+  - >-
+    Rerun the exact 237-test final-hash gate and all static/security/local-only
+    checks. PASS only with P0/P1/P2 exactly 0/0/0; otherwise return bounded REWORK
+    with exact evidence and make no producer edit.
+acceptance_checks:
+  - uv run ruff format --check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run ruff check scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run mypy scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py tests/unit/test_w04_wyscout_runtime_control.py
+  - uv run pytest -q -p no:cacheprovider tests/unit/test_w04_wyscout_runtime_control.py tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_v2_aggregates.py tests/unit/test_w04_staged_product_publisher.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+  - git diff --check
+  - git remote
+deliverables:
+  - Fresh independent R6 merits review and mandatory reviewer return.
+stop_conditions:
+  - None for bounded defects; return REWORK without producer, source or real-root edits.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,56 @@
+schema_version: 1
+review_id: REVIEW-W04-CONTROL-PREIMAGE-01-R1
+task_id: W04-CONTROL-PREIMAGE-01
+reviewed_commit_base: 8eab3d5488735379817800be4b463f046f5d6e69
+changed_paths_scope: PASS
+implementation_readback: PASS
+subagent_tests_reproduced: PASS
+integration_checks: PASS
+artifact_lineage: PASS
+security_temporal_review: PASS
+defects: []
+decision: ACCEPT
+next_packet: W04-CONTROL-PREIMAGE-REVIEW-01-R1
+reviewer: master
+evidence:
+  - configs/schema/wyscout-v5-product-contract-preimage-v1.json
+  - configs/schema/wyscout-v5-schema-bundle-preimage-v1.json
+  - tests/contracts/test_w04_r21_control_preimages.py
+  - reports/reviews/W04/returns/W04-CONTROL-PREIMAGE-01-R1.md
+  - reports/verification/W04/wyscout-r21-control-preimage-R1-master-verification.md
+  - orchestration/task_packets/W04-CONTROL-PREIMAGE-01-R1.yaml
+checks:
+  - command: uv sync --locked --all-groups
+    result: PASS_83_RESOLVED_82_AUDITED
+  - command: complete four-path implementation readback
+    result: PASS_2_CANONICAL_JSON_569_TEST_LINES_98_RETURN_LINES
+  - command: canonical physical/hash reconstruction
+    result: PASS_0003DAF8_A37B426E
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+      tests/contracts/test_w04_r21_control_preimages.py
+    result: PASS_6_TESTS
+  - command: focused Ruff format and lint
+    result: PASS
+  - command: seven product destination roots
+    result: PASS_ALL_ABSENT
+  - command: >-
+      PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+      scripts/verify_local_only.py
+    result: PASS_25_CHECKS
+  - command: producer and master complete pyc inventory comparison
+    result: PASS_IDENTICAL_1145_PYCS_150_CACHE_DIRS
+  - command: git diff --check and git remote
+    result: PASS_EMPTY_REMOTE
+decision_notes:
+  - >-
+    The master read both complete canonical one-line JSON files, all 569 test
+    lines, and all 98 return lines. Exact R21 structures and hashes were
+    independently reproduced after a fresh locked sync.
+  - >-
+    The files are inert descriptor-only control preimages. No sibling/self/
+    downstream digest, concrete feature hash, product output, serializer, data
+    layer, or destination path exists.
+  - >-
+    This accepts the producer return into fresh independent review only. Field,
+    possession, feature, cross-authority, and product work remain blocked.

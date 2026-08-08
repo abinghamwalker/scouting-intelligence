@@ -1,0 +1,149 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-DECISION-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Correct P1 SEQUENCE_RESOLUTION_OVERCLAIM by separating exact canonical
+  predicate selection from deterministic ordered same-period possession
+  resolution. Preserve every frozen input, predecessor, and v1 predicate.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1:MASTER_REWORK
+assigned_role: possession_semantic_v2_sequence_rework_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.yaml
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-review-R1-master-verification.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+correction:
+  defect_id: SEQUENCE_RESOLUTION_OVERCLAIM
+  finding_severity: P1
+  unchanged:
+    - exact five bound inputs
+    - exact 17-key possession-v1 prior authority
+    - exact 36 v1 predicate rows and order
+    - strict four-field selector and no-coercion/name/label/raw boundary
+    - fixed decision/candidate IDs and schemas
+    - progression and no-product boundaries
+  required_separation:
+    predicate_selection: >-
+      Exact canonical selector validation returns only an admitted exact
+      predicate or an unmapped selection. It emits no final possession
+      eligibility state.
+    sequence_resolution: >-
+      The final possession_eligibility_state is emitted only after ordered
+      same-period resolution assigns the action to exactly one deterministic
+      resolved possession.
+requirements:
+  - >-
+    Extend the v2-only declarative policy with a closed same-period sequence
+    contract that restates, without widening, R20's exact action order
+    (period_rank, period_elapsed_seconds, source_record_ordinal,
+    source_event_record_id), match/period scoping, control/restart open and
+    transition behavior, dead-ball attachment, contested attachment/buffering,
+    equal-clock cross-team uncertainty, period-boundary closure/unassignment,
+    and no cross-period state.
+  - >-
+    Keep the strict selector's allowed inputs exactly
+    action_event_taxonomy_id, action_subevent_taxonomy_id,
+    action_team_source_id, and action_tag_ids. Make its result explicitly
+    predicate-admitted or predicate-unmapped; do not let selector lookup emit
+    ELIGIBLE_RESOLVED.
+  - >-
+    Implement a focused deterministic same-period resolver only as contract
+    executable evidence in the owned test. It must consume validated selector
+    results in exact R20 action order and emit ELIGIBLE_RESOLVED only for
+    actions assigned to exactly one resolved possession. All unassigned,
+    ambiguous, buffered-at-boundary, administrative, or selector-unmapped
+    actions emit INELIGIBLE_UNMAPPED.
+  - >-
+    Add positive cases for control/restart opening, same-team continuation,
+    opposing-team close/open, preceding dead-ball attachment, and contested
+    buffering resolved by a following same-period possession.
+  - >-
+    Add negative cases for isolated predicate lookup, dead-ball UNASSIGNED,
+    dead-ball without a preceding resolved possession, unresolved contested
+    action at period end, non-control administration, unknown/missing team,
+    cross-team equal-clock uncertainty, period boundary, and attempted
+    cross-period state. Preserve every R1 strict type/coercion/raw/name/label,
+    mutation, progression, and product-path test.
+  - >-
+    Materialize a fresh truthful decision clock because the policy bytes
+    change. Re-render canonical decision JSON and candidate YAML, update the
+    candidate decision digest, and keep all IDs/schemas/bindings/predicates
+    unchanged.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory. Use only
+    root uv with --locked --no-sync, bytecode disabled, helper Python with -B,
+    and reproduce the exact inventory after the R2 return. Do not sync,
+    install, clean, or repair.
+  - >-
+    Use apply_patch only with the four exact absolute allowed paths. Preserve
+    the R1 producer return and independent REWORK review bytes. Do not run Git,
+    delegate, self-approve, access provider/network data, or begin corrected
+    review, acceptance, feature, cross-authority, Bronze, Silver, Gold, build,
+    model, product, cloud, container, endpoint, hosted CI, or deployment work.
+definition_of_done:
+  - P1 is closed by declarative and executable selector/sequence separation.
+  - Five inputs, predecessor, all 36 predicates, and strict selector are exact.
+  - Full R1 tests plus new sequence positive/negative cases pass.
+  - Exactly four R2-owned paths changed and terminal inventory equals preflight.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any frozen input, predecessor value, v1 predicate, or v1 artifact changes.
+  - Selector/sequence separation cannot be implemented without new product code.
+  - Any check, path boundary, or terminal inventory differs.
+  - >-
+    Correct work requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

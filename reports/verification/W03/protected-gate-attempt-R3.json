@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "gate_id": "W03-PROTECTED-SYNTHETIC-01",
+  "attempt": "R3",
+  "broker": "master",
+  "partition": "PROTECTED_TEST",
+  "checks": {
+    "fixture_contract_valid": true,
+    "protected_partition_selected": true,
+    "serving_available": true,
+    "candidate_identity_match": true,
+    "result_contract_match": true,
+    "explanations_match": false,
+    "admitted_fact_set_match": true,
+    "rejected_fact_reasons_match": true,
+    "post_cutoff_admitted_zero": true,
+    "repeat_result_stable": true
+  },
+  "result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+  "expected_result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+  "repeat_result_digest": "dcab08fd4fa60a256485453880f3417451bd9a2bf6cd3b405e44925323b1853e",
+  "decision": "REWORK",
+  "disclosure": "Only bounded check categories and digests are retained; no protected values are disclosed to the implementer."
+}

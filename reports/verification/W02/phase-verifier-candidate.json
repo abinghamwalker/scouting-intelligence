@@ -1,0 +1,52 @@
+{
+  "allow_pending_checkpoint": true,
+  "checks": [
+    {
+      "detail": "state: 'CLOSED'",
+      "id": "PHASE_STATE_ALLOWED",
+      "status": "PASS"
+    },
+    {
+      "detail": "state must be one of ['CHECKPOINTED', 'CLOSED', 'VERIFIED'], got 'CLOSED'",
+      "id": "PHASE_GATE_READY",
+      "status": "PASS"
+    },
+    {
+      "detail": "W01:CLOSED",
+      "id": "DEPENDENCIES_CLOSED",
+      "status": "PASS"
+    },
+    {
+      "detail": "W02-SYNTH-01:ACCEPTED",
+      "id": "TASKS_ACCEPTED_AND_EVIDENCED",
+      "status": "PASS"
+    },
+    {
+      "detail": "reports/phase-gates/W02/acceptance-report.md, reports/phase-gates/W02/gate-report.json, reports/reviews/W02/master-review.md, reports/verification/W02/verification-report.md, reports/verification/W02/clean-tree-report.md, reports/verification/W02/synthetic-return-R1-failure.json, reports/verification/W02/synthetic-return-R2-pass.json, reports/verification/W02/parallel-safety.json, reports/verification/W02/phase-verifier-candidate.json",
+      "id": "EVIDENCE_PRESENT",
+      "status": "PASS"
+    },
+    {
+      "detail": "G-W02:PASS, task-return-deliberate-rework:PASS, task-return-correction:PASS, parallel-safety:PASS, local-only-and-shared-suite:PASS, phase-state-and-evidence:PASS",
+      "id": "DECLARED_CHECKS_PASS",
+      "status": "PASS"
+    },
+    {
+      "detail": "zero remotes",
+      "id": "ZERO_GIT_REMOTES",
+      "status": "PASS"
+    },
+    {
+      "detail": "start=checkpoint/w02-start:259c0408517ebe9136deb3872bd2de6903a7a064, accepted=checkpoint/w02-accepted:PENDING_ALLOWED",
+      "id": "CHECKPOINT_STATE",
+      "status": "PASS"
+    }
+  ],
+  "failures": [],
+  "phase_id": "W02",
+  "registry": "orchestration/phase_registry.yaml",
+  "schema_version": 1,
+  "state": "CLOSED",
+  "status": "PASS",
+  "validator": "verify_phase"
+}

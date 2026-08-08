@@ -1,0 +1,150 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-01
+phase_id: W04
+revision: R19
+state: DISPATCHED
+objective: >-
+  Preserve every accepted R18 semantic and stable launch/build closure while
+  truthfully refreshing the reviewer-caused operational pyc census and adding a
+  non-mutating review preflight/postflight contract.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R18:MASTER_ACCEPTED
+  - W04-SCHEMA-DESIGN-REVIEW-01-R11:INVALID_REWORK
+assigned_role: data_architecture_designer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-REVIEW-01-R11.yaml
+  - reports/verification/W04/wyscout-schema-design-independent-review-R11-master-verification.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-REVIEW-01-R11.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R11.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R11.md
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R18.yaml
+  - reports/verification/W04/wyscout-schema-design-R18-master-verification.md
+  - reports/reviews/W04/wyscout-schema-design-R18.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R18.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/evidence.py
+  - docs/architecture/threat-model.md
+  - pyproject.toml
+  - uv.lock
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-R19.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-01-R19.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+required_corrections:
+  - >-
+    Produce a standalone replacement of R18. Preserve all R18 field, actor,
+    possession, identity, supported-feature, source, rights, temporal, product,
+    path, environment, packaging, executable, alias, resource, result-frame,
+    projection, build, two-root, ownership, gate, and ledger authority.
+  - >-
+    Preserve the R11 incident without cleanup. Record that the current site
+    snapshot is 1,086 pycs: 973 normal lexical names comprising 972
+    distribution-source mappings plus one uv-bootstrap mapping, 112
+    pytest-rewrite mappings, and the optional six orphan. Repository remains 58
+    pycs in 19 cache directories: 35 mapped normal, 20 pytest rewrite, and the
+    three exact inert orphans.
+  - >-
+    Name the exact eleven new packaging paths from the R11/master reports and
+    bind their exact size, mode 0644, link count one, magic cb0d0d0a, shared
+    mtime evidence, present source siblings, and SHA-256 values as an
+    operational incident delta. They are classifiable normal pycs and grant no
+    new stable source or build authority.
+  - >-
+    Replace every stale R18 1,075/962/961 current-root reference and required
+    test decomposition with the truthful R19 snapshot. Do not merely substitute
+    numbers: explicitly distinguish the R19 evidence snapshot from the actual
+    preflight inventory at a later review or runtime.
+  - >-
+    Close the operational-cardinality rule. The stable source-derived pyc map,
+    exact four optional orphan predicates, classification rules, and zero-read/
+    no-change policy remain stable. Mapped normal/pytest cache presence,
+    path/count/bytes and optional-orphan presence are operational. At each
+    bounded review/runtime run, a read-only preflight snapshots every site and
+    repository pyc; every present file must classify; any unclassified file
+    fails; and the exact preflight inventory must be byte-identical at
+    postflight. The later actual count need not equal 1,086 solely because
+    mapped cache presence changed before preflight. Creation, deletion, or
+    mutation during the bounded run always invalidates it and cannot be cleaned
+    into success.
+  - >-
+    Update health/test language so the controlling evidence records the actual
+    run preflight decomposition and its delta from the named R19 evidence
+    snapshot, rather than hardcoding 1,086 as a future admission requirement.
+    Stable/two-root equality must remain independent of mapped-cache presence.
+  - >-
+    Add an exact independent-review no-write harness before another design
+    review: take a read-only shell preflight census/inventory before any Python
+    import; every Python helper uses locked/no-sync root uv and starts with both
+    PYTHONDONTWRITEBYTECODE=1 and python -B, using -S when installed packages are
+    unnecessary; helpers requiring installed packages verify both no-write
+    controls at first instruction; take the identical read-only postflight
+    inventory; any write/drift invalidates the review; no cleanup, repair, sync,
+    cache purge, or environment recreation is permitted. This is review
+    procedure, not stable build input.
+  - >-
+    Retain the exact 119-pair roster, strict UUID ActorId, complete 12-field
+    possession row and six-decision union, approved field contract-test path,
+    root-independent uv/H1-H2 closure, v4/v2/v2/v14 versions,
+    16/8/10/25/25/20 cardinalities, 24-key projection intersection, and absent
+    future implementation scripts.
+  - >-
+    Because stable executable canonical preimages do not change, retain
+    w04-local-control-bootstrap-v4, w04-outer-environment-bootstrap-v2,
+    w04-child-environment-input-v2, and
+    w04-code-environment-admission-v14. If the producer concludes otherwise,
+    stop instead of changing a version.
+  - >-
+    Change exactly the two R19 report paths. Do not touch .venv, inspect it
+    through Python, delete/repair any pyc, create a parent-workspace path, or
+    perform Git, provider, network, implementation, configuration, or data work.
+definition_of_done:
+  - R19 is a standalone implementation authority with no stale 1,075/962/961 claim.
+  - The incident's exact 1,086 decomposition and eleven-file delta are preserved.
+  - Future operational counts are truthful preflight results under exact no-change rules.
+  - The independent-review harness cannot create bytecode silently.
+  - Every passing R18 stable and semantic closure remains unchanged.
+acceptance_checks:
+  - >-
+    before_site=$(find .venv/lib/python3.12/site-packages -name '*.pyc' -type f | wc -l);
+    before_repo=$(find . -path './.venv' -prune -o -name '*.pyc' -type f -print | wc -l);
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B -c
+    "from pathlib import Path; p=Path('reports/reviews/W04/wyscout-schema-design-R19.md');
+    s=p.read_text(); assert p.stat().st_size > 225000;
+    assert '1,086' in s and '1,075' not in s;
+    assert 'PYTHONDONTWRITEBYTECODE=1' in s and 'python -B' in s";
+    after_site=$(find .venv/lib/python3.12/site-packages -name '*.pyc' -type f | wc -l);
+    after_repo=$(find . -path './.venv' -prune -o -name '*.pyc' -type f -print | wc -l);
+    test "$before_site" = "$after_site";
+    test "$before_repo" = "$after_repo"
+  - PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B scripts/verify_local_only.py
+stop_conditions:
+  - >-
+    The correction requires cleanup, deletion, .venv mutation, dependency
+    change, stable schema/preimage change, architecture change, project-root
+    change, provider/rights change, or local-only boundary change.
+  - The eleven-file delta cannot be classified without inventing source authority.
+  - A no-write review harness cannot coexist with the locked root uv policy.
+  - Work needs edits outside the two report paths.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,45 @@
+task_id: W09-UPLIFT-LOCAL-LAUNCHER-02
+objective: >-
+  Add and test one bounded, loopback-only W09 research-workbench launcher without touching shared
+  authority, documentation, application UI, artifacts or Git state.
+read_first:
+  - AGENTS.md
+  - docs/reviews/uplift-options.md
+  - docs/adr/0004-container-free-embedded-runtime.md
+  - services/api/w09_main.py
+  - scripts/start_w08_study_console.command
+  - pyproject.toml
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/start_w09_research_workbench.command
+  - tests/unit/test_w09_research_launcher.py
+forbidden_paths:
+  - configs
+  - src
+  - apps
+  - docs
+  - data
+  - runs
+  - reports
+  - orchestration
+deliverables:
+  - Add an executable zsh launcher that resolves repository root, accepts zero or one numeric port,
+    defaults to 8769, restricts ports to 1024..65535, prints the loopback URL and stop instruction,
+    and execs uv run --locked uvicorn services.api.w09_main:app on 127.0.0.1.
+  - The launcher must have one process, no reload, no access log, no browser open, no detached or
+    unbounded caffeinate process, no remote bind, and no build/re-pin behavior.
+  - Add focused tests for shell syntax/static safety, port validation, exact composition and
+    forbidden flags without starting an unbounded server.
+acceptance_commands:
+  - zsh -n scripts/start_w09_research_workbench.command
+  - uv run --no-sync pytest -q tests/unit/test_w09_research_launcher.py
+  - uv run --no-sync ruff check tests/unit/test_w09_research_launcher.py
+stop_conditions:
+  - Stop if launcher completion requires a dependency, remote bind, browser automation, detached
+    process, artifact build, authority change or a file outside allowed_paths.
+  - Any command expected to exceed 60 seconds must use command-scoped caffeinate -dimsu.
+constraints:
+  - No Git operations, including chmod through Git; set the filesystem executable bit normally.
+  - No further delegation.
+  - No network/provider/credential access.
+  - Return using orchestration/templates/subagent_return.md exactly.

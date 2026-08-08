@@ -1,0 +1,70 @@
+schema_version: 1
+task_id: W04-SCHEMA-DESIGN-REVIEW-01
+phase_id: W04
+revision: R6
+state: DISPATCHED
+objective: >-
+  Independently verify the final standalone R7 design, closure of the two new R6
+  P1 defects, retention of all seven R5 P1 closures and every earlier accepted
+  finding, and readiness for W04 implementation.
+depends_on:
+  - W04-SCHEMA-DESIGN-01-R7:IMPLEMENTED
+  - W04-SOURCE-PROFILE-REVIEW-01-R2:ACCEPTED
+assigned_role: independent_architecture_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SCHEMA-DESIGN-01-R7.yaml
+  - orchestration/reviews/REVIEW-W04-SCHEMA-DESIGN-01-R6.yaml
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R5.md
+  - reports/reviews/W04/wyscout-schema-design-R6.md
+  - reports/reviews/W04/wyscout-schema-design-R7.md
+  - reports/phase-gates/W04/source-schema-profile.md
+  - src/scouting/contracts/evidence.py
+  - pyproject.toml
+  - uv.lock
+  - configs/environments/local-only.yaml
+  - .gitignore
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R6.md
+  - reports/reviews/W04/returns/W04-SCHEMA-DESIGN-REVIEW-01-R6.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+deliverables:
+  - Ranked closure table for both new R6 P1 defects.
+  - Retained closure tables for all seven R5 P1s and earlier findings.
+  - >-
+    Independent challenge of complete locked/installed distribution equality,
+    import/native/namespace ownership and runtime subset enforcement, unknown-kind
+    quarantine safety, and all retained temporal/identity/path/gate boundaries.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - All P0-P2 defects close or the packet returns REWORK.
+  - No direct-only dependency or unconstructible path remains.
+  - No architecture, rights, dependency, migration, provider, network or local-only change is introduced.
+acceptance_checks:
+  - >-
+    uv run python -c "from pathlib import Path;
+    p=Path('reports/reviews/W04/wyscout-schema-design-independent-review-R6.md');
+    assert p.is_file() and p.stat().st_size > 9000"
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - Any P0-P2 executable-truth, path, temporal, identity, gate or local-only defect remains.
+  - Review requires producer/code/config/data/dependency edits or provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

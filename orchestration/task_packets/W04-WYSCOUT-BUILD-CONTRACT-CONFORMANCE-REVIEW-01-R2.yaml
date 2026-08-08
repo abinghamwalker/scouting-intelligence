@@ -1,0 +1,110 @@
+schema_version: 1
+task_id: W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently review the frozen R4 fail-closed build-contract correction and
+  determine whether receipt closure is truthfully unavailable until the planned
+  accepted canonical Gold schema authority exists.
+depends_on:
+  - W04-WYSCOUT-BUILD-CONTRACT-01-R4:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_build_contract_r4_conformance_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R2.yaml
+  - orchestration/task_packets/W04-WYSCOUT-BUILD-CONTRACT-01-R4.yaml
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-01-R4.md
+  - reports/reviews/W04/wyscout-build-contract-conformance-review-R1.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R1.md
+  - reports/reviews/W04/wyscout-schema-composition-boundary-audit-R1.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R2.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R3.md
+  - reports/reviews/W04/wyscout-build-receipt-closure-audit-R4.md
+  - src/scouting/contracts/wyscout_build.py
+  - src/scouting/contracts/wyscout_data.py
+  - src/scouting/storage/formats.py
+  - tests/contracts/test_w04_wyscout_build_contract.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-build-contract-conformance-review-R2.md
+  - reports/reviews/W04/returns/W04-WYSCOUT-BUILD-CONTRACT-CONFORMANCE-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  r4_packet_sha256: d55ed40ea24d8fff680a2fa4eadefbb5bfa32394b8fc562b2ca1bb7b45fc01ee
+  r4_contract_sha256: f4433ebeaadee2f1d17f7f5f286f6eee21656c7408338e972270b9237ee8bce6
+  r4_test_sha256: c6a50ffc7963c15ace11d68d78a9a5abd0e80953e52696a765ac2a4e259da229
+  r4_return_sha256: 4e4bf858fec11d3cff40052f579164ddeae426f9ad70cc69852f1eb73f9b5db1
+  failed_r3_review_sha256: 82cc1b09111b9236d51578a25ab525f81c2dd79cdd9014ff042b222b06d26592
+  failed_r3_review_return_sha256: e25d5802c55b33f64f720ff461f31a93c861b869dc9385eb62d888b7463ba4ef
+  boundary_audit_sha256: e1d3597b5331705d030a25be7ffc7fd390a5c0fe4b7c84000a25ec744b30517b
+  boundary_audit_return_sha256: df20a183a608b0b9ac84d5791298f473de4e7d15405fb98401a9a7ffd5662623
+  r4_authority_audit_sha256: a6f8f3321dcfdb0c04d231d3e07d06497441ce703716d6e509f3f45b8829c222
+  r20_sha256: 8cb2f0d4d4015484453491f1846bd5bd0f41e8b8f11d8e52c0fab81b40078047
+  r21_sha256: faff34cc5f8c976809f58d7847038aafd39eac8ac68f6c418d717f74e6287020
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Prove by code inspection and execution that no invocation of
+    `validate_receipt_closure` can return successful completion in R4 and that no
+    caller argument, callback, Boolean, descriptor, digest or object can satisfy or
+    suppress the dedicated unavailable-authority state.
+  - >-
+    Independently reconstruct the exact baseline composition and the three coherent
+    supported schema variations from R1: top-level nullability, top-level field
+    order and nested integer width. Re-derive all dependent values consistently and
+    require every case to end in the exact dedicated unavailable-authority state.
+  - >-
+    Confirm that malformed manifest, Gold content, boundary, parent, population and
+    clock inputs still fail before the dedicated state, every manifest is still
+    revalidated from exact bytes by accepted LayerManifest, and claim-only digest
+    parameters have not returned.
+  - >-
+    Confirm all exact build/window/projection/invocation/receipt/result keys and
+    hashes, one-match/four-feature/season/lineup bindings and local-only limits are
+    unchanged. Confirm no schema is hard-coded, inferred, copied or prematurely
+    accepted by R4.
+  - >-
+    Treat R4 only as accepted Packet-1 contract/fail-closed behavior. Do not claim
+    final executable receipt completion; that remains downstream of the accepted
+    23-root schema and aggregate authorities.
+definition_of_done:
+  - PASS with P0/P1/P2 equal 0/0/0, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run ruff check src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run mypy src/scouting/contracts/wyscout_build.py tests/contracts/test_w04_wyscout_build_contract.py
+  - uv run pytest -q tests/contracts/test_w04_wyscout_build_contract.py tests/contracts/test_w04_wyscout_build_product_authority.py tests/contracts/test_w04_wyscout_season_lineup_product_binding_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_w04_wyscout_product_formats.py
+  - uv run pytest -q tests/contracts/test_wyscout_data_contracts.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R2 conformance review with finding counts.
+  - Reviewer return using the repository template.
+stop_conditions:
+  - Fixed hash drift.
+  - Need to edit implementation/tests or any non-review path.
+  - Need for architecture/root/projection/population/feature/dependency/product,
+    Git, provider/network or external-infrastructure action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,88 @@
+schema_version: 1
+task_id: W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01
+phase_id: W04
+revision: R2
+state: ACCEPTED
+objective: >-
+  Independently attempt to invalidate the exact R3 progression-guard correction,
+  including compound substitutions across all four physically pinned gate artifacts.
+depends_on:
+  - W04-REPOSITORY-PROGRESSION-GUARD-01-R3:MASTER_FOCUSED_CHECKS_PASS
+assigned_role: fresh_independent_w04_repository_progression_guard_r2_reviewer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R2.yaml
+  - orchestration/task_packets/W04-REPOSITORY-PROGRESSION-GUARD-01-R3.yaml
+  - reports/reviews/W04/wyscout-repository-progression-guard-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R1.md
+  - reports/verification/W04/wyscout-repository-progression-guard-R3-master-verification.md
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-01-R3.md
+  - tests/contracts/test_w04_field_semantic_v2_authority.py
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - tests/contracts/test_w04_r21_cross_authority_composability.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W04/wyscout-repository-progression-guard-independent-review-R2.md
+  - reports/reviews/W04/returns/W04-REPOSITORY-PROGRESSION-GUARD-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - src/**
+  - tests/**
+fixed_bindings:
+  field_test_sha256: 289727da1fceb2fc1c188ad4f86ce29a4be9e103b833b740ee0dfa3cfc6604d1
+  possession_test_sha256: 50eba809ca7114e995a85d3a839fb28ec7650e351f254eb5ccfe3f767868ea1a
+  producer_return_sha256: 1f6aa82353281294336983a1356b68000161303a0c2ebe48130ed7d87815b136
+  master_verification_sha256: ec65e40d9abf4da337bd40d0313d4486661a569fd16aee8ebc75f45224241104
+  failed_r1_review_sha256: 865d1b7af38a9ff54d860117b970dd9b9adf041726ec5c05896f3b3525f7b8a0
+  accepted_gate_report_sha256: 656769e7e9fe894421056230344ed9e976d583895cabe42600d1a2294042e14e
+  accepted_gate_record_sha256: 980303642f5c58876ed157698a5ea8f25ee79acef3c9faeaf015266cf547f168
+  accepted_gate_review_sha256: e9eca309986140ddfe40c66645a3f640777ff700e6a7187d43f020060d35c070
+  accepted_gate_return_sha256: 8f45128b4609b2a575a9f7da5e147dd95c5ef83f203812d27ac97e6fbd9eb051
+review_requirements:
+  - Verify every fixed hash before analysis and stop on drift.
+  - >-
+    Independently prove exact accepted four-artifact evidence succeeds and every one
+    of the 16 declared mutations in each module fails closed.
+  - >-
+    Repeat the R1 paired review-plus-recomputed-record exploit and attack arbitrary
+    two-, three- and four-artifact consistent substitutions, replay, cross-wire,
+    duplicate-key and additional-path cases. No changed artifact may be accepted.
+  - >-
+    Confirm the canonical record is still fully parsed and reconciled, not merely
+    hash-compared, and that all lower validators, governed paths and the central R21
+    lifecycle remain unchanged.
+  - >-
+    Confirm no production, source, data, authority, gate, dependency, product,
+    provider/network, Git, cloud, container, CI, remote or deployment action occurred.
+definition_of_done:
+  - Exact R3 candidate receives PASS with zero open P0-P2 findings, or bounded REWORK with executable evidence.
+acceptance_checks:
+  - uv run ruff format --check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run ruff check tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - uv run pytest -q tests/contracts/test_w04_field_semantic_v2_authority.py tests/contracts/test_w04_possession_semantic_v2_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Independent R2 review and mandatory return with exact P0/P1/P2 counts.
+stop_conditions:
+  - Candidate hash drift or need to edit implementation, tests, data, frozen authority or gate evidence.
+  - Any Git, dependency, provider/network, product, cloud/container/CI/remote/deployment action.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

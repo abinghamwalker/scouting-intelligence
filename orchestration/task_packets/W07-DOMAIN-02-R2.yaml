@@ -1,0 +1,95 @@
+schema_version: 1
+task_id: W07-DOMAIN-02
+phase_id: W07
+revision: R2
+state: DISPATCHED
+objective: Close the three reproduced domain R1 P1 findings and prove the exact truthful-composition invariant with direct integration tests.
+depends_on:
+  - REVIEW-W07-DOMAIN-02-R1:REWORK
+assigned_role: w07_composition_producer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W07-DOMAIN-02-R1.yaml
+  - orchestration/reviews/REVIEW-W07-DOMAIN-02-R1.yaml
+  - src/scouting/web/w07.py
+  - tests/integration/test_w07_local_evidence_app.py
+  - tests/integration/test_w05_m0_serving.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/web/w07.py
+  - src/scouting/web/__init__.py
+  - services/api/w07_main.py
+  - tests/integration/test_w07_local_evidence_app.py
+  - reports/reviews/W07/returns/W07-DOMAIN-02-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - apps/**
+  - src/scouting/contracts/**
+  - src/scouting/serving/**
+  - src/scouting/m0/**
+  - src/scouting/features/**
+  - src/scouting/roles/**
+  - runs/**
+  - configs/**
+  - reports/evaluation/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W03/**
+  - reports/reviews/W04/**
+  - reports/reviews/W05/**
+  - reports/reviews/W06/**
+  - tests/fixtures/synthetic/expected_retrieval.json
+  - tests/fixtures/synthetic/protected/**
+  - tests/fixtures/w06/**
+requirements:
+  - >-
+    Replace core._candidates access with an explicit composition object built from the
+    same accepted public loaders used to construct M0ServingCore. Build once per app.
+  - >-
+    Inject structured authority, w04 and w06 into every page. Authority includes exact
+    source/evidence class, model/index ID/version, artifact, manifest/result, registry,
+    feature schema, taxonomy ID/version/digest, configuration, fitting/candidate
+    populations, data/model window, cutoff, confidence, LIMITED applicability,
+    limitations and lineage. The W06 projection fixes protected_outputs_opened=false.
+  - >-
+    Create stable 18-player presentation rows with label, UUID, position, age, exact
+    feature values/states, role probabilities, cutoff and row lineage. Search q matches
+    label or UUID; position is closed to CENTRAL/DEFENSIVE/WIDE and invalid filters
+    yield the explicit empty state.
+  - >-
+    Zip each M0 result into result_rows containing its scored candidate, retrieval
+    candidate, confidence evidence, dimension evidence and explanation. For compare,
+    bind selected_row exactly to the requested returned candidate. Never calculate a
+    score, distance, contribution, confidence or role value in web code.
+  - >-
+    Implement at least eight focused integration tests with distinct test functions:
+    all landing/evidence security headers and wording; 18-row search plus label/UUID/
+    position filters and empty; known player exact evidence and invalid player no
+    serving call; default retrieval public call and exact seven accepted digests;
+    single/batch model_dump_json parity; genuine selected comparison binding and batch
+    call; all five closed states plus unknown 404; four artifact SHA-256 values unchanged
+    across requests and no forbidden match/recommendation/outcome/production labels.
+  - >-
+    Spy serve_m0_request, serve_m0_batch and LoadedM0Artifact.score. Rejected identities
+    must call none. Valid retrieval and compare each traverse the expected public path
+    and one shared score implementation. Assert exact accepted result, lineage,
+    manifest, registry, taxonomy, configuration and feature-schema digests.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py
+  - uv run ruff check src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py tests/integration/test_w07_local_evidence_app.py
+  - uv run mypy src/scouting/web/w07.py src/scouting/web/__init__.py services/api/w07_main.py
+  - uv run pytest -q tests/integration/test_w07_local_evidence_app.py tests/integration/test_w05_m0_serving.py tests/e2e/test_w05_m0_retrieval.py
+  - uv run lint-imports
+stop_conditions:
+  - A scorer, accepted authority, dependency, protected output, external access/service, Git or out-of-scope path is required.
+deliverables:
+  - Corrected composition and at least eight direct integration tests.
+  - Mandatory return at reports/reviews/W07/returns/W07-DOMAIN-02-R2.md.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

@@ -1,0 +1,134 @@
+schema_version: 1
+task_id: W04-POSSESSION-SEMANTIC-V2-REVIEW-01
+phase_id: W04
+revision: R1
+state: DISPATCHED
+objective: >-
+  Independently review the complete possession-v2 decision, candidate, focused
+  contract, and producer return against R20/R21. Report every P0-P2 finding and
+  issue PASS only with zero findings. Do not modify the candidate or accept it.
+depends_on:
+  - W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1:MASTER_ACCEPTED_FOR_REVIEW
+assigned_role: independent_possession_semantic_v2_reviewer
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.yaml
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - reports/reviews/W04/wyscout-schema-design-R21.md
+  - reports/reviews/W04/wyscout-schema-design-independent-review-R15.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-decisions-v2.json
+  - configs/schema/wyscout-v5-field-registry-v2.yaml
+  - reports/reviews/W04/authorities/wyscout-field-semantic-independent-review-v2-R1.md
+  - reports/reviews/W04/authorities/wyscout-field-semantic-acceptance-v2.json
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v1.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v1.yaml
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-R1.md
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-acceptance-v1.json
+  - tests/contracts/test_w04_possession_semantic_authority.py
+  - reports/reviews/W04/authorities/wyscout-possession-semantic-decisions-v2.json
+  - configs/taxonomies/wyscout-v5-possession-taxonomy-v2.yaml
+  - tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.md
+  - orchestration/reviews/REVIEW-W04-POSSESSION-SEMANTIC-V2-DECISION-01-R1.yaml
+  - reports/verification/W04/wyscout-possession-semantic-v2-decision-R1-master-verification.md
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/authorities/wyscout-possession-semantic-independent-review-v2-R1.md
+  - /Users/adrian/Documents/personal_repos/investigation_v2/scouting-intelligence/reports/reviews/W04/returns/W04-POSSESSION-SEMANTIC-V2-REVIEW-01-R1.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - tests/**
+review_authority:
+  review_id: w04-wyscout-possession-semantic-independent-review-v2-R1
+  review_schema_version: w04-authority-independent-review-v1
+  independent_actor_id: 03a65770-02f6-5eb0-9bd2-e2ebb44b62bd
+  candidate_id: w04-wyscout-possession-taxonomy-v2
+  candidate_physical_sha256: 6c739f674894d6c605cbd5beccb0ad074f0b64f2447efe664438764458b84d7c
+  candidate_sha256: 54c2dcca6e84ef1cdb174a41a4c35f05a224f216513bdf1408422aa7c93f7452
+  decision_id: w04-wyscout-possession-semantic-decisions-v2
+  decision_physical_sha256: 3198178feef14886be3cf65dbc98a0b3b34d87a74102d2c54a470e23079a4973
+  decision_sha256: 3198178feef14886be3cf65dbc98a0b3b34d87a74102d2c54a470e23079a4973
+requirements:
+  - >-
+    Read every input completely. Reconstruct strict canonical JSON/YAML bytes,
+    physical and canonical digests, clocks, actors, five exact inputs, exact
+    17-key v1 predecessor, 36 predicate equality/order, and progression states
+    independently rather than trusting producer helpers.
+  - >-
+    Challenge the selector with missing/mistyped values, booleans, strings,
+    numeric-looking strings, null, non-integer numbers, arrays/objects, unknown
+    pairs, absent/mistyped/unsorted/duplicate tag arrays, forbidden/required
+    tags, and absent/mistyped/zero canonical team. Prove no raw, rejected,
+    event/subevent name, or taxonomy-label value is consumed.
+  - >-
+    Resolve the master challenge explicitly: determine whether
+    ELIGIBLE_RESOLVED is emitted only after an exact predicate participates in
+    a deterministically resolved same-period possession under R20 sequence
+    rules. If the authority or test equates mere predicate lookup with
+    completed sequence resolution, record a P0-P2 finding and recommend REWORK.
+    Do not reinterpret or silently narrow R21.
+  - >-
+    Challenge test quality and progression safety with independent positive and
+    negative mutations, including review/acceptance clocks, actors, digests,
+    supersession, malformed fences, later-authority blocking, and product-path
+    absence.
+  - >-
+    The fixed review Markdown must contain exactly one
+    w04-authority-review-v1 fence whose body is strict canonical JSON plus LF
+    with the 12 exact review keys, truthful fresh reviewed_at, fixed independent
+    actor, exact candidate/decision digests, recommendation, and findings.
+    PASS requires findings=[]; REWORK requires one or more P0-P2 findings.
+  - >-
+    Before Python take a fresh shell-only pyc/__pycache__ inventory; run only
+    root uv with --locked --no-sync and bytecode disabled; reproduce the exact
+    inventory after the final return. Do not sync, install, clean, or repair.
+  - >-
+    Use apply_patch only with the two exact absolute allowed paths. Do not run
+    Git, delegate, self-approve, edit candidate/test/dependencies, access
+    provider/network data, or begin acceptance, feature, cross-authority,
+    Bronze, Silver, Gold, build, model, product, cloud, container, endpoint,
+    hosted CI, or deployment work.
+definition_of_done:
+  - Complete independent review reports all P0-P2 findings.
+  - Candidate and v1 bytes remain unchanged.
+  - Review record is canonical, exact, truthful, and independently authored.
+  - Focused/local-only/inventory checks and mandatory return are complete.
+acceptance_checks:
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync pytest -q
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+    tests/contracts/test_w04_possession_semantic_authority.py
+    tests/contracts/test_w04_field_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff format --check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync ruff check
+    tests/contracts/test_w04_possession_semantic_v2_authority.py
+  - >-
+    PYTHONDONTWRITEBYTECODE=1 uv run --locked --no-sync python -B
+    scripts/verify_local_only.py
+stop_conditions:
+  - Any candidate/v1 byte changes or third output is required.
+  - Any mandatory input, check, or terminal inventory differs.
+  - Reviewer cannot resolve the selector-versus-sequence semantic from R20/R21.
+  - >-
+    Correct review requires architecture, product, provider/right, root,
+    dependency/lock, storage, network, cloud, container, endpoint, hosted-CI,
+    deployment, or broader-scope change.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

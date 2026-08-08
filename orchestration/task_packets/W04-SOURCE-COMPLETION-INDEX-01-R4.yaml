@@ -1,0 +1,122 @@
+schema_version: 1
+task_id: W04-SOURCE-COMPLETION-INDEX-01
+phase_id: W04
+revision: R4
+state: ACCEPTED
+objective: >-
+  Correct only W04SCIIDXR3CAPR1-P1-001 by replacing identity-only registry trust with
+  independently re-verifiable exact population and product-scope evidence at every
+  checked consumption boundary. Preserve the accepted index, all R1/R2/R21 semantics
+  and the R3 ordinary checked API. Create no product byte.
+depends_on:
+  - W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1:MASTER_ACCEPTED_REWORK_EVIDENCE
+assigned_role: w04_data_contracts_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R4.yaml
+  - reports/verification/W04/wyscout-source-completion-index-parallel-review-R1-master-acceptance.md
+  - reports/reviews/W04/wyscout-source-completion-index-capability-independent-review-R1.md
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-REVIEW-02-R1.md
+  - reports/reviews/W04/wyscout-source-completion-index-semantic-independent-review-R1.md
+  - orchestration/task_packets/W04-SOURCE-COMPLETION-INDEX-01-R3.yaml
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R3.md
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - src/scouting/sources/wyscout_completion_index.py
+  - src/scouting/contracts/wyscout_data.py
+  - tests/unit/test_wyscout_source_completion_index.py
+  - tests/contracts/test_wyscout_data_contracts.py
+  - reports/reviews/W04/returns/W04-SOURCE-COMPLETION-INDEX-01-R4.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - scripts/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/authorities/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/wyscout-source-completion-index-capability-independent-review-R1.md
+  - reports/reviews/W04/wyscout-source-completion-index-semantic-independent-review-R1.md
+  - src/scouting/contracts/evidence.py
+  - src/scouting/contracts/primitives.py
+  - src/scouting/contracts/retrieval.py
+  - src/scouting/sources/wyscout_manifest.py
+  - src/scouting/identity/**
+  - src/scouting/data_products/**
+fixed_bindings:
+  r3_source_sha256: 22d825631af0d27d1583a79ce4bb8adb10643bb32fe139630871727f814f1415
+  r3_contract_sha256: 154f1ae9934615a2ce9a24a4f8e373cd640a4c3246df93f0e35e6bed28517932
+  r3_source_test_sha256: 5beb37ee5fffadcab1d7355b879fcb65b76816b969c5581a943b1096afd98580
+  r3_contract_test_sha256: 7ef542d5ed65437683063e2980e08a94b260771405147a860ca5d4541f1c004b
+  index_sha256: 46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df
+  capability_review_sha256: 5fb92056c3c23cee2f052fcd2d568520e28eaead5857a6b172944c6a6f39fb87
+  capability_return_sha256: fd4c4ba4c8ea2256a31d6b04333fa251f3b9c971b57567bcc583b1657fd16bb4
+  semantic_review_sha256: 9d270746900394f2ae1abd3c145e278d61cf3cdef8c7e12165cde138d089c3fa
+requirements:
+  - >-
+    Completion proof state must retain enough exact source evidence to re-execute the
+    accepted period or match population comparison. On every checked use, derive the
+    period/full-match state and reader-built sequences from that evidence; never trust
+    a stored Boolean, count, period key, sequence, issuer identity or registry entry.
+  - >-
+    Product proof state must retain its exact construction kind and dependency graph.
+    On every checked use, recursively revalidate completion evidence and recompute the
+    exact Action, Possession, Fact, Gold or manifest value from checked dependencies.
+    The recomputed exact value and completion scopes must equal the retained product.
+  - >-
+    Make recursive verification acyclic and fail closed for cycles, malformed record
+    types, unissued handles, direct registry insertion, exposed-issuer invocation,
+    false complete-match state, detached raw-value reissue and cross-scope mixing.
+  - >-
+    A registry may remain only as a process-local lookup/cache; neither its membership
+    nor issuer secrecy may confer authority. Standard callable introspection of public
+    checked functions or private getters must not expose a route that makes arbitrary
+    semantic models pass `require_checked_product`.
+  - >-
+    Preserve the R3 public checked API, normal positive match 2499719 behavior,
+    exact one-match manifest scope, raw `semantic_only_unchecked` state, copy/replay
+    rejection and future serializer requirement to consume the checked handle.
+  - >-
+    Preserve exact accepted index bytes/address, full 3071395 reconciliation, strict
+    integer-only action projection, equal-clock group-first behavior, causal
+    provenance, dependency lineage, six coverage authorities and exactly four Gold
+    features. Add no dependency, product byte, provider/network, cloud, container,
+    endpoint, hosted CI, remote or deployment.
+definition_of_done:
+  - Registry/issuer introspection and mutation cannot make a non-reader or malformed population/product pass checked consumption.
+  - Every legitimate checked product remains re-verifiable from the exact accepted population and exact dependency graph.
+  - The complete R3 focused suite and new bounded regression tests pass.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run ruff check src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run mypy src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py
+  - uv run lint-imports
+  - uv run pytest -q tests/unit/test_wyscout_source_completion_index.py tests/contracts/test_wyscout_data_contracts.py tests/contracts/test_foundation_contracts.py tests/contracts/test_w04_identity_ruleset_authority.py tests/contracts/test_w04_r21_cross_authority_composability.py tests/unit/test_wyscout_source_manifest.py
+  - uv run bandit -q -r src/scouting/sources/wyscout_completion_index.py src/scouting/contracts/wyscout_data.py
+  - uv run python scripts/verify_local_only.py
+master_only_checks:
+  - shasum -a 256 data/manifests/wyscout/v5/source-completion/46a22423d5a32122429e7bf15d79dc892fa8177b19d9672b61303bc6e1df87df.source-completion-index.json reports/reviews/W04/wyscout-schema-design-R20.md reports/reviews/W04/wyscout-schema-design-R21.md
+  - git diff --check
+  - git remote
+stop_conditions:
+  - Correction requires changing the accepted index, R20/R21 bytes, dependencies, architecture, feature scope, provider rights or local-only boundary.
+  - Independently re-verifying exact population and product derivation cannot close the introspection route without a broader product architecture change.
+  - Any out-of-scope byte, Git operation, provider/network access, product write, cloud, container, hosted CI, endpoint, remote or deployment is required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

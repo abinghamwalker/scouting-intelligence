@@ -1,0 +1,114 @@
+schema_version: 1
+task_id: W04-WYSCOUT-RUNTIME-CONTROL-01
+phase_id: W04
+revision: R10
+state: DISPATCHED
+objective: >-
+  Correct only the first real-root rebuild-child serialization defect: reconstruct
+  the two declared tuple fields from their canonical JSON array representation
+  before strict RebuildInvocation validation, without changing any logical field,
+  key, order, value, inverse, product, digest formula, or accepted runtime control.
+depends_on:
+  - W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9:MASTER_ACCEPTED
+  - W04-WYSCOUT-REAL-ROOT-INVOCATION-01-R1:REWORK
+assigned_role: w04_runtime_control_r10_producer
+risk: critical
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-01-R9.yaml
+  - orchestration/task_packets/W04-WYSCOUT-RUNTIME-CONTROL-REVIEW-01-R9.yaml
+  - reports/verification/W04/wyscout-runtime-control-R9-master-acceptance.md
+  - reports/reviews/W04/wyscout-schema-design-R20.md
+  - scripts/rebuild_wyscout_v5.py
+  - src/scouting/contracts/wyscout_build.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - tests/unit/test_w04_wyscout_runtime_control.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - scripts/rebuild_wyscout_v5.py
+  - tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - reports/reviews/W04/returns/W04-WYSCOUT-RUNTIME-CONTROL-01-R10.md
+forbidden_paths:
+  - .git/**
+  - .gitignore
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - AGENTS.md
+  - orchestration/**
+  - configs/**
+  - migrations/**
+  - data/**
+  - runs/**
+  - docs/**
+  - reports/phase-gates/**
+  - reports/verification/**
+  - reports/reviews/W04/archive/**
+  - reports/reviews/W04/authorities/**
+  - scripts/__pycache__/**
+  - scripts/admit_wyscout_v5_runtime.py
+  - scripts/launch_wyscout_v5.py
+  - src/**
+  - tests/contracts/**
+  - tests/e2e/**
+  - tests/unit/**
+fixed_bindings:
+  r9_admission_child_sha256: f6dbce7ffd48320155ab0562ef27a4f79c99e80aa1b122e5f0b039c493048f05
+  r9_launcher_sha256: 6211ff1cd0b51bdd3ab24fe26358077f46f1ad0526ff60126776606ca01243eb
+  r9_runtime_tests_sha256: 12924b9905a8334c4a6f83bb00b170059be0bb965a1d3d6b4f0c09d364a95abf
+  r9_rebuild_child_sha256: 82d7a22cc9d48bca19e0f4a6d05f60995f7486df829585fa7bf0b9ab7434ba99
+  r9_master_acceptance_sha256: b120ad2b0c942d939cef10b8a914187c85b1a2647ac37c328296c1152fe4d618
+  r9_independent_review_sha256: cf4d4df85c4960930fd02d653636358d705dd8b05e8b343e349480197561b02a
+  retained_unaccepted_code_manifest_sha256: fb1bcca5772d71a0de2c116cd2539d1d2cd757554df8791dad8e0d952cf67083
+  disclosed_operational_pyc_sha256: b1c8fbd8e5de10d6251995b9dc0fbbcb7457ba0bdaffd669e6e58c86d280b52e
+requirements:
+  - >-
+    Verify every fixed binding before editing. Keep the accepted admission child,
+    launcher, runtime tests, disclosed PYC, unaccepted admitted code manifest,
+    all retained control/admission/rebuild prefixes, data, runs, products,
+    manifests, contracts and every unrelated byte read-only. No cleanup or real-
+    root retry is authorized in this packet.
+  - >-
+    Add one narrow pure reconstruction boundary for the rebuild_invocation value
+    returned by the canonical child-envelope JSON decoder. Require the value to
+    be one exact ordered 25-key object. Require authority_rows and dependency_rows
+    to be JSON arrays, reconstruct only those two arrays as tuples without
+    coercing, reordering, filtering, defaulting or changing any nested element,
+    then call RebuildInvocation.model_validate(..., strict=True). Retain the
+    existing exact five-row authorities/dependencies, inverse, build ID, clocks,
+    digests and all other model validators.
+  - >-
+    Reject a tuple already present at the JSON boundary, missing/extra/reordered
+    invocation key, non-array tuple field, changed row order/cardinality/value,
+    nested extra/mistyped field, and any model validation error. Do not use
+    model_validate_json or non-strict validation as a shortcut and do not broaden
+    accepted JSON types.
+  - >-
+    Add direct positive proof using the exact canonical JSON round trip of an
+    accepted RebuildInvocation: arrays reconstruct, strict validation succeeds,
+    projection_from_invocation and invocation_from_projection reproduce exactly,
+    and canonical logical JSON bytes are unchanged. Add the adversarial cases
+    above. Retain every R9 test and the unchanged launcher/admission/PYC closure.
+  - >-
+    Preserve dependencies, lock state, product population, logical contracts,
+    physical products, manifest formulas, build-ID formula and digest meaning.
+    Descriptor or future unaccepted code-manifest/build bytes may change only as
+    the mechanical result of the corrected rebuild-child source byte.
+acceptance_checks:
+  - uv run ruff format --check scripts/rebuild_wyscout_v5.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run ruff check scripts/rebuild_wyscout_v5.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run mypy scripts/rebuild_wyscout_v5.py tests/security/test_w04_wyscout_vertical_slice_publication.py
+  - uv run pytest -q -p no:cacheprovider tests/security/test_w04_wyscout_vertical_slice_publication.py tests/contracts/test_w04_wyscout_build_contract.py tests/unit/test_w04_wyscout_runtime_control.py tests/e2e/test_w04_wyscout_vertical_slice.py tests/unit/test_w04_staged_product_publisher.py tests/contracts/test_w04_wyscout_v2_aggregates.py
+  - uv run bandit -q -r scripts/admit_wyscout_v5_runtime.py scripts/launch_wyscout_v5.py scripts/rebuild_wyscout_v5.py
+  - uv run lint-imports
+  - uv run python scripts/verify_local_only.py
+deliverables:
+  - Exact R10 canonical-JSON tuple reconstruction boundary, positive/inverse and
+    adversarial tests, preserved retained evidence, and mandatory return.
+stop_conditions:
+  - None for bounded implementation defects; continue rework without cleanup,
+    real-root retry, dependency change, PYC mutation, or Git.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

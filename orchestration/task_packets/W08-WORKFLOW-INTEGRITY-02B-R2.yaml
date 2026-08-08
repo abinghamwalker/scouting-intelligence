@@ -1,0 +1,75 @@
+schema_version: 1
+task_id: W08-WORKFLOW-INTEGRITY-02B
+phase_id: W08
+revision: R2
+state: MASTER_ACCEPTED_PENDING_INDEPENDENT_REVIEW
+objective: >-
+  Prove that decision authority and scout assignment identifiers always resolve to the
+  authenticated or explicitly role-qualified local identity they claim.
+depends_on:
+  - W08-WORKFLOW-INTEGRITY-02B-R1:MASTER_REPRODUCED_WITH_IDENTITY_ROLE_FINDINGS
+assigned_role: routine_producer_gpt-5.6-terra_medium
+risk: critical
+read_first:
+  - AGENTS.md
+  - ../scouting-ml-production-blueprint.html
+  - ../scouting-ml-agent-implementation-workflow.html
+  - orchestration/task_packets/W08-WORKFLOW-INTEGRITY-02B-R1.yaml
+  - reports/reviews/W08/returns/W08-WORKFLOW-INTEGRITY-02B-R1.md
+  - configs/policies/w08-authorization.yaml
+  - migrations/versions/0002_w08_workflow.sql
+  - src/scouting/contracts/workflow.py
+  - src/scouting/workflow/r1.py
+  - tests/integration/test_w08_workflow.py
+allowed_paths:
+  - src/scouting/workflow/r1.py
+  - src/scouting/observations/r1.py
+  - tests/integration/test_w08_workflow.py
+  - tests/security/test_w08_workflow_access.py
+  - reports/reviews/W08/returns/W08-WORKFLOW-INTEGRITY-02B-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - migrations/**
+  - src/scouting/contracts/**
+  - src/scouting/policy/**
+  - src/scouting/audit/**
+  - src/scouting/operations/**
+  - src/scouting/web/**
+  - apps/**
+  - services/**
+  - orchestration/**
+  - tests/fixtures/synthetic/protected/**
+  - reports/evaluation/W06/**
+deliverables:
+  - For approved/rejected role-brief revisions, require decided_by and created_by to equal the authenticated approver principal; deny forged or absent authority before mutation.
+  - Require every non-null assigned_scout_id to resolve to an enabled local account in the same tenant with an explicit scout role before an entry revision is written.
+  - Reject an assigned scout on the initial unassigned longlist creation path; assignment must be an explicit later revision.
+  - Prove disabled, wrong-tenant, analyst-only, approver-only, admin-only and unknown actors cannot be assigned as scouts, without disclosing which lookup failed.
+  - Preserve the complete prior attribution, identity, reconsideration, optimistic-concurrency, rollback and W06-boundary behavior.
+definition_of_done:
+  - Forged decision authority and invalid/disabled scout assignment tests fail before any workflow/audit mutation; valid scout assignment remains green.
+  - The complete prior workflow suite and mandatory return pass.
+focused_checks:
+  - decided_by/authenticated approver equality.
+  - enabled same-tenant explicit scout-role assignment and generic invalid-assignment denial.
+acceptance_checks:
+  - uv run ruff format --check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run ruff check src/scouting/workflow/r1.py src/scouting/observations/r1.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py
+  - uv run mypy src/scouting/workflow/r1.py src/scouting/observations/r1.py
+  - uv run pytest -q tests/contracts/test_w08_workflow_contracts.py tests/integration/test_w08_workflow.py tests/security/test_w08_workflow_access.py tests/security/test_w08_auth_audit.py
+stop_conditions:
+  - The invariant requires a shared contract/migration/policy change.
+  - Any external identity/service/model, protected-output access, destructive action or forbidden-path edit is required.
+  - A correction would accept forged decision or assignment identity or weaken generic denial/audit integrity.
+mandatory_return:
+  - task ID/revision and exact identity-role invariant
+  - exact changed-file list
+  - positive/negative proof
+  - exact commands, exit statuses and concise results
+  - residual risks and confirmations of no Git/dependency/external/protected/out-of-scope action
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden

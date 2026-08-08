@@ -1,0 +1,62 @@
+schema_version: 1
+task_id: W10-STUDY-CONSOLE-SURVEY-00C
+phase_id: W10
+revision: R1
+state: DISPATCHED
+objective: >-
+  Map reusable W08 study-console and W09 governed-workbench seams for a simple local W10
+  expert journey, while keeping the dormant W08 workflow excluded and pilot/formal evidence separate.
+depends_on:
+  - W09:CLOSED
+assigned_role: study_console_reuse_surveyor
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W10-STUDY-CONSOLE-SURVEY-00C-R1.yaml
+  - docs/architecture/research-workbench-pivot.md
+  - docs/architecture/product-claim.md
+  - src/scouting/web/w08_study_console.py
+  - src/scouting/web/w09.py
+  - src/scouting/storage/research.py
+  - services/api/w09_main.py
+  - apps/web/templates/w08_study_console/participant.html
+  - apps/web/templates/w09/workbench.html
+  - tests/integration/test_w08_study_console.py
+  - tests/e2e/test_w09_research_workbench_playwright.py
+  - orchestration/templates/subagent_return.md
+allowed_paths:
+  - reports/reviews/W10/returns/W10-STUDY-CONSOLE-SURVEY-00C-R1.md
+forbidden_paths:
+  - .git/**
+  - .venv/**
+  - pyproject.toml
+  - uv.lock
+  - orchestration/**
+  - configs/**
+  - data/**
+  - runs/**
+  - src/**
+  - services/**
+  - apps/**
+  - migrations/**
+  - tests/**
+  - reports/phase-gates/**
+  - reports/verification/**
+requirements:
+  - Identify reusable loopback, accessibility, resume, idempotency and browser patterns.
+  - Identify W08 workflow/auth/persona concepts that W10 must not inherit.
+  - Propose exact W10 paths, routes, journey states and pilot/formal separation controls.
+  - Keep all expected results and candidate provenance hidden from participant views.
+deliverables:
+  - reports/reviews/W10/returns/W10-STUDY-CONSOLE-SURVEY-00C-R1.md
+definition_of_done:
+  - The master can allocate a path-disjoint W10 console packet against frozen contracts.
+acceptance_checks:
+  - uv run pytest -q tests/integration/test_w08_study_console.py tests/unit/test_w09_research_web.py
+  - test -s reports/reviews/W10/returns/W10-STUDY-CONSOLE-SURVEY-00C-R1.md
+stop_conditions:
+  - W08 reactivation, fictional role workflow, protected-output exposure, external access, a Git operation or an edit outside allowed_paths would be required.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
+self_approval: forbidden

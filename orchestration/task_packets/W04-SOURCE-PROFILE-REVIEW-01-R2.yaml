@@ -1,0 +1,61 @@
+schema_version: 1
+task_id: W04-SOURCE-PROFILE-REVIEW-01
+phase_id: W04
+revision: R2
+state: DISPATCHED
+objective: >-
+  Independently verify the corrected measured profile and all six R1 defects using a
+  different reviewer, with no Git command and no trust in producer counts.
+depends_on:
+  - W04-SOURCE-PROFILE-01-R2:IMPLEMENTED
+assigned_role: independent_verifier
+risk: high
+read_first:
+  - AGENTS.md
+  - orchestration/task_packets/W04-SOURCE-PROFILE-01-R2.yaml
+  - orchestration/reviews/REVIEW-W04-SOURCE-PROFILE-REVIEW-01-R1.yaml
+  - tests/security/test_w04_wyscout_profile_review.py
+  - scripts/profile_wyscout_v5.py
+  - tests/unit/test_wyscout_profile.py
+  - reports/phase-gates/W04/source-schema-profile.md
+  - data/source/wyscout/v5/completion-manifest.json
+  - orchestration/templates/subagent_return.md
+allowed_read_paths:
+  - data/source/wyscout/v5/**
+allowed_paths:
+  - tests/security/test_w04_wyscout_profile_review.py
+  - reports/reviews/W04/wyscout-source-profile-review-R2.md
+  - reports/reviews/W04/returns/W04-SOURCE-PROFILE-REVIEW-01-R2.md
+forbidden_paths:
+  - .git/**
+  - pyproject.toml
+  - uv.lock
+  - configs/**
+  - orchestration/**
+  - scripts/**
+  - src/**
+  - migrations/**
+  - data/**
+  - runs/**
+deliverables:
+  - Retain and independently rerun the complete R1 recomputation and completeness gate.
+  - Add any missing output-path, exact-decimal, player-match, anomaly, privacy, or determinism challenge.
+  - Confirm every measured input needed by schema-design R3 is present or explicitly unsupported.
+  - Audit and mandatory return with ACCEPT-or-REWORK recommendation.
+definition_of_done:
+  - All producer and independent profile checks pass against the full snapshot.
+  - All six R1 profile defects are closed.
+  - No Git command, network/provider access, data mutation, or forbidden edit occurs.
+acceptance_checks:
+  - uv run pytest -q tests/unit/test_wyscout_profile.py tests/security/test_w04_wyscout_profile_review.py
+  - uv run python scripts/profile_wyscout_v5.py --check
+  - uv run ruff format --check tests/security/test_w04_wyscout_profile_review.py
+  - uv run ruff check tests/security/test_w04_wyscout_profile_review.py
+  - uv run mypy tests/security/test_w04_wyscout_profile_review.py
+  - uv run python scripts/verify_local_only.py
+stop_conditions:
+  - A P0-P2 completeness, determinism, privacy, boundary, temporal, or lineage defect remains.
+  - Review requires producer/data/config/dependency/design edits or provider access.
+return_template: orchestration/templates/subagent_return.md
+delegation: forbidden
+git_operations: forbidden
